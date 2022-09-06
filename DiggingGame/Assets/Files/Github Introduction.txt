@@ -1,0 +1,14 @@
+Hey, it's Rudy!
+
+See this file? You've pulled the project from Github! Congrats!!
+
+Whenever you work on the project from your own device, you'll have to Commit your changes, and Push their origin back to Github.
+
+Don't forget or else we won't be able to see your work!
+
+- - - - - 
+
+- Remember to stay organized when working with files. Don't rename folders and such often, it'll mess with other people's devices!
+- If you feel like you've broken something, talk with the group before uploading your own project files. 
+- Detail your Commits simply, but let others know exactly what you've accomplished!
+- Feel free to use this "Files" folder to keep misc information for work. Things like our Game Concept Document can go in here. 
