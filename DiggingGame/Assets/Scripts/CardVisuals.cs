@@ -33,6 +33,9 @@ public class CardVisuals : MonoBehaviour
     [SerializeField] private Image _suitImageColor;
     [SerializeField] private TextMeshProUGUI _suitName;
 
+    /// <summary>
+    /// Prepares the suit of the card. Does this automatically so all you have to do in the inspector is check a box.
+    /// </summary>
     private void PrepareCardSuit()
     {
         if(_thisCard.GrassSuit)
@@ -65,6 +68,9 @@ public class CardVisuals : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Prepares other defined values in the card's scriptable object.
+    /// </summary>
     private void PrepareCardValues()
     {
         _nameText.text = _thisCard.CardName;
@@ -76,6 +82,9 @@ public class CardVisuals : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Runs both "Prepare" methods. 
+    /// </summary>
     private void Start()
     {
         PrepareCardSuit();
