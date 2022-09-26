@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using TMPro;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +18,8 @@ using UnityEngine.Tilemaps;
 
 public class TileActionController : MonoBehaviour
 {
+    ResourceManager rManager = new ResourceManager();
+    private GameplayManager _gm;
 
     private Grid _grid;     //grid that holds the tilemaps
 
@@ -34,6 +37,7 @@ public class TileActionController : MonoBehaviour
     void Start()
     {
         _grid = gameObject.GetComponent<Grid>();
+         _gm = GameObject.FindObjectOfType<GameplayManager>();
     }
 
     /// <summary>
@@ -49,14 +53,20 @@ public class TileActionController : MonoBehaviour
         // interacting with the currently visible tile they clicked on
         if (Input.GetMouseButtonDown(0))
         {
+            if(_interactiveMap == _grassMap)
+            {
+                rManager.SetGrass(1);
+            }
             if (_grassMap.GetTile(mousePos) == null)
             {
                 _interactiveMap = _dirtMap;
+                rManager.SetDirt(1);
             }
             if (_dirtMap.GetTile(mousePos) == null)
             {
                 _interactiveMap = _stoneMap;
-            }       
+                rManager.SetStone(1);
+            }  
             _interactiveMap.SetTile(mousePos, null);
         }
     }
