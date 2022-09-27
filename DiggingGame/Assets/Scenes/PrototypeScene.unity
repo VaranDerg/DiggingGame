@@ -4076,12 +4076,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPlayerText: {fileID: 1201932363}
-  p1DirtText: {fileID: 0}
-  p2DirtText: {fileID: 0}
-  p1GrassText: {fileID: 0}
-  p2GrassText: {fileID: 0}
-  p1StoneText: {fileID: 0}
-  p2StoneText: {fileID: 0}
+  p1DirtText: {fileID: 54572083}
+  p2DirtText: {fileID: 1984673548}
+  p1GrassText: {fileID: 2085231977}
+  p2GrassText: {fileID: 6828092}
+  p1StoneText: {fileID: 1122547128}
+  p2StoneText: {fileID: 1180457928}
 --- !u!4 &2123112564
 Transform:
   m_ObjectHideFlags: 0
@@ -4158,7 +4158,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 173b85fa38d0938419633a2905190af3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactiveMap: {fileID: 0}
+  _interactiveMap: {fileID: 2041335714}
+  _grassTile: {fileID: 11400000, guid: 7537ce994043347448d7fbad4510f912, type: 2}
+  _dirtTile: {fileID: 11400000, guid: 4461202c4af44f5448e4d8abf63a6106, type: 2}
+  _stoneTile: {fileID: 11400000, guid: bb816087644b5dc46a3bd03a831a0f4f, type: 2}
+  _buildingTile: {fileID: 11400000, guid: ba7caf414722dcd48b6737e056e5e367, type: 2}
   _grassMap: {fileID: 2041335714}
   _dirtMap: {fileID: 2005070577}
   _stoneMap: {fileID: 414181973}
@@ -4960,7 +4964,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 29.342123, y: -29.342157}
+  m_AnchoredPosition: {x: 29.342102, y: -29.342163}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &884999156906260325

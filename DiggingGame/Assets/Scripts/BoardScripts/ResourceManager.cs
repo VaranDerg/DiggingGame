@@ -14,13 +14,16 @@ public class ResourceManager
     // amount of collected resources
     private int _collectedGrass, _collectedDirt, _collectedStone;
 
+
     /// <summary>
     /// Changes amount of grass the player has
     /// </summary>
     /// <param name="amount"> The amount the grass changes by </param>
-    public void SetGrass(int amount) 
+    public void SetGrass(int amount)
     {
         _collectedGrass += amount;
+        GameplayManager _gm = GameObject.FindObjectOfType<GameplayManager>();
+        _gm.UpdateText(_gm.p1GrassText, "Grass: " + _collectedGrass.ToString());
     }
 
     /// <summary>
@@ -30,6 +33,8 @@ public class ResourceManager
     public void SetDirt(int amount)
     {
         _collectedDirt += amount;
+        GameplayManager _gm = GameObject.FindObjectOfType<GameplayManager>();
+        _gm.UpdateText(_gm.p1DirtText, "Dirt: " + _collectedDirt.ToString());
     }
 
     /// <summary>
@@ -39,6 +44,8 @@ public class ResourceManager
     public void SetStone(int amount)
     {
         _collectedStone += amount;
+        GameplayManager _gm = GameObject.FindObjectOfType<GameplayManager>();
+        _gm.UpdateText(_gm.p1StoneText, "Stone: " + _collectedStone.ToString());
     }
 
     /// <summary>

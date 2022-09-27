@@ -63,4 +63,9 @@ public class GameplayManager : MonoBehaviour
     {
         textEdit.text = newText;
     }
+
+    public int GetCurrentPlayer()
+    {
+        return _currentPlayer;
+    }    
 }

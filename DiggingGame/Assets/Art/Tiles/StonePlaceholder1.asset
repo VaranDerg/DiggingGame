@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StonePlaceholder1
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300000, guid: 468e32737ac7ba348a7f7f7c792de39b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9971261, g: 0.44716978, b: 1, a: 1}
   m_Transform:
     e00: 1
     e01: 0
