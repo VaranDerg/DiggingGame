@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEditor.UI;
 using TMPro;
 
-public class GameManager : MonoBehaviour
+public class ProtoCardManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject _defaultCard;
@@ -100,9 +100,9 @@ public class GameManager : MonoBehaviour
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.transform.rotation = _handPositions[i].rotation;
                     //The card knows what position its in. 
-                    randomCard.GetComponentInChildren<CardController>()._handPosition = i;
+                    randomCard.GetComponentInChildren<ProtoCardController>()._handPosition = i;
                     //The card is no longer played.
-                    randomCard.GetComponentInChildren<CardController>().Played = false;
+                    randomCard.GetComponentInChildren<ProtoCardController>().Played = false;
                     //The position is closed and the card has left the deck
                     OpenHandPositions[i] = false;
                     _deck.Remove(randomCard);

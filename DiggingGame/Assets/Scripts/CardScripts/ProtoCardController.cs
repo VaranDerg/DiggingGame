@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardController : MonoBehaviour
+public class ProtoCardController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject _cardAreaToMaximize;
@@ -21,17 +21,18 @@ public class CardController : MonoBehaviour
 
     [Header("Other")]
     [HideInInspector] public int _handPosition;
-    private GameManager _gm;
+    private ProtoCardManager _gm;
     private Transform _cardMaximizeZone;
     private GameObject _currentCard;
     [HideInInspector] public bool Played;
+    private bool _mouseOverCard = false;
 
     /// <summary>
     /// Assigns the anchor point
     /// </summary>
     private void Start()
     {
-        _gm = FindObjectOfType<GameManager>();
+        _gm = FindObjectOfType<ProtoCardManager>();
 
         if(GameObject.FindGameObjectWithTag("MaximizeAnchor"))
         {
@@ -43,20 +44,33 @@ public class CardController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Maximizes the card the mouse is over
-    /// </summary>
-    private void OnMouseEnter()
+    private void Update()
     {
-        UpdateMaximizedView(_cardAreaToMaximize);
+        if (Input.GetKeyDown(KeyCode.Mouse1) && _mouseOverCard)
+        {
+            UpdateMaximizedView(_cardAreaToMaximize);
+        }
+
+        if(Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            UpdateMaximizedView(null);
+        }
     }
 
     /// <summary>
-    /// Removes the card once the mouse leaves
+    /// Detects if the mouse is over the card.
+    /// </summary>
+    private void OnMouseEnter()
+    {
+        _mouseOverCard = true;
+    }
+
+    /// <summary>
+    /// Detects if the mouse has left the card. 
     /// </summary>
     private void OnMouseExit()
     {
-        UpdateMaximizedView(null);
+        _mouseOverCard = false;
     }
 
     /// <summary>
@@ -84,7 +98,7 @@ public class CardController : MonoBehaviour
     private void MoveToDiscardPile()
     {
         _gm.Discard.Add(_parentObj.gameObject);
-        UpdateMaximizedView(_cardAreaToMaximize);
+        //UpdateMaximizedView(_cardAreaToMaximize);
         Debug.Log("Discarded " + _parentObj.name + ".");
         _parentObj.gameObject.SetActive(false);
     }
@@ -98,6 +112,11 @@ public class CardController : MonoBehaviour
         if(_currentCard != null)
         {
             Destroy(_currentCard.gameObject);
+            return;
+        }
+
+        if(setMaximized == null)
+        {
             return;
         }
 
