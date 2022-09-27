@@ -29,6 +29,7 @@ public class ProtoCardManager : MonoBehaviour
     private List<GameObject> _deck = new List<GameObject>();
     [HideInInspector] public List<GameObject> Discard = new List<GameObject>();
     [HideInInspector] public bool[] OpenHandPositions;
+    [SerializeField] private bool _generateEmptyDeck;
 
     /// <summary>
     /// Spawns cards
@@ -47,6 +48,21 @@ public class ProtoCardManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Adds cards in scene
+    /// </summary>
+    private void AddCards()
+    {
+        int cardAmount = 0;
+        foreach(GameObject card in GameObject.FindGameObjectsWithTag("Card"))
+        {
+            _deck.Add(card);
+            card.SetActive(false);
+            cardAmount++;
+        }
+        Debug.Log("Added " + cardAmount + " cards.");
+    }
+
+    /// <summary>
     /// Preps the card slots
     /// </summary>
     private void PrepareOpenHandSlots()
@@ -62,11 +78,19 @@ public class ProtoCardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Runs the two above functions
+    /// Runs the above functions
     /// </summary>
     private void Start()
     {
-        InstantiateCards();
+        if(_generateEmptyDeck)
+        {
+            InstantiateCards();
+        }
+        else
+        {
+            AddCards();
+        }
+
         PrepareOpenHandSlots();
     }
 
