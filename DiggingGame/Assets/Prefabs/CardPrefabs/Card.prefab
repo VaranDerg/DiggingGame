@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 8963238437072702107}
   m_Layer: 0
   m_Name: Card
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1531,15 +1531,16 @@ MonoBehaviour:
   _dirtColor: {r: 0.5660378, g: 0.32024753, b: 0.17354932, a: 1}
   _stoneColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
   _goldColor: {r: 0.9056604, g: 0.7108367, b: 0, a: 1}
-  _grassIcon: {fileID: 21300000, guid: 7a8fac172eed09240acaf59396d6ced3, type: 3}
-  _dirtIcon: {fileID: 21300000, guid: 2b10019dd73d28b40ba1e0f56ccb664f, type: 3}
-  _stoneIcon: {fileID: 21300000, guid: 468e32737ac7ba348a7f7f7c792de39b, type: 3}
-  _goldIcon: {fileID: 21300000, guid: 4603e3d7edad15d419cea83784d178e9, type: 3}
+  _grassIcon: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
+  _dirtIcon: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
+  _stoneIcon: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
+  _goldIcon: {fileID: 21300000, guid: 7566eea44f1676a49a57d4e12bfd9f71, type: 3}
   _nameText: {fileID: 8963238437489295992}
   _descriptionText: {fileID: 8963238437167369524}
   _grassCost: {fileID: 8963238438680342506}
   _dirtCost: {fileID: 8963238438058164694}
   _stoneCost: {fileID: 8963238437188554879}
+  _specialCardText: {fileID: 8963238438471516892}
   _cardImage: {fileID: 8963238438692123230}
   _suitIconImage: {fileID: 8963238438780534085}
   _suitImageColor: {fileID: 8963238438627141460}
@@ -1690,7 +1691,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8963238438471516895
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1739,9 +1740,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Icon
-
-    Here'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1768,8 +1767,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.2
-  m_fontSizeBase: 0.2
+  m_fontSize: 0.6
+  m_fontSizeBase: 0.6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

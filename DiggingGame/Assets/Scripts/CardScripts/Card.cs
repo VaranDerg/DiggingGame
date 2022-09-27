@@ -25,5 +25,8 @@ public class Card : ScriptableObject
     public int DirtCost;
     public int StoneCost;
 
+    public bool persistent;
+    public bool disaster;
+
     public Sprite CardArt;
 }

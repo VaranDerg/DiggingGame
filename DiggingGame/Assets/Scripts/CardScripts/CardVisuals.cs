@@ -28,6 +28,7 @@ public class CardVisuals : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _descriptionText;
     [SerializeField] private TextMeshProUGUI _grassCost, _dirtCost, _stoneCost;
+    [SerializeField] private TextMeshProUGUI _specialCardText;
     [SerializeField] private Image _cardImage;
     [SerializeField] private Image _suitIconImage;
     [SerializeField] private Image _suitImageColor;
@@ -75,11 +76,49 @@ public class CardVisuals : MonoBehaviour
     {
         _nameText.text = _thisCard.CardName;
         _descriptionText.text = _thisCard.CardDescription;
-        _grassCost.text = _thisCard.GrassCost.ToString();
-        _dirtCost.text = _thisCard.DirtCost.ToString();
-        _stoneCost.text = _thisCard.StoneCost.ToString();
+
+        //Set a card's cost to 10 or higher to make its cost "X"
+        if(_thisCard.GrassCost >= 10)
+        {
+            _grassCost.text = "X";
+        }
+        else
+        {
+            _grassCost.text = _thisCard.GrassCost.ToString();
+        }
+
+        if (_thisCard.DirtCost >= 10)
+        {
+            _grassCost.text = "X";
+        }
+        else
+        {
+            _dirtCost.text = _thisCard.DirtCost.ToString();
+        }
+
+        if (_thisCard.StoneCost >= 10)
+        {
+            _grassCost.text = "X";
+        }
+        else
+        {
+            _stoneCost.text = _thisCard.StoneCost.ToString();
+        }
+
         _cardImage.sprite = _thisCard.CardArt;
 
+        if(_thisCard.persistent)
+        {
+            _specialCardText.text = "P";
+        }
+        else if(_thisCard.disaster)
+        {
+            _specialCardText.text = "D";
+        }
+        else
+        {
+            _specialCardText.text = "";
+        }
     }
 
     /// <summary>
