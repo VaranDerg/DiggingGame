@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardName: Retribution
   CardDescription: The next time a Building of yours is Removed, Damage 3 of your
-    opponent's Buildings. Score 2 point for every Building Destroyed this way.
+    opponent's Buildings. Score 1 point for every Building Destroyed this way.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0

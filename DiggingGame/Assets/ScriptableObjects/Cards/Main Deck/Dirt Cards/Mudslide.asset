@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Mudslide
   m_EditorClassIdentifier: 
   CardName: Mudslide
-  CardDescription: Move onto any Dirt Tile, or more an opponent on a Dirt Tile onto
+  CardDescription: Move onto any Dirt Tile, or move an opponent on a Dirt Tile onto
     a different Dirt Tile.
   GrassSuit: 0
   DirtSuit: 1

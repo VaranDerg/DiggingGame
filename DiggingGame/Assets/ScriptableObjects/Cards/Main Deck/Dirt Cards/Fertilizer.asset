@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Fertilizer
   m_EditorClassIdentifier: 
   CardName: Fertilizer
-  CardDescription: Place 4 spent Dirt Tiles onto any revealed Stone Tiles. Score
-    2 points.
+  CardDescription: Place 4 Dirt Tiles onto any revealed Stone Tiles. Score 2 points.
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0
