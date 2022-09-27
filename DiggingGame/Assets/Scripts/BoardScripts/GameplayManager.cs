@@ -14,10 +14,10 @@ using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
-    private GameObject _currentPlayer;
+    private int _currentPlayer;
 
-    [SerializeField] GameObject _player1;
-    [SerializeField] GameObject _player2;
+    //[SerializeField] GameObject _player1;
+    //[SerializeField] GameObject _player2;
 
     [SerializeField] TextMeshProUGUI currentPlayerText;
 
@@ -33,8 +33,7 @@ public class GameplayManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        _currentPlayer = _player1;
-        UpdateText(currentPlayerText, "Current Turn: " + _currentPlayer.name);
+        _currentPlayer = 1;
     }
 
     /// <summary>
@@ -42,16 +41,16 @@ public class GameplayManager : MonoBehaviour
     /// </summary>
     public void ChangePlayer()
     {
-        if(_currentPlayer.Equals(_player1))
+        if(_currentPlayer == 1)
         {
-            _currentPlayer = _player2;
+            _currentPlayer = 2;
         }
         else
         {
-            _currentPlayer = _player1;
+            _currentPlayer = 1;
         }
         
-        UpdateText(currentPlayerText, "Current Turn: " + _currentPlayer.name);
+        UpdateText(currentPlayerText, "Current Turn: " + _currentPlayer);
 
     }
 
