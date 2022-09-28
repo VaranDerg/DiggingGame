@@ -24,4 +24,4 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 1
   disaster: 0
-  CardArt: {fileID: 21300000, guid: 4fe6bfd2fe916574cb005205dd49449c, type: 3}
+  CardArt: {fileID: -2002532713, guid: c98ba8e7180ee07459682f41f9d07bc0, type: 3}

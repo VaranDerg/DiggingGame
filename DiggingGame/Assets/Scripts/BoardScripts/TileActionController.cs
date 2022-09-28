@@ -44,7 +44,7 @@ public class TileActionController : MonoBehaviour
     void Start()
     {
         _grid = gameObject.GetComponent<Grid>();
-        _gm = GameObject.FindObjectOfType<GameplayManager>();
+        _gm = FindObjectOfType<GameplayManager>();
     }
 
     /// <summary>

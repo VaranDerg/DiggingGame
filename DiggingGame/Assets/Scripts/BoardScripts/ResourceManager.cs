@@ -13,6 +13,7 @@ public class ResourceManager
 {
     // amount of collected resources
     private int _collectedGrass, _collectedDirt, _collectedStone;
+    private int _p2CollectedGrass, _p2CollectedDirt, _p2CollectedStone;
 
 
     /// <summary>
@@ -21,9 +22,24 @@ public class ResourceManager
     /// <param name="amount"> The amount the grass changes by </param>
     public void SetGrass(int amount)
     {
-        _collectedGrass += amount;
         GameplayManager _gm = GameObject.FindObjectOfType<GameplayManager>();
-        _gm.UpdateText(_gm.p1GrassText, "Grass: " + _collectedGrass.ToString());
+        if(_gm.CurrentPlayer == 1)
+        {
+            _collectedGrass += amount;
+        }
+        else if(_gm.CurrentPlayer == 2)
+        {
+            _p2CollectedGrass += amount;
+        }
+
+        if(_gm.CurrentPlayer == 1)
+        {
+            _gm.UpdateText(_gm.p1GrassText, "Grass: " + _collectedGrass.ToString());
+        }
+        else if(_gm.CurrentPlayer == 2)
+        {
+            _gm.UpdateText(_gm.p2GrassText, "Grass: " + _p2CollectedGrass.ToString());
+        }
     }
 
     /// <summary>
@@ -32,9 +48,24 @@ public class ResourceManager
     /// <param name="amount"> The amount that dirt changes by </param>
     public void SetDirt(int amount)
     {
-        _collectedDirt += amount;
         GameplayManager _gm = GameObject.FindObjectOfType<GameplayManager>();
-        _gm.UpdateText(_gm.p1DirtText, "Dirt: " + _collectedDirt.ToString());
+        if (_gm.CurrentPlayer == 1)
+        {
+            _collectedDirt += amount;
+        }
+        else if (_gm.CurrentPlayer == 2)
+        {
+            _p2CollectedDirt += amount;
+        }
+
+        if (_gm.CurrentPlayer == 1)
+        {
+            _gm.UpdateText(_gm.p1DirtText, "Dirt: " + _collectedDirt.ToString());
+        }
+        else if (_gm.CurrentPlayer == 2)
+        {
+            _gm.UpdateText(_gm.p2DirtText, "Dirt: " + _p2CollectedDirt.ToString());
+        }
     }
 
     /// <summary>
@@ -43,9 +74,24 @@ public class ResourceManager
     /// <param name="amount"></param>
     public void SetStone(int amount)
     {
-        _collectedStone += amount;
         GameplayManager _gm = GameObject.FindObjectOfType<GameplayManager>();
-        _gm.UpdateText(_gm.p1StoneText, "Stone: " + _collectedStone.ToString());
+        if (_gm.CurrentPlayer == 1)
+        {
+            _collectedStone += amount;
+        }
+        else if (_gm.CurrentPlayer == 2)
+        {
+            _p2CollectedStone += amount;
+        }
+
+        if (_gm.CurrentPlayer == 1)
+        {
+            _gm.UpdateText(_gm.p1StoneText, "Stone: " + _collectedStone.ToString());
+        }
+        else if (_gm.CurrentPlayer == 2)
+        {
+            _gm.UpdateText(_gm.p2StoneText, "Stone: " + _p2CollectedStone.ToString());
+        }
     }
 
     /// <summary>
