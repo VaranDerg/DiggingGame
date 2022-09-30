@@ -11,10 +11,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using TMPro;
-using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Photon.Pun;
 
 public class TileActionController : MonoBehaviour
 {
@@ -37,6 +37,8 @@ public class TileActionController : MonoBehaviour
     [SerializeField] private Tilemap _dirtMap;
     [SerializeField] private Tilemap _stoneMap;
 
+    PhotonView view;
+
 
     /// <summary>
     /// Start is called before the first frame update
@@ -45,6 +47,7 @@ public class TileActionController : MonoBehaviour
     {
         _grid = gameObject.GetComponent<Grid>();
         _gm = FindObjectOfType<GameplayManager>();
+        view = GetComponent<PhotonView>();
     }
 
     /// <summary>

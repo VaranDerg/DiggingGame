@@ -25,7 +25,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// Callbaack function to check when successfully connected to server.
+    /// Callback function to check when successfully connected to server.
     /// The player then joins the lobby.
     /// </summary>
     public override void OnConnectedToMaster()
