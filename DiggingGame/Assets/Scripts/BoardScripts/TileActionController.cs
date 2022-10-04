@@ -11,10 +11,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using TMPro;
-using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Photon.Pun;
 
 public class TileActionController : MonoBehaviour
 {
@@ -37,18 +37,23 @@ public class TileActionController : MonoBehaviour
     [SerializeField] private Tilemap _dirtMap;
     [SerializeField] private Tilemap _stoneMap;
 
+    PhotonView view;
+
 
     /// <summary>
     /// Start is called before the first frame update
+    /// Author: Andrea SD
     /// </summary>
     void Start()
     {
         _grid = gameObject.GetComponent<Grid>();
         _gm = FindObjectOfType<GameplayManager>();
+        view = GetComponent<PhotonView>();
     }
 
     /// <summary>
     /// Update is called once per frame
+    /// Author: Andrea SD
     /// </summary>
     void Update()
     {
@@ -131,6 +136,7 @@ public class TileActionController : MonoBehaviour
 
     /// <summary>
     /// Converts the mouse position on screen to  aworld point then to a cell 
+    /// Author: Andrea SD
     /// position
     /// </summary>
     /// <returns> cell position at the world point </returns>
