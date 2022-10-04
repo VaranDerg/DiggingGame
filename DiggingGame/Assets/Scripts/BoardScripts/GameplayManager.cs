@@ -107,7 +107,7 @@ public class GameplayManager : MonoBehaviour
                 tempPiece.transform.position = new Vector3(newXPos, newYPos);
                 // Places each new piece into a parent object to keep the
                 // hierarchy organized.
-                gameBoard.transform.SetParent(gameBoard.transform);
+                tempPiece.transform.SetParent(gameBoard.transform);
                 newYPos++;
             }
             newYPos = yPos;
