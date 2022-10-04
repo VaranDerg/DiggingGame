@@ -10,15 +10,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
     public int CurrentPlayer;
 
-    //[SerializeField] GameObject _player1;
-    //[SerializeField] GameObject _player2;
-
+    // TextMeshPro UIs
     [SerializeField] TextMeshProUGUI currentPlayerText;
 
     public TextMeshProUGUI p1DirtText;
@@ -28,13 +27,15 @@ public class GameplayManager : MonoBehaviour
     public TextMeshProUGUI p1StoneText;
     public TextMeshProUGUI p2StoneText;
 
-    [Header("Board Piece Prefabs")]
+    // Game board piece prefab
     [SerializeField] GameObject _grassPrefab;
-    [SerializeField] GameObject _dirtPrefab;
-    [SerializeField] GameObject _stonePrefab;
 
+    // X and Y positions the game spaces will spawn at
     [SerializeField] float xPos;
     [SerializeField] float yPos;
+
+    // Game board parent object to each space piece
+    [SerializeField] GameObject gameBoard;
 
     /// <summary>
     /// Start is called before the first frame update
@@ -87,20 +88,26 @@ public class GameplayManager : MonoBehaviour
         return CurrentPlayer;
     }    
 
+    /// <summary>
+    /// Spawns the game board of objects vertically beginning at the bottom 
+    /// left.
+    /// Author: Andrea SD
+    /// </summary>
     private void SpawnBoard()
-    {
+    {      
         float newXPos = xPos;
         float newYPos = yPos;
 
         for (int i = 0; i < 6; i++)
-        {
-            GameObject tempPiece = Instantiate(_grassPrefab);
-           // tempPiece.transform.position = new Vector3(newXPos, newYPos);
-
+        { 
             for(int j = 0; j < 6; j++)
-            {
-                tempPiece = Instantiate(_grassPrefab);
+            { 
+                GameObject tempPiece = Instantiate(_grassPrefab);
+                
                 tempPiece.transform.position = new Vector3(newXPos, newYPos);
+                // Places each new piece into a parent object to keep the
+                // hierarchy organized.
+                gameBoard.transform.SetParent(gameBoard.transform);
                 newYPos++;
             }
             newYPos = yPos;

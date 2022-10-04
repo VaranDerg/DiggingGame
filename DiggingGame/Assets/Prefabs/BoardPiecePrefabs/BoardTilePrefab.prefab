@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4847777960994457896}
   - component: {fileID: 4333397845963253455}
   m_Layer: 0
-  m_Name: Grass Piece
+  m_Name: BoardTilePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,6 +101,7 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
+  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
 --- !u!61 &4333397845963253455
 BoxCollider2D:
   m_ObjectHideFlags: 0
