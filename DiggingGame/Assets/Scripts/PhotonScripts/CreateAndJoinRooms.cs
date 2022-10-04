@@ -1,3 +1,12 @@
+/*****************************************************************************
+// File Name :         CreateAndJoinRooms.cs
+// Author :            Andrea Swihart-DeCoster
+// Creation Date :     September 29th, 2022
+//
+// Brief Description : This document contains the functionality for joining
+                       and creating rooms, and what happens when a player has
+                       succesfully joined
+*****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +22,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     /// <summary>
     /// Creates a new room with the name of whatever was in the input field.
     /// When players create a room, they also automatically join it.
+    /// Author: Andrea SD
     /// </summary>
     public void CreateRoom()
     {
@@ -21,6 +31,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// Joins room using the text in the input field
+    /// Author: Andrea SD
     /// </summary>
     public void JoinRoom()
     {
@@ -30,6 +41,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     /// <summary>
     /// Automatically called when a room is joined.
     /// Loads scene associated with the room
+    /// Author: Andrea SD
     /// </summary>
     public override void OnJoinedRoom()
     {

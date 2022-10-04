@@ -17,7 +17,10 @@ using UnityEngine.SceneManagement;
 // automatically happens when specific events occur.
 public class ConnectToServer : MonoBehaviourPunCallbacks
 {
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update
+    /// Author: Andrea SD
+    /// </summary>
     void Start()
     {
         //Connects to photon server
@@ -27,6 +30,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
     /// <summary>
     /// Callback function to check when successfully connected to server.
     /// The player then joins the lobby.
+    /// Author: Andrea SD
     /// </summary>
     public override void OnConnectedToMaster()
     {
@@ -36,6 +40,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// Loads lobby scene once connected
+    /// Author: Andrea SD
     /// </summary>
     public override void OnJoinedLobby()
     {

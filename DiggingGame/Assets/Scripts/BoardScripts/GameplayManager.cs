@@ -28,17 +28,28 @@ public class GameplayManager : MonoBehaviour
     public TextMeshProUGUI p1StoneText;
     public TextMeshProUGUI p2StoneText;
 
+    [Header("Board Piece Prefabs")]
+    [SerializeField] GameObject _grassPrefab;
+    [SerializeField] GameObject _dirtPrefab;
+    [SerializeField] GameObject _stonePrefab;
+
+    [SerializeField] float xPos;
+    [SerializeField] float yPos;
+
     /// <summary>
     /// Start is called before the first frame update
+    /// Author: Andrea SD
     /// </summary>
     void Start()
     {
+        SpawnBoard();
         CurrentPlayer = 1;
         UpdateText(currentPlayerText, "Current Turn: " + CurrentPlayer);
     }
 
     /// <summary>
     /// Switches between the two players
+    /// Author: Andrea SD
     /// </summary>
     public void ChangePlayer()
     {
@@ -57,6 +68,7 @@ public class GameplayManager : MonoBehaviour
 
     /// <summary>
     /// Updates a text UI element
+    /// Author: Andrea SD
     /// </summary>
     /// <param name="textEdit"> Text UI element to be changed </param>
     /// <param name="newText"> what the text will be changed to </param>
@@ -65,8 +77,34 @@ public class GameplayManager : MonoBehaviour
         textEdit.text = newText;
     }
 
+    /// <summary>
+    /// Access the current player variable
+    /// Author: Andrea SD
+    /// </summary>
+    /// <returns></returns>
     public int GetCurrentPlayer()
     {
         return CurrentPlayer;
     }    
+
+    private void SpawnBoard()
+    {
+        float newXPos = xPos;
+        float newYPos = yPos;
+
+        for (int i = 0; i < 6; i++)
+        {
+            GameObject tempPiece = Instantiate(_grassPrefab);
+           // tempPiece.transform.position = new Vector3(newXPos, newYPos);
+
+            for(int j = 0; j < 6; j++)
+            {
+                tempPiece = Instantiate(_grassPrefab);
+                tempPiece.transform.position = new Vector3(newXPos, newYPos);
+                newYPos++;
+            }
+            newYPos = yPos;
+            newXPos++;
+        }
+    }
 }

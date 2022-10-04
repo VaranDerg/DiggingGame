@@ -42,6 +42,7 @@ public class TileActionController : MonoBehaviour
 
     /// <summary>
     /// Start is called before the first frame update
+    /// Author: Andrea SD
     /// </summary>
     void Start()
     {
@@ -52,6 +53,7 @@ public class TileActionController : MonoBehaviour
 
     /// <summary>
     /// Update is called once per frame
+    /// Author: Andrea SD
     /// </summary>
     void Update()
     {
@@ -134,6 +136,7 @@ public class TileActionController : MonoBehaviour
 
     /// <summary>
     /// Converts the mouse position on screen to  aworld point then to a cell 
+    /// Author: Andrea SD
     /// position
     /// </summary>
     /// <returns> cell position at the world point </returns>

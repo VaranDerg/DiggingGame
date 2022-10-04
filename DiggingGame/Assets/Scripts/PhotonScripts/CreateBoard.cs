@@ -1,3 +1,11 @@
+/*****************************************************************************
+// File Name :         CreateBoard.cs
+// Author :            Andrea Swihart-DeCoster
+// Creation Date :     September 29th, 2022
+//
+// Brief Description : This document spawns the gameboard once the players join
+                       the room.
+*****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

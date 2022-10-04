@@ -18,12 +18,14 @@ public class ResourceManager
 
     /// <summary>
     /// Changes amount of grass the player has
+    /// Author: Andrea SD
     /// </summary>
     /// <param name="amount"> The amount the grass changes by </param>
     public void SetGrass(int amount)
     {
         GameplayManager _gm = GameObject.FindObjectOfType<GameplayManager>();
-        if(_gm.CurrentPlayer == 1)
+
+        if (_gm.CurrentPlayer == 1)
         {
             _collectedGrass += amount;
         }
@@ -44,6 +46,7 @@ public class ResourceManager
 
     /// <summary>
     /// Changes amount of dirt the player has
+    /// Author: Andrea SD
     /// </summary>
     /// <param name="amount"> The amount that dirt changes by </param>
     public void SetDirt(int amount)
@@ -70,6 +73,7 @@ public class ResourceManager
 
     /// <summary>
     /// Changes amount of stone the player has
+    /// Author: Andrea SD
     /// </summary>
     /// <param name="amount"></param>
     public void SetStone(int amount)
@@ -96,6 +100,7 @@ public class ResourceManager
 
     /// <summary>
     /// How much grass the player has
+    /// Author: Andrea SD
     /// </summary>
     /// <returns> amount of grass the player currently has </returns>
     public int GetGrass()
@@ -105,6 +110,7 @@ public class ResourceManager
 
     /// <summary>
     /// How much dirt the player has
+    /// Author: Andrea SD
     /// </summary>
     /// <returns> amount of dirt the player currently has </returns>
     public int GetDirt()
@@ -114,6 +120,7 @@ public class ResourceManager
 
     /// <summary>
     /// How much stone the player has
+    /// Author: Andrea SD
     /// </summary>
     /// <returns> amount of stone the player currently has </returns>
     public int GetStone()
