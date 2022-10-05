@@ -6,26 +6,39 @@ using TMPro;
 
 public class ExampleCanvasManager : MonoBehaviour
 {
-    [Header("Text References")]
-    [SerializeField] private TextMeshProUGUI _turnText;
-    [SerializeField] private TextMeshProUGUI _cGrassText, _cDirtText, _cStoneText, _cGoldText;
-    [SerializeField] private TextMeshProUGUI _rGrassText, _rDirtText, _rStoneText, _rGoldText;
-    [SerializeField] private TextMeshProUGUI _sGrassText, _sDirtText, _sStoneText, _sGoldText;
-    [SerializeField] private TextMeshProUGUI _bFactories, _bBurrows, _bMines;
-    [SerializeField] private TextMeshProUGUI _rFactories, _rBurrows, _rMines;
-    [SerializeField] private TextMeshProUGUI _cardText, _goldCardText, _dragCardsText;
+    [Header("Text & Object References, Player 1")]
+    //[SerializeField] private TextMeshProUGUI _cGrassText, _cDirtText, _cStoneText, _cGoldText;
+    //Array for collected text objects. Grass, Dirt, Stone, and Gold counts.
+    [SerializeField] private TextMeshProUGUI[] _p1collectedPieces = new TextMeshProUGUI[4];
+    [SerializeField] private TextMeshProUGUI[] _p2collectedPieces = new TextMeshProUGUI[4];
+    //Array for refined text objects. Grass, Dirt, Stone, and Gold counts.
+    //[SerializeField] private TextMeshProUGUI _rGrassText, _rDirtText, _rStoneText, _rGoldText;
+    [SerializeField] private TextMeshProUGUI[] _p1refinedPieces = new TextMeshProUGUI[4];
+    [SerializeField] private TextMeshProUGUI[] _p2refinedPieces = new TextMeshProUGUI[4];
+    //[SerializeField] private TextMeshProUGUI _bFactories, _bBurrows, _bMines;
+    [SerializeField] private TextMeshProUGUI[] _p1BuiltBuildings = new TextMeshProUGUI[3];
+    [SerializeField] private TextMeshProUGUI[] _p2BuiltBuildings = new TextMeshProUGUI[3];
+    //[SerializeField] private TextMeshProUGUI _rFactories, _rBurrows, _rMines;
+    [SerializeField] private TextMeshProUGUI[] _p1RemainingFactories = new TextMeshProUGUI[3];
+    [SerializeField] private TextMeshProUGUI[] _p2RemainingFactories = new TextMeshProUGUI[3];
+    //[SerializeField] private TextMeshProUGUI _cardText, _goldCardText, _dragCardsText;
+    [SerializeField] private TextMeshProUGUI[] _p1CardInfo = new TextMeshProUGUI[3];
+    [SerializeField] private TextMeshProUGUI[] _p2CardInfo = new TextMeshProUGUI[3];
 
-    [Header("Object References")]
+    [Header("Text & Object References, Player 2")]
+
+    [Header("Constant Text & Object References")]
+    [SerializeField] private TextMeshProUGUI _turnText;
     [SerializeField] private GameObject _startTurnButton;
     [SerializeField] private GameObject _firstZone, _thenZone, _finallyZone;
     [SerializeField] private GameObject _actionsZone, _fActionsZone, _digZone, _buildZone, _buildMineZone, _activateZone;
+    [SerializeField] private TextMeshProUGUI _sGrassText, _sDirtText, _sStoneText, _sGoldText;
 
     [Header("Other References")]
     [SerializeField] private ActionManager _am;
 
     [Header("Other")]
     private List<GameObject> _canvasObjects = new List<GameObject>();
-    private int _turn = 1;
 
     private void AssignToList()
     {
