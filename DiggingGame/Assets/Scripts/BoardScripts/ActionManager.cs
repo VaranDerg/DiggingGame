@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ActionManager : MonoBehaviour
 {
-    [Header("Values")]
     [HideInInspector] public int CollectedGrass, CollectedDirt, CollectedStone, CollectedGold;
     [HideInInspector] public int RefinedGrass, RefinedDirt, RefinedStone, RefinedGold;
     [HideInInspector] public int SupplyGrass, SupplyDirt, SupplyStone, SupplyGold;
@@ -12,18 +11,27 @@ public class ActionManager : MonoBehaviour
     [HideInInspector] public int Cards = 0;
     [HideInInspector] public int GoldCards = 0;
     [HideInInspector] public int CurrentTurnPhase = 0;
-    public int RemainingFactories, RemainingBurrows, RemainingMines;
+    [HideInInspector] public int CurrentFactoryPrice, CurrentBurrowPrice, CurrentMinePrice;
+
+    [Header("Player Values")]
     public int CardActivations;
     public int StartingCards;
     public int HandLimit;
     public int CardDraw;
+
+    [Header("Building Values")]
+    public int BuildingPrice;
+    public int RemainingFactories, RemainingBurrows, RemainingMines;
 
     /// <summary>
     /// Sets the card amount.
     /// </summary>
     private void Start()
     {
-        Cards = 4;
+        Cards = StartingCards;
+        CurrentFactoryPrice = BuildingPrice;
+        CurrentBurrowPrice = BuildingPrice;
+        CurrentMinePrice = BuildingPrice;
     }
 
     /// <summary>
@@ -99,10 +107,17 @@ public class ActionManager : MonoBehaviour
             return false;
         }
 
+        if(Cards == 0)
+        {
+            Debug.Log("No cards to Retrieve with!");
+            return false;
+        }
+
         Cards--;
         GoldCards++;
         RefinedGold--;
         SupplyGold++;
+        Debug.Log("Spent 1 card and 1 gold for 1 gold card!");
         return true;
     }
 
@@ -144,8 +159,13 @@ public class ActionManager : MonoBehaviour
                     Debug.Log("All Factories have been built!");
                     break;
                 }
-                RemainingFactories--;
-                BuiltFactories++;
+
+                if(AbleToBuild(CurrentFactoryPrice, "Factory"))
+                {
+                    CurrentFactoryPrice++;
+                    RemainingFactories--;
+                    BuiltFactories++;
+                }
                 break;
             case "Burrow":
                 if (RemainingBurrows == 0)
@@ -153,8 +173,13 @@ public class ActionManager : MonoBehaviour
                     Debug.Log("All Burrows have been built!");
                     break;
                 }
-                RemainingBurrows--;
-                BuiltBurrows++;
+
+                if (AbleToBuild(CurrentBurrowPrice, "Burrow"))
+                {
+                    CurrentBurrowPrice++;
+                    RemainingBurrows--;
+                    BuiltBurrows++;
+                }
                 break;
             case "Mine":
                 if (RemainingMines == 0)
@@ -162,20 +187,56 @@ public class ActionManager : MonoBehaviour
                     Debug.Log("All Mines have been built!");
                     break;
                 }
-                RemainingMines--;
-                if(mineType == "Grass")
+
+                if (AbleToBuild(CurrentMinePrice, "Mine"))
                 {
-                    GrassMines++;
-                }
-                else if(mineType == "Dirt")
-                {
-                    DirtMines++;
-                }
-                else if(mineType == "Stone")
-                {
-                    StoneMines++;
+                    CurrentMinePrice++;
+                    RemainingMines--;
+                    if (mineType == "Grass")
+                    {
+                        GrassMines++;
+                    }
+                    else if (mineType == "Dirt")
+                    {
+                        DirtMines++;
+                    }
+                    else if (mineType == "Stone")
+                    {
+                        StoneMines++;
+                    }
                 }
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Checks if the player has enough "Cards" to build something. Subtracts cards accordingly.
+    /// </summary>
+    /// <param name="currentPrice">Price var of current building type.</param>
+    /// <param name="type">Name of building.</param>
+    /// <returns>True if cards are substantial. False if otherwise.</returns>
+    private bool AbleToBuild(int currentPrice, string type)
+    {
+        if (Cards + GoldCards >= currentPrice)
+        {
+            for (int i = currentPrice; i != 0; i--)
+            {
+                if (Cards > 0)
+                {
+                    Cards--;
+                }
+                else if (GoldCards > 0)
+                {
+                    GoldCards--;
+                }
+            }
+            Debug.Log("Built " + type +  " for " + currentPrice + " cards.");
+            return true;
+        }
+        else
+        {
+            Debug.Log("Not enough cards to build " + type + "! (Need " + currentPrice + " have " + (Cards + GoldCards) + ".)");
+            return false;
         }
     }
 
@@ -186,7 +247,7 @@ public class ActionManager : MonoBehaviour
     {
         CollectedGrass += GrassMines;
         CollectedDirt += DirtMines;
-        CollectedStone += DirtMines;
+        CollectedStone += StoneMines;
     }
 
     /// <summary>
@@ -197,8 +258,12 @@ public class ActionManager : MonoBehaviour
     public void DrawCards(int player, int cardsToDraw)
     {
         Cards += cardsToDraw;
+        Debug.Log("Drew " + cardsToDraw + " cards!"); 
     }
 
+    /// <summary>
+    /// Discards cards down to the hand limit.
+    /// </summary>
     public void DiscardCards()
     {
         int discardedCards = 0;

@@ -8411,13 +8411,17 @@ MonoBehaviour:
   Cards: 0
   GoldCards: 0
   CurrentTurnPhase: 0
-  RemainingFactories: 3
-  RemainingBurrows: 3
-  RemainingMines: 3
+  CurrentFactoryPrice: 0
+  CurrentBurrowPrice: 0
+  CurrentMinePrice: 0
   CardActivations: 1
   StartingCards: 4
   HandLimit: 7
   CardDraw: 2
+  RemainingFactories: 3
+  RemainingBurrows: 3
+  RemainingMines: 3
+  BuildingPrice: 1
 --- !u!1 &1598070888
 GameObject:
   m_ObjectHideFlags: 0
