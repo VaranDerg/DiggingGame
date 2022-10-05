@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Erosion
   m_EditorClassIdentifier: 
   CardName: Erosion
-  CardDescription: Remove 3 revealed Stone Tiles.
+  CardDescription: Remove up to 3 Stone Pieces.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1
   GoldSuit: 0
-  GrassCost: 1
-  DirtCost: 1
-  StoneCost: 1
+  GrassCost: 2
+  DirtCost: 2
+  StoneCost: 0
   persistent: 0
   disaster: 0
   CardArt: {fileID: -1524755723, guid: 3cf20e312271287409fb7adb929cea0d, type: 3}

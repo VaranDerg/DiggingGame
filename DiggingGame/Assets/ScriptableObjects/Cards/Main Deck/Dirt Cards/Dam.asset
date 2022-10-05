@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Dam
   m_EditorClassIdentifier: 
   CardName: Dam
-  CardDescription: Discard this card to prevent a Building on a Dirt Tile from becoming
-    Damaged.
+  CardDescription: Discard this card to prevent a Building on a Dirt Piece from taking
+    damage.
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0
   GoldSuit: 0
   GrassCost: 0
-  DirtCost: 0
-  StoneCost: 2
+  DirtCost: 1
+  StoneCost: 1
   persistent: 1
   disaster: 0
   CardArt: {fileID: 21300000, guid: 4fe6bfd2fe916574cb005205dd49449c, type: 3}

@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Walkway
   m_EditorClassIdentifier: 
   CardName: Walkway
-  CardDescription: Remove an adjacent Grass Tile and  place a Stone Tile there. Then,
-    move onto that Stone Tile.
+  CardDescription: Remove Grass and Dirt Pieces from an adjacent Grass Piece. Then,
+    move onto that Piece.
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 0
-  GrassCost: 1
+  GrassCost: 0
   DirtCost: 0
   StoneCost: 1
   persistent: 0

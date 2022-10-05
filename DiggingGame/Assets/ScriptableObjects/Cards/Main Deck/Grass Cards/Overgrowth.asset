@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Overgrowth
   m_EditorClassIdentifier: 
   CardName: Overgrowth!
-  CardDescription: Damage an opponent's Building on a Grass Tile.
+  CardDescription: Damage an opponent's Building on a Grass Piece.
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0

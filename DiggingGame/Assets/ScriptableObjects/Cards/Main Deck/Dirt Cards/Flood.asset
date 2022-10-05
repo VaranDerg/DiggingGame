@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Flood
   m_EditorClassIdentifier: 
   CardName: Flood!
-  CardDescription: Damage an opponent's Building on a Dirt Tile. If "Secret Tunnels"
-    is in play, discard it.
+  CardDescription: Damage an opponent's Building on a Dirt Piece. Your opponent must
+    discard 1 Persistent Effect, if any.
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0
   GoldSuit: 0
   GrassCost: 0
   DirtCost: 2
-  StoneCost: 1
+  StoneCost: 0
   persistent: 0
   disaster: 1
   CardArt: {fileID: 21300000, guid: 4fe6bfd2fe916574cb005205dd49449c, type: 3}

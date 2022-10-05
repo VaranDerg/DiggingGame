@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Dirty Thief
   m_EditorClassIdentifier: 
   CardName: Dirty Thief
-  CardDescription: Take a Gold Tile or 2 of any other Tile from your opponent. Do
-    this once for every adjacent enemy Building.
+  CardDescription: For each adjacent enemy piece, take a Gold Piece or up to 2 Dirt
+    or Stone Pieces from an adjacent opponent.
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Thunderstorm
   m_EditorClassIdentifier: 
   CardName: Thunderstorm!
-  CardDescription: Damage an opponent's Building that isn't on a Stone Tile. Then,
-    Damage a Building of your own that isn't on a Stone Tile.
+  CardDescription: Damage an opponent's Building that isn't on a Stone Piece. Then,
+    damage a Building of your own that isn't on a Stone Piece.
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0

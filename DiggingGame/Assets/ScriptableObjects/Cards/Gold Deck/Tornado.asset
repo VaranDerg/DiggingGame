@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Tornado
   m_EditorClassIdentifier: 
   CardName: Tornado!
-  CardDescription: Choose a row or column of Tiles. Damage every Building there.
+  CardDescription: Choose a row or column of Pieces. Damage every Building there.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 1
   GrassCost: 2
-  DirtCost: 2
+  DirtCost: 1
   StoneCost: 0
   persistent: 0
   disaster: 1

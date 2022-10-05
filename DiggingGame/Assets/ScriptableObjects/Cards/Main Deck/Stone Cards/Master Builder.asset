@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Master Builder
   m_EditorClassIdentifier: 
   CardName: Master Builder
-  CardDescription: Your next Building costs 0 of its resource. Discard after placing
-    your next Building.
+  CardDescription: Your next Building costs 1. Discard after resolving.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1

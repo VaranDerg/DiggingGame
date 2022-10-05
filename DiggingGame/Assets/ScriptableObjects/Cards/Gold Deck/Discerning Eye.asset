@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Discerning Eye
   m_EditorClassIdentifier: 
   CardName: Discerning Eye
-  CardDescription: Flip 6 Stone Tiles. For every Gold Tile revealed this way, score
+  CardDescription: Flip up to 4 Stone Pieces. For every Gold Piece revealed, score
     1 point.
   GrassSuit: 0
   DirtSuit: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
   GoldSuit: 1
   GrassCost: 0
   DirtCost: 0
-  StoneCost: 2
+  StoneCost: 1
   persistent: 0
   disaster: 0
   CardArt: {fileID: 21300000, guid: 4fe6bfd2fe916574cb005205dd49449c, type: 3}

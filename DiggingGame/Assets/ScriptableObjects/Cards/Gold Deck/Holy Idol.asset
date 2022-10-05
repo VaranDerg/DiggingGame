@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Holy Idol
   m_EditorClassIdentifier: 
   CardName: Holy Idol
-  CardDescription: Take up to 6 of any one Tile type from the Supply, or score 2
-    points.
+  CardDescription: Take up to 5 of any one Resource from the Supply, or score 1 point.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0

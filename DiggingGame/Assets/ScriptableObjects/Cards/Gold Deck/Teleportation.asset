@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Teleportation
   m_EditorClassIdentifier: 
   CardName: Teleportation
-  CardDescription: Move onto any Tile.
+  CardDescription: Move onto any Piece.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 1
   GrassCost: 1
-  DirtCost: 1
+  DirtCost: 0
   StoneCost: 0
   persistent: 0
   disaster: 0

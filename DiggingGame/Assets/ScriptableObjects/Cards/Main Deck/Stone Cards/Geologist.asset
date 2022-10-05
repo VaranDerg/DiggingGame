@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Geologist
   m_EditorClassIdentifier: 
   CardName: Geologist
-  CardDescription: Whenever you Retrieve a Gold Tile, score 1 point.
+  CardDescription: Whenever you Retrieve, score 1 point.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1

@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Garden
   m_EditorClassIdentifier: 
   CardName: Garden
-  CardDescription: Place up to 4 Grass Tiles on adjacent Dirt Tiles. Score 1 point
-    if all 4 Tiles are placed.
+  CardDescription: Place up to 3 Grass Pieces onto adjacent Dirt Pieces. Score 1
+    point if you place any and an additional point if you place all 3.
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 0
   GrassCost: 0
-  DirtCost: 2
+  DirtCost: 1
   StoneCost: 0
   persistent: 0
   disaster: 0

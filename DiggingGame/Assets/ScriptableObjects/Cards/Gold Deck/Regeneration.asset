@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Regeneration
   m_EditorClassIdentifier: 
   CardName: Regeneration
-  CardDescription: Choose a type of Tile. Place up to 10 of those Tiles onto any
-    valid Tile. Score 1 point for every 2 Tiles placed in this way.
+  CardDescription: Choose any type of Resource. Place up to 10 back onto their respective
+    Piece. Score 1 point for every 2 Pieces placed.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0

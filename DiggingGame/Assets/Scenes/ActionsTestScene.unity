@@ -8418,10 +8418,10 @@ MonoBehaviour:
   StartingCards: 4
   HandLimit: 7
   CardDraw: 2
+  BuildingPrice: 1
   RemainingFactories: 3
   RemainingBurrows: 3
   RemainingMines: 3
-  BuildingPrice: 1
 --- !u!1 &1598070888
 GameObject:
   m_ObjectHideFlags: 0

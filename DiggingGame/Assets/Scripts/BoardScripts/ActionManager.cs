@@ -5,8 +5,13 @@ using UnityEngine;
 public class ActionManager : MonoBehaviour
 {
     [HideInInspector] public int CollectedGrass, CollectedDirt, CollectedStone, CollectedGold;
+    [HideInInspector] public int[] P1CollectedPile = new int[4];
+    [HideInInspector] public int[] P2CollectedPile = new int[4];
     [HideInInspector] public int RefinedGrass, RefinedDirt, RefinedStone, RefinedGold;
+    [HideInInspector] public int[] P1RefinedPile = new int[4];
+    [HideInInspector] public int[] P2RefinedPile = new int[4];
     [HideInInspector] public int SupplyGrass, SupplyDirt, SupplyStone, SupplyGold;
+    [HideInInspector] public int[] SupplyPile = new int[4];
     [HideInInspector] public int BuiltFactories, BuiltBurrows, GrassMines, DirtMines, StoneMines;
     [HideInInspector] public int Cards = 0;
     [HideInInspector] public int GoldCards = 0;

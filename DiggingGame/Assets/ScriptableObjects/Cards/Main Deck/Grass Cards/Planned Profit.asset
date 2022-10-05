@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Planned Profit
   m_EditorClassIdentifier: 
   CardName: Planned Profit
-  CardDescription: After placing your next Building, take 1 of each Tile from the
-    Supply.
+  CardDescription: After placing your next Building, take 1 of each Resource from
+    the Supply.
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 0
-  GrassCost: 2
+  GrassCost: 1
   DirtCost: 0
   StoneCost: 0
   persistent: 1

@@ -89,7 +89,7 @@ public class CardVisuals : MonoBehaviour
 
         if (_thisCard.DirtCost >= 10)
         {
-            _grassCost.text = "X";
+            _dirtCost.text = "X";
         }
         else
         {
@@ -98,7 +98,7 @@ public class CardVisuals : MonoBehaviour
 
         if (_thisCard.StoneCost >= 10)
         {
-            _grassCost.text = "X";
+            _stoneCost.text = "X";
         }
         else
         {

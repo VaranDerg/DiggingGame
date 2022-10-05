@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Master Thief
   m_EditorClassIdentifier: 
   CardName: Master Thief
-  CardDescription: Take 2 Cards and 2 Tiles from your opponent. Score 1 point.
+  CardDescription: Take 4 Resourcees from your opponent.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
