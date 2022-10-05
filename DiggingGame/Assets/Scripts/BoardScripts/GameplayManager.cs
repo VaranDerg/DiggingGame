@@ -12,8 +12,9 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 
-public class GameplayManager : MonoBehaviour
+public class GameplayManager : MonoBehaviourPun
 {
     public int CurrentPlayer;
 
@@ -43,7 +44,7 @@ public class GameplayManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        SpawnBoard();
+        //SpawnBoard();
         CurrentPlayer = 1;
         UpdateText(currentPlayerText, "Current Turn: " + CurrentPlayer);
     }

@@ -10,17 +10,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.SceneManagement;
 using System;
+using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
-public class BoardController : MonoBehaviour
+public class BoardController : MonoBehaviourPun
 {
+
+    private const byte SPRITE_CHANGE_EVENT = 0;
+
     [SerializeField] Sprite _grassSprite;
     [SerializeField] Sprite _dirtSprite;
     [SerializeField] Sprite _stoneSprite;
     [SerializeField] Sprite _bedRockSprite;
 
     private GameState _objState;
+    private Action<EventData> networkingClient_EventRecieved;
+
+    PhotonView view;
 
     /// <summary>
     /// Represents one of three states: One - Grass, Two - Dirt, Three - Stone,
@@ -36,9 +44,12 @@ public class BoardController : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        // Object will always listen for events
+        PhotonNetwork.NetworkingClient.EventReceived += networkingClient_EventRecieved;
         SetObjectState(1);
+        view = GetComponent<PhotonView>();
     }
 
     /// <summary>
@@ -46,6 +57,16 @@ public class BoardController : MonoBehaviour
     /// </summary>
     void Update()
     {
+    }
+
+    private void NetworkingClient_EventReceived(EventData obj)
+    {
+        if (obj.Code == SPRITE_CHANGE_EVENT)
+        {
+            object[] datas = (object[])obj.CustomData;
+            int newNum = (int)datas[0];
+            gameObject.GetComponent<SpriteRenderer>().sprite = _dirtSprite;
+        }
     }
 
     /// <summary>
@@ -58,25 +79,29 @@ public class BoardController : MonoBehaviour
         // Once clicked, the piece will change states to the piece below it and
         // the sprite is changed to reflect that.
         // Example: grass -> dirt, dirt -> stone, stone -> (disappears)
-        switch (_objState)
+        if (view.IsMine)
         {
-            case GameState.One:
-                gameObject.GetComponent<SpriteRenderer>().sprite = _dirtSprite;
-                SetObjectState(2);
-                Debug.Log(_objState);
-                break;
-            case GameState.Two:
-                gameObject.GetComponent<SpriteRenderer>().sprite = _stoneSprite;
-                SetObjectState(3);
-                Debug.Log(_objState);
-                break;
-            case GameState.Three:
-                gameObject.GetComponent<SpriteRenderer>().sprite = 
-                    _bedRockSprite;
-                SetObjectState(4);
-                Debug.Log(_objState);
-                break;
-        }   
+            switch (_objState)
+            {
+
+                case GameState.One:
+                    ChangeSprite(_dirtSprite);
+                    //photonView.RPC("ChangeSprite", RpcTarget.All, _dirtSprite);
+                    SetObjectState(2);
+                    Debug.Log(_objState);
+                    break;
+                case GameState.Two:
+                    ChangeSprite(_stoneSprite);
+                    SetObjectState(3);
+                    Debug.Log(_objState);
+                    break;
+                case GameState.Three:
+                    ChangeSprite(_bedRockSprite);
+                    SetObjectState(4);
+                    Debug.Log(_objState);
+                    break;
+            }
+        }
     }
 
     /// <summary>
@@ -103,5 +128,18 @@ public class BoardController : MonoBehaviour
                 throw new Exception("This board piece state does not exist.");
         }
         
+    }
+
+    //[PunRPC]
+    public void ChangeSprite(Sprite newSprite)
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = newSprite;
+        //Debug.Log("Worked");
+
+        // cant specify obj type in raiseEvents
+        //ensures objID matches
+        //object[] datas = new object[] { base.photonView.ViewID, newSprite };
+       // object[] datas = new object[] { 1 };
+       // PhotonNetwork.RaiseEvent(SPRITE_CHANGE_EVENT, datas, RaiseEventOptions.Default, SendOptions.SendReliable);
     }
 }
