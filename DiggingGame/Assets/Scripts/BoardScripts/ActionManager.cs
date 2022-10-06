@@ -43,9 +43,9 @@ public class ActionManager : MonoBehaviour
     public int TotalBuildings;
 
     /// <summary>
-    /// Sets the card amount.
+    /// Calls PrepareStartingValues
     /// </summary>
-    private void Start()
+    private void Awake()
     {
         PrepareStartingValues();
     }
@@ -218,7 +218,7 @@ public class ActionManager : MonoBehaviour
                 return false;
             }
             P1Cards--;
-            P1GoldCards--;
+            P1GoldCards++;
             P1RefinedPile[3]--;
             SupplyPile[3]++;
             Debug.Log("Spent 1 card and 1 gold for 1 gold card!");
@@ -237,7 +237,7 @@ public class ActionManager : MonoBehaviour
                 return false;
             }
             P2Cards--;
-            P2GoldCards--;
+            P2GoldCards++;
             P2RefinedPile[3]--;
             SupplyPile[3]++;
             Debug.Log("Spent 1 card and 1 gold for 1 gold card!");
