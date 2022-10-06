@@ -1,3 +1,12 @@
+/*****************************************************************************
+// File Name :         ActionManager.cs
+// Author :            Rudy Wolfer
+// Creation Date :     October 3rd, 2022
+//
+// Brief Description : A Script to hold all play information and functions 
+                       that control and store a player's actions.
+*****************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

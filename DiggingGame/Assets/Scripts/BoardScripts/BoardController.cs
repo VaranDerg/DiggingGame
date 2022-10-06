@@ -20,14 +20,15 @@ public class BoardController : MonoBehaviour
     [SerializeField] Sprite _stoneSprite;
     [SerializeField] Sprite _bedRockSprite;
 
-    private GameState _objState;
+    //Edited: Rudy W. Set to public so other scripts can reference. 
+    [HideInInspector] public GameState ObjState;
 
     /// <summary>
     /// Represents one of three states: One - Grass, Two - Dirt, Three - Stone,
     /// Four - Gone
     /// Author: Andrea SD
     /// </summary>
-    enum GameState
+    public enum GameState
     {
         One,
         Two,
@@ -46,35 +47,32 @@ public class BoardController : MonoBehaviour
     /// </summary>
     void Update()
     {
+
     }
 
     /// <summary>
     /// This method controls what happens when the player left clicks on the
     /// board piece.
     /// Author: Andrea SD
+    /// Edited: Rudy W. Moved Debug statements into SetObjectState along with sprite change lines, as states may change through separate effects in the future.
     /// </summary>
     private void OnMouseDown()
     {
         // Once clicked, the piece will change states to the piece below it and
         // the sprite is changed to reflect that.
         // Example: grass -> dirt, dirt -> stone, stone -> (disappears)
-        switch (_objState)
+        switch (ObjState)
         {
             case GameState.One:
-                gameObject.GetComponent<SpriteRenderer>().sprite = _dirtSprite;
                 SetObjectState(2);
-                Debug.Log(_objState);
                 break;
             case GameState.Two:
                 gameObject.GetComponent<SpriteRenderer>().sprite = _stoneSprite;
                 SetObjectState(3);
-                Debug.Log(_objState);
                 break;
             case GameState.Three:
-                gameObject.GetComponent<SpriteRenderer>().sprite = 
-                    _bedRockSprite;
+                gameObject.GetComponent<SpriteRenderer>().sprite = _bedRockSprite;
                 SetObjectState(4);
-                Debug.Log(_objState);
                 break;
         }   
     }
@@ -85,23 +83,28 @@ public class BoardController : MonoBehaviour
     /// <param name="state"> determines which state the obj is set to </param>
     public void SetObjectState(int state) 
     {
-        switch(state)
+        Debug.Log("Switching " + gameObject.name + "'s State to " + state + ".");
+
+        switch (state)
         {
             case 1:
-                _objState = GameState.One;
+                gameObject.GetComponent<SpriteRenderer>().sprite = _grassSprite;
+                ObjState = GameState.One;
                 break;
-            case 2: 
-                _objState = GameState.Two;
+            case 2:
+                gameObject.GetComponent<SpriteRenderer>().sprite = _dirtSprite;
+                ObjState = GameState.Two;
                 break;
             case 3:
-                _objState = GameState.Three;
+                gameObject.GetComponent<SpriteRenderer>().sprite = _stoneSprite;
+                ObjState = GameState.Three;
                 break;
             case 4:
-                _objState = GameState.Four;
+                gameObject.GetComponent<SpriteRenderer>().sprite = _bedRockSprite;
+                ObjState = GameState.Four;
                 break;
             default:
                 throw new Exception("This board piece state does not exist.");
         }
-        
     }
 }

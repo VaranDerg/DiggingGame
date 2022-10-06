@@ -1,10 +1,18 @@
+/*****************************************************************************
+// File Name :         GameCanvasManager.cs
+// Author :            Rudy Wolfer
+// Creation Date :     October 3rd, 2022
+//
+// Brief Description : A script that updates the canvas during play.
+*****************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ExampleCanvasManager : MonoBehaviour
+public class GameCanvasManager : MonoBehaviour
 {
     //P1's Refs
     [Header("Text & Object References, Player 1")]
