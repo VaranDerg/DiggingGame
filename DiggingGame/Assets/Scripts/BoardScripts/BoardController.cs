@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         BoardController.cs
-// Author :            Andrea Swihart-DeCoster
+// Author :            Andrea Swihart-DeCoster & Rudy W.
 // Creation Date :     October 3rd, 2022
 //
 // Brief Description : This document controls the players interactions with the
@@ -15,17 +15,24 @@ using System;
 
 public class BoardController : MonoBehaviour
 {
-    [SerializeField] Sprite _grassSprite;
-    [SerializeField] Sprite _dirtSprite;
-    [SerializeField] Sprite _stoneSprite;
-    [SerializeField] Sprite _bedRockSprite;
+    //Edited: Rudy W. Organized with headers, added certain variables for functionality.
 
-    //Edited: Rudy W. Set to public so other scripts can reference. 
+    [Header("References")]
+    [SerializeField] private Sprite _grassSprite;
+    [SerializeField] private Sprite _dirtSprite;
+    [SerializeField] private Sprite _stoneSprite;
+    [SerializeField] private Sprite _bedRockSprite;
+
+    [Header("Tile Values/Information")]
+    public bool IsInteractable = true;
     [HideInInspector] public GameState ObjState;
+    [HideInInspector] public bool HasBuilding;
+    [HideInInspector] public bool HasPawn;
+    [HideInInspector] public bool IsAdjacent;
 
     /// <summary>
     /// Represents one of three states: One - Grass, Two - Dirt, Three - Stone,
-    /// Four - Gone
+    /// Four - Bedrock
     /// Author: Andrea SD
     /// </summary>
     public enum GameState
@@ -43,42 +50,60 @@ public class BoardController : MonoBehaviour
     }
 
     /// <summary>
-    /// Update is called before the first frame update
-    /// </summary>
-    void Update()
-    {
-
-    }
-
-    /// <summary>
-    /// This method controls what happens when the player left clicks on the
+    /// This method controls what happens when the player left/right clicks on the
     /// board piece.
     /// Author: Andrea SD
-    /// Edited: Rudy W. Moved Debug statements into SetObjectState along with sprite change lines, as states may change through separate effects in the future.
+    /// Edited: Rudy W. Moved Debug statements into SetObjectState along with sprite change lines, as states may change through 
+    ///         separate effects in the future. Additionally, moved into OnMouseOver for further usability; allows for replacing 
+    ///         pieces with right click temporarily.
     /// </summary>
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
         // Once clicked, the piece will change states to the piece below it and
         // the sprite is changed to reflect that.
-        // Example: grass -> dirt, dirt -> stone, stone -> (disappears)
-        switch (ObjState)
+        // Example: grass -> dirt, dirt -> stone, stone -> bedrock. reverse for right click
+
+        //The board cannot be adjusted if a tile is not marked as interactable. If commented, it's being tested.
+        //if(!IsInteractable)
+        //{
+        //    return;
+        //}
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            case GameState.One:
-                SetObjectState(2);
-                break;
-            case GameState.Two:
-                gameObject.GetComponent<SpriteRenderer>().sprite = _stoneSprite;
-                SetObjectState(3);
-                break;
-            case GameState.Three:
-                gameObject.GetComponent<SpriteRenderer>().sprite = _bedRockSprite;
-                SetObjectState(4);
-                break;
-        }   
+            switch (ObjState)
+            {
+                case GameState.One:
+                    SetObjectState(2);
+                    break;
+                case GameState.Two:
+                    SetObjectState(3);
+                    break;
+                case GameState.Three:
+                    SetObjectState(4);
+                    break;
+            }
+        }
+        else if(Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            switch (ObjState)
+            {
+                case GameState.Two:
+                    SetObjectState(1);
+                    break;
+                case GameState.Three:
+                    SetObjectState(2);
+                    break;
+                case GameState.Four:
+                    SetObjectState(3);
+                    break;
+            }
+        }
     }
 
     /// <summary>
     /// Sets the state of the game object to one of the valid enum values
+    /// Edited: 
     /// </summary>
     /// <param name="state"> determines which state the obj is set to </param>
     public void SetObjectState(int state) 
