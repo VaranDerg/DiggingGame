@@ -30,6 +30,8 @@ public class BoardController : MonoBehaviourPun
 
     PhotonView view;
 
+    [SerializeField] SpriteRenderer spriteRenderer;
+
     /// <summary>
     /// Represents one of three states: One - Grass, Two - Dirt, Three - Stone,
     /// Four - Gone
@@ -47,9 +49,9 @@ public class BoardController : MonoBehaviourPun
     void Awake()
     {
         // Object will always listen for events
-        PhotonNetwork.NetworkingClient.EventReceived += networkingClient_EventRecieved;
+        //PhotonNetwork.NetworkingClient.EventReceived += networkingClient_EventRecieved;
         SetObjectState(1);
-        view = GetComponent<PhotonView>();
+        //view = GetComponent<PhotonView>();
     }
 
     /// <summary>
@@ -59,7 +61,7 @@ public class BoardController : MonoBehaviourPun
     {
     }
 
-    private void NetworkingClient_EventReceived(EventData obj)
+   /* private void NetworkingClient_EventReceived(EventData obj)
     {
         if (obj.Code == SPRITE_CHANGE_EVENT)
         {
@@ -68,7 +70,7 @@ public class BoardController : MonoBehaviourPun
             gameObject.GetComponent<SpriteRenderer>().sprite = _dirtSprite;
         }
     }
-
+   */
     /// <summary>
     /// This method controls what happens when the player left clicks on the
     /// board piece.
@@ -79,29 +81,29 @@ public class BoardController : MonoBehaviourPun
         // Once clicked, the piece will change states to the piece below it and
         // the sprite is changed to reflect that.
         // Example: grass -> dirt, dirt -> stone, stone -> (disappears)
-        if (view.IsMine)
-        {
+       // if (view.IsMine)
+       // {
             switch (_objState)
             {
 
                 case GameState.One:
-                    ChangeSprite(_dirtSprite);
-                    //photonView.RPC("ChangeSprite", RpcTarget.All, _dirtSprite);
+                    ChangeSprite("DirtPiece");
+                    photonView.RPC("ChangeSprite", RpcTarget.All, "DirtPiece");
                     SetObjectState(2);
                     Debug.Log(_objState);
                     break;
                 case GameState.Two:
-                    ChangeSprite(_stoneSprite);
+                    ChangeSprite("StonePiece");
                     SetObjectState(3);
                     Debug.Log(_objState);
                     break;
                 case GameState.Three:
-                    ChangeSprite(_bedRockSprite);
+                    ChangeSprite("BedrockPiece");
                     SetObjectState(4);
                     Debug.Log(_objState);
                     break;
             }
-        }
+        //}
     }
 
     /// <summary>
@@ -130,16 +132,16 @@ public class BoardController : MonoBehaviourPun
         
     }
 
-    //[PunRPC]
-    public void ChangeSprite(Sprite newSprite)
+    [PunRPC]
+    public void ChangeSprite(String newSprite)
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = newSprite;
+        spriteRenderer.sprite = Resources.Load<Sprite>(newSprite);
         //Debug.Log("Worked");
 
         // cant specify obj type in raiseEvents
         //ensures objID matches
         //object[] datas = new object[] { base.photonView.ViewID, newSprite };
-       // object[] datas = new object[] { 1 };
-       // PhotonNetwork.RaiseEvent(SPRITE_CHANGE_EVENT, datas, RaiseEventOptions.Default, SendOptions.SendReliable);
+        // object[] datas = new object[] { 1 };
+        // PhotonNetwork.RaiseEvent(SPRITE_CHANGE_EVENT, datas, RaiseEventOptions.Default, SendOptions.SendReliable);
     }
 }
