@@ -14,16 +14,44 @@ public class PlayerPawn : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Collider2D _playerMainCollider;
+    //The 4 colliders surrounding a player. NSEW.
     [SerializeField] private Collider2D[] _playerNsewColliders = new Collider2D[4];
 
     [Header("Other")]
+    //The (up to) 4 Board Pieces surrounding a player. NSEW.
     private BoardController[] _tilesAdjacent = new BoardController[4];
+    private List<GameObject> _boardPieces = new List<GameObject>();
+
+    private void Start()
+    {
+        FindBoardPieces();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            CheckAdjacentTiles();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            UnassignAdjacentTiles();
+        }
+    }
+
+    private void FindBoardPieces()
+    {
+        foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            _boardPieces.Add(piece);
+        }
+    }
 
     /// <summary>
     /// Finds adjacent tiles based on the Nsew colliders. Marks them as adjacent.
     /// </summary>
-    /// <param name="collision">Touching parameter</param>
-    private void CheckAdjacentTiles(Collision2D collision)
+    private void CheckAdjacentTiles()
     {
         //Check if a collider is touching anything. 
         //Check if that collider is touching something with the tag "BoardPiece."
@@ -32,7 +60,13 @@ public class PlayerPawn : MonoBehaviour
 
         for(int i = 0; i < _playerNsewColliders.Length; i++)
         {
-            
+            foreach(GameObject piece in _boardPieces)
+            {
+                if(piece.gameObject.GetComponent<Collider2D>().IsTouching(_playerNsewColliders[i]))
+                {
+                    _tilesAdjacent[i] = piece.GetComponent<BoardController>();
+                }
+            }
         }
     }
 
@@ -40,7 +74,7 @@ public class PlayerPawn : MonoBehaviour
     {
         for(int i = 0; i < _tilesAdjacent.Length; i++)
         {
-            _tilesAdjacent[i].IsAdjacent = false;
+            _tilesAdjacent[i].NoLongerAdjacent();
         }
     }
 }

@@ -22,13 +22,21 @@ public class BoardController : MonoBehaviour
     [SerializeField] private Sprite _dirtSprite;
     [SerializeField] private Sprite _stoneSprite;
     [SerializeField] private Sprite _bedRockSprite;
+    private SpriteRenderer _sr;
 
     [Header("Tile Values/Information")]
     public bool IsInteractable = true;
+    [SerializeField] private Color _adjacentColor;
+    [SerializeField] private Color _defaultColor;
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasBuilding;
     [HideInInspector] public bool HasPawn;
     [HideInInspector] public bool IsAdjacent;
+
+    private void Awake()
+    {
+        _sr = GetComponent<SpriteRenderer>();
+    }
 
     /// <summary>
     /// Represents one of three states: One - Grass, Two - Dirt, Three - Stone,
@@ -44,9 +52,10 @@ public class BoardController : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         SetObjectState(1);
+        _sr.color = _defaultColor;
     }
 
     /// <summary>
@@ -130,6 +139,57 @@ public class BoardController : MonoBehaviour
                 break;
             default:
                 throw new Exception("This board piece state does not exist.");
+        }
+    }
+
+    /// <summary>
+    /// Updates tile to an adjacent state, allowing more interaction.
+    /// </summary>
+    public void AdjacentToPlayer()
+    {
+        _sr.color = _adjacentColor;
+        IsAdjacent = true;
+        IsInteractable = true;
+    }
+
+    /// <summary>
+    /// Removes tile's adjacent state.
+    /// </summary>
+    public void NoLongerAdjacent()
+    {
+        _sr.color = _defaultColor;
+        IsAdjacent = false;
+        IsInteractable = false;
+    }
+
+    /// <summary>
+    /// Changes a Tile's occupant. A tile can hold 1 Pawn and 1 Building.
+    /// </summary>
+    /// <param name="isPlayer">True = Pawn; False = Building</param>
+    /// <param name="isEntering">True = Being Placed; False = Being Removed</param>
+    public void ChangeOccupation(bool isPlayer, bool isEntering)
+    {
+        if(isEntering)
+        {
+            if (isPlayer)
+            {
+                HasPawn = true;
+            }
+            else if (!isPlayer)
+            {
+                HasBuilding = true;
+            }
+        }
+        else
+        {
+            if (isPlayer)
+            {
+                HasPawn = false;
+            }
+            else if (!isPlayer)
+            {
+                HasBuilding = false;
+            }
         }
     }
 }
