@@ -15,11 +15,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
-<<<<<<<< HEAD:DiggingGame/Assets/Scripts/BoardScripts/PieceController.cs
-public class PieceController : MonoBehaviour
-========
 public class MultiPieceController : MonoBehaviourPun
->>>>>>>> Photon3:DiggingGame/Assets/Scripts/BoardScripts/MultiPieceController.cs
 {
     //Edited: Rudy W. Organized with headers, added certain variables for functionality.
 

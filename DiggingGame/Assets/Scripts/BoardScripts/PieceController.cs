@@ -10,16 +10,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.SceneManagement;
 using System;
-using Photon.Pun;
-using Photon.Realtime;
-using ExitGames.Client.Photon;
 
-<<<<<<<< HEAD:DiggingGame/Assets/Scripts/BoardScripts/PieceController.cs
 public class PieceController : MonoBehaviour
-========
-public class MultiPieceController : MonoBehaviourPun
->>>>>>>> Photon3:DiggingGame/Assets/Scripts/BoardScripts/MultiPieceController.cs
 {
     //Edited: Rudy W. Organized with headers, added certain variables for functionality.
 
@@ -45,7 +39,6 @@ public class MultiPieceController : MonoBehaviourPun
     [HideInInspector] public bool HasPawn;
     [HideInInspector] public bool IsAdjacent;
 
-
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
@@ -67,7 +60,7 @@ public class MultiPieceController : MonoBehaviourPun
     // Start is called before the first frame update
     private void Start()
     {
-        //SetObjectState(1);
+        SetObjectState(1);
         _sr.color = _defaultColor;
     }
 
@@ -105,13 +98,12 @@ public class MultiPieceController : MonoBehaviourPun
             {
                 case GameState.One:
                     SetObjectState(2);
-                    photonView.RPC("SetObjectState", RpcTarget.All, 2);
                     break;
                 case GameState.Two:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 3);
+                    SetObjectState(3);
                     break;
                 case GameState.Three:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 4);
+                    SetObjectState(4);
                     break;
             }
         }
@@ -120,19 +112,18 @@ public class MultiPieceController : MonoBehaviourPun
             switch (ObjState)
             {
                 case GameState.Two:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 1);
+                    SetObjectState(1);
                     break;
                 case GameState.Three:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 2);
+                    SetObjectState(2);
                     break;
                 case GameState.Four:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 3);
+                    SetObjectState(3);
                     break;
             }
         }
     }
 
-    [PunRPC]
     /// <summary>
     /// Method controlling Building placement and removal.
     /// </summary>
@@ -179,22 +170,20 @@ public class MultiPieceController : MonoBehaviourPun
 
         switch (state)
         {
-                // Each case calls each client connected to the server and
-                // changes the game object sprite to a sprite from the resources
             case 1:
-                ChangeSprite("GrassPiece");
+                gameObject.GetComponent<SpriteRenderer>().sprite = _grassSprite;
                 ObjState = GameState.One;
                 break;
             case 2:
-                ChangeSprite("DirtPiece");
+                gameObject.GetComponent<SpriteRenderer>().sprite = _dirtSprite;
                 ObjState = GameState.Two;
                 break;
             case 3:
-                ChangeSprite("StonePiece");
+                gameObject.GetComponent<SpriteRenderer>().sprite = _stoneSprite;
                 ObjState = GameState.Three;
                 break;
             case 4:
-                ChangeSprite("BedrockPiece");
+                gameObject.GetComponent<SpriteRenderer>().sprite = _bedRockSprite;
                 ObjState = GameState.Four;
                 break;
             default:
@@ -202,16 +191,10 @@ public class MultiPieceController : MonoBehaviourPun
         }
     }
 
-    [PunRPC]
-    public void ChangeSprite(String newSprite)
-    {
-        _sr.sprite = Resources.Load<Sprite>(newSprite);
-    }
-
-        /// <summary>
-        /// Updates tile to an adjacent state, allowing more interaction.
-        /// </summary>
-        public void AdjacentToPlayer()
+    /// <summary>
+    /// Updates tile to an adjacent state, allowing more interaction.
+    /// </summary>
+    public void AdjacentToPlayer()
     {
         _sr.color = _adjacentColor;
         IsAdjacent = true;
