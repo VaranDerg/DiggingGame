@@ -73,7 +73,7 @@ public class BoardController : MonoBehaviour
         // Example: grass -> dirt, dirt -> stone, stone -> bedrock. reverse for right click
 
         //The board cannot be adjusted if a tile is not marked as interactable. If commented, it's being tested.
-        //if(!IsInteractable)
+        //if (!IsInteractable)
         //{
         //    return;
         //}

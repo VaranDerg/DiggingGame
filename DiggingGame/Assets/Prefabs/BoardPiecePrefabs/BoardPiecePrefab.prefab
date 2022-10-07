@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4847777960994457896}
   - component: {fileID: 4333397845963253455}
   m_Layer: 0
-  m_Name: BoardTilePrefab
+  m_Name: BoardPiecePrefab
   m_TagString: BoardPiece
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,13 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: d6092582ec4d67c42a318eecd215b92c, type: 3}
+  IsInteractable: 1
+  _adjacentColor: {r: 0.9690732, g: 1, b: 0.3066038, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
+  IsAdjacent: 0
 --- !u!61 &4333397845963253455
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -65,6 +65,7 @@ public class PlayerPawn : MonoBehaviour
                 if(piece.gameObject.GetComponent<Collider2D>().IsTouching(_playerNsewColliders[i]))
                 {
                     _tilesAdjacent[i] = piece.GetComponent<BoardController>();
+                    _tilesAdjacent[i].GetComponent<BoardController>().AdjacentToPlayer();
                 }
             }
         }
