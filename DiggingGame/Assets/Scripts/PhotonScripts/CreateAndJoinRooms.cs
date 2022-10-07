@@ -17,7 +17,10 @@ using TMPro;
 public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 {
     // Where the player enters the name of the room they want to create or join
-    [SerializeField] TMP_InputField createInput, joinInput;
+    [SerializeField] TMP_InputField _createInput, _joinInput;
+    
+    // Scene players will load into when a room is joined
+    [SerializeField] string _joinScene;
 
     /// <summary>
     /// Creates a new room with the name of whatever was in the input field.
@@ -26,7 +29,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     /// </summary>
     public void CreateRoom()
     {
-        PhotonNetwork.CreateRoom(createInput.text);
+        PhotonNetwork.CreateRoom(_createInput.text);
     }
 
     /// <summary>
@@ -35,7 +38,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     /// </summary>
     public void JoinRoom()
     {
-        PhotonNetwork.JoinRoom(joinInput.text);
+        PhotonNetwork.JoinRoom(_joinInput.text);
     }
 
     /// <summary>
@@ -45,6 +48,6 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.LoadLevel("PrototypeScene");
+        PhotonNetwork.LoadLevel(_joinScene);
     }
 }

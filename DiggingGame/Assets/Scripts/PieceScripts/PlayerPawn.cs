@@ -19,7 +19,7 @@ public class PlayerPawn : MonoBehaviour
 
     [Header("Other")]
     //The (up to) 4 Board Pieces surrounding a player. NSEW.
-    private BoardController[] _tilesAdjacent = new BoardController[4];
+    private PieceController[] _tilesAdjacent = new PieceController[4];
     private List<GameObject> _boardPieces = new List<GameObject>();
 
     private void Start()
@@ -64,8 +64,8 @@ public class PlayerPawn : MonoBehaviour
             {
                 if(piece.gameObject.GetComponent<Collider2D>().IsTouching(_playerNsewColliders[i]))
                 {
-                    _tilesAdjacent[i] = piece.GetComponent<BoardController>();
-                    _tilesAdjacent[i].GetComponent<BoardController>().AdjacentToPlayer();
+                    _tilesAdjacent[i] = piece.GetComponent<PieceController>();
+                    _tilesAdjacent[i].GetComponent<PieceController>().AdjacentToPlayer();
                 }
             }
         }

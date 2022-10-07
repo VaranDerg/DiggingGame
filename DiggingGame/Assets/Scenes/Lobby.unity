@@ -484,8 +484,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d7edbd9ab332e04a967ad17deeb5f7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createInput: {fileID: 1508638092}
-  joinInput: {fileID: 224404380}
+  _createInput: {fileID: 1508638092}
+  _joinInput: {fileID: 224404380}
+  _joinScene: MultiplayerTest
 --- !u!4 &266599580
 Transform:
   m_ObjectHideFlags: 0
