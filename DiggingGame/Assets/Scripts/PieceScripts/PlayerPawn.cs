@@ -12,14 +12,14 @@ using UnityEngine;
 
 public class PlayerPawn : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private Collider2D _playerMainCollider;
-    //The 4 colliders surrounding a player. NSEW.
-    [SerializeField] private Collider2D[] _playerNsewColliders = new Collider2D[4];
+    [Header("References/Values")]
+    //1 or 2
+    [SerializeField] private int _player;
+    [SerializeField] private float _raycastAdjuster;
 
     [Header("Other")]
     //The (up to) 4 Board Pieces surrounding a player. NSEW.
-    private BoardController[] _tilesAdjacent = new BoardController[4];
+    private List<GameObject> _adjacentPieces = new List<GameObject>();
     private List<GameObject> _boardPieces = new List<GameObject>();
 
     private void Start()
@@ -34,8 +34,29 @@ public class PlayerPawn : MonoBehaviour
             CheckAdjacentTiles();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        BasicMovement();
+    }
+
+    private void BasicMovement()
+    {
+        if(Input.GetKeyDown(KeyCode.UpArrow))
         {
+            transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+            UnassignAdjacentTiles();
+        }
+        if(Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            transform.position = new Vector2(transform.position.x, transform.position.y - 1);
+            UnassignAdjacentTiles();
+        }
+        if(Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            transform.position = new Vector2(transform.position.x + 1, transform.position.y);
+            UnassignAdjacentTiles();
+        }
+        if(Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            transform.position = new Vector2(transform.position.x - 1, transform.position.y);
             UnassignAdjacentTiles();
         }
     }
@@ -49,33 +70,57 @@ public class PlayerPawn : MonoBehaviour
     }
 
     /// <summary>
-    /// Finds adjacent tiles based on the Nsew colliders. Marks them as adjacent.
+    /// Finds adjacent tiles based on the Nsew points. Marks them as adjacent.
     /// </summary>
     private void CheckAdjacentTiles()
     {
-        //Check if a collider is touching anything. 
-        //Check if that collider is touching something with the tag "BoardPiece."
-        //If it isn't, move to the nice collider in the array. 
-        //If it is, update the tile in the _tilesAdjacent array to being adjacent. 
+        RaycastHit2D nPiece = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + _raycastAdjuster), Vector2.up, _raycastAdjuster);
+        RaycastHit2D sPiece = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - _raycastAdjuster), Vector2.down, -_raycastAdjuster);
+        RaycastHit2D ePiece = Physics2D.Raycast(new Vector2(transform.position.x + _raycastAdjuster, transform.position.y), Vector2.right, _raycastAdjuster);
+        RaycastHit2D wPiece = Physics2D.Raycast(new Vector2(transform.position.x - _raycastAdjuster, transform.position.y), Vector2.left, -_raycastAdjuster);
 
-        for(int i = 0; i < _playerNsewColliders.Length; i++)
+        //if(nPiece.transform.gameObject != null)
+        //{
+        //    _adjacentPieces.Add(nPiece.transform.gameObject);
+        //}
+        //if (sPiece.transform.gameObject != null)
+        //{
+        //    _adjacentPieces.Add(sPiece.transform.gameObject);
+        //}
+        //if (ePiece.transform.gameObject != null)
+        //{
+        //    _adjacentPieces.Add(ePiece.transform.gameObject);
+        //}
+        //if(wPiece.transform.gameObject != null)
+        //{
+        //    _adjacentPieces.Add(wPiece.transform.gameObject);
+        //}
+
+        _adjacentPieces.Add(nPiece.transform.gameObject);
+        _adjacentPieces.Add(sPiece.transform.gameObject);
+        _adjacentPieces.Add(ePiece.transform.gameObject);
+        _adjacentPieces.Add(wPiece.transform.gameObject);
+
+        foreach (GameObject piece in _adjacentPieces)
         {
-            foreach(GameObject piece in _boardPieces)
+            if(piece == null)
             {
-                if(piece.gameObject.GetComponent<Collider2D>().IsTouching(_playerNsewColliders[i]))
-                {
-                    _tilesAdjacent[i] = piece.GetComponent<BoardController>();
-                    _tilesAdjacent[i].GetComponent<BoardController>().AdjacentToPlayer();
-                }
+                return;
             }
+            piece.GetComponent<PieceController>().AdjacentToPlayer();
         }
     }
 
     private void UnassignAdjacentTiles()
     {
-        for(int i = 0; i < _tilesAdjacent.Length; i++)
+        for(int i = 0; i < _adjacentPieces.Count; i++)
         {
-            _tilesAdjacent[i].NoLongerAdjacent();
+            if(_adjacentPieces[i] != null)
+            {
+                _adjacentPieces[i].GetComponent<PieceController>().NoLongerAdjacent();
+            }
         }
+
+        _adjacentPieces.Clear();
     }
 }

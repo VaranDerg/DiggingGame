@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEditor.SceneManagement;
 using System;
 
-public class BoardController : MonoBehaviour
+public class PieceController : MonoBehaviour
 {
     //Edited: Rudy W. Organized with headers, added certain variables for functionality.
 
@@ -117,7 +117,7 @@ public class BoardController : MonoBehaviour
     /// <param name="state"> determines which state the obj is set to </param>
     public void SetObjectState(int state) 
     {
-        Debug.Log("Switching " + gameObject.name + "'s State to " + state + ".");
+        //Debug.Log("Switching " + gameObject.name + "'s State to " + state + ".");
 
         switch (state)
         {
