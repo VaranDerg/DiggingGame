@@ -10,9 +10,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Building : MonoBehaviour
 {
-    public bool Damaged;
+    [HideInInspector] public bool Damaged;
+
+    private List<GameObject> _boardPieces = new List<GameObject>();
+
+    private void Start()
+    {
+        FindBoardPieces();
+    }
+
+    /// <summary>
+    /// Adds every board piece to a list.
+    /// </summary>
+    private void FindBoardPieces()
+    {
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            _boardPieces.Add(piece);
+        }
+    }
 
     public virtual void PlaceBuilding()
     {

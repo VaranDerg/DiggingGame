@@ -17,15 +17,21 @@ public class PieceController : MonoBehaviour
 {
     //Edited: Rudy W. Organized with headers, added certain variables for functionality.
 
-    [Header("References")]
+    [Header("Piece References")]
     [SerializeField] private Sprite _grassSprite;
     [SerializeField] private Sprite _dirtSprite;
     [SerializeField] private Sprite _stoneSprite;
     [SerializeField] private Sprite _bedRockSprite;
     private SpriteRenderer _sr;
 
+    [Header("Building References")]
+    [SerializeField] private Transform _buildingSlot;
+    [SerializeField] private GameObject _factory, _burrow, _mine;
+
+
     [Header("Tile Values/Information")]
-    public bool IsInteractable = true;
+    [HideInInspector] public bool IsInteractable = false;
+    [HideInInspector] public bool IsRemovable = false;
     [SerializeField] private Color _adjacentColor;
     [SerializeField] private Color _defaultColor;
     [HideInInspector] public GameState ObjState;
@@ -59,8 +65,7 @@ public class PieceController : MonoBehaviour
     }
 
     /// <summary>
-    /// This method controls what happens when the player left/right clicks on the
-    /// board piece.
+    /// This method controls what happens when the interacts with the board.
     /// Author: Andrea SD
     /// Edited: Rudy W. Moved Debug statements into SetObjectState along with sprite change lines, as states may change through 
     ///         separate effects in the future. Additionally, moved into OnMouseOver for further usability; allows for replacing 
@@ -68,15 +73,24 @@ public class PieceController : MonoBehaviour
     /// </summary>
     private void OnMouseOver()
     {
+        BuildingPlacementAndRemoval();
+        PiecePlacementAndRemoval();
+    }
+
+    /// <summary>
+    /// Method controlling Piece placement and removal.
+    /// </summary>
+    private void PiecePlacementAndRemoval()
+    {
         // Once clicked, the piece will change states to the piece below it and
         // the sprite is changed to reflect that.
         // Example: grass -> dirt, dirt -> stone, stone -> bedrock. reverse for right click
 
-        //The board cannot be adjusted if a tile is not marked as interactable. If commented, it's being tested.
-        //if (!IsInteractable)
-        //{
-        //    return;
-        //}
+        //The board cannot be adjusted if a tile is not marked as interactable.If commented, it's being tested.
+        if (!IsRemovable)
+        {
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -93,7 +107,7 @@ public class PieceController : MonoBehaviour
                     break;
             }
         }
-        else if(Input.GetKeyDown(KeyCode.Mouse1))
+        else if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             switch (ObjState)
             {
@@ -108,6 +122,41 @@ public class PieceController : MonoBehaviour
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// Method controlling Building placement and removal.
+    /// </summary>
+    private void BuildingPlacementAndRemoval()
+    {
+        if(!IsInteractable)
+        {
+            return;
+        }
+
+        if(HasBuilding)
+        {
+            return;
+        }
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            BuildBuilding(_factory);
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            BuildBuilding(_burrow);
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            BuildBuilding(_mine);
+        }
+    }
+
+    private void BuildBuilding(GameObject building)
+    {
+        GameObject newestBuilding = Instantiate(building, _buildingSlot);
+        HasBuilding = true;
     }
 
     /// <summary>
