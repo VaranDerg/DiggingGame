@@ -957,7 +957,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &112926721
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1110,7 +1125,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &120718966
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1268,7 +1298,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &128881778
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1421,7 +1466,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &162510133
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1636,7 +1696,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &190187430
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1789,7 +1864,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &207270702
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2009,7 +2099,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &236102955
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2167,7 +2272,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &249700349
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2501,7 +2621,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 272112492}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &272112492
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3231,7 +3366,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &406379793
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3384,7 +3534,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &416348986
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3542,7 +3707,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &456882234
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3700,7 +3880,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &495373192
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3911,7 +4106,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &547875682
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4370,7 +4580,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &685667073
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4523,7 +4748,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &702425301
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4701,7 +4941,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &796107931
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5115,7 +5370,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &922694207
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5316,7 +5586,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &998719999
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5518,7 +5803,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1055247818
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6044,7 +6344,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1150793039
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6752,7 +7067,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1273766974
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7221,7 +7551,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1331646976
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7620,7 +7965,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1393964728
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8074,7 +8434,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1563172595
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8408,7 +8783,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1669787902
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8618,7 +9008,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1680757061
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8771,7 +9176,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1689149194
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9069,7 +9489,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1736438480
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9475,7 +9910,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1813000092
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9685,7 +10135,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1852873046
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9952,7 +10417,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &1952543097
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10285,7 +10765,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &2010542968
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10687,7 +11182,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &2089508395
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10902,7 +11412,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &2105808712
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11178,7 +11703,22 @@ MonoBehaviour:
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
   _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
-  spriteRenderer: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _movableColor: {r: 0, g: 0, b: 0, a: 0}
+  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
+  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
+  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
 --- !u!212 &2135415163
 SpriteRenderer:
   m_ObjectHideFlags: 0

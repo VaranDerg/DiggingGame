@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 4847777960994457898}
   - component: {fileID: 4847777960994457899}
   - component: {fileID: 4847777960994457896}
+  - component: {fileID: 441989377441299965}
   - component: {fileID: 4333397845963253455}
+  - component: {fileID: 1653752625053519425}
   m_Layer: 7
   m_Name: BoardPiecePrefab
   m_TagString: BoardPiece
@@ -76,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: -318801959
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 80293987c4f8f494b8f951275d4b62e3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -94,7 +96,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4847777960994457941}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8be2d41e94410f4cbff8622ef61f4ef, type: 3}
   m_Name: 
@@ -119,6 +121,34 @@ MonoBehaviour:
   ObjState: 0
   HasBuilding: 0
   HasPawn: 0
+--- !u!114 &441989377441299965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4847777960994457941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3dbf8dc23a07f44858a9cd9e916847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _grassSprite: {fileID: 0}
+  _dirtSprite: {fileID: 0}
+  _stoneSprite: {fileID: 0}
+  _bedRockSprite: {fileID: 0}
+  _buildingSlot: {fileID: 0}
+  _factory: {fileID: 0}
+  _burrow: {fileID: 0}
+  _mine: {fileID: 0}
+  IsInteractable: 0
+  IsRemovable: 0
+  _adjacentColor: {r: 0, g: 0, b: 0, a: 0}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  ObjState: 0
+  HasBuilding: 0
+  HasPawn: 0
+  IsAdjacent: 0
 --- !u!61 &4333397845963253455
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -145,6 +175,29 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1653752625053519425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4847777960994457941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  observableSearch: 0
+  ObservedComponents:
+  - {fileID: 0}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6229392866763795104
 GameObject:
   m_ObjectHideFlags: 0

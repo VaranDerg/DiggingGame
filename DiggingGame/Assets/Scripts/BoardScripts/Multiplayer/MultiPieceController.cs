@@ -63,7 +63,8 @@ public class MultiPieceController : MonoBehaviourPun
     // Start is called before the first frame update
     private void Start()
     {
-        //SetObjectState(1);
+        
+        SetObjectState(1);
         _sr.color = _defaultColor;
     }
 
@@ -100,7 +101,6 @@ public class MultiPieceController : MonoBehaviourPun
             switch (ObjState)
             {
                 case GameState.One:
-                    SetObjectState(2);
                     photonView.RPC("SetObjectState", RpcTarget.All, 2);
                     break;
                 case GameState.Two:
@@ -221,7 +221,7 @@ public class MultiPieceController : MonoBehaviourPun
     {
         _sr.color = _defaultColor;
         IsAdjacent = false;
-        IsInteractable = false;
+        //IsInteractable = false;
     }
 
     /// <summary>
