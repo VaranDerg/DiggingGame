@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2097167223220628438}
   - component: {fileID: 2097167223220628437}
   - component: {fileID: 6332178982544180167}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Burrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

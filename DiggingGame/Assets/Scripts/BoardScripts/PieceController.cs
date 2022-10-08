@@ -28,20 +28,19 @@ public class PieceController : MonoBehaviour
     [SerializeField] private Transform _buildingSlot;
     [SerializeField] private GameObject _factory, _burrow, _mine;
 
-
     [Header("Tile Values/Information")]
-    [HideInInspector] public bool IsInteractable = false;
-    [HideInInspector] public bool IsRemovable = false;
-    [SerializeField] private Color _adjacentColor;
     [SerializeField] private Color _defaultColor;
+    [SerializeField] private Color _movableColor, _diggableColor, _placeableColor, buildableColor;
+    [HideInInspector] public bool IsMovable = false, IsDiggable = false, IsPlaceable = false, IsBuildable = false;
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasBuilding;
     [HideInInspector] public bool HasPawn;
-    [HideInInspector] public bool IsAdjacent;
+    private AdjacencyChecker _ac;
 
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
+        _ac = FindObjectOfType<AdjacencyChecker>();
     }
 
     /// <summary>
@@ -87,7 +86,7 @@ public class PieceController : MonoBehaviour
         // Example: grass -> dirt, dirt -> stone, stone -> bedrock. reverse for right click
 
         //The board cannot be adjusted if a tile is not marked as interactable.If commented, it's being tested.
-        if (!IsRemovable)
+        if (!IsDiggable)
         {
             return;
         }
@@ -129,7 +128,7 @@ public class PieceController : MonoBehaviour
     /// </summary>
     private void BuildingPlacementAndRemoval()
     {
-        if(!IsInteractable)
+        if(!IsBuildable)
         {
             return;
         }
@@ -153,10 +152,34 @@ public class PieceController : MonoBehaviour
         }
     }
 
-    private void BuildBuilding(GameObject building)
+    /// <summary>
+    /// Places a building. Returns false and removes it if it's adjacent to another building.
+    /// </summary>
+    /// <param name="building"></param>
+    private bool BuildBuilding(GameObject building)
     {
-        GameObject newestBuilding = Instantiate(building, _buildingSlot);
-        HasBuilding = true;
+        bool canPlaceOnTile = true;
+
+        foreach(GameObject piece in _ac.GenerateAdjacentPieceList(gameObject))
+        {
+            if(piece.GetComponent<PieceController>().HasBuilding)
+            {
+                canPlaceOnTile = false;
+            }
+        }
+
+        if(canPlaceOnTile)
+        {
+            Instantiate(building, _buildingSlot);
+            HasBuilding = true;
+            Debug.Log("Placed " + building.name + ".");
+            return true;
+        }
+        else
+        {
+            Debug.Log("Cannot place " + building.name + " adjacent to another building.");
+            return false;
+        }
     }
 
     /// <summary>
@@ -192,23 +215,71 @@ public class PieceController : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates tile to an adjacent state, allowing more interaction.
+    /// Updates tiles for player movement.
     /// </summary>
-    public void AdjacentToPlayer()
+    public void ShowHideMovable(bool show)
     {
-        _sr.color = _adjacentColor;
-        IsAdjacent = true;
-        IsInteractable = true;
+        if(show)
+        {
+            _sr.color = _movableColor;
+            IsMovable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            IsMovable = false;
+        }
     }
 
     /// <summary>
-    /// Removes tile's adjacent state.
+    /// Updates tiles for buildability.
     /// </summary>
-    public void NoLongerAdjacent()
+    public void ShowHideBuildable(bool show)
     {
-        _sr.color = _defaultColor;
-        IsAdjacent = false;
-        IsInteractable = false;
+        if (show)
+        {
+            _sr.color = buildableColor;
+            IsBuildable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            IsBuildable = false;
+        }
+    }
+
+    /// <summary>
+    /// Updates tiles for piece removal.
+    /// </summary>
+    public void ShowHideDiggable(bool show)
+    {
+        if (show)
+        {
+            _sr.color = _diggableColor;
+            IsDiggable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            IsDiggable = false;
+        }
+    }
+
+    /// <summary>
+    /// Updates tiles for piece placement.
+    /// </summary>
+    public void ShowHidePlaceable(bool show)
+    {
+        if (show)
+        {
+            _sr.color = _placeableColor;
+            IsPlaceable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            IsPlaceable = false;
+        }
     }
 
     /// <summary>

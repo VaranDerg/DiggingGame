@@ -18,8 +18,9 @@ public class PlayerPawn : MonoBehaviour
 
     [Header("Other")]
     //The (up to) 4 Board Pieces surrounding a player. NSEW.
-    private List<GameObject> _adjacentPieces = new List<GameObject>();
+    private List<GameObject> _shownPieces = new List<GameObject>();
     private List<GameObject> _boardPieces = new List<GameObject>();
+    private AdjacencyChecker _ac;
 
     /// <summary>
     /// Calls FindBoardPieces.
@@ -27,6 +28,7 @@ public class PlayerPawn : MonoBehaviour
     private void Start()
     {
         FindBoardPieces();
+        _ac = FindObjectOfType<AdjacencyChecker>();
     }
 
     /// <summary>
@@ -34,12 +36,48 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Q))
+        //Find every piece adjacent to the pawn's piece.
+        if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            CheckAdjacentTiles();
+            //Add it to the "_shownPieces" array and mark it as movable. 
+            foreach(GameObject piece in _ac.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            {
+                piece.GetComponent<PieceController>().ShowHideMovable(true);
+                _shownPieces.Add(piece);
+            }
         }
 
-        BasicMovement();
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            //Find every piece adjacent to the pawn's piece.
+            foreach (GameObject piece in _ac.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            {
+                bool dontHighlight = false;
+                //Check if that adjacent piece has a building.
+                if (piece.GetComponent<PieceController>().HasBuilding)
+                {
+                    dontHighlight = true;
+                }
+
+                //Check if any currently adjacent pieces are adjacent to a building.
+                foreach (GameObject pieceSquared in _ac.GenerateAdjacentPieceList(piece))
+                {
+                    if (pieceSquared.GetComponent<PieceController>().HasBuilding)
+                    {
+                        dontHighlight = true;
+                    }
+                }
+
+                //If not, add it to the "_shownPieces" array and mark it as buildable.
+                if(!dontHighlight)
+                {
+                    piece.GetComponent<PieceController>().ShowHideBuildable(true);
+                    _shownPieces.Add(piece);
+                }
+            }
+        }
+
+        TemporaryMovement();
     }
 
     /// <summary>
@@ -56,7 +94,7 @@ public class PlayerPawn : MonoBehaviour
     /// <summary>
     /// Temporary method for example movement.
     /// </summary>
-    private void BasicMovement()
+    private void TemporaryMovement()
     {
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -81,50 +119,6 @@ public class PlayerPawn : MonoBehaviour
     }
 
     /// <summary>
-    /// Finds adjacent tiles & the tile the player is on.
-    /// 1. Finds the distance between the current tile and closest other tile. 
-    /// 2. Finds each tile matching that distance.
-    /// 3. Adds every tile to _adjacentPieces.
-    /// 4. Calls "AdjacentToPlayer" for each Piece.
-    /// </summary>
-    private void CheckAdjacentTiles()
-    {
-        GameObject closestPiece = null;
-        float curShortestDist = Mathf.Infinity;
-        Vector3 curPiecePos = ClosestPieceToPawn().transform.position;
-
-        foreach(GameObject piece in _boardPieces)
-        {
-            float pieceToPieceDist = Vector3.Distance(piece.transform.position, curPiecePos);
-            if (pieceToPieceDist < curShortestDist)
-            {
-                closestPiece = piece;
-
-                if(closestPiece.transform.position != curPiecePos)
-                {
-                    curShortestDist = pieceToPieceDist;
-                }
-            }
-        }
-
-        int i = 0;
-        foreach(GameObject piece in _boardPieces)
-        {
-            if(Vector3.Distance(piece.transform.position, curPiecePos) == curShortestDist)
-            {
-                i++;
-                _adjacentPieces.Add(piece);
-            }
-        }
-        Debug.Log("Found " + i + " pieces " + curShortestDist + " units from " + closestPiece.name + ".");
-
-        foreach(GameObject piece in _adjacentPieces)
-        {
-            piece.GetComponent<PieceController>().AdjacentToPlayer();
-        }
-    }
-
-    /// <summary>
     /// Finds the closest piece to the pawn.
     /// </summary>
     /// <returns>GameObject "Piece" that's closest to the current Pawn.</returns>
@@ -143,16 +137,7 @@ public class PlayerPawn : MonoBehaviour
             }
         }
 
-        if(closestPiece == null)
-        {
-            Debug.LogWarning("No closest piece to pawn found? Are pieces in the scene and marked with the BoardPiece tag?");
-            return null;
-        }
-        else
-        {
-            Debug.Log("Found closest piece: " + closestPiece.name);
-            return closestPiece;
-        }
+        return closestPiece;
     }
 
     /// <summary>
@@ -160,14 +145,14 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     private void UnassignAdjacentTiles()
     {
-        for(int i = 0; i < _adjacentPieces.Count; i++)
+        for(int i = 0; i < _shownPieces.Count; i++)
         {
-            if(_adjacentPieces[i] != null)
+            if(_shownPieces[i] != null)
             {
-                _adjacentPieces[i].GetComponent<PieceController>().NoLongerAdjacent();
+                _shownPieces[i].GetComponent<PieceController>().ShowHideMovable(false);
             }
         }
 
-        _adjacentPieces.Clear();
+        _shownPieces.Clear();
     }
 }

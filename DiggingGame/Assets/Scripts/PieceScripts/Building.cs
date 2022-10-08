@@ -33,11 +33,6 @@ public class Building : MonoBehaviour
         }
     }
 
-    public virtual void PlaceBuilding()
-    {
-
-    }
-
     public virtual void DamageBuiliding()
     {
 

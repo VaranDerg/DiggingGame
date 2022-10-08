@@ -107,14 +107,18 @@ MonoBehaviour:
   _factory: {fileID: 4251760763736238801, guid: 37b05d21554c1a247b0cabf54254d7e6, type: 3}
   _burrow: {fileID: 2097167223220628436, guid: a047394ed136f104fb8e0300e1b84376, type: 3}
   _mine: {fileID: 6614894829994012052, guid: 9f7559e39bd4411429c0a8b08d32837a, type: 3}
-  IsInteractable: 0
-  IsRemovable: 0
-  _adjacentColor: {r: 1, g: 0.30588233, b: 0.404429, a: 1}
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _movableColor: {r: 1, g: 0, b: 0, a: 1}
+  _diggableColor: {r: 0.9561405, g: 0, b: 1, a: 1}
+  _placeableColor: {r: 0, g: 0.084033966, b: 1, a: 1}
+  buildableColor: {r: 0, g: 0.9032259, b: 1, a: 1}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
   ObjState: 0
   HasBuilding: 0
   HasPawn: 0
-  IsAdjacent: 0
 --- !u!61 &4333397845963253455
 BoxCollider2D:
   m_ObjectHideFlags: 0
