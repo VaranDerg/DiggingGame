@@ -93,7 +93,7 @@ public class MultiPieceController : MonoBehaviourPun
         //The board cannot be adjusted if a tile is not marked as interactable.If commented, it's being tested.
         if (!IsRemovable)
         {
-            return;
+            //return;
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -164,6 +164,7 @@ public class MultiPieceController : MonoBehaviourPun
         HasBuilding = true;
     }
 
+    [PunRPC]
     /// <summary>
     /// Sets the state of the game object to one of the valid enum values
     /// Edited: 
