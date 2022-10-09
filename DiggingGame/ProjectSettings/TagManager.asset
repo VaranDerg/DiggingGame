@@ -8,6 +8,7 @@ TagManager:
   - Card
   - Bullet
   - BoardPiece
+  - Pawn
   layers:
   - Default
   - TransparentFX
@@ -15,9 +16,9 @@ TagManager:
   - 
   - Water
   - UI
-  - Game Board
-  - BoardPiece
+  - Pawn
   - Building
+  - BoardPiece
   - 
   - 
   - 

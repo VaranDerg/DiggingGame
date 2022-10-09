@@ -3,14 +3,14 @@
 // Author :            Rudy W.
 // Creation Date :     October 7th, 2022
 //
-// Brief Description : Script exclusively existing to check adjacent Pieces.
+// Brief Description : Script to manage unique board-centric methods.
 *****************************************************************************/
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AdjacencyChecker : MonoBehaviour
+public class BoardManager : MonoBehaviour
 {
     private List<GameObject> _boardPieces = new List<GameObject>();
 
@@ -32,6 +32,27 @@ public class AdjacencyChecker : MonoBehaviour
             _boardPieces.Add(piece);
         }
     }
+
+    /// <summary>
+    /// Turns on/off the board colliders, so you can click on pawns. Why is this a thing?
+    /// </summary>
+    /// <param name="enable">True = Turn on</param>
+    public void BoardColliderSwitch(bool enable)
+    {
+        foreach(GameObject piece in _boardPieces)
+        {
+            piece.GetComponent<BoxCollider2D>().enabled = enable;
+        }
+
+        if(enable)
+        {
+            Debug.Log("Enabled board colliders.");
+        }
+        else
+        {
+            Debug.Log("Disabled board colliders.");
+        }
+    }    
 
     /// <summary>
     /// Finds adjacent tiles & the tile the player is on.

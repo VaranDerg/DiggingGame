@@ -182,6 +182,7 @@ public class GameCanvasManager : MonoBehaviour
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
         _am.CurrentTurnPhase++;
+        Move();
 
         UpdateAllText();
     }
@@ -213,8 +214,8 @@ public class GameCanvasManager : MonoBehaviour
     /// </summary>
     public void Move()
     {
-        Debug.Log("Wow, Player " + _am.CurrentPlayer +", you moved!");
-
+        _am.StartMove(_am.CurrentPlayer);
+        Debug.Log("Select pawn and then tile to move to. I was too lazy to do UI");
         UpdateAllText();
     }
 

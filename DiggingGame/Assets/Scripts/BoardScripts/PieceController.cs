@@ -35,14 +35,19 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasBuilding;
     [HideInInspector] public bool HasPawn;
-    private AdjacencyChecker _ac;
+    [HideInInspector] public GameObject CurrentPawn;
+    private BoardManager _bm;
+    private ActionManager _am;
+    private GameCanvasManager _gcm;
 
     public bool HasGold;    //true if the piece reveals gold when flipped
 
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
-        _ac = FindObjectOfType<AdjacencyChecker>();
+        _bm = FindObjectOfType<BoardManager>();
+        _am = FindObjectOfType<ActionManager>();
+        _gcm = FindObjectOfType<GameCanvasManager>();
     }
 
     /// <summary>
@@ -76,6 +81,7 @@ public class PieceController : MonoBehaviour
     {
         BuildingPlacementAndRemoval();
         PiecePlacementAndRemoval();
+        PawnMovement();
     }
 
     /// <summary>
@@ -90,7 +96,7 @@ public class PieceController : MonoBehaviour
         //The board cannot be adjusted if a tile is not marked as interactable.If commented, it's being tested.
         if (!IsDiggable)
         {
-           // return;
+            return;
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -122,6 +128,31 @@ public class PieceController : MonoBehaviour
                 case GameState.Four:
                     SetObjectState(3);
                     break;
+            }
+        }
+    }
+
+    private void PawnMovement()
+    {
+        if(!IsMovable || CurrentPawn == null)
+        {
+            return;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
+            CurrentPawn.transform.position = gameObject.transform.position;
+            HasPawn = true;
+            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+
+            if(_am.CurrentTurnPhase == 1)
+            {
+                _gcm.ToThenPhase();
+            }
+            else if(_am.CurrentTurnPhase == 2)
+            {
+                _gcm.Back();
             }
         }
     }
@@ -163,7 +194,7 @@ public class PieceController : MonoBehaviour
     {
         bool canPlaceOnTile = true;
 
-        foreach(GameObject piece in _ac.GenerateAdjacentPieceList(gameObject))
+        foreach(GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
         {
             if(piece.GetComponent<PieceController>().HasBuilding)
             {
@@ -231,6 +262,7 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _defaultColor;
             IsMovable = false;
+            CurrentPawn = null;
         }
     }
 
@@ -248,6 +280,7 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _defaultColor;
             IsBuildable = false;
+            CurrentPawn = null;
         }
     }
 

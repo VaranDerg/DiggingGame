@@ -29,7 +29,7 @@ public class ActionManager : MonoBehaviour
     [HideInInspector] public int P1GoldCards = 0, P2GoldCards = 0;
     //Variables for the current phase of the turn (First, Then, Finally) and the current player (1, 2)
     [HideInInspector] public int CurrentTurnPhase = 0;
-    [HideInInspector] public int CurrentPlayer = 0;
+    [HideInInspector] public int CurrentPlayer = 1;
     //Variables for the current turn number and the current round.
     [HideInInspector] public int CurrentTurn = 0;
     [HideInInspector] public int CurrentRound = 0;
@@ -51,11 +51,15 @@ public class ActionManager : MonoBehaviour
     public int BaseBuildingPrice;
     public int TotalBuildings;
 
+    [Header("Script References")]
+    private BoardManager _bm;
+
     /// <summary>
     /// Calls PrepareStartingValues
     /// </summary>
     private void Awake()
     {
+        _bm = FindObjectOfType<BoardManager>();
         PrepareStartingValues();
     }
 
@@ -85,6 +89,19 @@ public class ActionManager : MonoBehaviour
         P2RemainingBuildings[0] = TotalBuildings;
         P2RemainingBuildings[1] = TotalBuildings;
         P2RemainingBuildings[2] = TotalBuildings;
+    }
+
+    public void StartMove(int player)
+    {
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
+            {
+                pawn.GetComponent<PlayerPawn>().IsMoving = true;
+            }
+        }
+
+        _bm.BoardColliderSwitch(false);
     }
 
     /// <summary>
