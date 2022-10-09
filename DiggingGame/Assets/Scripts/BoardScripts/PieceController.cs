@@ -37,6 +37,8 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public bool HasPawn;
     private AdjacencyChecker _ac;
 
+    public bool HasGold;    //true if the piece reveals gold when flipped
+
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
@@ -88,7 +90,7 @@ public class PieceController : MonoBehaviour
         //The board cannot be adjusted if a tile is not marked as interactable.If commented, it's being tested.
         if (!IsDiggable)
         {
-            return;
+           // return;
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -100,6 +102,7 @@ public class PieceController : MonoBehaviour
                     break;
                 case GameState.Two:
                     SetObjectState(3);
+                    Debug.Log(HasGold);
                     break;
                 case GameState.Three:
                     SetObjectState(4);
@@ -311,5 +314,13 @@ public class PieceController : MonoBehaviour
                 HasBuilding = false;
             }
         }
+    }
+
+    /// <summary>
+    /// Assigns the gold value to true;
+    /// </summary>
+    public void GiveGold()
+    {
+        HasGold = true;
     }
 }

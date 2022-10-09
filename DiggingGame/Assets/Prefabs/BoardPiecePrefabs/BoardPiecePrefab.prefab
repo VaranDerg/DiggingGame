@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4847777960994457898}
   - component: {fileID: 4847777960994457899}
   - component: {fileID: 4847777960994457896}
-  - component: {fileID: 441989377441299965}
   - component: {fileID: 4333397845963253455}
   - component: {fileID: 1653752625053519425}
   m_Layer: 7
@@ -96,7 +95,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4847777960994457941}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8be2d41e94410f4cbff8622ef61f4ef, type: 3}
   m_Name: 
@@ -121,34 +120,7 @@ MonoBehaviour:
   ObjState: 0
   HasBuilding: 0
   HasPawn: 0
---- !u!114 &441989377441299965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4847777960994457941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a3dbf8dc23a07f44858a9cd9e916847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _grassSprite: {fileID: 0}
-  _dirtSprite: {fileID: 0}
-  _stoneSprite: {fileID: 0}
-  _bedRockSprite: {fileID: 0}
-  _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
-  IsInteractable: 0
-  IsRemovable: 0
-  _adjacentColor: {r: 0, g: 0, b: 0, a: 0}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  ObjState: 0
-  HasBuilding: 0
-  HasPawn: 0
-  IsAdjacent: 0
+  HasGold: 0
 --- !u!61 &4333397845963253455
 BoxCollider2D:
   m_ObjectHideFlags: 0
