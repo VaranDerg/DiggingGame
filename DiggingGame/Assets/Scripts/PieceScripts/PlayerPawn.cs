@@ -21,9 +21,23 @@ public class PlayerPawn : MonoBehaviour
     private List<GameObject> _shownPieces = new List<GameObject>();
     private List<GameObject> _boardPieces = new List<GameObject>();
     private BoardManager _bm;
+    private ActionManager _am;
+    private GameCanvasManager _gcm;
 
     [Header("Pawn Status for Other Scripts")]
-    [HideInInspector] public bool IsMoving = false, IsBuilding = false;
+    [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false;
+    [HideInInspector] public string BuildingToBuild = "";
+
+    /// <summary>
+    /// Adds every board piece to a list.
+    /// </summary>
+    private void FindBoardPieces()
+    {
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            _boardPieces.Add(piece);
+        }
+    }
 
     /// <summary>
     /// Calls FindBoardPieces.
@@ -32,8 +46,13 @@ public class PlayerPawn : MonoBehaviour
     {
         FindBoardPieces();
         _bm = FindObjectOfType<BoardManager>();
+        _am = FindObjectOfType<ActionManager>();
+        _gcm = FindObjectOfType<GameCanvasManager>();
     }
 
+    /// <summary>
+    /// Update, but for the mouse!
+    /// </summary>
     private void OnMouseOver()
     {
         if (IsMoving)
@@ -45,16 +64,10 @@ public class PlayerPawn : MonoBehaviour
         {
             PreparePawnBuilding();
         }
-    }
 
-    /// <summary>
-    /// Adds every board piece to a list.
-    /// </summary>
-    private void FindBoardPieces()
-    {
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        if(IsDigging)
         {
-            _boardPieces.Add(piece);
+            PreparePawnDigging();
         }
     }
 
@@ -92,6 +105,48 @@ public class PlayerPawn : MonoBehaviour
     }
 
     /// <summary>
+    /// Preps pawn for digging.
+    /// </summary>
+    private void PreparePawnDigging()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            foreach(GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            {
+                if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasBuilding)
+                {
+                    continue;
+                }
+
+                if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+                {
+                    continue;
+                }
+
+                piece.GetComponent<PieceController>().ShowHideDiggable(true);
+                piece.GetComponent<PieceController>().IsDiggable = true;
+                _shownPieces.Add(piece);
+            }
+
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                }
+            }
+            else
+            {
+                Debug.Log("No valid digging locations at this pawn.");
+                _bm.DisablePawnBoardInteractions();
+                _gcm.Back();
+            }
+
+            _bm.BoardColliderSwitch(true);
+        }
+    }
+
+    /// <summary>
     /// Preps pawn for building.
     /// </summary>
     private void PreparePawnBuilding()
@@ -108,10 +163,25 @@ public class PlayerPawn : MonoBehaviour
                     dontHighlight = true;
                 }
 
-                //Check if any currently adjacent pieces are adjacent to a building.
+                if (piece.GetComponent<PieceController>().HasPawn)
+                {
+                    dontHighlight = true;
+                }
+
+                if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+                {
+                    dontHighlight = true;
+                }
+
+                //Check if any currently adjacent pieces are adjacent to a building or if they're Bedrock or Gold.
                 foreach (GameObject pieceSquared in _bm.GenerateAdjacentPieceList(piece))
                 {
                     if (pieceSquared.GetComponent<PieceController>().HasBuilding)
+                    {
+                        dontHighlight = true;
+                    }
+
+                    if (pieceSquared.GetComponent<PieceController>().ObjState == PieceController.GameState.Four || pieceSquared.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
                     {
                         dontHighlight = true;
                     }
@@ -124,6 +194,23 @@ public class PlayerPawn : MonoBehaviour
                     _shownPieces.Add(piece);
                 }
             }
+
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                }
+            }
+            else
+            {
+                Debug.Log("No valid building locations at this pawn.");
+                _bm.DisablePawnBoardInteractions();
+                _am.StopPawnActions(_am.CurrentPlayer);
+                _gcm.Back();
+            }
+
+            _bm.BoardColliderSwitch(true);
         }
     }
 
@@ -164,6 +251,8 @@ public class PlayerPawn : MonoBehaviour
 
         IsMoving = false;
         IsBuilding = false;
+        IsDigging = false;
+        BuildingToBuild = "";
         _shownPieces.Clear();
     }
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5312618096240013890}
   - component: {fileID: 5312618096240013891}
   - component: {fileID: 7978415616008661505}
+  - component: {fileID: 5976671422692316580}
   - component: {fileID: 1102574898821124289}
   m_Layer: 6
   m_Name: PlayerPawn
@@ -112,6 +113,26 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!95 &5976671422692316580
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312618096240013892}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c5937c83155b1af4293ca052ee625270, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1102574898821124289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ebcd305496815542a51069a0506e506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: 0
+  PawnPlayer: 0
   IsMoving: 0
   IsBuilding: 0

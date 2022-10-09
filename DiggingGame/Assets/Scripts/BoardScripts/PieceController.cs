@@ -21,7 +21,8 @@ public class PieceController : MonoBehaviour
     [SerializeField] private Sprite _grassSprite;
     [SerializeField] private Sprite _dirtSprite;
     [SerializeField] private Sprite _stoneSprite;
-    [SerializeField] private Sprite _bedRockSprite;
+    [SerializeField] private Sprite _bedrockSprite;
+    [SerializeField] private Sprite _goldSprite;
     private SpriteRenderer _sr;
 
     [Header("Building References")]
@@ -52,7 +53,7 @@ public class PieceController : MonoBehaviour
 
     /// <summary>
     /// Represents one of three states: One - Grass, Two - Dirt, Three - Stone,
-    /// Four - Bedrock
+    /// Four - Bedrock, Five - Gold
     /// Author: Andrea SD
     /// </summary>
     public enum GameState
@@ -60,13 +61,14 @@ public class PieceController : MonoBehaviour
         One,
         Two,
         Three,
-        Four
+        Four,
+        Five
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        SetObjectState(1);
+        SetPieceState(1);
         _sr.color = _defaultColor;
     }
 
@@ -79,21 +81,17 @@ public class PieceController : MonoBehaviour
     /// </summary>
     private void OnMouseOver()
     {
-        BuildingPlacementAndRemoval();
-        PiecePlacementAndRemoval();
+        BuildingPlacement();
+        PiecePlacement();
+        PieceRemoval();
         PawnMovement();
     }
 
     /// <summary>
-    /// Method controlling Piece placement and removal.
+    /// Method controlling piece removal.
     /// </summary>
-    private void PiecePlacementAndRemoval()
+    private void PieceRemoval()
     {
-        // Once clicked, the piece will change states to the piece below it and
-        // the sprite is changed to reflect that.
-        // Example: grass -> dirt, dirt -> stone, stone -> bedrock. reverse for right click
-
-        //The board cannot be adjusted if a tile is not marked as interactable.If commented, it's being tested.
         if (!IsDiggable)
         {
             return;
@@ -101,37 +99,74 @@ public class PieceController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
+            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            _gcm.Back();
+
             switch (ObjState)
             {
                 case GameState.One:
-                    SetObjectState(2);
+                    SetPieceState(2);
+                    _am.CollectTile(_am.CurrentPlayer, "Grass");
                     break;
                 case GameState.Two:
-                    SetObjectState(3);
-                    Debug.Log(HasGold);
+                    SetPieceState(3);
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt");
                     break;
                 case GameState.Three:
-                    SetObjectState(4);
-                    break;
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            switch (ObjState)
-            {
-                case GameState.Two:
-                    SetObjectState(1);
-                    break;
-                case GameState.Three:
-                    SetObjectState(2);
-                    break;
-                case GameState.Four:
-                    SetObjectState(3);
+                    SetPieceState(4);
+
+                    if(HasGold)
+                    {
+                        _am.CollectTile(_am.CurrentPlayer, "Gold");
+                    }
+                    else
+                    {
+                        _am.CollectTile(_am.CurrentPlayer, "Stone");
+                    }
+
                     break;
             }
         }
     }
 
+    /// <summary>
+    /// Allows the placement of pieces back onto the board.
+    /// </summary>
+    private void PiecePlacement()
+    {
+        if(!IsPlaceable)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
+            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            _gcm.Back();
+
+            switch (ObjState)
+            {
+                case GameState.Two:
+                    SetPieceState(1);
+                    _am.PlaceTile(_am.CurrentPlayer, "Grass");
+                    break;
+                case GameState.Three:
+                    SetPieceState(2);
+                    _am.PlaceTile(_am.CurrentPlayer, "Dirt");
+                    break;
+                case GameState.Four:
+                    SetPieceState(3);
+                    _am.PlaceTile(_am.CurrentPlayer, "Stone");
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Controls pawn movement.
+    /// </summary>
     private void PawnMovement()
     {
         if(!IsMovable || CurrentPawn == null)
@@ -141,9 +176,12 @@ public class PieceController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
+            //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
             CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
             CurrentPawn.transform.position = gameObject.transform.position;
             HasPawn = true;
+
+            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
 
             if(_am.CurrentTurnPhase == 1)
@@ -160,7 +198,7 @@ public class PieceController : MonoBehaviour
     /// <summary>
     /// Method controlling Building placement and removal.
     /// </summary>
-    private void BuildingPlacementAndRemoval()
+    private void BuildingPlacement()
     {
         if(!IsBuildable)
         {
@@ -172,17 +210,55 @@ public class PieceController : MonoBehaviour
             return;
         }
 
-        if(Input.GetKeyDown(KeyCode.F))
+        if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            BuildBuilding(_factory);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            BuildBuilding(_burrow);
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            BuildBuilding(_mine);
+            bool canPlaceThere = false;
+            if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Factory")
+            {
+                canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Factory", "");
+
+                if(canPlaceThere)
+                {
+                    PlaceBuildingOnPiece(_factory);
+                }
+            }
+            else if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Burrow")
+            {
+                canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Burrow", "");
+
+                if(canPlaceThere)
+                {
+                    PlaceBuildingOnPiece(_burrow);
+                }
+            }
+            else if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Mine")
+            {
+                if(ObjState == GameState.One)
+                {
+                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Grass");
+                }
+                else if(ObjState == GameState.Two)
+                {
+                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Dirt");
+                }
+                else if(ObjState == GameState.Three)
+                {
+                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Stone");
+                }
+
+                if(canPlaceThere)
+                {
+                    PlaceBuildingOnPiece(_mine);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("There is no building called " + CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild + "!");
+            }
+
+            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
+            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            _gcm.Back();
         }
     }
 
@@ -190,7 +266,7 @@ public class PieceController : MonoBehaviour
     /// Places a building. Returns false and removes it if it's adjacent to another building.
     /// </summary>
     /// <param name="building"></param>
-    private bool BuildBuilding(GameObject building)
+    public bool PlaceBuildingOnPiece(GameObject building)
     {
         bool canPlaceOnTile = true;
 
@@ -206,7 +282,6 @@ public class PieceController : MonoBehaviour
         {
             Instantiate(building, _buildingSlot);
             HasBuilding = true;
-            Debug.Log("Placed " + building.name + ".");
             return true;
         }
         else
@@ -221,7 +296,7 @@ public class PieceController : MonoBehaviour
     /// Edited: 
     /// </summary>
     /// <param name="state"> determines which state the obj is set to </param>
-    public void SetObjectState(int state) 
+    public void SetPieceState(int state) 
     {
         //Debug.Log("Switching " + gameObject.name + "'s State to " + state + ".");
 
@@ -240,8 +315,12 @@ public class PieceController : MonoBehaviour
                 ObjState = GameState.Three;
                 break;
             case 4:
-                gameObject.GetComponent<SpriteRenderer>().sprite = _bedRockSprite;
+                gameObject.GetComponent<SpriteRenderer>().sprite = _bedrockSprite;
                 ObjState = GameState.Four;
+                break;
+            case 5:
+                gameObject.GetComponent<SpriteRenderer>().sprite = _goldSprite;
+                ObjState = GameState.Five;
                 break;
             default:
                 throw new Exception("This board piece state does not exist.");

@@ -53,6 +53,7 @@ public class ActionManager : MonoBehaviour
 
     [Header("Script References")]
     private BoardManager _bm;
+    private GameCanvasManager _gcm;
 
     /// <summary>
     /// Calls PrepareStartingValues
@@ -60,6 +61,7 @@ public class ActionManager : MonoBehaviour
     private void Awake()
     {
         _bm = FindObjectOfType<BoardManager>();
+        _gcm = FindObjectOfType<GameCanvasManager>();
         PrepareStartingValues();
     }
 
@@ -91,6 +93,10 @@ public class ActionManager : MonoBehaviour
         P2RemainingBuildings[2] = TotalBuildings;
     }
 
+    /// <summary>
+    /// Prepares pawns to move.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
     public void StartMove(int player)
     {
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
@@ -98,10 +104,64 @@ public class ActionManager : MonoBehaviour
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
             {
                 pawn.GetComponent<PlayerPawn>().IsMoving = true;
+                pawn.GetComponent<Animator>().Play("TempPawnBlink");
             }
         }
 
         _bm.BoardColliderSwitch(false);
+    }
+
+    /// <summary>
+    /// Prepares pawns to build.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    public void StartBuild(int player, string building)
+    {
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
+            {
+                pawn.GetComponent<PlayerPawn>().IsBuilding = true;
+                pawn.GetComponent<PlayerPawn>().BuildingToBuild = building;
+                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+            }
+        }
+
+        _bm.BoardColliderSwitch(false);
+    }
+
+    public void StartDig(int player)
+    {
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
+            {
+                pawn.GetComponent<PlayerPawn>().IsDigging = true;
+                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+            }
+        }
+
+        _bm.BoardColliderSwitch(false);
+    }
+
+    /// <summary>
+    /// Stops pawns from doing stuff.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    public void StopPawnActions(int player)
+    {
+        foreach(GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if(pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
+            {
+                pawn.GetComponent<PlayerPawn>().IsMoving = false;
+                pawn.GetComponent<PlayerPawn>().IsBuilding = false;
+                pawn.GetComponent<PlayerPawn>().IsDigging = false;
+                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+            }
+        }
+
+        _bm.BoardColliderSwitch(true);
     }
 
     /// <summary>
@@ -116,15 +176,19 @@ public class ActionManager : MonoBehaviour
             {
                 case "Grass":
                     P1CollectedPile[0]++;
+                    _gcm.UpdateAllText();
                     break;
                 case "Dirt":
                     P1CollectedPile[1]++;
+                    _gcm.UpdateAllText();
                     break;
                 case "Stone":
                     P1CollectedPile[2]++;
+                    _gcm.UpdateAllText();
                     break;
                 case "Gold":
                     P1CollectedPile[3]++;
+                    _gcm.UpdateAllText();
                     break;
             }
         }
@@ -134,15 +198,19 @@ public class ActionManager : MonoBehaviour
             {
                 case "Grass":
                     P2CollectedPile[0]++;
+                    _gcm.UpdateAllText();
                     break;
                 case "Dirt":
                     P2CollectedPile[1]++;
+                    _gcm.UpdateAllText();
                     break;
                 case "Stone":
                     P2CollectedPile[2]++;
+                    _gcm.UpdateAllText();
                     break;
                 case "Gold":
                     P2CollectedPile[3]++;
+                    _gcm.UpdateAllText();
                     break;
             }
         }
@@ -280,7 +348,7 @@ public class ActionManager : MonoBehaviour
     /// Place a tile back onto the board. 
     /// </summary>
     /// <param name="type">"Grass" "Dirt" or "Stone"</param>
-    public void PlaceTiles(int player, string type)
+    public void PlaceTile(int player, string type)
     {
         Debug.Log("Player " + player + " placed a " + type + " tile!");
 
@@ -306,7 +374,7 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     /// <param name="type">"Factory" "Burrow" or "Mine"</param>
     /// <param name="mineType">If "Mine" must list a type. "Grass" "Dirt" or "Stone"</param>
-    public void BuildBuilding(int player, string type, string mineType)
+    public bool EnoughBuildingsToBuild(int player, string type, string mineType)
     {
         if (player == 1)
         {
@@ -316,38 +384,46 @@ public class ActionManager : MonoBehaviour
                     if (P1RemainingBuildings[0] == 0)
                     {
                         Debug.Log("All Factories have been built!");
-                        break;
+                        return false;
                     }
 
-                    if (AbleToBuild(CurrentPlayer, P1CurrentBuildingPrices[0], "Factory"))
+                    if (EnoughCardsToBuild(CurrentPlayer, P1CurrentBuildingPrices[0], "Factory"))
                     {
                         P1CurrentBuildingPrices[0]++;
                         P1RemainingBuildings[0]--;
                         P1BuiltBuildings[0]++;
                     }
-                    break;
+                    else
+                    {
+                        return false;
+                    }
+                    return true;
                 case "Burrow":
                     if (P1RemainingBuildings[1] == 0)
                     {
                         Debug.Log("All Burrows have been built!");
-                        break;
+                        return false;
                     }
 
-                    if (AbleToBuild(CurrentPlayer, P1CurrentBuildingPrices[1], "Burrow"))
+                    if (EnoughCardsToBuild(CurrentPlayer, P1CurrentBuildingPrices[1], "Burrow"))
                     {
                         P1CurrentBuildingPrices[1]++;
                         P1RemainingBuildings[1]--;
                         P1BuiltBuildings[1]++;
                     }
-                    break;
+                    else
+                    {
+                        return false;
+                    }
+                    return true;
                 case "Mine":
                     if (P1RemainingBuildings[2] == 0)
                     {
                         Debug.Log("All Mines have been built!");
-                        break;
+                        return false;
                     }
 
-                    if (AbleToBuild(CurrentPlayer, P1CurrentBuildingPrices[2], "Mine"))
+                    if (EnoughCardsToBuild(CurrentPlayer, P1CurrentBuildingPrices[2], "Mine"))
                     {
                         P1CurrentBuildingPrices[2]++;
                         P1RemainingBuildings[2]--;
@@ -364,7 +440,14 @@ public class ActionManager : MonoBehaviour
                             P1BuiltBuildings[4]++;
                         }
                     }
-                    break;
+                    else
+                    {
+                        return false;
+                    }
+                    return true;
+                default:
+                    Debug.LogWarning("Incorrect building provided: " + type);
+                    return false;
             }
         }
         else if (player == 2)
@@ -375,38 +458,46 @@ public class ActionManager : MonoBehaviour
                     if (P2RemainingBuildings[0] == 0)
                     {
                         Debug.Log("All Factories have been built!");
-                        break;
+                        return false;
                     }
 
-                    if (AbleToBuild(CurrentPlayer, P2CurrentBuildingPrices[0], "Factory"))
+                    if (EnoughCardsToBuild(CurrentPlayer, P2CurrentBuildingPrices[0], "Factory"))
                     {
                         P2CurrentBuildingPrices[0]++;
                         P2RemainingBuildings[0]--;
                         P2BuiltBuildings[0]++;
                     }
-                    break;
+                    else
+                    {
+                        return false;
+                    }
+                    return true;
                 case "Burrow":
                     if (P2RemainingBuildings[1] == 0)
                     {
                         Debug.Log("All Burrows have been built!");
-                        break;
+                        return false;
                     }
 
-                    if (AbleToBuild(CurrentPlayer, P2CurrentBuildingPrices[1], "Burrow"))
+                    if (EnoughCardsToBuild(CurrentPlayer, P2CurrentBuildingPrices[1], "Burrow"))
                     {
                         P2CurrentBuildingPrices[1]++;
                         P2RemainingBuildings[1]--;
                         P2BuiltBuildings[1]++;
                     }
-                    break;
+                    else
+                    {
+                        return false;
+                    }
+                    return true;
                 case "Mine":
                     if (P2RemainingBuildings[2] == 0)
                     {
                         Debug.Log("All Mines have been built!");
-                        break;
+                        return false;
                     }
 
-                    if (AbleToBuild(CurrentPlayer, P2CurrentBuildingPrices[2], "Mine"))
+                    if (EnoughCardsToBuild(CurrentPlayer, P2CurrentBuildingPrices[2], "Mine"))
                     {
                         P2CurrentBuildingPrices[2]++;
                         P2RemainingBuildings[2]--;
@@ -423,8 +514,20 @@ public class ActionManager : MonoBehaviour
                             P2BuiltBuildings[4]++;
                         }
                     }
-                    break;
+                    else
+                    {
+                        return false;
+                    }
+                    return true;
+                default:
+                    Debug.LogWarning("Incorrect building provided: " + type);
+                    return false;
             }
+        }
+        else
+        {
+            Debug.LogWarning("Player " + player + " is not valid.");
+            return false;
         }
     }
 
@@ -434,7 +537,7 @@ public class ActionManager : MonoBehaviour
     /// <param name="currentPrice">Price var of current building type.</param>
     /// <param name="type">Name of building.</param>
     /// <returns>True if cards are substantial. False if otherwise.</returns>
-    private bool AbleToBuild(int player, int currentPrice, string type)
+    private bool EnoughCardsToBuild(int player, int currentPrice, string type)
     {
         if(player == 1)
         {
@@ -566,6 +669,49 @@ public class ActionManager : MonoBehaviour
                 }
             }
             Debug.Log("Player " + player + " discarded " + discardedCards + " cards!");
+        }
+    }
+
+    public bool SpendCards(int player)
+    {
+        if(player == 1)
+        {
+            if(P1Cards == 0 && P1GoldCards == 0)
+            {
+                Debug.Log("Not enough cards for this action!");
+                return false;
+            }
+
+            if(P1Cards == 0)
+            {
+                P1GoldCards--;
+                return true;
+            }
+
+            P1Cards--;
+            return true;
+        }
+        else if(player == 2)
+        {
+            if (P2Cards == 0 && P2GoldCards == 0)
+            {
+                Debug.Log("Not enough cards for this action!");
+                return false;
+            }
+
+            if (P2Cards == 0)
+            {
+                P2GoldCards--;
+                return true;
+            }
+
+            P2Cards--;
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning("Incorrect player parameter.");
+            return false;
         }
     }
 }

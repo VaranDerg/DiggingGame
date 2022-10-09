@@ -29,8 +29,8 @@ public class GameCanvasManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] _p1CardInfo = new TextMeshProUGUI[3];
     //Array for Primary Canvas zones. "First" Zone, "Then" Zone, and "Finally" Zone.
     [SerializeField] private GameObject[] _p1PrimaryZoneObjRefs = new GameObject[3];
-    //Array for Secondary Canvas zones. "Then" Actions, "Finally" Actions, Dig Zone, Build Zone, Build Mine Zone, Activate Card Zone.
-    [SerializeField] private GameObject[] _p1SecondaryZoneObjRefs = new GameObject[6];
+    //Array for Secondary Canvas zones. "Then" Actions, "Finally" Actions, Dig Zone, Build Zone, Build Mine Zone, Activate Card Zone, Move Zone.
+    [SerializeField] private GameObject[] _p1SecondaryZoneObjRefs = new GameObject[7];
 
     //P2's Refs
     [Header("Text & Object References, Player 2")]
@@ -41,7 +41,7 @@ public class GameCanvasManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] _p2RemainingBuildings = new TextMeshProUGUI[3];
     [SerializeField] private TextMeshProUGUI[] _p2CardInfo = new TextMeshProUGUI[3];
     [SerializeField] private GameObject[] _p2PrimaryZoneObjRefs = new GameObject[3];
-    [SerializeField] private GameObject[] _p2SecondaryZoneObjRefs = new GameObject[6];
+    [SerializeField] private GameObject[] _p2SecondaryZoneObjRefs = new GameObject[7];
 
     //Universal Refs
     [Header("Constant Text & Object References")]
@@ -54,11 +54,19 @@ public class GameCanvasManager : MonoBehaviour
 
     //Other Misc Refs
     [Header("Other References")]
-    [SerializeField] private ActionManager _am;
+    private ActionManager _am;
+    private BoardManager _bm;
 
     //Code Things
     [Header("Other")]
     private List<GameObject> _canvasObjects = new List<GameObject>();
+
+    private void Awake()
+    {
+        AssignToList();
+        _am = FindObjectOfType<ActionManager>();
+        _bm = FindObjectOfType<BoardManager>();
+    }
 
     /// <summary>
     /// Adds most Canvas Objects to a list.
@@ -90,9 +98,6 @@ public class GameCanvasManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        AssignToList();
-        _am = FindObjectOfType<ActionManager>();
-
         DisableObjects();
         _startTurnButton.SetActive(true);
         UpdateAllText();
@@ -101,7 +106,7 @@ public class GameCanvasManager : MonoBehaviour
     /// <summary>
     /// Updates every text element in the scene.
     /// </summary>
-    private void UpdateAllText()
+    public void UpdateAllText()
     {
         //P1 Text
         _p1CollectedPieces[0].text = "x" + _am.P1CollectedPile[0].ToString();
@@ -181,8 +186,8 @@ public class GameCanvasManager : MonoBehaviour
         }
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
+        _am.StartMove(_am.CurrentPlayer);
         _am.CurrentTurnPhase++;
-        Move();
 
         UpdateAllText();
     }
@@ -193,6 +198,7 @@ public class GameCanvasManager : MonoBehaviour
     public void ToThenPhase()
     {
         DisableObjects();
+        _bm.DisablePawnBoardInteractions();
 
         if(_am.CurrentPlayer == 1)
         {
@@ -214,40 +220,62 @@ public class GameCanvasManager : MonoBehaviour
     /// </summary>
     public void Move()
     {
-        _am.StartMove(_am.CurrentPlayer);
-        Debug.Log("Select pawn and then tile to move to. I was too lazy to do UI");
-        UpdateAllText();
-    }
-
-    /// <summary>
-    /// Opens the Dig Tile menu
-    /// </summary>
-    public void Dig()
-    {
         DisableObjects();
 
-        if(_am.CurrentPlayer == 1)
+        if(!_am.SpendCards(_am.CurrentPlayer))
+        {
+            return;
+        }
+
+        _bm.DisablePawnBoardInteractions();
+        _am.StartMove(_am.CurrentPlayer);
+
+        if (_am.CurrentPlayer == 1)
         {
             _p1PrimaryZoneObjRefs[1].SetActive(true);
-            _p1SecondaryZoneObjRefs[2].SetActive(true);
+            _p1SecondaryZoneObjRefs[6].SetActive(true);
         }
-        else if(_am.CurrentPlayer == 2)
+        else if (_am.CurrentPlayer == 2)
         {
             _p2PrimaryZoneObjRefs[1].SetActive(true);
-            _p2SecondaryZoneObjRefs[2].SetActive(true);
+            _p2SecondaryZoneObjRefs[6].SetActive(true);
         }
 
         UpdateAllText();
     }
 
     /// <summary>
-    /// Digs a specified tile
+    /// (OLD) Opens the Dig Tile menu
     /// </summary>
-    /// <param name="type">"Grass" "Dirt" "Stone" or "Gold"</param>
-    public void DigTile(string type)
+    //public void Dig()
+    //{
+    //    _bm.DisableActiveBoardPieces();
+    //    DisableObjects();
+
+    //    if(_am.CurrentPlayer == 1)
+    //    {
+    //        _p1PrimaryZoneObjRefs[1].SetActive(true);
+    //        _p1SecondaryZoneObjRefs[2].SetActive(true);
+    //    }
+    //    else if(_am.CurrentPlayer == 2)
+    //    {
+    //        _p2PrimaryZoneObjRefs[1].SetActive(true);
+    //        _p2SecondaryZoneObjRefs[2].SetActive(true);
+    //    }
+
+    //    UpdateAllText();
+    //}
+
+    /// <summary>
+    /// Prepares pawn for tile digging.
+    /// </summary>
+    public void DigTile()
     {
-        _am.CollectTile(_am.CurrentPlayer, type);
-        Debug.Log("Collected " + type + "!");
+        if(_am.SpendCards(_am.CurrentPlayer))
+        {
+            _bm.DisablePawnBoardInteractions();
+            _am.StartDig(_am.CurrentPlayer);
+        }
 
         UpdateAllText();
     }
@@ -258,8 +286,9 @@ public class GameCanvasManager : MonoBehaviour
     public void Build()
     {
         DisableObjects();
+        _bm.DisablePawnBoardInteractions();
 
-        if(_am.CurrentPlayer == 1)
+        if (_am.CurrentPlayer == 1)
         {
             _p1PrimaryZoneObjRefs[1].SetActive(true);
             _p1SecondaryZoneObjRefs[3].SetActive(true);
@@ -287,56 +316,37 @@ public class GameCanvasManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Builds a Factory
+    /// Builds a building.
     /// </summary>
-    public void BuildFactory()
+    /// <param name="buildingName">"Factory" "Burrow" or "Mine"</param>
+    public void BuildNewBuilding(string buildingName)
     {
-        _am.BuildBuilding(_am.CurrentPlayer, "Factory", "");
+        _bm.DisablePawnBoardInteractions();
+        _am.StartBuild(_am.CurrentPlayer, buildingName);
 
         UpdateAllText();
     }
 
     /// <summary>
-    /// Builds a Burrow
+    /// (OLD) Opens the Mine Menu.
     /// </summary>
-    public void BuildBurrow()
-    {
-        _am.BuildBuilding(_am.CurrentPlayer, "Burrow", "");
+    //public void OpenMineMenu()
+    //{
+    //    DisableObjects();
 
-        UpdateAllText();
-    }
+    //    if(_am.CurrentPlayer == 1)
+    //    {
+    //        _p1PrimaryZoneObjRefs[1].SetActive(true);
+    //        _p1SecondaryZoneObjRefs[4].SetActive(true);
+    //    }
+    //    else if(_am.CurrentPlayer == 2)
+    //    {
+    //        _p2PrimaryZoneObjRefs[1].SetActive(true);
+    //        _p2SecondaryZoneObjRefs[4].SetActive(true);
+    //    }
 
-    /// <summary>
-    /// Opens the Mine Menu
-    /// </summary>
-    public void OpenMineMenu()
-    {
-        DisableObjects();
-
-        if(_am.CurrentPlayer == 1)
-        {
-            _p1PrimaryZoneObjRefs[1].SetActive(true);
-            _p1SecondaryZoneObjRefs[4].SetActive(true);
-        }
-        else if(_am.CurrentPlayer == 2)
-        {
-            _p2PrimaryZoneObjRefs[1].SetActive(true);
-            _p2SecondaryZoneObjRefs[4].SetActive(true);
-        }
-
-        UpdateAllText();
-    }
-
-    /// <summary>
-    /// Builds a Mine
-    /// </summary>
-    /// <param name="type">"Grass" "Dirt" or "Stone"</param>
-    public void BuildMine(string type)
-    {
-        _am.BuildBuilding(_am.CurrentPlayer, "Mine", type);
-
-        UpdateAllText();
-    }
+    //    UpdateAllText();
+    //}
 
     /// <summary>
     /// Moves to the "Finally" phase
@@ -345,8 +355,9 @@ public class GameCanvasManager : MonoBehaviour
     {
         _am.CurrentTurnPhase++;
         DisableObjects();
+        _bm.DisablePawnBoardInteractions();
 
-        if(_am.CurrentPlayer == 1)
+        if (_am.CurrentPlayer == 1)
         {
             _p1PrimaryZoneObjRefs[2].SetActive(true);
             _p1SecondaryZoneObjRefs[1].SetActive(true);
@@ -395,8 +406,9 @@ public class GameCanvasManager : MonoBehaviour
     public void Back()
     {
         DisableObjects();
+        _bm.DisablePawnBoardInteractions();
 
-        if(_am.CurrentPlayer == 1)
+        if (_am.CurrentPlayer == 1)
         {
             if (_am.CurrentTurnPhase == 2)
             {

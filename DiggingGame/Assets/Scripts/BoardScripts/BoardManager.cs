@@ -13,6 +13,12 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     private List<GameObject> _boardPieces = new List<GameObject>();
+    private ActionManager _am;
+
+    private void Awake()
+    {
+        _am = FindObjectOfType<ActionManager>();
+    }
 
     /// <summary>
     /// Calls FindBoardPieces.
@@ -43,16 +49,19 @@ public class BoardManager : MonoBehaviour
         {
             piece.GetComponent<BoxCollider2D>().enabled = enable;
         }
-
-        if(enable)
-        {
-            Debug.Log("Enabled board colliders.");
-        }
-        else
-        {
-            Debug.Log("Disabled board colliders.");
-        }
     }    
+
+    public void DisablePawnBoardInteractions()
+    {
+        foreach(GameObject piece in _boardPieces)
+        {
+            piece.GetComponent<PieceController>().ShowHideBuildable(false);
+            piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            piece.GetComponent<PieceController>().ShowHideMovable(false);
+            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+            _am.StopPawnActions(_am.CurrentPlayer);
+        }
+    }
 
     /// <summary>
     /// Finds adjacent tiles & the tile the player is on.
