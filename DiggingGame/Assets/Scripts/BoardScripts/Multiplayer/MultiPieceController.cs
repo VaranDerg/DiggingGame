@@ -19,11 +19,6 @@ public class MultiPieceController : MonoBehaviourPun
 {
     //Edited: Rudy W. Organized with headers, added certain variables for functionality.
 
-    [Header("Piece References")]
-    [SerializeField] private Sprite _grassSprite;
-    [SerializeField] private Sprite _dirtSprite;
-    [SerializeField] private Sprite _stoneSprite;
-    [SerializeField] private Sprite _bedRockSprite;
     private SpriteRenderer _sr;
 
     [Header("Building References")]
@@ -32,19 +27,25 @@ public class MultiPieceController : MonoBehaviourPun
 
 
     [Header("Tile Values/Information")]
-    [HideInInspector] public bool IsInteractable = false;
-    [HideInInspector] public bool IsRemovable = false;
-    [SerializeField] private Color _adjacentColor;
     [SerializeField] private Color _defaultColor;
+    [SerializeField] private Color _movableColor, _diggableColor, _placeableColor, buildableColor;
+    [HideInInspector] public bool IsMovable = false, IsDiggable = false, IsPlaceable = false, IsBuildable = false;
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasBuilding;
     [HideInInspector] public bool HasPawn;
-    [HideInInspector] public bool IsAdjacent;
+    [HideInInspector] public GameObject CurrentPawn;
+    private MultiBoardManager _bm;
+    private MultiActionManager _am;
+    private MultiGameCanvasManager _gcm;
 
+    public bool HasGold; //True if the piece reveals gold when flipped
 
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
+        _bm = FindObjectOfType<MultiBoardManager>();
+        _am = FindObjectOfType<MultiActionManager>();
+        _gcm = FindObjectOfType<MultiGameCanvasManager>();
     }
 
     /// <summary>
@@ -57,111 +58,239 @@ public class MultiPieceController : MonoBehaviourPun
         One,
         Two,
         Three,
-        Four
+        Four,
+        Five
     }
 
     // Start is called before the first frame update
     private void Start()
-    {
-        
-        SetObjectState(1);
+    {     
+        SetPieceState(1);
         _sr.color = _defaultColor;
     }
 
     /// <summary>
     /// This method controls what happens when the interacts with the board.
     /// Author: Andrea SD
-    /// Edited: Rudy W. Moved Debug statements into SetObjectState along with sprite change lines, as states may change through 
+    /// Edited: Rudy W. Moved Debug statements into SePieceState along with sprite change lines, as states may change through 
     ///         separate effects in the future. Additionally, moved into OnMouseOver for further usability; allows for replacing 
     ///         pieces with right click temporarily.
     /// </summary>
     private void OnMouseOver()
     {
-        BuildingPlacementAndRemoval();
-        PiecePlacementAndRemoval();
+        BuildingPlacement();
+        PiecePlacement();
+        PieceRemoval();
+        PawnMovement();
     }
 
     /// <summary>
-    /// Method controlling Piece placement and removal.
+    /// Method controlling Piece removal.
     /// </summary>
-    private void PiecePlacementAndRemoval()
+    private void PieceRemoval()
     {
         // Once clicked, the piece will change states to the piece below it and
         // the sprite is changed to reflect that.
         // Example: grass -> dirt, dirt -> stone, stone -> bedrock. reverse for right click
 
         //The board cannot be adjusted if a tile is not marked as interactable.If commented, it's being tested.
-        if (!IsRemovable)
+        if (!IsDiggable)
         {
-            //return;
+            return;
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
+            CurrentPawn.GetComponent<MultiPlayerPawn>().UnassignAdjacentTiles();
+
             switch (ObjState)
             {
                 case GameState.One:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 2);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 2);
+                    _am.CollectTile(_am.CurrentPlayer, "Grass");
                     break;
                 case GameState.Two:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 3);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 3);
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt");
                     break;
                 case GameState.Three:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 4);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 4);
+
+                    if (HasGold)
+                    {
+                        _am.CollectTile(_am.CurrentPlayer, "Gold");
+                    }
+                    else
+                    {
+                        _am.CollectTile(_am.CurrentPlayer, "Stone");
+                    } 
                     break;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse1))
+
+    }
+
+    /// <summary>
+    /// Allows the placement of pieces back onto the board.
+    /// </summary>
+    private void PiecePlacement()
+    {
+        if (!IsPlaceable)
         {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
+            CurrentPawn.GetComponent<MultiPlayerPawn>().UnassignAdjacentTiles();
+            _gcm.Back();
+
             switch (ObjState)
             {
                 case GameState.Two:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 1);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 1);
+                    _am.PlaceTile(_am.CurrentPlayer, "Grass");
                     break;
                 case GameState.Three:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 2);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 2);
+                    _am.PlaceTile(_am.CurrentPlayer, "Dirt");
                     break;
                 case GameState.Four:
-                    photonView.RPC("SetObjectState", RpcTarget.All, 3);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 3);
+                    _am.PlaceTile(_am.CurrentPlayer, "Stone");
                     break;
             }
         }
     }
 
-    [PunRPC]
     /// <summary>
-    /// Method controlling Building placement and removal.
+    /// Controls pawn movement.
     /// </summary>
-    private void BuildingPlacementAndRemoval()
+    private void PawnMovement()
     {
-        if(!IsInteractable)
+        if (!IsMovable || CurrentPawn == null)
         {
             return;
         }
 
-        if(HasBuilding)
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            return;
-        }
+            //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
+            CurrentPawn.GetComponent<MultiPlayerPawn>().ClosestPieceToPawn().GetComponent<MultiPieceController>().HasPawn = false;
+            CurrentPawn.transform.position = gameObject.transform.position;
+            HasPawn = true;
 
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            BuildBuilding(_factory);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            BuildBuilding(_burrow);
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            BuildBuilding(_mine);
+            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
+            CurrentPawn.GetComponent<MultiPlayerPawn>().UnassignAdjacentTiles();
+
+            if (_am.CurrentTurnPhase == 1)
+            {
+                _gcm.ToThenPhase();
+            }
+            else if (_am.CurrentTurnPhase == 2)
+            {
+                _gcm.Back();
+            }
         }
     }
 
-    private void BuildBuilding(GameObject building)
+
+    /// <summary>
+    /// Method controlling Building placement and removal.
+    /// </summary>
+    private void BuildingPlacement()
     {
-        GameObject newestBuilding = Instantiate(building, _buildingSlot);
-        HasBuilding = true;
+        if (!IsBuildable)
+        {
+            return;
+        }
+
+        if (HasBuilding)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            bool canPlaceThere = false;
+            if (CurrentPawn.GetComponent<MultiPlayerPawn>().BuildingToBuild == "Factory")
+            {
+                canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Factory", "");
+
+                if (canPlaceThere)
+                {
+                    PlaceBuildingOnPiece(_factory);
+                }
+            }
+            else if (CurrentPawn.GetComponent<MultiPlayerPawn>().BuildingToBuild == "Burrow")
+            {
+                canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Burrow", "");
+
+                if (canPlaceThere)
+                {
+                    PlaceBuildingOnPiece(_burrow);
+                }
+            }
+            else if (CurrentPawn.GetComponent<MultiPlayerPawn>().BuildingToBuild == "Mine")
+            {
+                if (ObjState == GameState.One)
+                {
+                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Grass");
+                }
+                else if (ObjState == GameState.Two)
+                {
+                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Dirt");
+                }
+                else if (ObjState == GameState.Three)
+                {
+                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Stone");
+                }
+
+                if (canPlaceThere)
+                {
+                    PlaceBuildingOnPiece(_mine);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("There is no building called " + CurrentPawn.GetComponent<MultiPlayerPawn>().BuildingToBuild + "!");
+            }
+
+            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
+            CurrentPawn.GetComponent<MultiPlayerPawn>().UnassignAdjacentTiles();
+            _gcm.Back();
+        }
+    }
+
+    /// <summary>
+    /// Places a building. Returns false and removes it if it's adjacent to another building.
+    /// </summary>
+    /// <param name="building"></param>
+    public bool PlaceBuildingOnPiece(GameObject building)
+    {
+        bool canPlaceOnTile = true;
+
+        foreach (GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
+        {
+            if (piece.GetComponent<MultiPieceController>().HasBuilding)
+            {
+                canPlaceOnTile = false;
+            }
+        }
+
+        if (canPlaceOnTile)
+        {
+            Instantiate(building, _buildingSlot);
+            HasBuilding = true;
+            return true;
+        }
+        else
+        {
+            Debug.Log("Cannot place " + building.name + " adjacent to another building.");
+            return false;
+        }
     }
 
     [PunRPC]
@@ -170,7 +299,7 @@ public class MultiPieceController : MonoBehaviourPun
     /// Edited: 
     /// </summary>
     /// <param name="state"> determines which state the obj is set to </param>
-    public void SetObjectState(int state) 
+    public void SetPieceState(int state) 
     {
         //Debug.Log("Switching " + gameObject.name + "'s State to " + state + ".");
 
@@ -194,35 +323,88 @@ public class MultiPieceController : MonoBehaviourPun
                 ChangeSprite("BedrockPiece");
                 ObjState = GameState.Four;
                 break;
+            case 5:
+                ChangeSprite("GoldPiece");
+                ObjState = GameState.Five;
+                break;
             default:
                 throw new Exception("This board piece state does not exist.");
         }
     }
 
-    [PunRPC]
     public void ChangeSprite(String newSprite)
     {
         _sr.sprite = Resources.Load<Sprite>(newSprite);
     }
 
-        /// <summary>
-        /// Updates tile to an adjacent state, allowing more interaction.
-        /// </summary>
-        public void AdjacentToPlayer()
+    /// <summary>
+    /// Updates tiles for player movement.
+    /// </summary>
+    public void ShowHideMovable(bool show)
     {
-        _sr.color = _adjacentColor;
-        IsAdjacent = true;
-        IsInteractable = true;
+        if (show)
+        {
+            _sr.color = _movableColor;
+            IsMovable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            IsMovable = false;
+            CurrentPawn = null;
+        }
     }
 
     /// <summary>
-    /// Removes tile's adjacent state.
+    /// Updates tiles for buildability.
     /// </summary>
-    public void NoLongerAdjacent()
+    public void ShowHideBuildable(bool show)
     {
-        _sr.color = _defaultColor;
-        IsAdjacent = false;
-        //IsInteractable = false;
+        if (show)
+        {
+            _sr.color = buildableColor;
+            IsBuildable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            IsBuildable = false;
+            CurrentPawn = null;
+        }
+    }
+
+    /// <summary>
+    /// Updates tiles for piece removal.
+    /// </summary>
+    public void ShowHideDiggable(bool show)
+    {
+        if (show)
+        {
+            _sr.color = _diggableColor;
+            IsDiggable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            IsDiggable = false;
+        }
+    }
+
+    /// <summary>
+    /// Updates tiles for piece placement.
+    /// </summary>
+    public void ShowHidePlaceable(bool show)
+    {
+        if (show)
+        {
+            _sr.color = _placeableColor;
+            IsPlaceable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            IsPlaceable = false;
+        }
     }
 
     /// <summary>
@@ -232,7 +414,7 @@ public class MultiPieceController : MonoBehaviourPun
     /// <param name="isEntering">True = Being Placed; False = Being Removed</param>
     public void ChangeOccupation(bool isPlayer, bool isEntering)
     {
-        if(isEntering)
+        if (isEntering)
         {
             if (isPlayer)
             {
@@ -254,5 +436,13 @@ public class MultiPieceController : MonoBehaviourPun
                 HasBuilding = false;
             }
         }
+    }
+
+    /// <summary>
+    /// Assigns the gold value to true;
+    /// </summary>
+    public void GiveGold()
+    {
+        HasGold = true;
     }
 }

@@ -34,7 +34,7 @@ public class CreateGold : MonoBehaviour
             if(_stonePieces.Count >= numGold)
             {
                 GameObject tempPiece = _stonePieces.ElementAt<GameObject>(Random.Range(0, _stonePieces.Count));
-                tempPiece.GetComponent<PieceController>().GiveGold();  
+                tempPiece.GetComponent<MultiPieceController>().GiveGold();  
                 _stonePieces.Remove(tempPiece);
             }
             numGold--;
