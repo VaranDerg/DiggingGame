@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4570739556124116446}
   - component: {fileID: 4570739556124116445}
   - component: {fileID: 8472482760639851983}
+  - component: {fileID: -4362792227905391746}
   m_Layer: 7
   m_Name: Burrow
   m_TagString: Untagged
@@ -98,3 +99,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damaged: 0
+--- !u!114 &-4362792227905391746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570739556124116444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 0
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

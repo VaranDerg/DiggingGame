@@ -14,6 +14,7 @@ using System;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using UnityEditor;
 
 public class MultiPieceController : MonoBehaviourPun
 {
@@ -131,6 +132,7 @@ public class MultiPieceController : MonoBehaviourPun
 
     }
 
+
     /// <summary>
     /// Allows the placement of pieces back onto the board.
     /// </summary>
@@ -180,7 +182,9 @@ public class MultiPieceController : MonoBehaviourPun
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
             CurrentPawn.GetComponent<MultiPlayerPawn>().ClosestPieceToPawn().GetComponent<MultiPieceController>().HasPawn = false;
             CurrentPawn.transform.position = gameObject.transform.position;
+            photonView.RPC("MovePawn", RpcTarget.Others, gameObject.transform.position.x, gameObject.transform.position.y);
             HasPawn = true;
+
 
             CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
             CurrentPawn.GetComponent<MultiPlayerPawn>().UnassignAdjacentTiles();
@@ -194,6 +198,26 @@ public class MultiPieceController : MonoBehaviourPun
                 _gcm.Back();
             }
         }
+    }
+
+    /// <summary>
+    /// Moves a pawn on the other players screen.
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="pawn"> pawn that will be moved </param>
+    /// <param name="newPosition"> position where pawn will be moved to </param>
+    [PunRPC]
+    private void MovePawn(float newX, float newY)
+    {
+        if(_am.CurrentPlayer  == 1)
+        {
+            GameObject.Find("Player1Pawn").transform.position = new Vector2(newX, newY);
+        }
+        else
+        {
+            GameObject.Find("Player2Pawn").transform.position = new Vector2(newX, newY);
+        }
+        HasPawn = true;
     }
 
 
@@ -222,6 +246,7 @@ public class MultiPieceController : MonoBehaviourPun
                 if (canPlaceThere)
                 {
                     PlaceBuildingOnPiece(_factory);
+                    
                 }
             }
             else if (CurrentPawn.GetComponent<MultiPlayerPawn>().BuildingToBuild == "Burrow")
@@ -283,7 +308,9 @@ public class MultiPieceController : MonoBehaviourPun
         if (canPlaceOnTile)
         {
             Instantiate(building, _buildingSlot);
+
             HasBuilding = true;
+            photonView.RPC("PlaceBuilding", RpcTarget.Others, building.name, _buildingSlot.transform.position.x, _buildingSlot.transform.position.y);
             return true;
         }
         else
@@ -291,6 +318,17 @@ public class MultiPieceController : MonoBehaviourPun
             Debug.Log("Cannot place " + building.name + " adjacent to another building.");
             return false;
         }
+    }
+
+    /// <summary>
+    /// Places the building on all other clients
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="type"> the building to be placed </param>
+    [PunRPC]
+    private void PlaceBuilding(String type, float xPos, float yPos)
+    {
+        PhotonNetwork.Instantiate(type, new Vector3(xPos, yPos, 0f), Quaternion.identity);
     }
 
     [PunRPC]
