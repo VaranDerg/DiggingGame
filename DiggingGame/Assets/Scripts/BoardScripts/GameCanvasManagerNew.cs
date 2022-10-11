@@ -181,7 +181,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// Updates the Current Action text.
     /// </summary>
     /// <param name="updatedText">New text to show</param>
-    private void UpdateCurrentActionText(string updatedText)
+    public void UpdateCurrentActionText(string updatedText)
     {
         _currentActionText.text = updatedText;
     }
@@ -212,7 +212,6 @@ public class GameCanvasManagerNew : MonoBehaviour
 
         _startTurnButton.SetActive(true);
         _opponentInfoZone.SetActive(false);
-        _cm.HideShowCards(_am.CurrentPlayer, true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Press Start Turn to begin!");
@@ -242,11 +241,12 @@ public class GameCanvasManagerNew : MonoBehaviour
         DisableListObjects();
 
         _firstZone.SetActive(true);
+        _am.DrawStartingCards();
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
         _am.StartMove(_am.CurrentPlayer);
         _am.CurrentTurnPhase++;
-        _cm.HideShowCards(_am.CurrentPlayer, true);
+        _cm.ShowCards(_am.CurrentPlayer);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
@@ -274,11 +274,6 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     public void Move()
     {
-        if (!_am.SpendCards(_am.CurrentPlayer))
-        {
-            return;
-        }
-
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
 
@@ -295,11 +290,6 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     public void Dig()
     {
-        if (!_am.SpendCards(_am.CurrentPlayer))
-        {
-            return;
-        }
-
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
 
@@ -408,11 +398,11 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void EndTurn()
     {
         DisableListObjects();
-        _cm.HideShowCards(_am.CurrentPlayer, false);
 
         if (_am.CurrentPlayer == 1)
         {
-            _am.DrawCards(_am.CurrentPlayer, _am.CardDraw + _am.P1BuiltBuildings[0]);
+            _am.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
+            _cm.HideCards(_am.CurrentPlayer);
             _am.DiscardCards(_am.CurrentPlayer);
             _am.CurrentTurnPhase = 0;
             _startTurnButton.SetActive(true);
@@ -423,7 +413,8 @@ public class GameCanvasManagerNew : MonoBehaviour
         }
         else
         {
-            _am.DrawCards(_am.CurrentPlayer, _am.CardDraw + _am.P2BuiltBuildings[0]);
+            _am.DrawAlottedCards(_am.CardDraw + _am.P2BuiltBuildings[0]);
+            _cm.HideCards(_am.CurrentPlayer);
             _am.DiscardCards(_am.CurrentPlayer);
             _am.CurrentTurnPhase = 0;
             _startTurnButton.SetActive(true);

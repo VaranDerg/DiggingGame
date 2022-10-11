@@ -57,6 +57,7 @@ public class ActionManager : MonoBehaviour
 
     [Header("Script References")]
     private BoardManager _bm;
+    private CardManager _cm;
     private GameCanvasManagerNew _gcm;
 
     /// <summary>
@@ -65,6 +66,7 @@ public class ActionManager : MonoBehaviour
     private void Awake()
     {
         _bm = FindObjectOfType<BoardManager>();
+        _cm = FindObjectOfType<CardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         PrepareStartingValues();
     }
@@ -75,9 +77,6 @@ public class ActionManager : MonoBehaviour
     private void PrepareStartingValues()
     {
         CurrentPlayer = StartingPlayer;
-
-        P1Cards = StartingCards;
-        P2Cards = StartingCards;
 
         CurrentTurn = 1;
         CurrentRound = 1;
@@ -95,6 +94,20 @@ public class ActionManager : MonoBehaviour
         P2RemainingBuildings[0] = TotalBuildings;
         P2RemainingBuildings[1] = TotalBuildings;
         P2RemainingBuildings[2] = TotalBuildings;
+    }
+
+    /// <summary>
+    /// Draws cards up to the starting cards if it's the first round.
+    /// </summary>
+    public void DrawStartingCards()
+    {
+        if(CurrentRound == 1)
+        {
+            for (int i = StartingCards; i > 0; i--)
+            {
+                _cm.DrawCard("Universal");
+            }
+        }
     }
 
     /// <summary>
@@ -134,6 +147,10 @@ public class ActionManager : MonoBehaviour
         _bm.BoardColliderSwitch(false);
     }
 
+    /// <summary>
+    /// Prepares pawn to dig.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
     public void StartDig(int player)
     {
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
@@ -323,8 +340,8 @@ public class ActionManager : MonoBehaviour
                 Debug.Log("No cards to Retrieve with!");
                 return false;
             }
-            P1Cards--;
-            P1GoldCards++;
+            _cm.PrepSelectionVariables(1, "Any", false);
+            //Run "CheckSelectedCards" until adequate cards are selected."
             P1RefinedPile[3]--;
             SupplyPile[3]++;
             Debug.Log("Spent 1 card and 1 gold for 1 gold card!");
@@ -628,17 +645,12 @@ public class ActionManager : MonoBehaviour
     /// <summary>
     /// Draws cards for a selected player.
     /// </summary>
-    /// <param name="player">1 or 2. Which hand to send the cards to.</param>
     /// <param name="cardsToDraw">How many cards you should draw.</param>
-    public void DrawCards(int player, int cardsToDraw)
+    public void DrawAlottedCards(int cardsToDraw)
     {
-        if(player == 1)
+        for (int i = cardsToDraw; i > 0; i--)
         {
-            P1Cards += cardsToDraw;
-        }
-        else if(player == 2)
-        {
-            P2Cards += cardsToDraw;
+            _cm.DrawCard("Universal");
         }
         Debug.Log("Drew " + cardsToDraw + " cards!");
     }
@@ -648,82 +660,24 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     public void DiscardCards(int player)
     {
+        Debug.LogWarning("Temporary return statement to prevent an infinite loop.");
+        return;
+
         if(player == 1)
         {
-            int discardedCards = 0;
             while (P1Cards + P1GoldCards > HandLimit)
             {
-                discardedCards++;
-                if (P1Cards > 0)
-                {
-                    P1Cards--;
-                }
-                else
-                {
-                    P1GoldCards--;
-                }
+                //Code to make Player 1 choose cards to discard.
+                //Run "CheckSelectedCards" until adequate cards are selected.
             }
-            Debug.Log("Player " + player + " discarded " + discardedCards + " cards!");
         }
         else if(player == 2)
         {
-            int discardedCards = 0;
             while (P2Cards + P2GoldCards > HandLimit)
             {
-                discardedCards++;
-                if (P2Cards > 0)
-                {
-                    P2Cards--;
-                }
-                else
-                {
-                    P2GoldCards--;
-                }
+                //Code to make Player 2 choose cards to discard.
+                //Run "CheckSelectedCards" until adequate cards are selected.
             }
-            Debug.Log("Player " + player + " discarded " + discardedCards + " cards!");
-        }
-    }
-
-    public bool SpendCards(int player)
-    {
-        if(player == 1)
-        {
-            if(P1Cards == 0 && P1GoldCards == 0)
-            {
-                Debug.Log("Not enough cards for this action!");
-                return false;
-            }
-
-            if(P1Cards == 0)
-            {
-                P1GoldCards--;
-                return true;
-            }
-
-            P1Cards--;
-            return true;
-        }
-        else if(player == 2)
-        {
-            if (P2Cards == 0 && P2GoldCards == 0)
-            {
-                Debug.Log("Not enough cards for this action!");
-                return false;
-            }
-
-            if (P2Cards == 0)
-            {
-                P2GoldCards--;
-                return true;
-            }
-
-            P2Cards--;
-            return true;
-        }
-        else
-        {
-            Debug.LogWarning("Incorrect player parameter.");
-            return false;
         }
     }
 }

@@ -6256,8 +6256,7 @@ MonoBehaviour:
   - {fileID: 1034060801}
   - {fileID: 1491287116}
   - {fileID: 1015289855}
-  _player1Cards: {fileID: 1831804215}
-  _player2Cards: {fileID: 1199691643}
+  _opponentViewShowing: 0
   _moleFactory: {fileID: 21300000, guid: c44f93469180f3444b9ac6bf2f6fe759, type: 3}
   _moleBurrow: {fileID: 21300000, guid: dd59c161cee62da469e25ff9ef335f0c, type: 3}
   _moleMine: {fileID: 21300000, guid: dd145c0285b438440ad3f1ae1c069783, type: 3}
@@ -7194,20 +7193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54af6470a71552940a088f6a7771d407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _p1HandPositions:
-  - {fileID: 150704083}
-  - {fileID: 188782166}
-  - {fileID: 1951175487}
-  - {fileID: 1633396039}
-  - {fileID: 934445756}
-  - {fileID: 168391373}
-  - {fileID: 1997993082}
-  - {fileID: 1298940391}
-  - {fileID: 913884971}
-  - {fileID: 595873296}
-  - {fileID: 211006728}
-  - {fileID: 1873873692}
-  _p2HandPositions:
+  _handPositions:
   - {fileID: 211698687}
   - {fileID: 210275913}
   - {fileID: 1498854274}
@@ -7224,6 +7210,11 @@ MonoBehaviour:
   _gDeckSizeText: {fileID: 823777225}
   _dPileSizeText: {fileID: 115054208}
   DPile: []
+  P1Hand: []
+  P2Hand: []
+  SelectedCards: []
+  RequiredSuit: 
+  RequiredCardAmount: 0
 --- !u!4 &1005441706
 Transform:
   m_ObjectHideFlags: 0
@@ -8705,7 +8696,7 @@ Transform:
   m_GameObject: {fileID: 1200940793}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 3.5, y: 5.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -10939,7 +10930,7 @@ MonoBehaviour:
   StartingCards: 4
   HandLimit: 7
   CardDraw: 2
-  WinningScore: 0
+  WinningScore: 15
   BaseBuildingPrice: 1
   TotalBuildings: 3
 --- !u!1 &1598070888

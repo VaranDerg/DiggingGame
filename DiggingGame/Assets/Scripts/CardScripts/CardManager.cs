@@ -21,11 +21,18 @@ public class CardManager : MonoBehaviour
     private List<GameObject> _uDeck = new List<GameObject>();
     private List<GameObject> _gDeck = new List<GameObject>();
     [HideInInspector] public List<GameObject> DPile = new List<GameObject>();
+    [HideInInspector] public List<GameObject> P1Hand = new List<GameObject>();
+    [HideInInspector] public List<GameObject> P2Hand = new List<GameObject>();
+    [HideInInspector] public List<GameObject> SelectedCards = new List<GameObject>();
     private bool[] _p1OpenHandPositions;
     private bool[] _p2OpenHandPositions;
     private ActionManager _am;
     private BoardManager _bm;
     private GameCanvasManagerNew _gcm;
+
+    [Header("Selection Requiements")]
+    [HideInInspector] public string RequiredSuit = "";
+    [HideInInspector] public int RequiredCardAmount = 0;
 
     /// <summary>
     /// Assigns partner scripts
@@ -141,13 +148,17 @@ public class CardManager : MonoBehaviour
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<CardController>().HandPosition = i;
                     randomCard.GetComponentInChildren<CardController>().HeldByPlayer = _am.CurrentPlayer;
+                    randomCard.GetComponentInChildren<CardController>().NextPos = randomCard.transform.position;
+                    P1Hand.Add(randomCard);
                     _p1OpenHandPositions[i] = false;
                     if(deck == "Universal")
                     {
+                        _am.P1Cards++;
                         _uDeck.Remove(randomCard);
                     }
                     else
                     {
+                        _am.P1GoldCards++;
                         _gDeck.Remove(randomCard);
                     }
                     Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
@@ -166,13 +177,17 @@ public class CardManager : MonoBehaviour
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<CardController>().HandPosition = i;
                     randomCard.GetComponentInChildren<CardController>().HeldByPlayer = _am.CurrentPlayer;
+                    randomCard.GetComponentInChildren<CardController>().NextPos = randomCard.transform.position;
+                    P2Hand.Add(randomCard);
                     _p2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
+                        _am.P2Cards++;
                         _uDeck.Remove(randomCard);
                     }
                     else
                     {
+                        _am.P2GoldCards++;
                         _gDeck.Remove(randomCard);
                     }
                     Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
@@ -180,6 +195,114 @@ public class CardManager : MonoBehaviour
                     return;
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Prepares selection value for checks related to spending cards.
+    /// </summary>
+    /// <param name="cardAmount">The amount of cards needed for an action.</param>
+    /// <param name="suit">"Grass" "Dirt" "Stone" "Any"</param>
+    /// <param name="remove">Mark true to set all variables to their defaults.</param>
+    public void PrepSelectionVariables(int cardAmount, string suit, bool remove)
+    {
+        if(remove)
+        {
+            RequiredCardAmount = 0;
+            RequiredSuit = "";
+
+            if (_am.CurrentPlayer == 1)
+            {
+                foreach (GameObject card in P1Hand)
+                {
+                    card.GetComponent<CardController>().CanBeSelected = false;
+                }
+            }
+            else
+            {
+                foreach (GameObject card in P2Hand)
+                {
+                    card.GetComponent<CardController>().CanBeSelected = false;
+                }
+            }
+
+            return;
+        }
+
+        if(_am.CurrentPlayer == 1)
+        {
+            foreach (GameObject card in P1Hand)
+            {
+                card.GetComponent<CardController>().CanBeSelected = true;
+            }
+        }
+        else
+        {
+            foreach (GameObject card in P2Hand)
+            {
+                card.GetComponent<CardController>().CanBeSelected = true;
+            }
+        }
+
+        RequiredSuit = suit;
+        RequiredCardAmount = cardAmount;
+    }
+
+    /// <summary>
+    /// Checks the "Value" of selected cards. Once the correct amount of cards are selected, it will return true.
+    /// </summary>
+    public bool CheckSelectedCards()
+    {
+        int requiredCardValue = RequiredCardAmount * 2;
+        int selectedCardValue = 0;
+
+        foreach(GameObject card in SelectedCards)
+        {
+            if(card.GetComponentInChildren<CardVisuals>().ThisCard.GrassSuit && RequiredSuit == "Grass")
+            {
+                selectedCardValue += 2;
+            }
+            else if (card.GetComponentInChildren<CardVisuals>().ThisCard.DirtSuit && RequiredSuit == "Dirt")
+            {
+                selectedCardValue += 2;
+            }
+            else if (card.GetComponentInChildren<CardVisuals>().ThisCard.StoneSuit && RequiredSuit == "Stone")
+            {
+                selectedCardValue += 2;
+            }
+            else if (card.GetComponentInChildren<CardVisuals>().ThisCard.GoldSuit)
+            {
+                selectedCardValue += 2;
+            }
+            else if(RequiredSuit == "Any")
+            {
+                selectedCardValue += 2;
+            }
+            else
+            {
+                selectedCardValue++;
+            }
+        }
+
+        if(selectedCardValue == requiredCardValue)
+        {
+            Debug.Log("Adequate cards provided!");
+            foreach(GameObject card in SelectedCards)
+            {
+                card.GetComponent<CardController>().SpendCard();
+                SelectedCards.Remove(card);
+            }
+            return true;
+        }
+        else if(selectedCardValue > requiredCardValue)
+        {
+            Debug.Log("Card value too high. Deselect more cards!");
+            return false;
+        }
+        else
+        {
+            Debug.Log("Card value too low. Select more cards!");
+            return false;
         }
     }
 
@@ -214,32 +337,46 @@ public class CardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows or hides cards based on the player and boolean. WIP.
+    /// Shows cards based on the player.
     /// </summary>
     /// <param name="player">1 or 2</param>
-    /// <param name="hide">true to show, false to hide</param>
-    public void HideShowCards(int player, bool show)
+    public void HideCards(int player)
     {
-        List<GameObject> cardsToCheck = new List<GameObject>();
-
-        foreach(GameObject card in GameObject.FindGameObjectsWithTag("Card"))
+        if(player == 1)
         {
-            cardsToCheck.Add(card);
-        }
-
-        foreach(GameObject card in GameObject.FindGameObjectsWithTag("GoldCard"))
-        {
-            cardsToCheck.Add(card);
-        }
-
-        foreach(GameObject card in cardsToCheck)
-        {
-            if(card.GetComponentInChildren<CardController>().HeldByPlayer != player)
+            foreach (GameObject card in P1Hand)
             {
-                continue;
+                card.SetActive(false);
             }
+        }
+        else
+        {
+            foreach (GameObject card in P2Hand)
+            {
+                card.SetActive(false);
+            }
+        }
+    }
 
-            card.SetActive(show);
+    /// <summary>
+    /// Hides cards based on the player.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    public void ShowCards(int player)
+    {
+        if(player == 1)
+        {
+            foreach(GameObject card in P1Hand)
+            {
+                card.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (GameObject card in P2Hand)
+            {
+                card.SetActive(true);
+            }
         }
     }
 }

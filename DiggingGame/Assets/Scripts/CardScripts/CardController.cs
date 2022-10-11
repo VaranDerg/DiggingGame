@@ -13,8 +13,12 @@ using UnityEngine;
 public class CardController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Animator _anims;
-    [SerializeField] private GameObject _cardParent;
+    [SerializeField] private Transform _mouseOverPos;
+    [SerializeField] private Transform _defaultPos;
+    [SerializeField] private GameObject _cardVisualToMaximize;
+
+    [Header("Values")]
+    [SerializeField] private float _cardSlideSpeed;
 
     [Header("Other")]
     private CardManager _cm;
@@ -26,6 +30,12 @@ public class CardController : MonoBehaviour
     private bool _currentlyMaximized = false;
     private GameObject _maximizedCard;
     private Transform _maximizeAnchor;
+    [HideInInspector] public Vector3 NextPos;
+
+    [Header("Selection Variables")]
+    [HideInInspector] public bool CanBeSelected;
+    [HideInInspector] public bool CanBeDiscarded;
+    [HideInInspector] public bool Selected;
 
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
@@ -37,6 +47,24 @@ public class CardController : MonoBehaviour
         _am = FindObjectOfType<ActionManager>();
         _bm = FindObjectOfType<BoardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
+        HeldByPlayer = 0;
+    }
+
+    /// <summary>
+    /// Adjusts the card's visual position.
+    /// </summary>
+    private void FixedUpdate()
+    {
+        if(Selected)
+        {
+            transform.position = _mouseOverPos.position;
+            return;
+        }
+
+        if(transform.position != NextPos)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, NextPos, _cardSlideSpeed * Time.deltaTime);
+        }
     }
 
     /// <summary>
@@ -44,7 +72,7 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseEnter()
     {
-        _anims.Play("CardSlideUp");
+        NextPos = _mouseOverPos.position;
     }
 
     /// <summary>
@@ -52,8 +80,7 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
-        _anims.Play("CardSlideDown");
-
+        NextPos = _defaultPos.position;
         if(_currentlyMaximized)
         {
             Destroy(_maximizedCard);
@@ -63,26 +90,84 @@ public class CardController : MonoBehaviour
 
     private void OnMouseOver()
     {
-        MaximizeCard(_cardParent);
+        MaximizeCard(_cardVisualToMaximize);
 
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if(CanBeDiscarded)
         {
-            SpendCard();
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                SpendCard();
+            }
+        }
+
+        if(CanBeSelected)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                SelectCard();
+            }
         }
     }
 
-    private void SpendCard()
+    private void SelectCard()
     {
-        _cm.DPile.Add(_cardParent);
+        if(!Selected)
+        {
+            _cm.SelectedCards.Add(gameObject);
+            Selected = true;
+        }
+        else
+        {
+            _cm.SelectedCards.Remove(gameObject);
+            Selected = false;
+        }
+    }
+
+    public void SpendCard()
+    {
+        _cm.DPile.Add(gameObject);
+
+        if(HeldByPlayer == 1)
+        {
+            if (gameObject.CompareTag("Card"))
+            {
+                _am.P1Cards--;
+            }
+            else if (gameObject.CompareTag("GoldCard"))
+            {
+                _am.P1GoldCards--;
+            }
+            _cm.P1Hand.Remove(gameObject);
+        }
+        else if(HeldByPlayer == 2)
+        {
+            if (gameObject.CompareTag("Card"))
+            {
+                _am.P2Cards--;
+            }
+            else if (gameObject.CompareTag("GoldCard"))
+            {
+                _am.P2GoldCards--;
+            }
+            _cm.P2Hand.Remove(gameObject);
+        }
+        HeldByPlayer = 0;
+        Selected = false;
+
         if (_currentlyMaximized)
         {
             Destroy(_maximizedCard);
             _currentlyMaximized = false;
         }
-        _cardParent.SetActive(false);
-        Debug.Log("Spent " + _cardParent.name + ".");
+        gameObject.SetActive(false);
+
+        Debug.Log("Spent " + gameObject.transform.parent.name + ".");
     }
 
+    /// <summary>
+    /// Maximizes a card for easier view.
+    /// </summary>
+    /// <param name="thingToMaximize">Card zone to maximize</param>
     private void MaximizeCard(GameObject thingToMaximize)
     {
         if(Input.GetKeyDown(KeyCode.Mouse1))

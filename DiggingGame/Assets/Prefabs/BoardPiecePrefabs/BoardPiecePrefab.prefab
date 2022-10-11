@@ -110,10 +110,7 @@ MonoBehaviour:
   _burrow: {fileID: 2097167223220628436, guid: a047394ed136f104fb8e0300e1b84376, type: 3}
   _mine: {fileID: 6614894829994012052, guid: 9f7559e39bd4411429c0a8b08d32837a, type: 3}
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _movableColor: {r: 1, g: 0, b: 0, a: 1}
-  _diggableColor: {r: 0.9561405, g: 0, b: 1, a: 1}
-  _placeableColor: {r: 0, g: 0.084033966, b: 1, a: 1}
-  buildableColor: {r: 0, g: 0.9032259, b: 1, a: 1}
+  _selectedColor: {r: 1, g: 0.495283, b: 0.495283, a: 1}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0

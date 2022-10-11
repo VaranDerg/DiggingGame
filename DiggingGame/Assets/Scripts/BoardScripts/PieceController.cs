@@ -31,7 +31,7 @@ public class PieceController : MonoBehaviour
 
     [Header("Tile Values/Information")]
     [SerializeField] private Color _defaultColor;
-    [SerializeField] private Color _movableColor, _diggableColor, _placeableColor, buildableColor;
+    [SerializeField] private Color _selectedColor;
     [HideInInspector] public bool IsMovable = false, IsDiggable = false, IsPlaceable = false, IsBuildable = false;
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasBuilding;
@@ -99,6 +99,8 @@ public class PieceController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            //Run "CheckSelectedCards" until adequate cards are selected.
+
             CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
             _gcm.Back();
@@ -176,6 +178,8 @@ public class PieceController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
+            //Run "CheckSelectedCards" until adequate cards are selected."
+
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
             CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
             CurrentPawn.transform.position = gameObject.transform.position;
@@ -219,6 +223,8 @@ public class PieceController : MonoBehaviour
 
                 if(canPlaceThere)
                 {
+                    //Run "CheckSelectedCards" until adequate cards are selected."
+
                     PlaceBuildingOnPiece(_factory);
                 }
             }
@@ -228,6 +234,8 @@ public class PieceController : MonoBehaviour
 
                 if(canPlaceThere)
                 {
+                    //Run "CheckSelectedCards" until adequate cards are selected."
+
                     PlaceBuildingOnPiece(_burrow);
                 }
             }
@@ -248,6 +256,8 @@ public class PieceController : MonoBehaviour
 
                 if(canPlaceThere)
                 {
+                    //Run "CheckSelectedCards" until adequate cards are selected."
+
                     PlaceBuildingOnPiece(_mine);
                 }
             }
@@ -334,7 +344,7 @@ public class PieceController : MonoBehaviour
     {
         if(show)
         {
-            _sr.color = _movableColor;
+            _sr.color = _selectedColor;
             IsMovable = true;
         }
         else
@@ -352,7 +362,7 @@ public class PieceController : MonoBehaviour
     {
         if (show)
         {
-            _sr.color = buildableColor;
+            _sr.color = _selectedColor;
             IsBuildable = true;
         }
         else
@@ -370,7 +380,7 @@ public class PieceController : MonoBehaviour
     {
         if (show)
         {
-            _sr.color = _diggableColor;
+            _sr.color = _selectedColor;
             IsDiggable = true;
         }
         else
@@ -387,7 +397,7 @@ public class PieceController : MonoBehaviour
     {
         if (show)
         {
-            _sr.color = _placeableColor;
+            _sr.color = _selectedColor;
             IsPlaceable = true;
         }
         else
@@ -429,7 +439,7 @@ public class PieceController : MonoBehaviour
     }
 
     /// <summary>
-    /// Assigns the gold value to true;
+    /// Assigns the gold value to true.
     /// </summary>
     public void GiveGold()
     {

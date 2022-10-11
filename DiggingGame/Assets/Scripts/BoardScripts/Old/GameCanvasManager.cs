@@ -221,12 +221,6 @@ public class GameCanvasManager : MonoBehaviour
     public void Move()
     {
         DisableObjects();
-
-        if(!_am.SpendCards(_am.CurrentPlayer))
-        {
-            return;
-        }
-
         _bm.DisablePawnBoardInteractions();
         _am.StartMove(_am.CurrentPlayer);
 
@@ -271,11 +265,8 @@ public class GameCanvasManager : MonoBehaviour
     /// </summary>
     public void DigTile()
     {
-        if(_am.SpendCards(_am.CurrentPlayer))
-        {
-            _bm.DisablePawnBoardInteractions();
-            _am.StartDig(_am.CurrentPlayer);
-        }
+        _bm.DisablePawnBoardInteractions();
+        _am.StartDig(_am.CurrentPlayer);
 
         UpdateAllText();
     }
@@ -447,7 +438,7 @@ public class GameCanvasManager : MonoBehaviour
 
         if(_am.CurrentPlayer == 1)
         {
-            _am.DrawCards(_am.CurrentPlayer, _am.CardDraw + _am.P1BuiltBuildings[0]);
+            _am.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
             _am.DiscardCards(_am.CurrentPlayer);
             _am.CurrentTurnPhase = 0;
             _startTurnButton.SetActive(true);
@@ -457,7 +448,7 @@ public class GameCanvasManager : MonoBehaviour
         }
         else if(_am.CurrentPlayer == 2)
         {
-            _am.DrawCards(_am.CurrentPlayer, _am.CardDraw + _am.P2BuiltBuildings[0]);
+            _am.DrawAlottedCards(_am.CardDraw + _am.P2BuiltBuildings[0]);
             _am.DiscardCards(_am.CurrentPlayer);
             _am.CurrentTurnPhase = 0;
             _startTurnButton.SetActive(true);
