@@ -298,10 +298,10 @@ public class GameCanvasManager : MonoBehaviour
     /// </summary>
     public void Retrieve()
     {
-        if(_am.UseGold(_am.CurrentPlayer))
-        {
-            Debug.Log("Player " + _am.CurrentPlayer + " Refined Gold!");
-        }
+        //if(_am.UseGold(_am.CurrentPlayer))
+        //{
+        //    Debug.Log("Player " + _am.CurrentPlayer + " Refined Gold!");
+        //}
 
         UpdateAllText();
     }

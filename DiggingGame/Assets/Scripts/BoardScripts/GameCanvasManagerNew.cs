@@ -16,7 +16,7 @@ using TMPro;
 public class GameCanvasManagerNew : MonoBehaviour
 {
     [Header("Text and Object References, Current Player View")]
-    [SerializeField] private GameObject _startTurnButton;
+    public GameObject StartTurnButton;
     [SerializeField] private GameObject _firstZone;
     [SerializeField] private GameObject _thenZone;
     [SerializeField] private GameObject _finallyZone;
@@ -60,7 +60,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     private void AddObjectsToList()
     {
-        _allObjects.Add(_startTurnButton);
+        _allObjects.Add(StartTurnButton);
         _allObjects.Add(_firstZone);
         _allObjects.Add(_thenZone);
         _allObjects.Add(_finallyZone);
@@ -210,7 +210,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
 
-        _startTurnButton.SetActive(true);
+        StartTurnButton.SetActive(true);
         _opponentInfoZone.SetActive(false);
 
         UpdateTextBothPlayers();
@@ -321,13 +321,9 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     public void Retrieve()
     {
-        if(_am.UseGold(_am.CurrentPlayer))
-        {
-            Debug.Log("Player " + _am.CurrentPlayer + " Retrieved Gold!");
-        }
+        StartCoroutine(_am.UseGold(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
-        UpdateCurrentActionText("Select an Action.");
     }
 
     /// <summary>
@@ -371,8 +367,15 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
+        //I HATE THIS PART OF CODE. If a workaround appears I wanna change it ASAP.
+        foreach(MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
+        {
+            script.StopAllCoroutines();
+        }
+        _cm.DeselectSelectedCards();
+        _cm.PrepSelectionVariables(0, "", true);
 
-        if(_am.CurrentTurnPhase == 2)
+        if (_am.CurrentTurnPhase == 2)
         {
             _thenZone.SetActive(true);
             _thenActions.SetActive(true);
@@ -402,11 +405,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         if (_am.CurrentPlayer == 1)
         {
             _am.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
-            _cm.HideCards(_am.CurrentPlayer);
-            _am.DiscardCards(_am.CurrentPlayer);
-            _am.CurrentTurnPhase = 0;
-            _startTurnButton.SetActive(true);
-            _am.CurrentPlayer = 2;
+            StartCoroutine(_am.DiscardCards(_am.CurrentPlayer));
             _factory.sprite = _meerkatFactory;
             _burrow.sprite = _meerkatBurrow;
             _mine.sprite = _meerkatMine;
@@ -414,18 +413,12 @@ public class GameCanvasManagerNew : MonoBehaviour
         else
         {
             _am.DrawAlottedCards(_am.CardDraw + _am.P2BuiltBuildings[0]);
-            _cm.HideCards(_am.CurrentPlayer);
-            _am.DiscardCards(_am.CurrentPlayer);
-            _am.CurrentTurnPhase = 0;
-            _startTurnButton.SetActive(true);
-            _am.CurrentPlayer = 1;
-            _am.CurrentRound++;
+            StartCoroutine(_am.DiscardCards(_am.CurrentPlayer));
             _factory.sprite = _moleFactory;
             _burrow.sprite = _moleBurrow;
             _mine.sprite = _moleMine;
         }
 
         UpdateTextBothPlayers();
-        UpdateCurrentActionText("Player " + _am.CurrentPlayer + ", start your turn.");
     }
 }

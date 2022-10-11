@@ -326,50 +326,52 @@ public class ActionManager : MonoBehaviour
     /// <summary>
     /// Uses gold tiles.
     /// </summary>
-    public bool UseGold(int player)
+    public IEnumerator UseGold(int player)
     {
         if (player == 1)
         {
-            if (P1RefinedPile[3] == 0)
+            if (P1RefinedPile[3] == 0 || P1Cards == 0)
             {
-                Debug.Log("No gold to use!");
-                return false;
+                _gcm.UpdateCurrentActionText("No Refined Gold or Cards to retrieve with!");
             }
-            if (P1Cards == 0)
+            else
             {
-                Debug.Log("No cards to Retrieve with!");
-                return false;
+                _cm.PrepSelectionVariables(1, "Any", false);
+                bool isGood = false;
+                while (!isGood)
+                {
+                    isGood = _cm.CheckSelectedCards();
+                    yield return null;
+                }
+                _cm.PrepSelectionVariables(0, "", true);
+
+                _cm.DrawCard("Gold");
+                P1RefinedPile[3]--;
+                SupplyPile[3]++;
             }
-            _cm.PrepSelectionVariables(1, "Any", false);
-            //Run "CheckSelectedCards" until adequate cards are selected."
-            P1RefinedPile[3]--;
-            SupplyPile[3]++;
-            Debug.Log("Spent 1 card and 1 gold for 1 gold card!");
-            return true;
         }
         else if (player == 2)
         {
-            if (P2RefinedPile[3] == 0)
+            if (P2RefinedPile[3] == 0 || P2Cards == 0)
             {
-                Debug.Log("No gold to use!");
-                return false;
+                _gcm.UpdateCurrentActionText("No Refined Gold or Cards to retrieve with!");
             }
-            if (P2Cards == 0)
+            else
             {
-                Debug.Log("No cards to Retrieve with!");
-                return false;
+                _cm.PrepSelectionVariables(1, "Any", false);
+                bool isGood = false;
+                while (!isGood)
+                {
+                    isGood = _cm.CheckSelectedCards();
+                    yield return null;
+                }
+                _cm.PrepSelectionVariables(0, "", true);
+
+                _cm.DrawCard("Gold");
+                P1RefinedPile[3]--;
+                SupplyPile[3]++;
+                _gcm.UpdateCurrentActionText("Gold retrieved!");
             }
-            P2Cards--;
-            P2GoldCards++;
-            P2RefinedPile[3]--;
-            SupplyPile[3]++;
-            Debug.Log("Spent 1 card and 1 gold for 1 gold card!");
-            return true;
-        }
-        else
-        {
-            Debug.LogWarning("Incorrect player parameter provided.");
-            return false;
         }
     }
 
@@ -402,8 +404,7 @@ public class ActionManager : MonoBehaviour
     /// Builds a building. 
     /// </summary>
     /// <param name="type">"Factory" "Burrow" or "Mine"</param>
-    /// <param name="mineType">If "Mine" must list a type. "Grass" "Dirt" or "Stone"</param>
-    public bool EnoughBuildingsToBuild(int player, string type, string mineType)
+    public bool EnoughBuildingsRemaining(int player, string type)
     {
         if (player == 1)
         {
@@ -412,65 +413,21 @@ public class ActionManager : MonoBehaviour
                 case "Factory":
                     if (P1RemainingBuildings[0] == 0)
                     {
-                        Debug.Log("All Factories have been built!");
-                        return false;
-                    }
-
-                    if (EnoughCardsToBuild(CurrentPlayer, P1CurrentBuildingPrices[0], "Factory"))
-                    {
-                        P1CurrentBuildingPrices[0]++;
-                        P1RemainingBuildings[0]--;
-                        P1BuiltBuildings[0]++;
-                    }
-                    else
-                    {
+                        _gcm.UpdateCurrentActionText("All Factories have been built!");
                         return false;
                     }
                     return true;
                 case "Burrow":
                     if (P1RemainingBuildings[1] == 0)
                     {
-                        Debug.Log("All Burrows have been built!");
-                        return false;
-                    }
-
-                    if (EnoughCardsToBuild(CurrentPlayer, P1CurrentBuildingPrices[1], "Burrow"))
-                    {
-                        P1CurrentBuildingPrices[1]++;
-                        P1RemainingBuildings[1]--;
-                        P1BuiltBuildings[1]++;
-                    }
-                    else
-                    {
+                        _gcm.UpdateCurrentActionText("All Burrows have been built!");
                         return false;
                     }
                     return true;
                 case "Mine":
                     if (P1RemainingBuildings[2] == 0)
                     {
-                        Debug.Log("All Mines have been built!");
-                        return false;
-                    }
-
-                    if (EnoughCardsToBuild(CurrentPlayer, P1CurrentBuildingPrices[2], "Mine"))
-                    {
-                        P1CurrentBuildingPrices[2]++;
-                        P1RemainingBuildings[2]--;
-                        if (mineType == "Grass")
-                        {
-                            P1BuiltBuildings[2]++;
-                        }
-                        else if (mineType == "Dirt")
-                        {
-                            P1BuiltBuildings[3]++;
-                        }
-                        else if (mineType == "Stone")
-                        {
-                            P1BuiltBuildings[4]++;
-                        }
-                    }
-                    else
-                    {
+                        _gcm.UpdateCurrentActionText("All Mines have been built!");
                         return false;
                     }
                     return true;
@@ -486,65 +443,21 @@ public class ActionManager : MonoBehaviour
                 case "Factory":
                     if (P2RemainingBuildings[0] == 0)
                     {
-                        Debug.Log("All Factories have been built!");
-                        return false;
-                    }
-
-                    if (EnoughCardsToBuild(CurrentPlayer, P2CurrentBuildingPrices[0], "Factory"))
-                    {
-                        P2CurrentBuildingPrices[0]++;
-                        P2RemainingBuildings[0]--;
-                        P2BuiltBuildings[0]++;
-                    }
-                    else
-                    {
+                        _gcm.UpdateCurrentActionText("All Factories have been built!");
                         return false;
                     }
                     return true;
                 case "Burrow":
                     if (P2RemainingBuildings[1] == 0)
                     {
-                        Debug.Log("All Burrows have been built!");
-                        return false;
-                    }
-
-                    if (EnoughCardsToBuild(CurrentPlayer, P2CurrentBuildingPrices[1], "Burrow"))
-                    {
-                        P2CurrentBuildingPrices[1]++;
-                        P2RemainingBuildings[1]--;
-                        P2BuiltBuildings[1]++;
-                    }
-                    else
-                    {
+                        _gcm.UpdateCurrentActionText("All Burrows have been built!");
                         return false;
                     }
                     return true;
                 case "Mine":
                     if (P2RemainingBuildings[2] == 0)
                     {
-                        Debug.Log("All Mines have been built!");
-                        return false;
-                    }
-
-                    if (EnoughCardsToBuild(CurrentPlayer, P2CurrentBuildingPrices[2], "Mine"))
-                    {
-                        P2CurrentBuildingPrices[2]++;
-                        P2RemainingBuildings[2]--;
-                        if (mineType == "Grass")
-                        {
-                            P2BuiltBuildings[2]++;
-                        }
-                        else if (mineType == "Dirt")
-                        {
-                            P2BuiltBuildings[3]++;
-                        }
-                        else if (mineType == "Stone")
-                        {
-                            P2BuiltBuildings[4]++;
-                        }
-                    }
-                    else
-                    {
+                        _gcm.UpdateCurrentActionText("All Mines have been built!");
                         return false;
                     }
                     return true;
@@ -556,69 +469,6 @@ public class ActionManager : MonoBehaviour
         else
         {
             Debug.LogWarning("Player " + player + " is not valid.");
-            return false;
-        }
-    }
-
-    /// <summary>
-    /// Checks if the player has enough "Cards" to build something. Subtracts cards accordingly.
-    /// </summary>
-    /// <param name="currentPrice">Price var of current building type.</param>
-    /// <param name="type">Name of building.</param>
-    /// <returns>True if cards are substantial. False if otherwise.</returns>
-    private bool EnoughCardsToBuild(int player, int currentPrice, string type)
-    {
-        if(player == 1)
-        {
-            if (P1Cards + P1GoldCards >= currentPrice)
-            {
-                for (int i = currentPrice; i != 0; i--)
-                {
-                    if (P1Cards > 0)
-                    {
-                        P1Cards--;
-                    }
-                    else if (P1GoldCards > 0)
-                    {
-                        P1GoldCards--;
-                    }
-                }
-                Debug.Log("Built " + type + " for " + currentPrice + " cards.");
-                return true;
-            }
-            else
-            {
-                Debug.Log("Not enough cards to build " + type + "! (Need " + currentPrice + " have " + (P1Cards + P1GoldCards) + ".)");
-                return false;
-            }
-        }
-        else if(player == 2)
-        {
-            if (P2Cards + P2GoldCards >= currentPrice)
-            {
-                for (int i = currentPrice; i != 0; i--)
-                {
-                    if (P2Cards > 0)
-                    {
-                        P2Cards--;
-                    }
-                    else if (P2GoldCards > 0)
-                    {
-                        P2GoldCards--;
-                    }
-                }
-                Debug.Log("Built " + type + " for " + currentPrice + " cards.");
-                return true;
-            }
-            else
-            {
-                Debug.Log("Not enough cards to build " + type + "! (Need " + currentPrice + " have " + (P2Cards + P2GoldCards) + ".)");
-                return false;
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Incorrect parameter provided for player.");
             return false;
         }
     }
@@ -656,28 +506,52 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Discards cards down to the hand limit.
+    /// Discards cards down to the hand limit at the end of your turn.
     /// </summary>
-    public void DiscardCards(int player)
+    public IEnumerator DiscardCards(int player)
     {
-        Debug.LogWarning("Temporary return statement to prevent an infinite loop.");
-        return;
-
         if(player == 1)
         {
-            while (P1Cards + P1GoldCards > HandLimit)
+            if (P1Cards + P1GoldCards > HandLimit)
             {
-                //Code to make Player 1 choose cards to discard.
-                //Run "CheckSelectedCards" until adequate cards are selected.
+                _gcm.UpdateCurrentActionText("Discard " + (P1Cards + P1GoldCards - HandLimit) + " Cards.");
+                _cm.PrepSelectionVariables(P1Cards + P1GoldCards - HandLimit, "Any", false);
+                bool isGood = false;
+                while (!isGood)
+                {
+                    isGood = _cm.CheckSelectedCards();
+                    yield return null;
+                }
+                _cm.PrepSelectionVariables(0, "", true);
             }
+
+            _cm.HideCards(CurrentPlayer);
+            CurrentTurnPhase = 0;
+            CurrentPlayer = 2;
+            _gcm.StartTurnButton.SetActive(true);
+            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
         else if(player == 2)
         {
-            while (P2Cards + P2GoldCards > HandLimit)
+            if (P2Cards + P2GoldCards > HandLimit)
             {
-                //Code to make Player 2 choose cards to discard.
-                //Run "CheckSelectedCards" until adequate cards are selected.
+                _gcm.UpdateCurrentActionText("Discard " + (P1Cards + P1GoldCards - HandLimit) + " Cards.");
+                _cm.PrepSelectionVariables(P2Cards + P2GoldCards - HandLimit, "Any", false);
+                bool isGood = false;
+                while (!isGood)
+                {
+                    isGood = _cm.CheckSelectedCards();
+                    yield return null;
+                }
+                _cm.PrepSelectionVariables(0, "", true);
             }
+
+            _cm.HideCards(CurrentPlayer);
+            CurrentTurnPhase = 0;
+            CurrentPlayer = 1;
+            CurrentRound++;
+            _gcm.StartTurnButton.SetActive(true);
+            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
     }
 }

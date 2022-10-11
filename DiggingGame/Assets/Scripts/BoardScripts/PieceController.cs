@@ -23,22 +23,26 @@ public class PieceController : MonoBehaviour
     [SerializeField] private Sprite _stoneSprite;
     [SerializeField] private Sprite _bedrockSprite;
     [SerializeField] private Sprite _goldSprite;
+    [SerializeField] private GameObject _playerPawn;
     private SpriteRenderer _sr;
 
     [Header("Building References")]
     [SerializeField] private Transform _buildingSlot;
-    [SerializeField] private GameObject _factory, _burrow, _mine;
+    [SerializeField] private GameObject _mFactory, _mBurrow, _mMine, _meeFactory, _meeBurrow, _meeMine;
 
     [Header("Tile Values/Information")]
     [SerializeField] private Color _defaultColor;
     [SerializeField] private Color _selectedColor;
+    [SerializeField] private Color _waitingColor;
     [HideInInspector] public bool IsMovable = false, IsDiggable = false, IsPlaceable = false, IsBuildable = false;
     [HideInInspector] public GameState ObjState;
-    [HideInInspector] public bool HasBuilding;
+    [HideInInspector] public bool HasP1Building, HasP2Building;
     [HideInInspector] public bool HasPawn;
     [HideInInspector] public GameObject CurrentPawn;
+    [HideInInspector] public bool PieceIsWaiting = true;
     private BoardManager _bm;
     private ActionManager _am;
+    private CardManager _cm;
     private GameCanvasManagerNew _gcm;
 
     public bool HasGold;    //true if the piece reveals gold when flipped
@@ -48,6 +52,7 @@ public class PieceController : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _bm = FindObjectOfType<BoardManager>();
         _am = FindObjectOfType<ActionManager>();
+        _cm = FindObjectOfType<CardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
     }
 
@@ -83,23 +88,60 @@ public class PieceController : MonoBehaviour
     {
         BuildingPlacement();
         PiecePlacement();
-        PieceRemoval();
-        PawnMovement();
+
+        if (IsDiggable)
+        {
+            StartCoroutine(PieceRemoval());
+        }
+
+        if (IsMovable && CurrentPawn != null)
+        {
+            StartCoroutine(PawnMovement());
+        }
+
+        if(!HasP1Building && !HasP2Building && IsBuildable)
+        {
+            StartCoroutine(BuildingPlacement());
+        }
     }
 
     /// <summary>
     /// Method controlling piece removal.
     /// </summary>
-    private void PieceRemoval()
+    private IEnumerator PieceRemoval()
     {
-        if (!IsDiggable)
-        {
-            return;
-        }
-
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Run "CheckSelectedCards" until adequate cards are selected.
+            _sr.color = _waitingColor;
+            PieceIsWaiting = true;
+            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+            {
+                pawn.GetComponent<PlayerPawn>().HideNonWaitingTiles();
+            }
+
+            if (ObjState == GameState.One)
+            {
+                _cm.PrepSelectionVariables(1, "Grass", false);
+            }
+            else if (ObjState == GameState.Two)
+            {
+                _cm.PrepSelectionVariables(1, "Dirt", false);
+            }
+            else if (ObjState == GameState.Three || ObjState == GameState.Five)
+            {
+                _cm.PrepSelectionVariables(1, "Stone", false);
+            }
+            else if (ObjState == GameState.Four)
+            {
+                _cm.PrepSelectionVariables(1, "Any", false);
+            }
+            bool isGood = false;
+            while (!isGood)
+            {
+                isGood = _cm.CheckSelectedCards();
+                yield return null;
+            }
+            _cm.PrepSelectionVariables(0, "", true);
 
             CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
@@ -169,16 +211,44 @@ public class PieceController : MonoBehaviour
     /// <summary>
     /// Controls pawn movement.
     /// </summary>
-    private void PawnMovement()
+    private IEnumerator PawnMovement()
     {
-        if(!IsMovable || CurrentPawn == null)
-        {
-            return;
-        }
-
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Run "CheckSelectedCards" until adequate cards are selected."
+            if(_am.CurrentTurnPhase != 1)
+            {
+                _sr.color = _waitingColor;
+                PieceIsWaiting = true;
+                foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+                {
+                    pawn.GetComponent<PlayerPawn>().HideNonWaitingTiles();
+                }
+
+                if (ObjState == GameState.One)
+                {
+                    _cm.PrepSelectionVariables(1, "Grass", false);
+                }
+                else if (ObjState == GameState.Two)
+                {
+                    _cm.PrepSelectionVariables(1, "Dirt", false);
+                }
+                else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                {
+                    _cm.PrepSelectionVariables(1, "Stone", false);
+                }
+                else if (ObjState == GameState.Four)
+                {
+                    _cm.PrepSelectionVariables(1, "Any", false);
+                }
+
+                bool isGood = false;
+                while (!isGood)
+                {
+                    isGood = _cm.CheckSelectedCards();
+                    yield return null;
+                }
+                _cm. PrepSelectionVariables(0, "", true);
+            }
 
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
             CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
@@ -202,63 +272,172 @@ public class PieceController : MonoBehaviour
     /// <summary>
     /// Method controlling Building placement and removal.
     /// </summary>
-    private void BuildingPlacement()
+    private IEnumerator BuildingPlacement()
     {
-        if(!IsBuildable)
-        {
-            return;
-        }
-
-        if(HasBuilding)
-        {
-            return;
-        }
-
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
             bool canPlaceThere = false;
-            if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Factory")
+
+            string pieceSuit = "";
+            if (ObjState == GameState.One)
             {
-                canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Factory", "");
+                pieceSuit = "Grass";
+            }
+            else if (ObjState == GameState.Two)
+            {
+                pieceSuit = "Dirt";
+            }
+            else if (ObjState == GameState.Three)
+            {
+                pieceSuit = "Stone";
+            }
+            else if (ObjState == GameState.Four || ObjState == GameState.Five)
+            {
+                Debug.LogWarning("Cannot place building on this piece, yet it was able to be selected?");
+            }
 
-                if(canPlaceThere)
+            if (CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Factory")
+            {
+                canPlaceThere = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, "Factory");
+
+                if (canPlaceThere)
                 {
-                    //Run "CheckSelectedCards" until adequate cards are selected."
+                    _sr.color = _waitingColor;
+                    PieceIsWaiting = true;
+                    foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+                    {
+                        pawn.GetComponent<PlayerPawn>().HideNonWaitingTiles();
+                    }
 
-                    PlaceBuildingOnPiece(_factory);
+                    if(_am.CurrentPlayer == 1)
+                    {
+                        _cm.PrepSelectionVariables(_am.P1CurrentBuildingPrices[0], pieceSuit, false);
+                    }
+                    else
+                    {
+                        _cm.PrepSelectionVariables(_am.P2CurrentBuildingPrices[0], pieceSuit, false);
+                    }
+                    bool isGood = false;
+                    while (!isGood)
+                    {
+                        isGood = _cm.CheckSelectedCards();
+                        yield return null;
+                    }
+                    _cm.PrepSelectionVariables(0, "", true);
+
+                    if(_am.CurrentPlayer == 1)
+                    {
+                        _am.P1CurrentBuildingPrices[0]++;
+                        _am.P1RemainingBuildings[0]--;
+                        _am.P1BuiltBuildings[0]++;
+                    }
+                    else
+                    {
+                        _am.P2CurrentBuildingPrices[0]++;
+                        _am.P2RemainingBuildings[0]--;
+                        _am.P2BuiltBuildings[0]++;
+                    }
+                    PlaceBuildingOnPiece("Factory");
                 }
             }
             else if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Burrow")
             {
-                canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Burrow", "");
+                canPlaceThere = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, "Burrow");
 
                 if(canPlaceThere)
                 {
-                    //Run "CheckSelectedCards" until adequate cards are selected."
+                    _sr.color = _waitingColor;
 
-                    PlaceBuildingOnPiece(_burrow);
+                    if (_am.CurrentPlayer == 1)
+                    {
+                        _cm.PrepSelectionVariables(_am.P1CurrentBuildingPrices[1], pieceSuit, false);
+                    }
+                    else
+                    {
+                        _cm.PrepSelectionVariables(_am.P2CurrentBuildingPrices[1], pieceSuit, false);
+                    }
+                    bool isGood = false;
+                    while (!isGood)
+                    {
+                        isGood = _cm.CheckSelectedCards();
+                        yield return null;
+                    }
+                    _cm.PrepSelectionVariables(0, "", true);
+
+                    if(_am.CurrentPlayer == 1)
+                    {
+                        _am.P1CurrentBuildingPrices[1]++;
+                        _am.P1RemainingBuildings[1]--;
+                        _am.P1BuiltBuildings[1]++;
+                    }
+                    else
+                    {
+                        _am.P2CurrentBuildingPrices[1]++;
+                        _am.P2RemainingBuildings[1]--;
+                        _am.P2BuiltBuildings[1]++;
+                    }
+                    PlaceBuildingOnPiece("Burrow");
                 }
             }
             else if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Mine")
             {
-                if(ObjState == GameState.One)
-                {
-                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Grass");
-                }
-                else if(ObjState == GameState.Two)
-                {
-                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Dirt");
-                }
-                else if(ObjState == GameState.Three)
-                {
-                    canPlaceThere = _am.EnoughBuildingsToBuild(_am.CurrentPlayer, "Mine", "Stone");
-                }
+                canPlaceThere = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, "Mine");
 
-                if(canPlaceThere)
+                if (canPlaceThere)
                 {
-                    //Run "CheckSelectedCards" until adequate cards are selected."
+                    _sr.color = _waitingColor;
 
-                    PlaceBuildingOnPiece(_mine);
+                    if (_am.CurrentPlayer == 1)
+                    {
+                        _cm.PrepSelectionVariables(_am.P1CurrentBuildingPrices[2], pieceSuit, false);
+                    }
+                    else
+                    {
+                        _cm.PrepSelectionVariables(_am.P2CurrentBuildingPrices[2], pieceSuit, false);
+                    }
+                    bool isGood = false;
+                    while (!isGood)
+                    {
+                        isGood = _cm.CheckSelectedCards();
+                        yield return null;
+                    }
+                    _cm.PrepSelectionVariables(0, "", true);
+
+                    if(_am.CurrentPlayer == 1)
+                    {
+                        _am.P1CurrentBuildingPrices[2]++;
+                        _am.P1RemainingBuildings[2]--;
+                        if (ObjState == GameState.One)
+                        {
+                            _am.P1BuiltBuildings[2]++;
+                        }
+                        else if (ObjState == GameState.Two)
+                        {
+                            _am.P1BuiltBuildings[3]++;
+                        }
+                        else if (ObjState == GameState.Three)
+                        {
+                            _am.P1BuiltBuildings[4]++;
+                        }
+                    }
+                    else
+                    {
+                        _am.P2CurrentBuildingPrices[2]++;
+                        _am.P2RemainingBuildings[2]--;
+                        if (ObjState == GameState.One)
+                        {
+                            _am.P2BuiltBuildings[2]++;
+                        }
+                        else if (ObjState == GameState.Two)
+                        {
+                            _am.P2BuiltBuildings[3]++;
+                        }
+                        else if (ObjState == GameState.Three)
+                        {
+                            _am.P2BuiltBuildings[4]++;
+                        }
+                    }
+                    PlaceBuildingOnPiece("Mine");
                 }
             }
             else
@@ -273,16 +452,47 @@ public class PieceController : MonoBehaviour
     }
 
     /// <summary>
-    /// Places a building. Returns false and removes it if it's adjacent to another building.
+    /// Places a building. Returns false and removes it if it's adjacent to another building. Also will spawn more Pawns if 3rd building is placed.
     /// </summary>
     /// <param name="building"></param>
-    public bool PlaceBuildingOnPiece(GameObject building)
+    public bool PlaceBuildingOnPiece(string buildingName)
     {
+        GameObject building = null;
+        if(_am.CurrentPlayer == 1)
+        {
+            if (buildingName == "Factory")
+            {
+                building = _mFactory;
+            }
+            else if (buildingName == "Burrow")
+            {
+                building = _mBurrow;
+            }
+            else if (buildingName == "Mine")
+            {
+                building = _mMine;
+            }
+        }
+        else
+        {
+            if (buildingName == "Factory")
+            {
+                building = _meeFactory;
+            }
+            else if (buildingName == "Burrow")
+            {
+                building = _meeBurrow;
+            }
+            else if (buildingName == "Mine")
+            {
+                building = _meeMine;
+            }
+        }
         bool canPlaceOnTile = true;
 
         foreach(GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
         {
-            if(piece.GetComponent<PieceController>().HasBuilding)
+            if(piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
             {
                 canPlaceOnTile = false;
             }
@@ -290,8 +500,78 @@ public class PieceController : MonoBehaviour
 
         if(canPlaceOnTile)
         {
+            bool spawnPawn = false;
             Instantiate(building, _buildingSlot);
-            HasBuilding = true;
+
+            if (_am.CurrentPlayer == 1)
+            {
+                if (buildingName == "Factory")
+                {
+                    if (_am.P1RemainingBuildings[0] == 0)
+                    {
+                        spawnPawn = true;
+                    }
+                }
+                else if (buildingName == "Burrow")
+                {
+                    if (_am.P1RemainingBuildings[1] == 0)
+                    {
+                        spawnPawn = true;
+                    }
+                }
+                else if (buildingName == "Mine")
+                {
+                    if (_am.P1RemainingBuildings[2] == 0)
+                    {
+                        spawnPawn = true;
+                    }
+                }
+
+                _am.P1Score++;
+            }
+            else
+            {
+                if (buildingName == "Factory")
+                {
+                    if (_am.P2RemainingBuildings[0] == 0)
+                    {
+                        spawnPawn = true;
+                    }
+                }
+                else if (buildingName == "Burrow")
+                {
+                    if (_am.P2RemainingBuildings[1] == 0)
+                    {
+                        spawnPawn = true;
+                    }
+                }
+                else if (buildingName == "Mine")
+                {
+                    if (_am.P2RemainingBuildings[2] == 0)
+                    {
+                        spawnPawn = true;
+                    }
+                }
+
+                _am.P2Score++;
+            }
+
+            if (_am.CurrentPlayer == 1)
+            {
+                HasP1Building = true;
+            }
+            else
+            {
+                HasP2Building = true;
+            }
+
+            if (spawnPawn)
+            {
+                GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
+                newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
+                newPawn.transform.SetParent(null);
+            }
+
             return true;
         }
         else
@@ -351,6 +631,7 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _defaultColor;
             IsMovable = false;
+            PieceIsWaiting = false;
             CurrentPawn = null;
         }
     }
@@ -369,6 +650,7 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _defaultColor;
             IsBuildable = false;
+            PieceIsWaiting = false;
             CurrentPawn = null;
         }
     }
@@ -386,6 +668,7 @@ public class PieceController : MonoBehaviour
         else
         {
             _sr.color = _defaultColor;
+            PieceIsWaiting = false;
             IsDiggable = false;
         }
     }
@@ -403,38 +686,8 @@ public class PieceController : MonoBehaviour
         else
         {
             _sr.color = _defaultColor;
+            PieceIsWaiting = false;
             IsPlaceable = false;
-        }
-    }
-
-    /// <summary>
-    /// Changes a Tile's occupant. A tile can hold 1 Pawn and 1 Building.
-    /// </summary>
-    /// <param name="isPlayer">True = Pawn; False = Building</param>
-    /// <param name="isEntering">True = Being Placed; False = Being Removed</param>
-    public void ChangeOccupation(bool isPlayer, bool isEntering)
-    {
-        if(isEntering)
-        {
-            if (isPlayer)
-            {
-                HasPawn = true;
-            }
-            else if (!isPlayer)
-            {
-                HasBuilding = true;
-            }
-        }
-        else
-        {
-            if (isPlayer)
-            {
-                HasPawn = false;
-            }
-            else if (!isPlayer)
-            {
-                HasBuilding = false;
-            }
         }
     }
 

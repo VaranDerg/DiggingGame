@@ -24,8 +24,8 @@ public class CardManager : MonoBehaviour
     [HideInInspector] public List<GameObject> P1Hand = new List<GameObject>();
     [HideInInspector] public List<GameObject> P2Hand = new List<GameObject>();
     [HideInInspector] public List<GameObject> SelectedCards = new List<GameObject>();
-    private bool[] _p1OpenHandPositions;
-    private bool[] _p2OpenHandPositions;
+    [HideInInspector] public bool[] P1OpenHandPositions;
+    [HideInInspector] public bool[] P2OpenHandPositions;
     private ActionManager _am;
     private BoardManager _bm;
     private GameCanvasManagerNew _gcm;
@@ -71,20 +71,20 @@ public class CardManager : MonoBehaviour
     /// </summary>
     private void PrepareOpenHandSlots()
     {
-        _p1OpenHandPositions = new bool[_handPositions.Length];
-        _p2OpenHandPositions = new bool[_handPositions.Length];
+        P1OpenHandPositions = new bool[_handPositions.Length];
+        P2OpenHandPositions = new bool[_handPositions.Length];
 
-        for(int i = 0; i < _p1OpenHandPositions.Length; i++)
+        for(int i = 0; i < P1OpenHandPositions.Length; i++)
         {
-            _p1OpenHandPositions[i] = true;
+            P1OpenHandPositions[i] = true;
         }
 
-        for (int i = 0; i < _p2OpenHandPositions.Length; i++)
+        for (int i = 0; i < P2OpenHandPositions.Length; i++)
         {
-            _p2OpenHandPositions[i] = true;
+            P2OpenHandPositions[i] = true;
         }
 
-        Debug.Log("Prepared " + _p1OpenHandPositions.Length + " hand positions for Player 1 and " + _p2OpenHandPositions.Length + " hand positions for Player 2.");
+        Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// Updates the text for each pile of cards.
     /// </summary>
-    private void UpdatePileText()
+    public void UpdatePileText()
     {
         _uDeckSizeText.text = "Deck (" + _uDeck.Count + ")";
         _gDeckSizeText.text = "Gold Deck (" + _gDeck.Count + ")";
@@ -140,9 +140,9 @@ public class CardManager : MonoBehaviour
 
         if(_am.CurrentPlayer == 1)
         {
-            for(int i = 0; i < _p1OpenHandPositions.Length; i++)
+            for(int i = 0; i < P1OpenHandPositions.Length; i++)
             {
-                if(_p1OpenHandPositions[i] == true)
+                if(P1OpenHandPositions[i] == true)
                 {
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
@@ -150,7 +150,7 @@ public class CardManager : MonoBehaviour
                     randomCard.GetComponentInChildren<CardController>().HeldByPlayer = _am.CurrentPlayer;
                     randomCard.GetComponentInChildren<CardController>().NextPos = randomCard.transform.position;
                     P1Hand.Add(randomCard);
-                    _p1OpenHandPositions[i] = false;
+                    P1OpenHandPositions[i] = false;
                     if(deck == "Universal")
                     {
                         _am.P1Cards++;
@@ -169,9 +169,9 @@ public class CardManager : MonoBehaviour
         }
         else if(_am.CurrentPlayer == 2)
         {
-            for (int i = 0; i < _p2OpenHandPositions.Length; i++)
+            for (int i = 0; i < P2OpenHandPositions.Length; i++)
             {
-                if (_p2OpenHandPositions[i] == true)
+                if (P2OpenHandPositions[i] == true)
                 {
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
@@ -179,7 +179,7 @@ public class CardManager : MonoBehaviour
                     randomCard.GetComponentInChildren<CardController>().HeldByPlayer = _am.CurrentPlayer;
                     randomCard.GetComponentInChildren<CardController>().NextPos = randomCard.transform.position;
                     P2Hand.Add(randomCard);
-                    _p2OpenHandPositions[i] = false;
+                    P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
                         _am.P2Cards++;
@@ -215,14 +215,14 @@ public class CardManager : MonoBehaviour
             {
                 foreach (GameObject card in P1Hand)
                 {
-                    card.GetComponent<CardController>().CanBeSelected = false;
+                    card.GetComponentInChildren<CardController>().CanBeSelected = false;
                 }
             }
             else
             {
                 foreach (GameObject card in P2Hand)
                 {
-                    card.GetComponent<CardController>().CanBeSelected = false;
+                    card.GetComponentInChildren<CardController>().CanBeSelected = false;
                 }
             }
 
@@ -233,19 +233,20 @@ public class CardManager : MonoBehaviour
         {
             foreach (GameObject card in P1Hand)
             {
-                card.GetComponent<CardController>().CanBeSelected = true;
+                card.GetComponentInChildren<CardController>().CanBeSelected = true;
             }
         }
         else
         {
             foreach (GameObject card in P2Hand)
             {
-                card.GetComponent<CardController>().CanBeSelected = true;
+                card.GetComponentInChildren<CardController>().CanBeSelected = true;
             }
         }
 
         RequiredSuit = suit;
         RequiredCardAmount = cardAmount;
+        _gcm.UpdateCurrentActionText("Select " + RequiredCardAmount + " " + RequiredSuit + " suited Cards!");
     }
 
     /// <summary>
@@ -258,52 +259,76 @@ public class CardManager : MonoBehaviour
 
         foreach(GameObject card in SelectedCards)
         {
-            if(card.GetComponentInChildren<CardVisuals>().ThisCard.GrassSuit && RequiredSuit == "Grass")
+            if(card.GetComponentInChildren<CardController>().Selected)
             {
-                selectedCardValue += 2;
-            }
-            else if (card.GetComponentInChildren<CardVisuals>().ThisCard.DirtSuit && RequiredSuit == "Dirt")
-            {
-                selectedCardValue += 2;
-            }
-            else if (card.GetComponentInChildren<CardVisuals>().ThisCard.StoneSuit && RequiredSuit == "Stone")
-            {
-                selectedCardValue += 2;
-            }
-            else if (card.GetComponentInChildren<CardVisuals>().ThisCard.GoldSuit)
-            {
-                selectedCardValue += 2;
-            }
-            else if(RequiredSuit == "Any")
-            {
-                selectedCardValue += 2;
-            }
-            else
-            {
-                selectedCardValue++;
+                if (card.GetComponentInChildren<CardVisuals>().ThisCard.GrassSuit && RequiredSuit == "Grass")
+                {
+                    selectedCardValue += 2;
+                }
+                else if (card.GetComponentInChildren<CardVisuals>().ThisCard.DirtSuit && RequiredSuit == "Dirt")
+                {
+                    selectedCardValue += 2;
+                }
+                else if (card.GetComponentInChildren<CardVisuals>().ThisCard.StoneSuit && RequiredSuit == "Stone")
+                {
+                    selectedCardValue += 2;
+                }
+                else if (card.GetComponentInChildren<CardVisuals>().ThisCard.GoldSuit)
+                {
+                    selectedCardValue += 2;
+                }
+                else if (RequiredSuit == "Any")
+                {
+                    selectedCardValue += 2;
+                }
+                else
+                {
+                    selectedCardValue++;
+                }
             }
         }
 
         if(selectedCardValue == requiredCardValue)
         {
             Debug.Log("Adequate cards provided!");
-            foreach(GameObject card in SelectedCards)
-            {
-                card.GetComponent<CardController>().SpendCard();
-                SelectedCards.Remove(card);
-            }
+            SpendSelectedCards();
             return true;
         }
         else if(selectedCardValue > requiredCardValue)
         {
-            Debug.Log("Card value too high. Deselect more cards!");
             return false;
         }
         else
         {
-            Debug.Log("Card value too low. Select more cards!");
             return false;
         }
+    }
+
+    /// <summary>
+    /// Spends every card in SelectedCards.
+    /// </summary>
+    private void SpendSelectedCards()
+    {
+        foreach(GameObject card in SelectedCards)
+        {
+            card.GetComponentInChildren<CardController>().ToDiscard();
+        }
+
+        SelectedCards.Clear();
+    }
+
+    /// <summary>
+    /// Deselects every selected card.
+    /// </summary>
+    public void DeselectSelectedCards()
+    {
+        foreach(GameObject card in SelectedCards)
+        {
+            card.GetComponentInChildren<CardController>().Selected = false;
+            card.GetComponentInChildren<CardController>().CanBeSelected = false;
+        }
+
+        SelectedCards.Clear();
     }
 
     /// <summary>

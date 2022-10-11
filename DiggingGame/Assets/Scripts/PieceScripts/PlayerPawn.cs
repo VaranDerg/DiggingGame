@@ -15,6 +15,8 @@ public class PlayerPawn : MonoBehaviour
     [Header("References/Values")]
     //1 or 2
     [Range(1, 2)] public int PawnPlayer;
+    [SerializeField] private Color _p1Color;
+    [SerializeField] private Color _p2Color;
 
     [Header("Other")]
     //The (up to) 4 Board Pieces surrounding a player. NSEW.
@@ -23,6 +25,7 @@ public class PlayerPawn : MonoBehaviour
     private BoardManager _bm;
     private ActionManager _am;
     private GameCanvasManagerNew _gcm;
+    [SerializeField] private SpriteRenderer _sr;
 
     [Header("Pawn Status for Other Scripts")]
     [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false;
@@ -39,15 +42,36 @@ public class PlayerPawn : MonoBehaviour
         }
     }
 
+    public void SetPawnToPlayer(int player)
+    {
+        if (player == 1)
+        {
+            _sr.color = _p1Color;
+            PawnPlayer = 1;
+        }
+        else
+        {
+            _sr.color = _p2Color;
+            PawnPlayer = 2;
+        }
+    }
+
+    /// <summary>
+    /// Assigns stuff
+    /// </summary>
+    private void Awake()
+    {
+        _bm = FindObjectOfType<BoardManager>();
+        _am = FindObjectOfType<ActionManager>();
+        _gcm = FindObjectOfType<GameCanvasManagerNew>();
+    }
+
     /// <summary>
     /// Calls FindBoardPieces.
     /// </summary>
     private void Start()
     {
         FindBoardPieces();
-        _bm = FindObjectOfType<BoardManager>();
-        _am = FindObjectOfType<ActionManager>();
-        _gcm = FindObjectOfType<GameCanvasManagerNew>();
     }
 
     /// <summary>
@@ -113,7 +137,7 @@ public class PlayerPawn : MonoBehaviour
         {
             foreach(GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
-                if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasBuilding)
+                if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     continue;
                 }
@@ -158,7 +182,7 @@ public class PlayerPawn : MonoBehaviour
             {
                 bool dontHighlight = false;
                 //Check if that adjacent piece has a building.
-                if (piece.GetComponent<PieceController>().HasBuilding)
+                if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     dontHighlight = true;
                 }
@@ -176,7 +200,7 @@ public class PlayerPawn : MonoBehaviour
                 //Check if any currently adjacent pieces are adjacent to a building or if they're Bedrock or Gold.
                 foreach (GameObject pieceSquared in _bm.GenerateAdjacentPieceList(piece))
                 {
-                    if (pieceSquared.GetComponent<PieceController>().HasBuilding)
+                    if (pieceSquared.GetComponent<PieceController>().HasP1Building || pieceSquared.GetComponent<PieceController>().HasP2Building)
                     {
                         dontHighlight = true;
                     }
@@ -246,6 +270,10 @@ public class PlayerPawn : MonoBehaviour
             if(_shownPieces[i] != null)
             {
                 _shownPieces[i].GetComponent<PieceController>().ShowHideMovable(false);
+                _shownPieces[i].GetComponent<PieceController>().ShowHideBuildable(false);
+                _shownPieces[i].GetComponent<PieceController>().ShowHidePlaceable(false);
+                _shownPieces[i].GetComponent<PieceController>().ShowHideDiggable(false);
+                _shownPieces[i].GetComponent<PieceController>().PieceIsWaiting = false;
             }
         }
 
@@ -254,5 +282,22 @@ public class PlayerPawn : MonoBehaviour
         IsDigging = false;
         BuildingToBuild = "";
         _shownPieces.Clear();
+    }
+
+    /// <summary>
+    /// Hides tiles that aren't waiting
+    /// </summary>
+    public void HideNonWaitingTiles()
+    {
+        foreach(GameObject piece in _shownPieces)
+        {
+            if(!piece.GetComponent<PieceController>().PieceIsWaiting)
+            {
+                piece.GetComponent<PieceController>().ShowHideMovable(false);
+                piece.GetComponent<PieceController>().ShowHideBuildable(false);
+                piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+                piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            }
+        }
     }
 }

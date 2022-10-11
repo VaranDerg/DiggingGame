@@ -14,8 +14,10 @@ public class CardController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Transform _mouseOverPos;
+    [SerializeField] private Transform _selectedPos;
     [SerializeField] private Transform _defaultPos;
     [SerializeField] private GameObject _cardVisualToMaximize;
+    [SerializeField] private GameObject _cardBody;
 
     [Header("Values")]
     [SerializeField] private float _cardSlideSpeed;
@@ -57,7 +59,7 @@ public class CardController : MonoBehaviour
     {
         if(Selected)
         {
-            transform.position = _mouseOverPos.position;
+            transform.position = _selectedPos.position;
             return;
         }
 
@@ -96,7 +98,7 @@ public class CardController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                SpendCard();
+                ToDiscard();
             }
         }
 
@@ -113,55 +115,57 @@ public class CardController : MonoBehaviour
     {
         if(!Selected)
         {
-            _cm.SelectedCards.Add(gameObject);
+            _cm.SelectedCards.Add(_cardBody);
             Selected = true;
         }
         else
         {
-            _cm.SelectedCards.Remove(gameObject);
+            _cm.SelectedCards.Remove(_cardBody);
             Selected = false;
         }
     }
 
-    public void SpendCard()
+    public void ToDiscard()
     {
-        _cm.DPile.Add(gameObject);
-
         if(HeldByPlayer == 1)
         {
-            if (gameObject.CompareTag("Card"))
+            if (_cardBody.CompareTag("Card"))
             {
                 _am.P1Cards--;
             }
-            else if (gameObject.CompareTag("GoldCard"))
+            else if (_cardBody.CompareTag("GoldCard"))
             {
                 _am.P1GoldCards--;
             }
-            _cm.P1Hand.Remove(gameObject);
+            _cm.P1OpenHandPositions[HandPosition] = true;
+            _cm.P1Hand.Remove(_cardBody);
         }
         else if(HeldByPlayer == 2)
         {
-            if (gameObject.CompareTag("Card"))
+            if (_cardBody.CompareTag("Card"))
             {
                 _am.P2Cards--;
             }
-            else if (gameObject.CompareTag("GoldCard"))
+            else if (_cardBody.CompareTag("GoldCard"))
             {
                 _am.P2GoldCards--;
             }
-            _cm.P2Hand.Remove(gameObject);
+            _cm.P2OpenHandPositions[HandPosition] = true;
+            _cm.P2Hand.Remove(_cardBody);
         }
         HeldByPlayer = 0;
         Selected = false;
+        CanBeSelected = false;
+        CanBeDiscarded = false;
+        _cm.DPile.Add(_cardBody);
+        _cm.UpdatePileText();
 
         if (_currentlyMaximized)
         {
             Destroy(_maximizedCard);
             _currentlyMaximized = false;
         }
-        gameObject.SetActive(false);
-
-        Debug.Log("Spent " + gameObject.transform.parent.name + ".");
+        _cardBody.SetActive(false);
     }
 
     /// <summary>
