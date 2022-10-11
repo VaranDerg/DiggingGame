@@ -56,9 +56,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tornado!
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -122,9 +134,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Teleportation
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -188,9 +212,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Retribution
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -254,9 +290,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: HolyIdol
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -320,9 +368,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: DiscerningEye
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -386,9 +446,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Reconstruction
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -452,9 +524,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoldenShovel
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -518,9 +602,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Regeneration
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -584,9 +680,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Transmutation
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x
@@ -650,9 +758,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: MasterThief
       objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702106, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_TagString
+      value: GoldCard
+      objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_RootOrder
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 8963238437072702107, guid: 6406fb7e75154d64f85331d36435b382, type: 3}
       propertyPath: m_LocalPosition.x

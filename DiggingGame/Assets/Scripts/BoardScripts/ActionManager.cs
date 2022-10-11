@@ -27,6 +27,9 @@ public class ActionManager : MonoBehaviour
     //Variables for each players' cards. 
     [HideInInspector] public int P1Cards = 0, P2Cards = 0;
     [HideInInspector] public int P1GoldCards = 0, P2GoldCards = 0;
+    //Variables for each players' score.
+    [HideInInspector] public int P1Score = 0;
+    [HideInInspector] public int P2Score = 0;
     //Variables for the current phase of the turn (First, Then, Finally) and the current player (1, 2)
     [HideInInspector] public int CurrentTurnPhase = 0;
     [HideInInspector] public int CurrentPlayer = 1;
@@ -40,12 +43,13 @@ public class ActionManager : MonoBehaviour
     [HideInInspector] public int[] P1CurrentBuildingPrices = new int[3];
     [HideInInspector] public int[] P2CurrentBuildingPrices = new int[3];
 
-    [Header("Player Values")]
+    [Header("Game Values")]
     public int StartingPlayer;
     public int CardActivations;
     public int StartingCards;
     public int HandLimit;
     public int CardDraw;
+    public int WinningScore;
 
     [Header("Building Values")]
     public int BaseBuildingPrice;
@@ -53,7 +57,7 @@ public class ActionManager : MonoBehaviour
 
     [Header("Script References")]
     private BoardManager _bm;
-    private GameCanvasManager _gcm;
+    private GameCanvasManagerNew _gcm;
 
     /// <summary>
     /// Calls PrepareStartingValues
@@ -61,7 +65,7 @@ public class ActionManager : MonoBehaviour
     private void Awake()
     {
         _bm = FindObjectOfType<BoardManager>();
-        _gcm = FindObjectOfType<GameCanvasManager>();
+        _gcm = FindObjectOfType<GameCanvasManagerNew>();
         PrepareStartingValues();
     }
 
@@ -176,19 +180,23 @@ public class ActionManager : MonoBehaviour
             {
                 case "Grass":
                     P1CollectedPile[0]++;
-                    _gcm.UpdateAllText();
+                    _gcm.UpdateTextBothPlayers();
+                    _gcm.Back();
                     break;
                 case "Dirt":
                     P1CollectedPile[1]++;
-                    _gcm.UpdateAllText();
+                    _gcm.UpdateTextBothPlayers();
+                    _gcm.Back();
                     break;
                 case "Stone":
                     P1CollectedPile[2]++;
-                    _gcm.UpdateAllText();
+                    _gcm.UpdateTextBothPlayers();
+                    _gcm.Back();
                     break;
                 case "Gold":
                     P1CollectedPile[3]++;
-                    _gcm.UpdateAllText();
+                    _gcm.UpdateTextBothPlayers();
+                    _gcm.Back();
                     break;
             }
         }
@@ -198,19 +206,23 @@ public class ActionManager : MonoBehaviour
             {
                 case "Grass":
                     P2CollectedPile[0]++;
-                    _gcm.UpdateAllText();
+                    _gcm.UpdateTextBothPlayers();
+                    _gcm.Back();
                     break;
                 case "Dirt":
                     P2CollectedPile[1]++;
-                    _gcm.UpdateAllText();
+                    _gcm.UpdateTextBothPlayers();
+                    _gcm.Back();
                     break;
                 case "Stone":
                     P2CollectedPile[2]++;
-                    _gcm.UpdateAllText();
+                    _gcm.UpdateTextBothPlayers();
+                    _gcm.Back();
                     break;
                 case "Gold":
                     P2CollectedPile[3]++;
-                    _gcm.UpdateAllText();
+                    _gcm.UpdateTextBothPlayers();
+                    _gcm.Back();
                     break;
             }
         }

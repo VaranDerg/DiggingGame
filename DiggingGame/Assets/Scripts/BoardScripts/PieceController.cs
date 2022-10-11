@@ -39,7 +39,7 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public GameObject CurrentPawn;
     private BoardManager _bm;
     private ActionManager _am;
-    private GameCanvasManager _gcm;
+    private GameCanvasManagerNew _gcm;
 
     public bool HasGold;    //true if the piece reveals gold when flipped
 
@@ -48,7 +48,7 @@ public class PieceController : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _bm = FindObjectOfType<BoardManager>();
         _am = FindObjectOfType<ActionManager>();
-        _gcm = FindObjectOfType<GameCanvasManager>();
+        _gcm = FindObjectOfType<GameCanvasManagerNew>();
     }
 
     /// <summary>

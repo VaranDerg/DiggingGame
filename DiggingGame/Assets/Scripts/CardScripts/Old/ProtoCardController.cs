@@ -1,9 +1,10 @@
 /*****************************************************************************
-// File Name :         CardController.cs
+// File Name :         ProtoCardController.cs
 // Author :            Rudy Wolfer
 // Creation Date :     September 20th, 2022
 //
-// Brief Description : Script that allows a card to be "maximized" and played.
+// Brief Description : Old Script that allows a card to be "maximized" and 
+                       "played."
 *****************************************************************************/
 
 using System.Collections;

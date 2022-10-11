@@ -22,7 +22,7 @@ public class PlayerPawn : MonoBehaviour
     private List<GameObject> _boardPieces = new List<GameObject>();
     private BoardManager _bm;
     private ActionManager _am;
-    private GameCanvasManager _gcm;
+    private GameCanvasManagerNew _gcm;
 
     [Header("Pawn Status for Other Scripts")]
     [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false;
@@ -47,7 +47,7 @@ public class PlayerPawn : MonoBehaviour
         FindBoardPieces();
         _bm = FindObjectOfType<BoardManager>();
         _am = FindObjectOfType<ActionManager>();
-        _gcm = FindObjectOfType<GameCanvasManager>();
+        _gcm = FindObjectOfType<GameCanvasManagerNew>();
     }
 
     /// <summary>

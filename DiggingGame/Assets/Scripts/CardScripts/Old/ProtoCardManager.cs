@@ -1,9 +1,9 @@
 /*****************************************************************************
-// File Name :         GameManager.cs
+// File Name :         ProtoCardManager.cs
 // Author :            Rudy Wolfer
 // Creation Date :     September 21st, 2022
 //
-// Brief Description : GameManager script for basic card functionality. 
+// Brief Description : Old script for basic card functionality. 
 *****************************************************************************/
 
 using System.Collections;
