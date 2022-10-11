@@ -21,6 +21,6 @@ EditorBuildSettings:
     path: Assets/Scenes/CardScene.unity
     guid: 0a5b211e1ee578849a8a3301a9f4ede8
   - enabled: 1
-    path: Assets/Scenes/ActionsTestScene.unity
+    path: Assets/Scenes/PassAndPlayScene.unity
     guid: 3677421c30784c54e8b286c031b4bf6a
   m_configObjects: {}
