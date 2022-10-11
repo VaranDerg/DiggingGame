@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - BoardPiece
   - Pawn
+  - GoldCard
   layers:
   - Default
   - TransparentFX

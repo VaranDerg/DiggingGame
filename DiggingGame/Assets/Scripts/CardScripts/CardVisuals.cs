@@ -15,7 +15,7 @@ using TMPro;
 public class CardVisuals : MonoBehaviour
 {
     [Header("Card Scriptable Object")]
-    [SerializeField] private Card _thisCard;
+    [SerializeField] public Card ThisCard;
 
     [Header("General References")]
     [SerializeField] private Color _grassColor;
@@ -39,25 +39,25 @@ public class CardVisuals : MonoBehaviour
     /// </summary>
     private void PrepareCardSuit()
     {
-        if(_thisCard.GrassSuit)
+        if(ThisCard.GrassSuit)
         {
             _suitIconImage.sprite = _grassIcon;
             _suitImageColor.color = _grassColor;
             _suitName.text = "Grass";
         }
-        else if(_thisCard.DirtSuit)
+        else if(ThisCard.DirtSuit)
         {
             _suitIconImage.sprite = _dirtIcon;
             _suitImageColor.color = _dirtColor;
             _suitName.text = "Dirt";
         }
-        else if(_thisCard.StoneSuit)
+        else if(ThisCard.StoneSuit)
         {
             _suitIconImage.sprite = _stoneIcon;
             _suitImageColor.color = _stoneColor;
             _suitName.text = "Stone";
         }
-        else if(_thisCard.GoldSuit)
+        else if(ThisCard.GoldSuit)
         {
             _suitIconImage.sprite = _goldIcon;
             _suitImageColor.color = _goldColor;
@@ -74,44 +74,44 @@ public class CardVisuals : MonoBehaviour
     /// </summary>
     private void PrepareCardValues()
     {
-        _nameText.text = _thisCard.CardName;
-        _descriptionText.text = _thisCard.CardDescription;
+        _nameText.text = ThisCard.CardName;
+        _descriptionText.text = ThisCard.CardDescription;
 
         //Set a card's cost to 10 or higher to make its cost "X"
-        if(_thisCard.GrassCost >= 10)
+        if(ThisCard.GrassCost >= 10)
         {
             _grassCost.text = "X";
         }
         else
         {
-            _grassCost.text = _thisCard.GrassCost.ToString();
+            _grassCost.text = ThisCard.GrassCost.ToString();
         }
 
-        if (_thisCard.DirtCost >= 10)
+        if (ThisCard.DirtCost >= 10)
         {
             _dirtCost.text = "X";
         }
         else
         {
-            _dirtCost.text = _thisCard.DirtCost.ToString();
+            _dirtCost.text = ThisCard.DirtCost.ToString();
         }
 
-        if (_thisCard.StoneCost >= 10)
+        if (ThisCard.StoneCost >= 10)
         {
             _stoneCost.text = "X";
         }
         else
         {
-            _stoneCost.text = _thisCard.StoneCost.ToString();
+            _stoneCost.text = ThisCard.StoneCost.ToString();
         }
 
-        _cardImage.sprite = _thisCard.CardArt;
+        _cardImage.sprite = ThisCard.CardArt;
 
-        if(_thisCard.persistent)
+        if(ThisCard.persistent)
         {
             _specialCardText.text = "P";
         }
-        else if(_thisCard.disaster)
+        else if(ThisCard.disaster)
         {
             _specialCardText.text = "D";
         }
