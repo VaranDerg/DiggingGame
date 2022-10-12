@@ -156,13 +156,12 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[0] += grassCost;
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
-                _gcm.UpdateTextBothPlayers();
 
                 _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
                 Debug.Log("Activation code will go in this line in the future.");
                 _am.P1Score++;
-
                 _cm.AllowedActivations--;
+                _gcm.UpdateTextBothPlayers();
 
                 ToDiscard();
             }
@@ -181,11 +180,12 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[0] += grassCost;
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
-                _gcm.UpdateTextBothPlayers();
 
                 _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
                 Debug.Log("Activation code will go in this line in the future.");
                 _am.P2Score++;
+                _cm.AllowedActivations--;
+                _gcm.UpdateTextBothPlayers();
 
                 ToDiscard();
             }
