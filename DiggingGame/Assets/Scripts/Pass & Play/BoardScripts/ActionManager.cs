@@ -61,7 +61,7 @@ public class ActionManager : MonoBehaviour
     private GameCanvasManagerNew _gcm;
 
     /// <summary>
-    /// Calls PrepareStartingValues
+    /// Calls PrepareStartingValues and assigns partner scripts.
     /// </summary>
     private void Awake()
     {
@@ -97,7 +97,7 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Draws cards up to the starting cards if it's the first round.
+    /// Draws cards up to the starting cards for each player if it's the first round.
     /// </summary>
     public void DrawStartingCards()
     {
@@ -178,6 +178,7 @@ public class ActionManager : MonoBehaviour
                 pawn.GetComponent<PlayerPawn>().IsMoving = false;
                 pawn.GetComponent<PlayerPawn>().IsBuilding = false;
                 pawn.GetComponent<PlayerPawn>().IsDigging = false;
+                pawn.GetComponent<PlayerPawn>().IsPlacing = false;
                 pawn.GetComponent<Animator>().Play("TempPawnDefault");
             }
         }
@@ -277,54 +278,7 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Uses tiles based on provided cost. 
-    /// </summary>
-    /// <param name="grassCost">How many grass tiles to use.</param>
-    /// <param name="dirtCost">How many dirt tiles to use.</param>
-    /// <param name="stoneCost">How many stone tiles to use.</param>
-    public bool UseTiles(int player, int grassCost, int dirtCost, int stoneCost)
-    {
-        if (player == 1)
-        {
-            if (grassCost > P1RefinedPile[0] || dirtCost > P1RefinedPile[1] || stoneCost > P1RefinedPile[2])
-            {
-                Debug.Log("Not enough tiles to use this effect!");
-                return false;
-            }
-            P1RefinedPile[0] -= grassCost;
-            P1RefinedPile[1] -= dirtCost;
-            P1RefinedPile[2] -= stoneCost;
-
-            SupplyPile[0] += grassCost;
-            SupplyPile[1] += dirtCost;
-            SupplyPile[2] += stoneCost;
-            return true;
-        }
-        else if (player == 2)
-        {
-            if (grassCost > P2RefinedPile[0] || dirtCost > P2RefinedPile[1] || stoneCost > P2RefinedPile[2])
-            {
-                Debug.Log("Not enough tiles to use this effect!");
-                return false;
-            }
-            P2RefinedPile[0] -= grassCost;
-            P2RefinedPile[1] -= dirtCost;
-            P2RefinedPile[2] -= stoneCost;
-
-            SupplyPile[0] += grassCost;
-            SupplyPile[1] += dirtCost;
-            SupplyPile[2] += stoneCost;
-            return true;
-        }
-        else
-        {
-            Debug.LogWarning("Incorrect player var provided.");
-            return false;
-        }
-    }
-
-    /// <summary>
-    /// Uses gold tiles.
+    /// Uses gold tiles to draw a gold card.
     /// </summary>
     public IEnumerator UseGold(int player)
     {
@@ -336,14 +290,12 @@ public class ActionManager : MonoBehaviour
             }
             else
             {
-                _cm.PrepSelectionVariables(1, "Any", false);
-                bool isGood = false;
-                while (!isGood)
+                _cm.PrepareCardSelection(1, "Any", false);
+                while (!_cm.CheckCardSelection())
                 {
-                    isGood = _cm.CheckSelectedCards();
                     yield return null;
                 }
-                _cm.PrepSelectionVariables(0, "", true);
+                _cm.PrepareCardSelection(0, "", true);
 
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
@@ -358,14 +310,12 @@ public class ActionManager : MonoBehaviour
             }
             else
             {
-                _cm.PrepSelectionVariables(1, "Any", false);
-                bool isGood = false;
-                while (!isGood)
+                _cm.PrepareCardSelection(1, "Any", false);
+                while (!_cm.CheckCardSelection())
                 {
-                    isGood = _cm.CheckSelectedCards();
                     yield return null;
                 }
-                _cm.PrepSelectionVariables(0, "", true);
+                _cm.PrepareCardSelection(0, "", true);
 
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
@@ -376,7 +326,7 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Place a tile back onto the board. 
+    /// (WIP) Place a tile back onto the board. 
     /// </summary>
     /// <param name="type">"Grass" "Dirt" or "Stone"</param>
     public void PlaceTile(int player, string type)
@@ -386,22 +336,19 @@ public class ActionManager : MonoBehaviour
         switch (type)
         {
             case "Grass":
-                //Place a grass tile
                 SupplyPile[0]--;
                 break;
             case "Dirt":
-                //Place a dirt tile
                 SupplyPile[1]--;
                 break;
             case "Stone":
-                //Place a stone tile
                 SupplyPile[2]--;
                 break;
         }
     }
 
     /// <summary>
-    /// Builds a building. 
+    /// Checks if there's buildings remaining to build a specified building.
     /// </summary>
     /// <param name="type">"Factory" "Burrow" or "Mine"</param>
     public bool EnoughBuildingsRemaining(int player, string type)
@@ -489,116 +436,6 @@ public class ActionManager : MonoBehaviour
             P2CollectedPile[0] += P2BuiltBuildings[2];
             P2CollectedPile[1] += P2BuiltBuildings[3];
             P2CollectedPile[2] += P2BuiltBuildings[4];
-        }
-    }
-
-    /// <summary>
-    /// Draws cards for a selected player.
-    /// </summary>
-    /// <param name="cardsToDraw">How many cards you should draw.</param>
-    public void DrawAlottedCards(int cardsToDraw)
-    {
-        for (int i = cardsToDraw; i > 0; i--)
-        {
-            _cm.DrawCard("Universal");
-        }
-        Debug.Log("Drew " + cardsToDraw + " cards!");
-    }
-
-    /// <summary>
-    /// Discards cards down to the hand limit at the end of your turn.
-    /// </summary>
-    public IEnumerator DiscardCards(int player)
-    {
-        if(player == 1)
-        {
-            if (P1Cards + P1GoldCards > HandLimit)
-            {
-                _gcm.UpdateCurrentActionText("Discard " + (P1Cards + P1GoldCards - HandLimit) + " Cards.");
-                _cm.PrepSelectionVariables(P1Cards + P1GoldCards - HandLimit, "Any", false);
-                bool isGood = false;
-                while (!isGood)
-                {
-                    isGood = _cm.CheckSelectedCards();
-                    yield return null;
-                }
-                _cm.PrepSelectionVariables(0, "", true);
-            }
-
-            _cm.HideCards(CurrentPlayer);
-            CurrentTurnPhase = 0;
-            CurrentPlayer = 2;
-            _gcm.StartTurnButton.SetActive(true);
-            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
-        }
-        else if(player == 2)
-        {
-            if (P2Cards + P2GoldCards > HandLimit)
-            {
-                _gcm.UpdateCurrentActionText("Discard " + (P1Cards + P1GoldCards - HandLimit) + " Cards.");
-                _cm.PrepSelectionVariables(P2Cards + P2GoldCards - HandLimit, "Any", false);
-                bool isGood = false;
-                while (!isGood)
-                {
-                    isGood = _cm.CheckSelectedCards();
-                    yield return null;
-                }
-                _cm.PrepSelectionVariables(0, "", true);
-            }
-
-            _cm.HideCards(CurrentPlayer);
-            CurrentTurnPhase = 0;
-            CurrentPlayer = 1;
-            CurrentRound++;
-            _gcm.StartTurnButton.SetActive(true);
-            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
-        }
-    }
-
-    /// <summary>
-    /// Prepares cards for activation.
-    /// </summary>
-    /// <param name="player">1 or 2</param>
-    /// <param name="maxActivateAmount">Default amount + Burrows</param>
-    public void PrepareCardActivating(int player, int maxActivateAmount)
-    {
-        _cm.AllowedActivations = maxActivateAmount;
-
-        if(player == 1)
-        {
-            foreach (GameObject card in _cm.P1Hand)
-            {
-                card.GetComponentInChildren<CardController>().CanBeActivated = true;
-            }
-        }
-        else
-        {
-            foreach (GameObject card in _cm.P2Hand)
-            {
-                card.GetComponentInChildren<CardController>().CanBeActivated = true;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Stops cards for activation.
-    /// </summary>
-    /// <param name="player">1 or 2</param>
-    public void StopCardActivating(int player)
-    {
-        if (player == 1)
-        {
-            foreach (GameObject card in _cm.P1Hand)
-            {
-                card.GetComponentInChildren<CardController>().CanBeActivated = false;
-            }
-        }
-        else
-        {
-            foreach (GameObject card in _cm.P1Hand)
-            {
-                card.GetComponentInChildren<CardController>().CanBeActivated = false;
-            }
         }
     }
 }

@@ -353,12 +353,12 @@ public class OnlineCanvasManager : MonoBehaviour
         if(_am.CurrentPlayer == 1)
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + " Card(s).");
-            _am.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1]);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1]);
         }
         else
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + " Card(s).");
-            _am.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1]);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1]);
         }
     }
 
@@ -375,14 +375,13 @@ public class OnlineCanvasManager : MonoBehaviour
             script.StopAllCoroutines();
         }
         _cm.DeselectSelectedCards();
-        _cm.PrepSelectionVariables(0, "", true);
+        _cm.PrepareCardSelection(0, "", true);
 
         if (_am.CurrentTurnPhase == 2)
         {
             _thenZone.SetActive(true);
             _thenActions.SetActive(true);
             _endPhaseButton.SetActive(true);
-            UpdateCurrentActionText("Select an Action.");
         }
         else if(_am.CurrentTurnPhase == 3)
         {
@@ -403,20 +402,20 @@ public class OnlineCanvasManager : MonoBehaviour
     public void EndTurn()
     {
         DisableListObjects();
-        _am.StopCardActivating(_am.CurrentPlayer);
+        _cm.StopCardActivating(_am.CurrentPlayer);
 
         if (_am.CurrentPlayer == 1)
         {
-            _am.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
-            StartCoroutine(_am.DiscardCards(_am.CurrentPlayer));
+            _cm.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
+            StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
             _factory.sprite = _meerkatFactory;
             _burrow.sprite = _meerkatBurrow;
             _mine.sprite = _meerkatMine;
         }
         else
         {
-            _am.DrawAlottedCards(_am.CardDraw + _am.P2BuiltBuildings[0]);
-            StartCoroutine(_am.DiscardCards(_am.CurrentPlayer));
+            _cm.DrawAlottedCards(_am.CardDraw + _am.P2BuiltBuildings[0]);
+            StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
             _factory.sprite = _moleFactory;
             _burrow.sprite = _moleBurrow;
             _mine.sprite = _moleMine;

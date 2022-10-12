@@ -205,7 +205,7 @@ public class CardManager : MonoBehaviour
     /// <param name="cardAmount">The amount of cards needed for an action.</param>
     /// <param name="suit">"Grass" "Dirt" "Stone" "Any"</param>
     /// <param name="remove">Mark true to set all variables to their defaults.</param>
-    public void PrepSelectionVariables(int cardAmount, string suit, bool remove)
+    public void PrepareCardSelection(int cardAmount, string suit, bool remove)
     {
         if(remove)
         {
@@ -253,7 +253,7 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// Checks the "Value" of selected cards. Once the correct amount of cards are selected, it will return true.
     /// </summary>
-    public bool CheckSelectedCards()
+    public bool CheckCardSelection()
     {
         int requiredCardValue = RequiredCardAmount * 2;
         int selectedCardValue = 0;
@@ -359,6 +359,114 @@ public class CardManager : MonoBehaviour
 
             DPile.Clear();
             UpdatePileText();
+        }
+    }
+
+    /// <summary>
+    /// Draws cards for a selected player.
+    /// </summary>
+    /// <param name="cardsToDraw">How many cards you should draw.</param>
+    public void DrawAlottedCards(int cardsToDraw)
+    {
+        for (int i = cardsToDraw; i > 0; i--)
+        {
+            DrawCard("Universal");
+        }
+        Debug.Log("Drew " + cardsToDraw + " cards!");
+    }
+
+    /// <summary>
+    /// Discard cards down to the hand limit at the end of your turn.
+    /// </summary>
+    public IEnumerator CardDiscardProcess(int player)
+    {
+        if (player == 1)
+        {
+            if (_am.P1Cards + _am.P1GoldCards > _am.HandLimit)
+            {
+                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
+
+                PrepareCardSelection(_am.P1Cards + _am.P1GoldCards - _am.HandLimit, "Any", false);
+                while (!CheckCardSelection())
+                {
+                    yield return null;
+                }
+                PrepareCardSelection(0, "", true);
+            }
+
+            HideCards(_am.CurrentPlayer);
+            _am.CurrentTurnPhase = 0;
+            _am.CurrentPlayer = 2;
+            _gcm.StartTurnButton.SetActive(true);
+            _gcm.UpdateCurrentActionText("Player " + _am.CurrentPlayer + ", start your turn.");
+        }
+        else if (player == 2)
+        {
+            if (_am.P2Cards + _am.P2GoldCards > _am.HandLimit)
+            {
+                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
+
+                PrepareCardSelection(_am.P2Cards + _am.P2GoldCards - _am.HandLimit, "Any", false);
+                while (!CheckCardSelection())
+                {
+                    yield return null;
+                }
+                PrepareCardSelection(0, "", true);
+            }
+
+            HideCards(_am.CurrentPlayer);
+            _am.CurrentTurnPhase = 0;
+            _am.CurrentPlayer = 1;
+            _am.CurrentRound++;
+            _gcm.StartTurnButton.SetActive(true);
+            _gcm.UpdateCurrentActionText("Player " + _am.CurrentPlayer + ", start your turn.");
+        }
+    }
+
+    /// <summary>
+    /// Prepares cards for activation.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    /// <param name="maxActivateAmount">Default amount + Burrows</param>
+    public void PrepareCardActivating(int player, int maxActivateAmount)
+    {
+        AllowedActivations = maxActivateAmount;
+
+        if (player == 1)
+        {
+            foreach (GameObject card in P1Hand)
+            {
+                card.GetComponentInChildren<CardController>().CanBeActivated = true;
+            }
+        }
+        else
+        {
+            foreach (GameObject card in P2Hand)
+            {
+                card.GetComponentInChildren<CardController>().CanBeActivated = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Stops cards for activation.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    public void StopCardActivating(int player)
+    {
+        if (player == 1)
+        {
+            foreach (GameObject card in P1Hand)
+            {
+                card.GetComponentInChildren<CardController>().CanBeActivated = false;
+            }
+        }
+        else
+        {
+            foreach (GameObject card in P1Hand)
+            {
+                card.GetComponentInChildren<CardController>().CanBeActivated = false;
+            }
         }
     }
 

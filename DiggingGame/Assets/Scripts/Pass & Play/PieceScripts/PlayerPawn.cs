@@ -25,10 +25,11 @@ public class PlayerPawn : MonoBehaviour
     private BoardManager _bm;
     private ActionManager _am;
     private GameCanvasManagerNew _gcm;
+    private Animator _anims;
     [SerializeField] private SpriteRenderer _sr;
 
     [Header("Pawn Status for Other Scripts")]
-    [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false;
+    [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false, IsPlacing;
     [HideInInspector] public string BuildingToBuild = "";
 
     /// <summary>
@@ -42,6 +43,10 @@ public class PlayerPawn : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Adjusts the Pawn's values to fit a player.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
     public void SetPawnToPlayer(int player)
     {
         if (player == 1)
@@ -57,13 +62,14 @@ public class PlayerPawn : MonoBehaviour
     }
 
     /// <summary>
-    /// Assigns stuff
+    /// Assigns partner scripts and components.
     /// </summary>
     private void Awake()
     {
         _bm = FindObjectOfType<BoardManager>();
         _am = FindObjectOfType<ActionManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
+        _anims = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -100,13 +106,10 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     private void PreparePawnMovement()
     {
-        //Find every piece adjacent to the pawn's piece.
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Add it to the "_shownPieces" array and mark it as movable. 
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
-                //If the piece has a pawn, don't mark it.
                 if(piece.GetComponent<PieceController>().HasPawn)
                 {
                     continue;
@@ -161,7 +164,7 @@ public class PlayerPawn : MonoBehaviour
             }
             else
             {
-                Debug.Log("No valid digging locations at this pawn.");
+                _gcm.UpdateCurrentActionText("No valid digging locations at this pawn.");
                 _bm.DisablePawnBoardInteractions();
                 _gcm.Back();
             }
@@ -177,11 +180,9 @@ public class PlayerPawn : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Find every piece adjacent to the pawn's piece.
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
                 bool dontHighlight = false;
-                //Check if that adjacent piece has a building.
                 if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     dontHighlight = true;
@@ -197,21 +198,14 @@ public class PlayerPawn : MonoBehaviour
                     dontHighlight = true;
                 }
 
-                //Check if any currently adjacent pieces are adjacent to a building or if they're Bedrock or Gold.
                 foreach (GameObject pieceSquared in _bm.GenerateAdjacentPieceList(piece))
                 {
                     if (pieceSquared.GetComponent<PieceController>().HasP1Building || pieceSquared.GetComponent<PieceController>().HasP2Building)
                     {
                         dontHighlight = true;
                     }
-
-                    if (pieceSquared.GetComponent<PieceController>().ObjState == PieceController.GameState.Four || pieceSquared.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
-                    {
-                        dontHighlight = true;
-                    }
                 }
 
-                //If not, add it to the "_shownPieces" array and mark it as buildable.
                 if (!dontHighlight)
                 {
                     piece.GetComponent<PieceController>().ShowHideBuildable(true);
@@ -228,9 +222,8 @@ public class PlayerPawn : MonoBehaviour
             }
             else
             {
-                Debug.Log("No valid building locations at this pawn.");
+                _gcm.UpdateCurrentActionText("No valid building locations at this pawn.");
                 _bm.DisablePawnBoardInteractions();
-                _am.StopPawnActions(_am.CurrentPlayer);
                 _gcm.Back();
             }
 
@@ -273,25 +266,27 @@ public class PlayerPawn : MonoBehaviour
                 _shownPieces[i].GetComponent<PieceController>().ShowHideBuildable(false);
                 _shownPieces[i].GetComponent<PieceController>().ShowHidePlaceable(false);
                 _shownPieces[i].GetComponent<PieceController>().ShowHideDiggable(false);
-                _shownPieces[i].GetComponent<PieceController>().PieceIsWaiting = false;
+                _shownPieces[i].GetComponent<PieceController>().PieceIsSelected = false;
             }
         }
 
         IsMoving = false;
         IsBuilding = false;
         IsDigging = false;
+        IsPlacing = false;
         BuildingToBuild = "";
+        _anims.Play("TempPawnDefault");
         _shownPieces.Clear();
     }
 
     /// <summary>
     /// Hides tiles that aren't waiting
     /// </summary>
-    public void HideNonWaitingTiles()
+    public void HideNonSelectedTiles()
     {
         foreach(GameObject piece in _shownPieces)
         {
-            if(!piece.GetComponent<PieceController>().PieceIsWaiting)
+            if(!piece.GetComponent<PieceController>().PieceIsSelected)
             {
                 piece.GetComponent<PieceController>().ShowHideMovable(false);
                 piece.GetComponent<PieceController>().ShowHideBuildable(false);

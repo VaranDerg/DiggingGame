@@ -160,6 +160,7 @@ public class CardController : MonoBehaviour
 
                 _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
                 Debug.Log("Activation code will go in this line in the future.");
+                _am.P1Score++;
 
                 _cm.AllowedActivations--;
 
@@ -184,6 +185,7 @@ public class CardController : MonoBehaviour
 
                 _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
                 Debug.Log("Activation code will go in this line in the future.");
+                _am.P2Score++;
 
                 ToDiscard();
             }

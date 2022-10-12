@@ -51,6 +51,9 @@ public class BoardManager : MonoBehaviour
         }
     }    
 
+    /// <summary>
+    /// Disables pawn checks with the board.
+    /// </summary>
     public void DisablePawnBoardInteractions()
     {
         foreach(GameObject piece in _boardPieces)
@@ -100,7 +103,6 @@ public class BoardManager : MonoBehaviour
                 _adjacentPieces.Add(piece);
             }
         }
-        //Debug.Log("Found " + i + " pieces " + curShortestDist + " units from " + closestPiece.name + ".");
 
         return _adjacentPieces;
     }

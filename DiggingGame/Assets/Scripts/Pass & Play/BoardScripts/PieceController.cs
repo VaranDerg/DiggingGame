@@ -39,13 +39,12 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public bool HasP1Building, HasP2Building;
     [HideInInspector] public bool HasPawn;
     [HideInInspector] public GameObject CurrentPawn;
-    [HideInInspector] public bool PieceIsWaiting = true;
+    [HideInInspector] public bool PieceIsSelected = true;
     private BoardManager _bm;
     private ActionManager _am;
     private CardManager _cm;
     private GameCanvasManagerNew _gcm;
-
-    public bool HasGold;    //true if the piece reveals gold when flipped
+    [HideInInspector] public bool HasGold;    //true if the piece reveals gold when flipped
 
     private void Awake()
     {
@@ -86,8 +85,10 @@ public class PieceController : MonoBehaviour
     /// </summary>
     private void OnMouseOver()
     {
-        BuildingPlacement();
-        PiecePlacement();
+        if(IsPlaceable)
+        {
+            PiecePlacement();
+        }
 
         if (IsDiggable)
         {
@@ -101,7 +102,7 @@ public class PieceController : MonoBehaviour
 
         if(!HasP1Building && !HasP2Building && IsBuildable)
         {
-            StartCoroutine(BuildingPlacement());
+            StartBuildingPlacement();
         }
     }
 
@@ -113,37 +114,35 @@ public class PieceController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             _sr.color = _waitingColor;
-            PieceIsWaiting = true;
+            PieceIsSelected = true;
             foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
             {
-                pawn.GetComponent<PlayerPawn>().HideNonWaitingTiles();
+                pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
             }
 
             if (ObjState == GameState.One)
             {
-                _cm.PrepSelectionVariables(1, "Grass", false);
+                _cm.PrepareCardSelection(1, "Grass", false);
             }
             else if (ObjState == GameState.Two)
             {
-                _cm.PrepSelectionVariables(1, "Dirt", false);
+                _cm.PrepareCardSelection(1, "Dirt", false);
             }
             else if (ObjState == GameState.Three || ObjState == GameState.Five)
             {
-                _cm.PrepSelectionVariables(1, "Stone", false);
+                _cm.PrepareCardSelection(1, "Stone", false);
             }
             else if (ObjState == GameState.Four)
             {
-                _cm.PrepSelectionVariables(1, "Any", false);
+                _cm.PrepareCardSelection(1, "Any", false);
             }
-            bool isGood = false;
-            while (!isGood)
+
+            while (!_cm.CheckCardSelection())
             {
-                isGood = _cm.CheckSelectedCards();
                 yield return null;
             }
-            _cm.PrepSelectionVariables(0, "", true);
+            _cm.PrepareCardSelection(0, "", true);
 
-            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
             _gcm.Back();
 
@@ -175,7 +174,7 @@ public class PieceController : MonoBehaviour
     }
 
     /// <summary>
-    /// Allows the placement of pieces back onto the board.
+    /// (WIP) Allows the placement of pieces back onto the board.
     /// </summary>
     private void PiecePlacement()
     {
@@ -186,7 +185,6 @@ public class PieceController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
             _gcm.Back();
 
@@ -215,47 +213,44 @@ public class PieceController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
+            //For the game's initial free move. The player has to spend cards unless this is true.
             if(_am.CurrentTurnPhase != 1)
             {
                 _sr.color = _waitingColor;
-                PieceIsWaiting = true;
+                PieceIsSelected = true;
                 foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
                 {
-                    pawn.GetComponent<PlayerPawn>().HideNonWaitingTiles();
+                    pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
                 }
 
                 if (ObjState == GameState.One)
                 {
-                    _cm.PrepSelectionVariables(1, "Grass", false);
+                    _cm.PrepareCardSelection(1, "Grass", false);
                 }
                 else if (ObjState == GameState.Two)
                 {
-                    _cm.PrepSelectionVariables(1, "Dirt", false);
+                    _cm.PrepareCardSelection(1, "Dirt", false);
                 }
                 else if (ObjState == GameState.Three || ObjState == GameState.Five)
                 {
-                    _cm.PrepSelectionVariables(1, "Stone", false);
+                    _cm.PrepareCardSelection(1, "Stone", false);
                 }
                 else if (ObjState == GameState.Four)
                 {
-                    _cm.PrepSelectionVariables(1, "Any", false);
+                    _cm.PrepareCardSelection(1, "Any", false);
                 }
 
-                bool isGood = false;
-                while (!isGood)
+                while (!_cm.CheckCardSelection())
                 {
-                    isGood = _cm.CheckSelectedCards();
                     yield return null;
                 }
-                _cm. PrepSelectionVariables(0, "", true);
+                _cm. PrepareCardSelection(0, "", true);
             }
 
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
             CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
             CurrentPawn.transform.position = gameObject.transform.position;
             HasPawn = true;
-
-            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
 
             if(_am.CurrentTurnPhase == 1)
@@ -272,12 +267,10 @@ public class PieceController : MonoBehaviour
     /// <summary>
     /// Method controlling Building placement and removal.
     /// </summary>
-    private IEnumerator BuildingPlacement()
+    private void StartBuildingPlacement()
     {
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            bool canPlaceThere = false;
-
             string pieceSuit = "";
             if (ObjState == GameState.One)
             {
@@ -296,166 +289,88 @@ public class PieceController : MonoBehaviour
                 Debug.LogWarning("Cannot place building on this piece, yet it was able to be selected?");
             }
 
-            if (CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Factory")
+            int buildingIndex = 0;
+            if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Factory")
             {
-                canPlaceThere = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, "Factory");
-
-                if (canPlaceThere)
-                {
-                    _sr.color = _waitingColor;
-                    PieceIsWaiting = true;
-                    foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
-                    {
-                        pawn.GetComponent<PlayerPawn>().HideNonWaitingTiles();
-                    }
-
-                    if(_am.CurrentPlayer == 1)
-                    {
-                        _cm.PrepSelectionVariables(_am.P1CurrentBuildingPrices[0], pieceSuit, false);
-                    }
-                    else
-                    {
-                        _cm.PrepSelectionVariables(_am.P2CurrentBuildingPrices[0], pieceSuit, false);
-                    }
-                    bool isGood = false;
-                    while (!isGood)
-                    {
-                        isGood = _cm.CheckSelectedCards();
-                        yield return null;
-                    }
-                    _cm.PrepSelectionVariables(0, "", true);
-
-                    if(_am.CurrentPlayer == 1)
-                    {
-                        _am.P1CurrentBuildingPrices[0]++;
-                        _am.P1RemainingBuildings[0]--;
-                        _am.P1BuiltBuildings[0]++;
-                    }
-                    else
-                    {
-                        _am.P2CurrentBuildingPrices[0]++;
-                        _am.P2RemainingBuildings[0]--;
-                        _am.P2BuiltBuildings[0]++;
-                    }
-                    PlaceBuildingOnPiece("Factory");
-                }
+                buildingIndex = 0;
             }
             else if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Burrow")
             {
-                canPlaceThere = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, "Burrow");
-
-                if(canPlaceThere)
-                {
-                    _sr.color = _waitingColor;
-
-                    if (_am.CurrentPlayer == 1)
-                    {
-                        _cm.PrepSelectionVariables(_am.P1CurrentBuildingPrices[1], pieceSuit, false);
-                    }
-                    else
-                    {
-                        _cm.PrepSelectionVariables(_am.P2CurrentBuildingPrices[1], pieceSuit, false);
-                    }
-                    bool isGood = false;
-                    while (!isGood)
-                    {
-                        isGood = _cm.CheckSelectedCards();
-                        yield return null;
-                    }
-                    _cm.PrepSelectionVariables(0, "", true);
-
-                    if(_am.CurrentPlayer == 1)
-                    {
-                        _am.P1CurrentBuildingPrices[1]++;
-                        _am.P1RemainingBuildings[1]--;
-                        _am.P1BuiltBuildings[1]++;
-                    }
-                    else
-                    {
-                        _am.P2CurrentBuildingPrices[1]++;
-                        _am.P2RemainingBuildings[1]--;
-                        _am.P2BuiltBuildings[1]++;
-                    }
-                    PlaceBuildingOnPiece("Burrow");
-                }
+                buildingIndex = 1;
             }
             else if(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Mine")
             {
-                canPlaceThere = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, "Mine");
-
-                if (canPlaceThere)
+                if(pieceSuit == "Grass")
                 {
-                    _sr.color = _waitingColor;
-
-                    if (_am.CurrentPlayer == 1)
-                    {
-                        _cm.PrepSelectionVariables(_am.P1CurrentBuildingPrices[2], pieceSuit, false);
-                    }
-                    else
-                    {
-                        _cm.PrepSelectionVariables(_am.P2CurrentBuildingPrices[2], pieceSuit, false);
-                    }
-                    bool isGood = false;
-                    while (!isGood)
-                    {
-                        isGood = _cm.CheckSelectedCards();
-                        yield return null;
-                    }
-                    _cm.PrepSelectionVariables(0, "", true);
-
-                    if(_am.CurrentPlayer == 1)
-                    {
-                        _am.P1CurrentBuildingPrices[2]++;
-                        _am.P1RemainingBuildings[2]--;
-                        if (ObjState == GameState.One)
-                        {
-                            _am.P1BuiltBuildings[2]++;
-                        }
-                        else if (ObjState == GameState.Two)
-                        {
-                            _am.P1BuiltBuildings[3]++;
-                        }
-                        else if (ObjState == GameState.Three)
-                        {
-                            _am.P1BuiltBuildings[4]++;
-                        }
-                    }
-                    else
-                    {
-                        _am.P2CurrentBuildingPrices[2]++;
-                        _am.P2RemainingBuildings[2]--;
-                        if (ObjState == GameState.One)
-                        {
-                            _am.P2BuiltBuildings[2]++;
-                        }
-                        else if (ObjState == GameState.Two)
-                        {
-                            _am.P2BuiltBuildings[3]++;
-                        }
-                        else if (ObjState == GameState.Three)
-                        {
-                            _am.P2BuiltBuildings[4]++;
-                        }
-                    }
-                    PlaceBuildingOnPiece("Mine");
+                    buildingIndex = 2;
+                }
+                else if(pieceSuit == "Dirt")
+                {
+                    buildingIndex = 3;
+                }
+                else if(pieceSuit == "Stone")
+                {
+                    buildingIndex = 4;
                 }
             }
-            else
-            {
-                Debug.LogWarning("There is no building called " + CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild + "!");
-            }
 
-            CurrentPawn.GetComponent<Animator>().Play("TempPawnDefault");
-            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-            _gcm.Back();
+            bool areThereRemainingBuildings = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild);
+            if(areThereRemainingBuildings)
+            {
+                StartCoroutine(BuildingCardSelection(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild, buildingIndex, pieceSuit));
+            }
         }
     }
 
+    private IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
+    {
+        _sr.color = _waitingColor;
+        PieceIsSelected = true;
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
+        }
+
+        if (_am.CurrentPlayer == 1)
+        {
+            _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+        }
+        else
+        {
+            _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+        }
+
+        while (!_cm.CheckCardSelection())
+        {
+            yield return null;
+        }
+        _cm.PrepareCardSelection(0, "", true);
+
+        if (_am.CurrentPlayer == 1)
+        {
+            _am.P1CurrentBuildingPrices[buildingIndex]++;
+            _am.P1RemainingBuildings[buildingIndex]--;
+            _am.P1BuiltBuildings[buildingIndex]++;
+        }
+        else
+        {
+            _am.P2CurrentBuildingPrices[buildingIndex]++;
+            _am.P2RemainingBuildings[buildingIndex]--;
+            _am.P2BuiltBuildings[buildingIndex]++;
+        }
+
+        InstantitateBuildingAndPawn(buildingName);
+
+        CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        _gcm.Back();
+        _gcm.UpdateCurrentActionText("Built " + buildingName + ".");
+    }
+
     /// <summary>
-    /// Places a building. Returns false and removes it if it's adjacent to another building. Also will spawn more Pawns if 3rd building is placed.
+    /// Places a building. Returns false and removes it if it's adjacent to another building. Also will spawn another Pawn if 3rd building is placed.
     /// </summary>
-    /// <param name="building"></param>
-    public bool PlaceBuildingOnPiece(string buildingName)
+    /// <param name="building">"Factory" "Burrow" or "Mine"</param>
+    private bool InstantitateBuildingAndPawn(string buildingName)
     {
         GameObject building = null;
         if(_am.CurrentPlayer == 1)
@@ -505,6 +420,8 @@ public class PieceController : MonoBehaviour
 
             if (_am.CurrentPlayer == 1)
             {
+                _am.P1Score++;
+
                 if (buildingName == "Factory")
                 {
                     if (_am.P1RemainingBuildings[0] == 0)
@@ -526,11 +443,11 @@ public class PieceController : MonoBehaviour
                         spawnPawn = true;
                     }
                 }
-
-                _am.P1Score++;
             }
             else
             {
+                _am.P2Score++;
+
                 if (buildingName == "Factory")
                 {
                     if (_am.P2RemainingBuildings[0] == 0)
@@ -552,8 +469,13 @@ public class PieceController : MonoBehaviour
                         spawnPawn = true;
                     }
                 }
+            }
 
-                _am.P2Score++;
+            if (spawnPawn)
+            {
+                GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
+                newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
+                newPawn.transform.SetParent(null);
             }
 
             if (_am.CurrentPlayer == 1)
@@ -563,13 +485,6 @@ public class PieceController : MonoBehaviour
             else
             {
                 HasP2Building = true;
-            }
-
-            if (spawnPawn)
-            {
-                GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
-                newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
-                newPawn.transform.SetParent(null);
             }
 
             return true;
@@ -588,8 +503,6 @@ public class PieceController : MonoBehaviour
     /// <param name="state"> determines which state the obj is set to </param>
     public void SetPieceState(int state) 
     {
-        //Debug.Log("Switching " + gameObject.name + "'s State to " + state + ".");
-
         switch (state)
         {
             case 1:
@@ -631,7 +544,7 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _defaultColor;
             IsMovable = false;
-            PieceIsWaiting = false;
+            PieceIsSelected = false;
             CurrentPawn = null;
         }
     }
@@ -650,7 +563,7 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _defaultColor;
             IsBuildable = false;
-            PieceIsWaiting = false;
+            PieceIsSelected = false;
             CurrentPawn = null;
         }
     }
@@ -668,7 +581,7 @@ public class PieceController : MonoBehaviour
         else
         {
             _sr.color = _defaultColor;
-            PieceIsWaiting = false;
+            PieceIsSelected = false;
             IsDiggable = false;
         }
     }
@@ -686,7 +599,7 @@ public class PieceController : MonoBehaviour
         else
         {
             _sr.color = _defaultColor;
-            PieceIsWaiting = false;
+            PieceIsSelected = false;
             IsPlaceable = false;
         }
     }
