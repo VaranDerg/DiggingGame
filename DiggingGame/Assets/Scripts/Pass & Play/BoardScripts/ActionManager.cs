@@ -438,4 +438,35 @@ public class ActionManager : MonoBehaviour
             P2CollectedPile[2] += P2BuiltBuildings[4];
         }
     }
+
+    public void EndTurn(int player)
+    {
+        if(player == 1)
+        {
+            if(P1Score >= 15)
+            {
+                _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached 15 points!");
+                return;
+            }
+
+            CurrentTurnPhase = 0;
+            CurrentPlayer = 2;
+            _gcm.StartTurnButton.SetActive(true);
+            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
+        }
+        else
+        {
+            if (P2Score >= 15)
+            {
+                _gcm.UpdateCurrentActionText("Player 2 wins, as they've reached 15 points!");
+                return;
+            }
+
+            CurrentTurnPhase = 0;
+            CurrentPlayer = 1;
+            CurrentRound++;
+            _gcm.StartTurnButton.SetActive(true);
+            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
+        }
+    }
 }

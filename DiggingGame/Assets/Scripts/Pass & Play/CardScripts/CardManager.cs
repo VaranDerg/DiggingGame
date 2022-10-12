@@ -395,10 +395,7 @@ public class CardManager : MonoBehaviour
             }
 
             HideCards(_am.CurrentPlayer);
-            _am.CurrentTurnPhase = 0;
-            _am.CurrentPlayer = 2;
-            _gcm.StartTurnButton.SetActive(true);
-            _gcm.UpdateCurrentActionText("Player " + _am.CurrentPlayer + ", start your turn.");
+            _am.EndTurn(_am.CurrentPlayer);
         }
         else if (player == 2)
         {
@@ -415,11 +412,7 @@ public class CardManager : MonoBehaviour
             }
 
             HideCards(_am.CurrentPlayer);
-            _am.CurrentTurnPhase = 0;
-            _am.CurrentPlayer = 1;
-            _am.CurrentRound++;
-            _gcm.StartTurnButton.SetActive(true);
-            _gcm.UpdateCurrentActionText("Player " + _am.CurrentPlayer + ", start your turn.");
+            _am.EndTurn(_am.CurrentPlayer);
         }
     }
 
