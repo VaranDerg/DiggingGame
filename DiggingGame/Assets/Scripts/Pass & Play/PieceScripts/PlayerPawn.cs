@@ -15,8 +15,8 @@ public class PlayerPawn : MonoBehaviour
     [Header("References/Values")]
     //1 or 2
     [Range(1, 2)] public int PawnPlayer;
-    [SerializeField] private Color _p1Color;
-    [SerializeField] private Color _p2Color;
+    [SerializeField] private Sprite _moleSprite;
+    [SerializeField] private Sprite _meerkatSprite;
 
     [Header("Other")]
     //The (up to) 4 Board Pieces surrounding a player. NSEW.
@@ -51,12 +51,12 @@ public class PlayerPawn : MonoBehaviour
     {
         if (player == 1)
         {
-            _sr.color = _p1Color;
+            _sr.sprite = _moleSprite;
             PawnPlayer = 1;
         }
         else
         {
-            _sr.color = _p2Color;
+            _sr.sprite = _meerkatSprite;
             PawnPlayer = 2;
         }
     }

@@ -146,10 +146,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PawnPlayer: 1
-  _p1Color: {r: 1, g: 1, b: 1, a: 0.5882353}
-  _p2Color: {r: 0.6084906, g: 1, b: 0.78729874, a: 0.5882353}
+  _moleSprite: {fileID: 21300000, guid: 2cede42f0de494a4488477e31bd77a10, type: 3}
+  _meerkatSprite: {fileID: 21300000, guid: c8c1d5aed5b3d874abcc2cfe62f355c5, type: 3}
   _sr: {fileID: 5312618096240013891}
   IsMoving: 0
   IsBuilding: 0
   IsDigging: 0
+  IsPlacing: 0
   BuildingToBuild: 
