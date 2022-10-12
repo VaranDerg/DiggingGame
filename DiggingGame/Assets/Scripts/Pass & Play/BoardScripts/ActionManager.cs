@@ -134,6 +134,13 @@ public class ActionManager : MonoBehaviour
     /// <param name="player">1 or 2</param>
     public void StartBuild(int player, string building)
     {
+        _bm.DisablePawnBoardInteractions();
+        foreach (MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
+        {
+            script.StopAllCoroutines();
+        }
+        _cm.DeselectSelectedCards();
+
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)

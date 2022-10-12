@@ -335,6 +335,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         _bm.DisablePawnBoardInteractions();
         _am.StartBuild(_am.CurrentPlayer, buildingName);
 
+        UpdateCurrentActionText("Select a Pawn, then Piece for your " + buildingName + ".");
         UpdateTextBothPlayers();
     }
 
