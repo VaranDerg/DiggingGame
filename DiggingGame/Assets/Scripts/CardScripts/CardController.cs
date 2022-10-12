@@ -37,6 +37,7 @@ public class CardController : MonoBehaviour
     [Header("Selection Variables")]
     [HideInInspector] public bool CanBeSelected;
     [HideInInspector] public bool CanBeDiscarded;
+    [HideInInspector] public bool CanBeActivated;
     [HideInInspector] public bool Selected;
 
     /// <summary>
@@ -109,6 +110,14 @@ public class CardController : MonoBehaviour
                 SelectCard();
             }
         }
+
+        if(CanBeActivated)
+        {
+            if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                ActivateCard();
+            }
+        }
     }
 
     private void SelectCard()
@@ -122,6 +131,66 @@ public class CardController : MonoBehaviour
         {
             _cm.SelectedCards.Remove(_cardBody);
             Selected = false;
+        }
+    }
+
+    private void ActivateCard()
+    {
+        int grassCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.GrassCost;
+        int dirtCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.DirtCost;
+        int stoneCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.StoneCost;
+
+        if(_cm.AllowedActivations == 0)
+        {
+            _gcm.UpdateCurrentActionText("You've Activated the max amount of Cards.");
+            return;
+        }
+
+        if(_am.CurrentPlayer == 1)
+        {
+            if(_am.P1RefinedPile[0] >= grassCost && _am.P1RefinedPile[1] >= dirtCost && _am.P1RefinedPile[2] >= stoneCost)
+            {
+                _am.P1RefinedPile[0] -= grassCost;
+                _am.P1RefinedPile[1] -= dirtCost;
+                _am.P1RefinedPile[2] -= stoneCost;
+                _am.SupplyPile[0] += grassCost;
+                _am.SupplyPile[1] += dirtCost;
+                _am.SupplyPile[2] += stoneCost;
+                _gcm.UpdateTextBothPlayers();
+
+                _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
+                Debug.Log("Activation code will go in this line in the future.");
+
+                _cm.AllowedActivations--;
+
+                ToDiscard();
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("Not enough Pieces to Activate this Card!");
+            }
+        }
+        else
+        {
+            if (_am.P2RefinedPile[0] >= grassCost && _am.P2RefinedPile[1] >= dirtCost && _am.P2RefinedPile[2] >= stoneCost)
+            {
+                _am.P2RefinedPile[0] -= grassCost;
+                _am.P2RefinedPile[1] -= dirtCost;
+                _am.P2RefinedPile[2] -= stoneCost;
+                _am.SupplyPile[0] += grassCost;
+                _am.SupplyPile[1] += dirtCost;
+                _am.SupplyPile[2] += stoneCost;
+                _gcm.UpdateTextBothPlayers();
+
+                _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
+                Debug.Log("Activation code will go in this line in the future.");
+
+                ToDiscard();
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("Not enough Pieces to Activate this card!");
+            }
         }
     }
 
@@ -157,6 +226,7 @@ public class CardController : MonoBehaviour
         Selected = false;
         CanBeSelected = false;
         CanBeDiscarded = false;
+        CanBeActivated = false;
         _cm.DPile.Add(_cardBody);
         _cm.UpdatePileText();
 

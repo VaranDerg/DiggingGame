@@ -554,4 +554,51 @@ public class ActionManager : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
     }
+
+    /// <summary>
+    /// Prepares cards for activation.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    /// <param name="maxActivateAmount">Default amount + Burrows</param>
+    public void PrepareCardActivating(int player, int maxActivateAmount)
+    {
+        _cm.AllowedActivations = maxActivateAmount;
+
+        if(player == 1)
+        {
+            foreach (GameObject card in _cm.P1Hand)
+            {
+                card.GetComponentInChildren<CardController>().CanBeActivated = true;
+            }
+        }
+        else
+        {
+            foreach (GameObject card in _cm.P2Hand)
+            {
+                card.GetComponentInChildren<CardController>().CanBeActivated = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Stops cards for activation.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    public void StopCardActivating(int player)
+    {
+        if (player == 1)
+        {
+            foreach (GameObject card in _cm.P1Hand)
+            {
+                card.GetComponentInChildren<CardController>().CanBeActivated = false;
+            }
+        }
+        else
+        {
+            foreach (GameObject card in _cm.P1Hand)
+            {
+                card.GetComponentInChildren<CardController>().CanBeActivated = false;
+            }
+        }
+    }
 }

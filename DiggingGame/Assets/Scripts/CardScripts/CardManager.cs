@@ -26,6 +26,7 @@ public class CardManager : MonoBehaviour
     [HideInInspector] public List<GameObject> SelectedCards = new List<GameObject>();
     [HideInInspector] public bool[] P1OpenHandPositions;
     [HideInInspector] public bool[] P2OpenHandPositions;
+    [HideInInspector] public int AllowedActivations;
     private ActionManager _am;
     private BoardManager _bm;
     private GameCanvasManagerNew _gcm;

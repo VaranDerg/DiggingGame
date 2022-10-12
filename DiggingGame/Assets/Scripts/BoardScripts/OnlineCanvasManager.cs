@@ -353,10 +353,12 @@ public class OnlineCanvasManager : MonoBehaviour
         if(_am.CurrentPlayer == 1)
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + " Card(s).");
+            _am.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1]);
         }
         else
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + " Card(s).");
+            _am.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1]);
         }
     }
 
@@ -401,6 +403,7 @@ public class OnlineCanvasManager : MonoBehaviour
     public void EndTurn()
     {
         DisableListObjects();
+        _am.StopCardActivating(_am.CurrentPlayer);
 
         if (_am.CurrentPlayer == 1)
         {
