@@ -305,6 +305,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598829241}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 86
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -367,6 +371,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 11057789}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 85
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -561,6 +569,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1750661912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 84
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -807,6 +819,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1444804917}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 83
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -956,23 +972,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &112926721
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1124,23 +1147,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &120718966
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1297,23 +1327,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &128881778
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1465,23 +1502,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &162510133
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1546,6 +1590,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 96756133}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 82
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -1695,23 +1743,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &190187430
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1863,23 +1918,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &207270702
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1949,6 +2011,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1444804917}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 81
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -2098,23 +2164,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &236102955
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2271,23 +2344,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &249700349
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2347,6 +2427,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1968909036}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -2404,6 +2488,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598829241}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 79
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -2620,23 +2708,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &272112492
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2920,6 +3015,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1968909036}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 78
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -2977,6 +3076,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 11057789}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 77
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -3109,6 +3212,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1444804917}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 76
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -3166,6 +3273,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 962899912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -3365,23 +3476,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &406379793
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3533,23 +3651,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &416348986
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3706,23 +3831,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &456882234
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3879,23 +4011,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &495373192
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4105,23 +4244,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &547875682
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4430,6 +4576,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 11057789}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 74
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -4579,23 +4729,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &685667073
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4747,23 +4904,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &702425301
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4940,23 +5104,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &796107931
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5016,6 +5187,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 11057789}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 73
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -5106,6 +5281,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 96756133}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 72
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -5163,6 +5342,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1968909036}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 71
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -5220,6 +5403,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1750661912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 70
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -5369,23 +5556,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &922694207
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5585,23 +5779,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &998719999
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5802,23 +6003,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1055247818
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5883,6 +6091,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1968909036}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 69
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -5940,6 +6152,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 96756133}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 68
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -5997,6 +6213,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598829241}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 67
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -6054,6 +6274,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 96756133}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 66
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -6343,23 +6567,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1150793039
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6689,6 +6920,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598829241}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 65
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -6746,6 +6981,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 11057789}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -6803,6 +7042,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1750661912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 63
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -6860,6 +7103,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1968909036}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 62
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -6917,6 +7164,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 962899912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 61
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -7066,23 +7317,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1273766974
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7142,6 +7400,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 11057789}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -7199,6 +7461,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1750661912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 59
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -7396,6 +7662,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1968909036}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 58
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -7550,23 +7820,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1331646976
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7626,6 +7903,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1750661912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 57
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -7688,6 +7969,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 96756133}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 56
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -7810,6 +8095,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 96756133}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 55
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -7964,23 +8253,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1393964728
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8040,6 +8336,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 962899912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 54
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -8107,6 +8407,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598829241}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 53
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -8169,6 +8473,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1968909036}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 52
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -8231,6 +8539,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 962899912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 51
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -8433,23 +8745,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1563172595
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8509,6 +8828,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 11057789}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -8566,6 +8889,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1750661912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 49
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -8623,6 +8950,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598829241}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 48
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -8782,23 +9113,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1669787902
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8858,6 +9196,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 962899912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 47
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -9007,23 +9349,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1680757061
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9175,23 +9524,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1689149194
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9488,23 +9844,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1736438480
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9564,6 +9927,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598829241}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 46
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -9760,6 +10127,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 962899912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -9909,23 +10280,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1813000092
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9985,6 +10363,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 962899912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 44
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -10134,23 +10516,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1852873046
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10210,6 +10599,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1444804917}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 43
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -10267,6 +10660,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1750661912}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 42
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -10416,23 +10813,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &1952543097
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10764,23 +11168,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &2010542968
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10840,6 +11251,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1444804917}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 41
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -10897,6 +11312,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 96756133}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -11181,23 +11600,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &2089508395
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11257,6 +11683,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1444804917}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 39
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -11411,23 +11841,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &2105808712
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11548,6 +11985,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1444804917}
     m_Modifications:
+    - target: {fileID: 1653752625053519425, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
+      propertyPath: sceneViewId
+      value: 38
+      objectReference: {fileID: 0}
     - target: {fileID: 4847777960994457898, guid: ec6966451334365408bf6775f3c7c7d4, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -11702,23 +12143,30 @@ MonoBehaviour:
   _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedRockSprite: {fileID: 21300000, guid: 59043becb31cf594ab128ca20d7ae268, type: 3}
+  _bedrockSprite: {fileID: 0}
+  _goldSprite: {fileID: 0}
+  _playerPawn: {fileID: 0}
   _buildingSlot: {fileID: 0}
-  _factory: {fileID: 0}
-  _burrow: {fileID: 0}
-  _mine: {fileID: 0}
+  _mFactory: {fileID: 0}
+  _mBurrow: {fileID: 0}
+  _mMine: {fileID: 0}
+  _meeFactory: {fileID: 0}
+  _meeBurrow: {fileID: 0}
+  _meeMine: {fileID: 0}
   _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  _movableColor: {r: 0, g: 0, b: 0, a: 0}
-  _diggableColor: {r: 0, g: 0, b: 0, a: 0}
-  _placeableColor: {r: 0, g: 0, b: 0, a: 0}
-  buildableColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _waitingColor: {r: 0, g: 0, b: 0, a: 0}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
   IsBuildable: 0
   ObjState: 0
-  HasBuilding: 0
+  HasP1Building: 0
+  HasP2Building: 0
   HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!212 &2135415163
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13144,7 +13592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ddb7ef6cde8344ab266ac77c04adcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _thisCard: {fileID: 11400000, guid: 4226f601b44b1b94ba73b86689ef61f5, type: 2}
+  ThisCard: {fileID: 0}
   _grassColor: {r: 0.1531414, g: 0.6698113, b: 0, a: 1}
   _dirtColor: {r: 0.5660378, g: 0.32024753, b: 0.17354932, a: 1}
   _stoneColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
@@ -13175,7 +13623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ddb7ef6cde8344ab266ac77c04adcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _thisCard: {fileID: 11400000, guid: df0509ca58e6b1348b6975bf554902b3, type: 2}
+  ThisCard: {fileID: 0}
   _grassColor: {r: 0.1531414, g: 0.6698113, b: 0, a: 1}
   _dirtColor: {r: 0.5660378, g: 0.32024753, b: 0.17354932, a: 1}
   _stoneColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
@@ -13206,7 +13654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ddb7ef6cde8344ab266ac77c04adcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _thisCard: {fileID: 11400000, guid: c432e1521f9901a4e9b0e08e57983df2, type: 2}
+  ThisCard: {fileID: 0}
   _grassColor: {r: 0.1531414, g: 0.6698113, b: 0, a: 1}
   _dirtColor: {r: 0.5660378, g: 0.32024753, b: 0.17354932, a: 1}
   _stoneColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
@@ -13237,7 +13685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ddb7ef6cde8344ab266ac77c04adcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _thisCard: {fileID: 11400000, guid: f31cd68feb70d7e4e861c58907546f2d, type: 2}
+  ThisCard: {fileID: 0}
   _grassColor: {r: 0.1531414, g: 0.6698113, b: 0, a: 1}
   _dirtColor: {r: 0.5660378, g: 0.32024753, b: 0.17354932, a: 1}
   _stoneColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
