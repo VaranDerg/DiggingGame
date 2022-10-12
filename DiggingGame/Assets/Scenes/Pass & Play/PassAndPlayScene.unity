@@ -7215,6 +7215,7 @@ MonoBehaviour:
   SelectedCards: []
   P1OpenHandPositions: 
   P2OpenHandPositions: 
+  AllowedActivations: 0
   RequiredSuit: 
   RequiredCardAmount: 0
 --- !u!4 &1005441706
