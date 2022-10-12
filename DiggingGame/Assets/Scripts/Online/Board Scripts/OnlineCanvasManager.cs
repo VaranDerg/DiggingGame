@@ -48,8 +48,8 @@ public class OnlineCanvasManager : MonoBehaviour
     public bool _opponentViewShowing = false;
     [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine, _meerkatFactory, _meerkatBurrow, _meerkatMine;
     [SerializeField] private Image _factory, _burrow, _mine;
-    private ActionManager _am;
-    private BoardManager _bm;
+    private OnlineActionManager _am;
+    private OnlineBoardManager _bm;
     private CardManager _cm;
 
     [Header("Other")]
@@ -75,8 +75,8 @@ public class OnlineCanvasManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _am = FindObjectOfType<ActionManager>();
-        _bm = FindObjectOfType<BoardManager>();
+        _am = FindObjectOfType<OnlineActionManager>();
+        _bm = FindObjectOfType<OnlineBoardManager>();
         _cm = FindObjectOfType<CardManager>();
         AddObjectsToList();
     }

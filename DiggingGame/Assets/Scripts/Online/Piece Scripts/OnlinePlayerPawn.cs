@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         PlayerPawn.cs
-// Author :            Rudy Wolfer & Andrea SD
+// Author :            Rudy Wolfer, Andrea SD
 // Creation Date :     October 6th, 2022
 //
 // Brief Description : Script that controls Players' Pawn pieces.
@@ -10,23 +10,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiPlayerPawn : MonoBehaviour
+public class OnlinePlayerPawn : MonoBehaviour
 {
-    //Edit: Andrea SD, Multiplayer functionality
+
+    //Edit: Andrea SD - Multiplayer Functionality
+
     [Header("References/Values")]
     //1 or 2
     [Range(1, 2)] public int PawnPlayer;
+    [SerializeField] private Color _p1Color;
+    [SerializeField] private Color _p2Color;
 
     [Header("Other")]
     //The (up to) 4 Board Pieces surrounding a player. NSEW.
     private List<GameObject> _shownPieces = new List<GameObject>();
     private List<GameObject> _boardPieces = new List<GameObject>();
-    private MultiBoardManager _bm;
-    private MultiActionManager _am;
-    private MultiGameCanvasManager _gcm;
+    private OnlineBoardManager _bm;
+    private OnlineActionManager _am;
+    private OnlineCanvasManager _gcm;
+    private Animator _anims;
+    [SerializeField] private SpriteRenderer _sr;
 
     [Header("Pawn Status for Other Scripts")]
-    [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false;
+    [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false, IsPlacing;
     [HideInInspector] public string BuildingToBuild = "";
 
     /// <summary>
@@ -41,14 +47,40 @@ public class MultiPlayerPawn : MonoBehaviour
     }
 
     /// <summary>
+    /// Adjusts the Pawn's values to fit a player.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    public void SetPawnToPlayer(int player)
+    {
+        if (player == 1)
+        {
+            _sr.color = _p1Color;
+            PawnPlayer = 1;
+        }
+        else
+        {
+            _sr.color = _p2Color;
+            PawnPlayer = 2;
+        }
+    }
+
+    /// <summary>
+    /// Assigns partner scripts and components.
+    /// </summary>
+    private void Awake()
+    {
+        _bm = FindObjectOfType<OnlineBoardManager>();
+        _am = FindObjectOfType<OnlineActionManager>();
+        _gcm = FindObjectOfType<OnlineCanvasManager>();
+        _anims = GetComponent<Animator>();
+    }
+
+    /// <summary>
     /// Calls FindBoardPieces.
     /// </summary>
     private void Start()
     {
         FindBoardPieces();
-        _bm = FindObjectOfType<MultiBoardManager>();
-        _am = FindObjectOfType<MultiActionManager>();
-        _gcm = FindObjectOfType<MultiGameCanvasManager>();
     }
 
     /// <summary>
@@ -61,12 +93,12 @@ public class MultiPlayerPawn : MonoBehaviour
             PreparePawnMovement();
         }
 
-        if(IsBuilding)
+        if (IsBuilding)
         {
             PreparePawnBuilding();
         }
 
-        if(IsDigging)
+        if (IsDigging)
         {
             PreparePawnDigging();
         }
@@ -77,27 +109,24 @@ public class MultiPlayerPawn : MonoBehaviour
     /// </summary>
     private void PreparePawnMovement()
     {
-        //Find every piece adjacent to the pawn's piece.
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Add it to the "_shownPieces" array and mark it as movable. 
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
-                //If the piece has a pawn, don't mark it.
-                if(piece.GetComponent<MultiPieceController>().HasPawn)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn)
                 {
                     continue;
                 }
 
-                piece.GetComponent<MultiPieceController>().ShowHideMovable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHideMovable(true);
                 _shownPieces.Add(piece);
             }
 
-            if(_shownPieces.Count > 0)
+            if (_shownPieces.Count > 0)
             {
-                foreach(GameObject piece in _shownPieces)
+                foreach (GameObject piece in _shownPieces)
                 {
-                    piece.GetComponent<MultiPieceController>().CurrentPawn = gameObject;
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
                 }
             }
 
@@ -110,22 +139,22 @@ public class MultiPlayerPawn : MonoBehaviour
     /// </summary>
     private void PreparePawnDigging()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            foreach(GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
-                if(piece.GetComponent<MultiPieceController>().HasPawn || piece.GetComponent<MultiPieceController>().HasBuilding)
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if(piece.GetComponent<MultiPieceController>().ObjState == MultiPieceController.GameState.Four)
+                if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
                 {
                     continue;
                 }
 
-                piece.GetComponent<MultiPieceController>().ShowHideDiggable(true);
-                piece.GetComponent<MultiPieceController>().IsDiggable = true;
+                piece.GetComponent<PieceController>().ShowHideDiggable(true);
+                piece.GetComponent<PieceController>().IsDiggable = true;
                 _shownPieces.Add(piece);
             }
 
@@ -133,12 +162,12 @@ public class MultiPlayerPawn : MonoBehaviour
             {
                 foreach (GameObject piece in _shownPieces)
                 {
-                    piece.GetComponent<MultiPieceController>().CurrentPawn = gameObject;
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
                 }
             }
             else
             {
-                Debug.Log("No valid digging locations at this pawn.");
+                _gcm.UpdateCurrentActionText("No valid digging locations at this pawn.");
                 _bm.DisablePawnBoardInteractions();
                 _gcm.Back();
             }
@@ -154,44 +183,35 @@ public class MultiPlayerPawn : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Find every piece adjacent to the pawn's piece.
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
                 bool dontHighlight = false;
-                //Check if that adjacent piece has a building.
-                if (piece.GetComponent<MultiPieceController>().HasBuilding)
+                if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     dontHighlight = true;
                 }
 
-                if (piece.GetComponent<MultiPieceController>().HasPawn)
+                if (piece.GetComponent<PieceController>().HasPawn)
                 {
                     dontHighlight = true;
                 }
 
-                if(piece.GetComponent<MultiPieceController>().ObjState == MultiPieceController.GameState.Four)
+                if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
                 {
                     dontHighlight = true;
                 }
 
-                //Check if any currently adjacent pieces are adjacent to a building or if they're Bedrock or Gold.
                 foreach (GameObject pieceSquared in _bm.GenerateAdjacentPieceList(piece))
                 {
-                    if (pieceSquared.GetComponent<MultiPieceController>().HasBuilding)
-                    {
-                        dontHighlight = true;
-                    }
-
-                    if (pieceSquared.GetComponent<MultiPieceController>().ObjState == MultiPieceController.GameState.Four || pieceSquared.GetComponent<MultiPieceController>().ObjState == MultiPieceController.GameState.Five)
+                    if (pieceSquared.GetComponent<PieceController>().HasP1Building || pieceSquared.GetComponent<PieceController>().HasP2Building)
                     {
                         dontHighlight = true;
                     }
                 }
 
-                //If not, add it to the "_shownPieces" array and mark it as buildable.
                 if (!dontHighlight)
                 {
-                    piece.GetComponent<MultiPieceController>().ShowHideBuildable(true);
+                    piece.GetComponent<PieceController>().ShowHideBuildable(true);
                     _shownPieces.Add(piece);
                 }
             }
@@ -200,14 +220,13 @@ public class MultiPlayerPawn : MonoBehaviour
             {
                 foreach (GameObject piece in _shownPieces)
                 {
-                    piece.GetComponent<MultiPieceController>().CurrentPawn = gameObject;
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
                 }
             }
             else
             {
-                Debug.Log("No valid building locations at this pawn.");
+                _gcm.UpdateCurrentActionText("No valid building locations at this pawn.");
                 _bm.DisablePawnBoardInteractions();
-                _am.StopPawnActions(_am.CurrentPlayer);
                 _gcm.Back();
             }
 
@@ -224,10 +243,10 @@ public class MultiPlayerPawn : MonoBehaviour
         GameObject closestPiece = null;
         float curShortestDist = Mathf.Infinity;
         Vector3 pawnPosition = transform.position;
-        foreach(GameObject piece in _boardPieces)
+        foreach (GameObject piece in _boardPieces)
         {
             float pawnToPieceDist = Vector3.Distance(piece.transform.position, pawnPosition);
-            if(pawnToPieceDist < curShortestDist)
+            if (pawnToPieceDist < curShortestDist)
             {
                 closestPiece = piece;
                 curShortestDist = pawnToPieceDist;
@@ -242,18 +261,41 @@ public class MultiPlayerPawn : MonoBehaviour
     /// </summary>
     public void UnassignAdjacentTiles()
     {
-        for(int i = 0; i < _shownPieces.Count; i++)
+        for (int i = 0; i < _shownPieces.Count; i++)
         {
-            if(_shownPieces[i] != null)
+            if (_shownPieces[i] != null)
             {
-                _shownPieces[i].GetComponent<MultiPieceController>().ShowHideMovable(false);
+                _shownPieces[i].GetComponent<PieceController>().ShowHideMovable(false);
+                _shownPieces[i].GetComponent<PieceController>().ShowHideBuildable(false);
+                _shownPieces[i].GetComponent<PieceController>().ShowHidePlaceable(false);
+                _shownPieces[i].GetComponent<PieceController>().ShowHideDiggable(false);
+                _shownPieces[i].GetComponent<PieceController>().PieceIsSelected = false;
             }
         }
 
         IsMoving = false;
         IsBuilding = false;
         IsDigging = false;
+        IsPlacing = false;
         BuildingToBuild = "";
+        _anims.Play("TempPawnDefault");
         _shownPieces.Clear();
+    }
+
+    /// <summary>
+    /// Hides tiles that aren't waiting
+    /// </summary>
+    public void HideNonSelectedTiles()
+    {
+        foreach (GameObject piece in _shownPieces)
+        {
+            if (!piece.GetComponent<PieceController>().PieceIsSelected)
+            {
+                piece.GetComponent<PieceController>().ShowHideMovable(false);
+                piece.GetComponent<PieceController>().ShowHideBuildable(false);
+                piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+                piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            }
+        }
     }
 }

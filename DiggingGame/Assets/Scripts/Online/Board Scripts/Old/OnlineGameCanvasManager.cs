@@ -4,7 +4,7 @@
 // Creation Date :     October 3rd, 2022
 //
 // Brief Description : A script that updates the canvas during play.
-*****************************************************************************/
+*****************************************************************************//*
 
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MultiGameCanvasManager : MonoBehaviour
+public class OnlineGameCanvasManager : MonoBehaviour
 {
     //P1's Refs
     [Header("Text & Object References, Player 1")]
@@ -54,8 +54,8 @@ public class MultiGameCanvasManager : MonoBehaviour
 
     //Other Misc Refs
     [Header("Other References")]
-    private MultiActionManager _am;
-    private MultiBoardManager _bm;
+    private OnlineActionManager _am;
+    private OnlineBoardManager _bm;
 
     //Code Things
     [Header("Other")]
@@ -64,8 +64,8 @@ public class MultiGameCanvasManager : MonoBehaviour
     private void Awake()
     {
         AssignToList();
-        _am = FindObjectOfType<MultiActionManager>();
-        _bm = FindObjectOfType<MultiBoardManager>();
+        _am = FindObjectOfType<OnlineActionManager>();
+        _bm = FindObjectOfType<OnlineBoardManager>();
     }
 
     /// <summary>
@@ -470,3 +470,4 @@ public class MultiGameCanvasManager : MonoBehaviour
         UpdateAllText();
     }
 }
+*/
