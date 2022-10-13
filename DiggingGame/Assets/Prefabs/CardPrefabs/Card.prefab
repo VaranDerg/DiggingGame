@@ -129,7 +129,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2.5, y: 2}
+  m_SizeDelta: {x: 2.45, y: 2}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &4411003535854929639
 CanvasRenderer:
@@ -1929,6 +1929,7 @@ MonoBehaviour:
   NextPos: {x: 0, y: 0, z: 0}
   CanBeSelected: 0
   CanBeDiscarded: 0
+  CanBeActivated: 0
   Selected: 0
 --- !u!1 &8963238438471516894
 GameObject:

@@ -6260,7 +6260,7 @@ MonoBehaviour:
   _moleFactory: {fileID: 21300000, guid: c44f93469180f3444b9ac6bf2f6fe759, type: 3}
   _moleBurrow: {fileID: 21300000, guid: dd59c161cee62da469e25ff9ef335f0c, type: 3}
   _moleMine: {fileID: 21300000, guid: dd145c0285b438440ad3f1ae1c069783, type: 3}
-  _meerkatFactory: {fileID: 21300000, guid: c44f93469180f3444b9ac6bf2f6fe759, type: 3}
+  _meerkatFactory: {fileID: 21300000, guid: 10ade514345cc524591b8c488c8bf3d7, type: 3}
   _meerkatBurrow: {fileID: 21300000, guid: 0f92e9322ab41bc4e8a72792f6f2611c, type: 3}
   _meerkatMine: {fileID: 21300000, guid: 1ce6897d6aeefa545bb5b604cdf69455, type: 3}
   _factory: {fileID: 854821624}
@@ -7215,6 +7215,7 @@ MonoBehaviour:
   SelectedCards: []
   P1OpenHandPositions: 
   P2OpenHandPositions: 
+  AllowedActivations: 0
   RequiredSuit: 
   RequiredCardAmount: 0
 --- !u!4 &1005441706
