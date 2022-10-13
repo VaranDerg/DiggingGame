@@ -21,11 +21,11 @@ public class OnlinePieceController : MonoBehaviourPun
     //Edited: Rudy W. Organized with headers, added certain variables for functionality.
 
     [Header("Piece References")]
-    [SerializeField] private Sprite _grassSprite;
+/*    [SerializeField] private Sprite _grassSprite;
     [SerializeField] private Sprite _dirtSprite;
     [SerializeField] private Sprite _stoneSprite;
     [SerializeField] private Sprite _bedrockSprite;
-    [SerializeField] private Sprite _goldSprite;
+    [SerializeField] private Sprite _goldSprite;*/
     [SerializeField] private GameObject _playerPawn;
     private SpriteRenderer _sr;
 

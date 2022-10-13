@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4847777960994457898}
   - component: {fileID: 4847777960994457899}
-  - component: {fileID: 4847777960994457896}
   - component: {fileID: 4333397845963253455}
+  - component: {fileID: 1653752625053519425}
+  - component: {fileID: -7790508050260373217}
   m_Layer: 8
-  m_Name: BoardPiecePrefab
+  m_Name: OnlinePiecePrefab
   m_TagString: BoardPiece
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,45 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4847777960994457896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4847777960994457941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8be2d41e94410f4cbff8622ef61f4ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _grassSprite: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
-  _dirtSprite: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
-  _stoneSprite: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _bedrockSprite: {fileID: 21300000, guid: d6092582ec4d67c42a318eecd215b92c, type: 3}
-  _goldSprite: {fileID: 21300000, guid: 7566eea44f1676a49a57d4e12bfd9f71, type: 3}
-  _playerPawn: {fileID: 5312618096240013892, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
-  _buildingSlot: {fileID: 6184250846653110890}
-  _mFactory: {fileID: 4251760763736238801, guid: 37b05d21554c1a247b0cabf54254d7e6, type: 3}
-  _mBurrow: {fileID: 2097167223220628436, guid: a047394ed136f104fb8e0300e1b84376, type: 3}
-  _mMine: {fileID: 6614894829994012052, guid: 9f7559e39bd4411429c0a8b08d32837a, type: 3}
-  _meeFactory: {fileID: 9207313477705262962, guid: 87554228a34d4e14993087c6aad2effd, type: 3}
-  _meeBurrow: {fileID: 6185052297031433510, guid: 78a7a23353ae393498ca92c24bbd11dc, type: 3}
-  _meeMine: {fileID: 1986726487383918477, guid: 096edc259821044499d8e0f5a6c9322e, type: 3}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _selectedColor: {r: 1, g: 0.495283, b: 0.495283, a: 1}
-  _waitingColor: {r: 0.09620416, g: 1, b: 0, a: 1}
-  IsMovable: 0
-  IsDiggable: 0
-  IsPlaceable: 0
-  IsBuildable: 0
-  ObjState: 0
-  HasP1Building: 0
-  HasP2Building: 0
-  HasPawn: 0
-  CurrentPawn: {fileID: 0}
-  PieceIsSelected: 1
-  HasGold: 0
 --- !u!61 &4333397845963253455
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -152,6 +114,63 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1653752625053519425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4847777960994457941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  observableSearch: 0
+  ObservedComponents:
+  - {fileID: 0}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &-7790508050260373217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4847777960994457941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3dbf8dc23a07f44858a9cd9e916847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPawn: {fileID: 5312618096240013892, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
+  _buildingSlot: {fileID: 6184250846653110890}
+  _mFactory: {fileID: 4251760763736238801, guid: 37b05d21554c1a247b0cabf54254d7e6, type: 3}
+  _mBurrow: {fileID: 2097167223220628436, guid: a047394ed136f104fb8e0300e1b84376, type: 3}
+  _mMine: {fileID: 6614894829994012052, guid: 9f7559e39bd4411429c0a8b08d32837a, type: 3}
+  _meeFactory: {fileID: 9207313477705262962, guid: 87554228a34d4e14993087c6aad2effd, type: 3}
+  _meeBurrow: {fileID: 6185052297031433510, guid: 78a7a23353ae393498ca92c24bbd11dc, type: 3}
+  _meeMine: {fileID: 1986726487383918477, guid: 096edc259821044499d8e0f5a6c9322e, type: 3}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _selectedColor: {r: 1, g: 0.49411765, b: 0.49411765, a: 1}
+  _waitingColor: {r: 0.09803922, g: 1, b: 0, a: 1}
+  IsMovable: 0
+  IsDiggable: 0
+  IsPlaceable: 0
+  IsBuildable: 0
+  ObjState: 0
+  HasP1Building: 0
+  HasP2Building: 0
+  HasPawn: 0
+  CurrentPawn: {fileID: 0}
+  PieceIsSelected: 1
+  HasGold: 0
 --- !u!1 &6229392866763795104
 GameObject:
   m_ObjectHideFlags: 0
