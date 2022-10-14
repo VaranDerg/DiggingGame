@@ -59,7 +59,7 @@ public class OnlineActionManager : MonoBehaviour
 
     [Header("Script References")]
     private OnlineBoardManager _bm;
-    private CardManager _cm;
+    private OnlineCardManager _cm;
     private OnlineCanvasManager _gcm;
 
     /// <summary>
@@ -68,7 +68,7 @@ public class OnlineActionManager : MonoBehaviour
     private void Awake()
     {
         _bm = FindObjectOfType<OnlineBoardManager>();
-        _cm = FindObjectOfType<CardManager>();
+        _cm = FindObjectOfType<OnlineCardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         PrepareStartingValues();
     }
@@ -120,9 +120,9 @@ public class OnlineActionManager : MonoBehaviour
     {
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
             {
-                pawn.GetComponent<PlayerPawn>().IsMoving = true;
+                pawn.GetComponent<OnlinePlayerPawn>().IsMoving = true;
                 pawn.GetComponent<Animator>().Play("TempPawnBlink");
             }
         }
@@ -145,10 +145,10 @@ public class OnlineActionManager : MonoBehaviour
 
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
             {
-                pawn.GetComponent<PlayerPawn>().IsBuilding = true;
-                pawn.GetComponent<PlayerPawn>().BuildingToBuild = building;
+                pawn.GetComponent<OnlinePlayerPawn>().IsBuilding = true;
+                pawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild = building;
                 pawn.GetComponent<Animator>().Play("TempPawnBlink");
             }
         }
@@ -164,9 +164,9 @@ public class OnlineActionManager : MonoBehaviour
     {
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
             {
-                pawn.GetComponent<PlayerPawn>().IsDigging = true;
+                pawn.GetComponent<OnlinePlayerPawn>().IsDigging = true;
                 pawn.GetComponent<Animator>().Play("TempPawnBlink");
             }
         }

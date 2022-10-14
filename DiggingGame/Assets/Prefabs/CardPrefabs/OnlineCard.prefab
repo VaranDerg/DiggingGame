@@ -380,7 +380,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8963238437072702107}
   m_Layer: 0
-  m_Name: Card
+  m_Name: OnlineCard
   m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1804,7 +1804,7 @@ GameObject:
   - component: {fileID: 8963238438343006311}
   - component: {fileID: 8963238438343006308}
   - component: {fileID: 8963238438343006309}
-  - component: {fileID: 415186160727544523}
+  - component: {fileID: 3051362430415254490}
   m_Layer: 0
   m_Name: CardScript
   m_TagString: Untagged
@@ -1906,7 +1906,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &415186160727544523
+--- !u!114 &3051362430415254490
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1915,7 +1915,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8963238438343006310}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a49be4283c11054191e06da758b1100, type: 3}
+  m_Script: {fileID: 11500000, guid: 11259e96509066a4fad5dc1a46c90244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _mouseOverPos: {fileID: 2155800061850999862}
@@ -1923,7 +1923,7 @@ MonoBehaviour:
   _defaultPos: {fileID: 7925999958643142583}
   _cardVisualToMaximize: {fileID: 8963238438185584236}
   _cardBody: {fileID: 8963238437072702106}
-  _cardSlideSpeed: 0
+  _cardSlideSpeed: 7.5
   HandPosition: 0
   HeldByPlayer: 0
   NextPos: {x: 0, y: 0, z: 0}

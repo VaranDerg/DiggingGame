@@ -13,7 +13,7 @@ using UnityEngine;
 public class OnlinePlayerPawn : MonoBehaviour
 {
 
-    //Edit: Andrea SD - Multiplayer Functionality
+    //Edit: Andrea SD - Added online functionality
 
     [Header("References/Values")]
     //1 or 2
@@ -126,7 +126,7 @@ public class OnlinePlayerPawn : MonoBehaviour
             {
                 foreach (GameObject piece in _shownPieces)
                 {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
                 }
             }
 
@@ -143,18 +143,18 @@ public class OnlinePlayerPawn : MonoBehaviour
         {
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
-                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
                 {
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                piece.GetComponent<PieceController>().IsDiggable = true;
+                piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
+                piece.GetComponent<OnlinePieceController>().IsDiggable = true;
                 _shownPieces.Add(piece);
             }
 
@@ -162,7 +162,7 @@ public class OnlinePlayerPawn : MonoBehaviour
             {
                 foreach (GameObject piece in _shownPieces)
                 {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
                 }
             }
             else
@@ -186,24 +186,24 @@ public class OnlinePlayerPawn : MonoBehaviour
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
                 bool dontHighlight = false;
-                if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     dontHighlight = true;
                 }
 
-                if (piece.GetComponent<PieceController>().HasPawn)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn)
                 {
                     dontHighlight = true;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
                 {
                     dontHighlight = true;
                 }
 
                 foreach (GameObject pieceSquared in _bm.GenerateAdjacentPieceList(piece))
                 {
-                    if (pieceSquared.GetComponent<PieceController>().HasP1Building || pieceSquared.GetComponent<PieceController>().HasP2Building)
+                    if (pieceSquared.GetComponent<OnlinePieceController>().HasP1Building || pieceSquared.GetComponent<OnlinePieceController>().HasP2Building)
                     {
                         dontHighlight = true;
                     }
@@ -211,7 +211,7 @@ public class OnlinePlayerPawn : MonoBehaviour
 
                 if (!dontHighlight)
                 {
-                    piece.GetComponent<PieceController>().ShowHideBuildable(true);
+                    piece.GetComponent<OnlinePieceController>().ShowHideBuildable(true);
                     _shownPieces.Add(piece);
                 }
             }
@@ -220,7 +220,7 @@ public class OnlinePlayerPawn : MonoBehaviour
             {
                 foreach (GameObject piece in _shownPieces)
                 {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
                 }
             }
             else
@@ -265,11 +265,11 @@ public class OnlinePlayerPawn : MonoBehaviour
         {
             if (_shownPieces[i] != null)
             {
-                _shownPieces[i].GetComponent<PieceController>().ShowHideMovable(false);
-                _shownPieces[i].GetComponent<PieceController>().ShowHideBuildable(false);
-                _shownPieces[i].GetComponent<PieceController>().ShowHidePlaceable(false);
-                _shownPieces[i].GetComponent<PieceController>().ShowHideDiggable(false);
-                _shownPieces[i].GetComponent<PieceController>().PieceIsSelected = false;
+                _shownPieces[i].GetComponent<OnlinePieceController>().ShowHideMovable(false);
+                _shownPieces[i].GetComponent<OnlinePieceController>().ShowHideBuildable(false);
+                _shownPieces[i].GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
+                _shownPieces[i].GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+                _shownPieces[i].GetComponent<OnlinePieceController>().PieceIsSelected = false;
             }
         }
 
@@ -289,12 +289,12 @@ public class OnlinePlayerPawn : MonoBehaviour
     {
         foreach (GameObject piece in _shownPieces)
         {
-            if (!piece.GetComponent<PieceController>().PieceIsSelected)
+            if (!piece.GetComponent<OnlinePieceController>().PieceIsSelected)
             {
-                piece.GetComponent<PieceController>().ShowHideMovable(false);
-                piece.GetComponent<PieceController>().ShowHideBuildable(false);
-                piece.GetComponent<PieceController>().ShowHidePlaceable(false);
-                piece.GetComponent<PieceController>().ShowHideDiggable(false);
+                piece.GetComponent<OnlinePieceController>().ShowHideMovable(false);
+                piece.GetComponent<OnlinePieceController>().ShowHideBuildable(false);
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
+                piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
             }
         }
     }

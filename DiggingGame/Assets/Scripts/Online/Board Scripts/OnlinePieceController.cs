@@ -45,7 +45,7 @@ public class OnlinePieceController : MonoBehaviourPun
     [HideInInspector] public bool PieceIsSelected = true;
     private OnlineBoardManager _bm;
     private OnlineActionManager _am;
-    private CardManager _cm;
+    private OnlineCardManager _cm;
     private OnlineCanvasManager _gcm;
     [HideInInspector] public bool HasGold;    //true if the piece reveals gold when flipped
 
@@ -54,7 +54,7 @@ public class OnlinePieceController : MonoBehaviourPun
         _sr = GetComponent<SpriteRenderer>();
         _bm = FindObjectOfType<OnlineBoardManager>();
         _am = FindObjectOfType<OnlineActionManager>();
-        _cm = FindObjectOfType<CardManager>();
+        _cm = FindObjectOfType<OnlineCardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
     }
 
@@ -120,7 +120,7 @@ public class OnlinePieceController : MonoBehaviourPun
             PieceIsSelected = true;
             foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
             {
-                pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
+                pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
             }
 
             if (ObjState == GameState.One)
@@ -146,7 +146,7 @@ public class OnlinePieceController : MonoBehaviourPun
             }
             _cm.PrepareCardSelection(0, "", true);
 
-            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
             _gcm.Back();
 
             switch (ObjState)
@@ -223,7 +223,7 @@ public class OnlinePieceController : MonoBehaviourPun
                 PieceIsSelected = true;
                 foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
                 {
-                    pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
+                    pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
                 }
 
                 if (ObjState == GameState.One)
@@ -251,10 +251,10 @@ public class OnlinePieceController : MonoBehaviourPun
             }
 
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
-            CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
+            CurrentPawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
             CurrentPawn.transform.position = gameObject.transform.position;
             HasPawn = true;
-            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
 
             if (_am.CurrentTurnPhase == 1)
             {
@@ -314,15 +314,15 @@ public class OnlinePieceController : MonoBehaviourPun
             }
 
             int buildingIndex = 0;
-            if (CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Factory")
+            if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Factory")
             {
                 buildingIndex = 0;
             }
-            else if (CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Burrow")
+            else if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Burrow")
             {
                 buildingIndex = 1;
             }
-            else if (CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Mine")
+            else if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Mine")
             {
                 if (pieceSuit == "Grass")
                 {
@@ -338,10 +338,10 @@ public class OnlinePieceController : MonoBehaviourPun
                 }
             }
 
-            bool areThereRemainingBuildings = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild);
+            bool areThereRemainingBuildings = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild);
             if (areThereRemainingBuildings)
             {
-                StartCoroutine(BuildingCardSelection(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild, buildingIndex, pieceSuit));
+                StartCoroutine(BuildingCardSelection(CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild, buildingIndex, pieceSuit));
             }
         }
     }
@@ -353,7 +353,7 @@ public class OnlinePieceController : MonoBehaviourPun
         PieceIsSelected = true;
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
+            pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
         }
 
         if (_am.CurrentPlayer == 1)
@@ -386,7 +386,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
         InstantitateBuildingAndPawn(buildingName);
 
-        CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
         _gcm.UpdateCurrentActionText("Built " + buildingName + ".");
     }
@@ -432,7 +432,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
         foreach (GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
         {
-            if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+            if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
             {
                 canPlaceOnTile = false;
             }
@@ -499,7 +499,7 @@ public class OnlinePieceController : MonoBehaviourPun
             if (spawnPawn)
             {
                 GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
-                newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
+                newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
                 newPawn.transform.SetParent(null);
             }
 

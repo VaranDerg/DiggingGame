@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         GameCanvasManagerNew.cs
-// Author :            Rudy Wolfer
+// Author :            Rudy Wolfer, Andrea SD
 // Creation Date :     October 10th, 2022
 //
 // Brief Description : Better version of GameCanvasManager. A script that 
@@ -15,6 +15,8 @@ using TMPro;
 
 public class OnlineCanvasManager : MonoBehaviour
 {
+    //Edit: Andrea SD - Added online functionality
+
     [Header("Text and Object References, Current Player View")]
     public GameObject StartTurnButton;
     [SerializeField] private GameObject _firstZone;
@@ -50,7 +52,7 @@ public class OnlineCanvasManager : MonoBehaviour
     [SerializeField] private Image _factory, _burrow, _mine;
     private OnlineActionManager _am;
     private OnlineBoardManager _bm;
-    private CardManager _cm;
+    private OnlineCardManager _cm;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -77,7 +79,7 @@ public class OnlineCanvasManager : MonoBehaviour
     {
         _am = FindObjectOfType<OnlineActionManager>();
         _bm = FindObjectOfType<OnlineBoardManager>();
-        _cm = FindObjectOfType<CardManager>();
+        _cm = FindObjectOfType<OnlineCardManager>();
         AddObjectsToList();
     }
 
