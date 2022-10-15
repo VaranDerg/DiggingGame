@@ -395,7 +395,7 @@ Transform:
   m_GameObject: {fileID: 8963238437072702106}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8963238438343006311}
@@ -1670,7 +1670,7 @@ GameObject:
   - component: {fileID: 8963238438185584232}
   - component: {fileID: 8963238438185584235}
   - component: {fileID: 8963238438185584234}
-  - component: {fileID: 4043980956272867714}
+  - component: {fileID: 1934241288401159180}
   m_Layer: 0
   m_Name: CardCanvas
   m_TagString: Untagged
@@ -1762,7 +1762,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4043980956272867714
+--- !u!114 &1934241288401159180
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1771,14 +1771,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8963238438185584236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20ddb7ef6cde8344ab266ac77c04adcd, type: 3}
+  m_Script: {fileID: 11500000, guid: 76482b7853cfc8448b59ff783bae84c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ThisCard: {fileID: 0}
-  _grassColor: {r: 0.1531414, g: 0.6698113, b: 0, a: 1}
-  _dirtColor: {r: 0.5660378, g: 0.32024753, b: 0.17354932, a: 1}
-  _stoneColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
-  _goldColor: {r: 0.9056604, g: 0.7108367, b: 0, a: 1}
+  _grassColor: {r: 0.15294118, g: 0.67058825, b: 0, a: 1}
+  _dirtColor: {r: 0.5647059, g: 0.32156864, b: 0.17254902, a: 1}
+  _stoneColor: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
+  _goldColor: {r: 0.90588236, g: 0.70980394, b: 0, a: 1}
   _grassIcon: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
   _dirtIcon: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
   _stoneIcon: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
