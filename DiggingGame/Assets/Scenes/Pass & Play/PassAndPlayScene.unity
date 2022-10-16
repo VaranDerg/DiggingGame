@@ -10883,7 +10883,7 @@ MonoBehaviour:
   CardActivations: 1
   StartingCards: 4
   HandLimit: 7
-  CardDraw: 2
+  CardDraw: 3
   WinningScore: 15
   BaseBuildingPrice: 1
   TotalBuildings: 3
