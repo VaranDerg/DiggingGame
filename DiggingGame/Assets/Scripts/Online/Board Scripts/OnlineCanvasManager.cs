@@ -12,8 +12,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
-public class OnlineCanvasManager : MonoBehaviour
+public class OnlineCanvasManager : MonoBehaviourPun
 {
     //Edit: Andrea SD - Added online functionality
 
@@ -53,6 +54,7 @@ public class OnlineCanvasManager : MonoBehaviour
     private OnlineActionManager _am;
     private OnlineBoardManager _bm;
     private OnlineCardManager _cm;
+    private TurnController _tm;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -424,5 +426,5 @@ public class OnlineCanvasManager : MonoBehaviour
         }
 
         UpdateTextBothPlayers();
-    }
+    }  
 }

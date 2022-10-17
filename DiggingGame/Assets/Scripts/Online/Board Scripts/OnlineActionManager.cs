@@ -7,11 +7,13 @@
                        that control and store a player's actions.
 *****************************************************************************/
 
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class OnlineActionManager : MonoBehaviour
+public class OnlineActionManager : MonoBehaviourPun
 {
     //Edit: Andrea SD, Multiplayer functionality
 
@@ -459,7 +461,8 @@ public class OnlineActionManager : MonoBehaviour
             }
 
             CurrentTurnPhase = 0;
-            CurrentPlayer = 2;
+            photonView.RPC("ChangeTurn", RpcTarget.All, 2);     //ASD
+            DisableBoard();
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
@@ -472,10 +475,26 @@ public class OnlineActionManager : MonoBehaviour
             }
 
             CurrentTurnPhase = 0;
-            CurrentPlayer = 1;
+            photonView.RPC("ChangeTurn", RpcTarget.All, 1);     //ASD
             CurrentRound++;
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
+
     }
+
+    [PunRPC]
+    private void ChangeTurn(int nextTurn)
+    {
+        CurrentPlayer = nextTurn;
+        
+    }
+
+    [PunRPC]
+    private void DisableBoard()
+    {
+        EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+        eventSystem.enabled = false;
+    }
+
 }
