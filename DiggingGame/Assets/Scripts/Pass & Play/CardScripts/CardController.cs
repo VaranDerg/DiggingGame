@@ -136,9 +136,10 @@ public class CardController : MonoBehaviour
 
     private void ActivateCard()
     {
-        int grassCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.GrassCost;
-        int dirtCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.DirtCost;
-        int stoneCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.StoneCost;
+        CardVisuals cv = _cardBody.GetComponentInChildren<CardVisuals>();
+        int grassCost = cv.ThisCard.GrassCost;
+        int dirtCost = cv.ThisCard.DirtCost;
+        int stoneCost = cv.ThisCard.StoneCost;
 
         if(_cm.AllowedActivations == 0)
         {
@@ -157,8 +158,22 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
-                Debug.Log("Activation code will go in this line in the future.");
+                if(cv.ThisCard.GrassSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName);
+                }
+                else if(cv.ThisCard.DirtSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName);
+                }
+                else if(cv.ThisCard.StoneSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName);
+                }
+                else if(cv.ThisCard.GoldSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName);
+                }
                 _am.P1Score++;
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
@@ -181,8 +196,22 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
-                Debug.Log("Activation code will go in this line in the future.");
+                if (cv.ThisCard.GrassSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName);
+                }
+                else if (cv.ThisCard.DirtSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName);
+                }
+                else if (cv.ThisCard.StoneSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName);
+                }
+                else if (cv.ThisCard.GoldSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName);
+                }
                 _am.P2Score++;
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
