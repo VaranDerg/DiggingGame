@@ -23,6 +23,7 @@ public class PieceController : MonoBehaviour
     [SerializeField] private Sprite _stoneSprite;
     [SerializeField] private Sprite _bedrockSprite;
     [SerializeField] private Sprite _goldSprite;
+    [SerializeField] private Sprite _flowerSprite;
     [SerializeField] private GameObject _playerPawn;
     private SpriteRenderer _sr;
 
@@ -66,7 +67,8 @@ public class PieceController : MonoBehaviour
         Two,
         Three,
         Four,
-        Five
+        Five,
+        Six
     }
 
     // Start is called before the first frame update
@@ -120,7 +122,7 @@ public class PieceController : MonoBehaviour
                 pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
             }
 
-            if (ObjState == GameState.One)
+            if (ObjState == GameState.One || ObjState == GameState.Six)
             {
                 _cm.PrepareCardSelection(1, "Grass", false);
             }
@@ -149,6 +151,10 @@ public class PieceController : MonoBehaviour
             switch (ObjState)
             {
                 case GameState.One:
+                    SetPieceState(2);
+                    _am.CollectTile(_am.CurrentPlayer, "Grass");
+                    break;
+                case GameState.Six:
                     SetPieceState(2);
                     _am.CollectTile(_am.CurrentPlayer, "Grass");
                     break;
