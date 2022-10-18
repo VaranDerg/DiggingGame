@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8472482760639851983}
   - component: {fileID: -4362792227905391746}
   m_Layer: 7
-  m_Name: Burrow
+  m_Name: MoleBurrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,9 +114,9 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 0
   OwnershipTransfer: 0
-  observableSearch: 0
+  observableSearch: 2
   ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0

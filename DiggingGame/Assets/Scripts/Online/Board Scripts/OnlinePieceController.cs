@@ -68,8 +68,8 @@ public class OnlinePieceController : MonoBehaviourPun
         One,
         Two,
         Three,
-        Four,
-        Five
+        Four
+       // Five
     }
 
     // Start is called before the first frame update
@@ -111,6 +111,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
     /// <summary>
     /// Method controlling piece removal.
+    /// Edited: Andrea SD - modified conditionals to no longer account for gold
     /// </summary>
     private IEnumerator PieceRemoval()
     {
@@ -131,7 +132,7 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 _cm.PrepareCardSelection(1, "Dirt", false);
             }
-            else if (ObjState == GameState.Three || ObjState == GameState.Five)
+            else if (ObjState == GameState.Three)
             {
                 _cm.PrepareCardSelection(1, "Stone", false);
             }
@@ -152,16 +153,14 @@ public class OnlinePieceController : MonoBehaviourPun
             switch (ObjState)
             {
                 case GameState.One:
-                    SetPieceState(2);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 2);
                     _am.CollectTile(_am.CurrentPlayer, "Grass");
                     break;
                 case GameState.Two:
-                    SetPieceState(3);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 3);
                     _am.CollectTile(_am.CurrentPlayer, "Dirt");
                     break;
                 case GameState.Three:
-                    SetPieceState(4);
-
                     if (HasGold)
                     {
                         _am.CollectTile(_am.CurrentPlayer, "Gold");
@@ -169,6 +168,7 @@ public class OnlinePieceController : MonoBehaviourPun
                     else
                     {
                         _am.CollectTile(_am.CurrentPlayer, "Stone");
+                        photonView.RPC("SetPieceState", RpcTarget.All, 4);
                     }
 
                     break;
@@ -211,6 +211,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
     /// <summary>
     /// Controls pawn movement.
+    /// Edited: Andrea SD - modified conditionals to no longer account for gold
     /// </summary>
     private IEnumerator PawnMovement()
     {
@@ -234,7 +235,7 @@ public class OnlinePieceController : MonoBehaviourPun
                 {
                     _cm.PrepareCardSelection(1, "Dirt", false);
                 }
-                else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                else if (ObjState == GameState.Three)
                 {
                     _cm.PrepareCardSelection(1, "Stone", false);
                 }
@@ -252,7 +253,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
             CurrentPawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
-            CurrentPawn.transform.position = gameObject.transform.position;
+            photonView.RPC("MovePawn", RpcTarget.All, gameObject.transform.position.x, gameObject.transform.position.y);    //Andrea SD
             HasPawn = true;
             CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
 
@@ -290,6 +291,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
     /// <summary>
     /// Method controlling Building placement and removal.
+    /// Edited: Andrea SD - modified conditionals to no longer account for gold
     /// </summary>
     private void StartBuildingPlacement()
     {
@@ -308,7 +310,7 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 pieceSuit = "Stone";
             }
-            else if (ObjState == GameState.Four || ObjState == GameState.Five)
+            else if (ObjState == GameState.Four)
             {
                 Debug.LogWarning("Cannot place building on this piece, yet it was able to be selected?");
             }
@@ -441,7 +443,12 @@ public class OnlinePieceController : MonoBehaviourPun
         if (canPlaceOnTile)
         {
             bool spawnPawn = false;
-            Instantiate(building, _buildingSlot);
+            //Instantiate(building, _buildingSlot);
+
+            // Instantiates building from the Resources folder on the network
+            // for all clients
+            PhotonNetwork.Instantiate(building.name, _buildingSlot.position, 
+                Quaternion.identity);   //Andrea SD
 
             if (_am.CurrentPlayer == 1)
             {
@@ -622,6 +629,7 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <summary>
     /// Sets the state of the game object to one of the valid enum values
     /// Edited: 
+    /// Author: Andrea SD
     /// </summary>
     /// <param name="state"> determines which state the obj is set to </param>
     [PunRPC]
@@ -649,10 +657,10 @@ public class OnlinePieceController : MonoBehaviourPun
                 ChangeSprite("BedrockPiece");
                 ObjState = GameState.Four;
                 break;
-            case 5:
+           /* case 5:
                 ChangeSprite("GoldPiece");
                 ObjState = GameState.Five;
-                break;
+                break;*/
             default:
                 throw new Exception("This board piece state does not exist.");
         }

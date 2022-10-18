@@ -490,6 +490,11 @@ public class OnlineActionManager : MonoBehaviourPun
         
     }
 
+    /// <summary>
+    /// Disables all interactions by the player. This occurs when it is not
+    /// their turn.
+    /// Author: Andrea SD
+    /// </summary>
     [PunRPC]
     private void DisableBoard()
     {
