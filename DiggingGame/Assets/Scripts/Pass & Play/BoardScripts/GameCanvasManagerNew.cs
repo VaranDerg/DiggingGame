@@ -84,7 +84,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// <summary>
     /// Disables every object in AllObjects
     /// </summary>
-    private void DisableListObjects()
+    public void DisableListObjects()
     {
         foreach (GameObject obj in _allObjects)
         {

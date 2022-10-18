@@ -12,8 +12,11 @@ using UnityEngine;
 
 public class CardEffects : MonoBehaviour
 {
-    [Header("Values")]
+    [Header("General Values")]
     [SerializeField] private float activateAnimWaitTime;
+
+    [Header("Flowers")]
+    [SerializeField] private int grassPiecesToPlace;
 
     [Header("Other")]
     private GameCanvasManagerNew _gcm;
@@ -172,6 +175,16 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Flowers()
     {
+        _gcm.DisableListObjects();
+        int placedPieces = 0;
+        foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
+            {
+                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+            }
+        }
+
         yield return null;
     }
 

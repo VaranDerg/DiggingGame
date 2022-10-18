@@ -531,6 +531,10 @@ public class PieceController : MonoBehaviour
                 gameObject.GetComponent<SpriteRenderer>().sprite = _goldSprite;
                 ObjState = GameState.Five;
                 break;
+            case 6:
+                gameObject.GetComponent<SpriteRenderer>().sprite = _flowerSprite;
+                ObjState = GameState.Six;
+                break;
             default:
                 throw new Exception("This board piece state does not exist.");
         }
