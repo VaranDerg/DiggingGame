@@ -41,6 +41,7 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public bool HasPawn;
     [HideInInspector] public GameObject CurrentPawn;
     [HideInInspector] public bool PieceIsSelected = true;
+    private string _pieceSuitGettingPlaced;
     private BoardManager _bm;
     private ActionManager _am;
     private CardManager _cm;
@@ -192,7 +193,7 @@ public class PieceController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-            _gcm.Back();
+            FindObjectOfType<CardEffects>().PlacedPieces++;
 
             switch (ObjState)
             {
@@ -599,7 +600,7 @@ public class PieceController : MonoBehaviour
     /// <summary>
     /// Updates tiles for piece placement.
     /// </summary>
-    public void ShowHidePlaceable(bool show)
+    public void ShowHidePlaceable(bool show, string currentPlacement)
     {
         if (show)
         {

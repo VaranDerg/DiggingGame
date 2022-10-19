@@ -18,6 +18,9 @@ public class CardEffects : MonoBehaviour
     [Header("Flowers")]
     [SerializeField] private int grassPiecesToPlace;
 
+    [Header("Placing")]
+    [HideInInspector] public int PlacedPieces = 0;
+
     [Header("Other")]
     private GameCanvasManagerNew _gcm;
     private CardManager _cm;
@@ -176,7 +179,7 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Flowers()
     {
         _gcm.DisableListObjects();
-        int placedPieces = 0;
+
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
