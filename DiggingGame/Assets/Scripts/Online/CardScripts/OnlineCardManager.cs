@@ -396,7 +396,7 @@ public class OnlineCardManager : MonoBehaviour
                 PrepareCardSelection(0, "", true);
             }
 
-            HideCards(_am.CurrentPlayer);
+           // HideCards(_am.CurrentPlayer);
             _am.EndTurn(_am.CurrentPlayer);
         }
         else if (player == 2)
@@ -413,7 +413,7 @@ public class OnlineCardManager : MonoBehaviour
                 PrepareCardSelection(0, "", true);
             }
 
-            HideCards(_am.CurrentPlayer);
+           // HideCards(_am.CurrentPlayer);
             _am.EndTurn(_am.CurrentPlayer);
         }
     }

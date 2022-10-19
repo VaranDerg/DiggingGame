@@ -253,7 +253,9 @@ public class OnlinePieceController : MonoBehaviourPun
 
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
             CurrentPawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
+
             photonView.RPC("MovePawn", RpcTarget.All, gameObject.transform.position.x, gameObject.transform.position.y);    //Andrea SD
+
             HasPawn = true;
             CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
 

@@ -472,9 +472,11 @@ public class OnlineActionManager : MonoBehaviourPun
             }
 
             CurrentTurnPhase = 0;
-            photonView.RPC("ChangeTurn", RpcTarget.All, 2);     //ASD
+            
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
+
+            photonView.RPC("ChangeTurn", RpcTarget.All, 2);     //ASD
         }
         else
         {
@@ -487,8 +489,10 @@ public class OnlineActionManager : MonoBehaviourPun
             CurrentTurnPhase = 0;
             photonView.RPC("ChangeTurn", RpcTarget.All, 1);     //ASD
             CurrentRound++;
-            
+
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
+
+            photonView.RPC("ChangeTurn", RpcTarget.All, 1);     //ASD
         }
 
         //Enables the start button for the other player then disables your own board 
@@ -509,11 +513,11 @@ public class OnlineActionManager : MonoBehaviourPun
     /// Changes the turn to the next player for online play
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="nextTurn"></param>
+    /// <param name="player">P Player who's turn it is changing to </param>
     [PunRPC]
-    private void ChangeTurn(int nextTurn)
+    private void ChangeTurn(int player)
     {
-        CurrentPlayer = nextTurn;     
+        CurrentPlayer = player;
     }
 
     /// <summary>
