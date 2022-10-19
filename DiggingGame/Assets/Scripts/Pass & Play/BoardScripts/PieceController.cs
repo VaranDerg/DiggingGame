@@ -47,6 +47,9 @@ public class PieceController : MonoBehaviour
     private GameCanvasManagerNew _gcm;
     [HideInInspector] public bool HasGold;    //true if the piece reveals gold when flipped
 
+    [Header("Card Activation Stuff")]
+    [HideInInspector] public bool FromActivatedCard = false;
+
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
@@ -94,7 +97,14 @@ public class PieceController : MonoBehaviour
 
         if (IsDiggable)
         {
-            StartCoroutine(PieceRemoval());
+            if(FromActivatedCard)
+            {
+                ActivatedPieceRemoval();
+            }
+            else
+            {
+                StartCoroutine(PieceRemoval());
+            }
         }
 
         if (IsMovable && CurrentPawn != null)
@@ -177,6 +187,51 @@ public class PieceController : MonoBehaviour
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// Method for digging tiles through effects instead of cards. 
+    /// </summary>
+    private void ActivatedPieceRemoval()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (ObjState == GameState.Four)
+            {
+                return;
+            }
+
+            switch (ObjState)
+            {
+                case GameState.One:
+                    SetPieceState(2);
+                    _am.CollectTile(_am.CurrentPlayer, "Grass");
+                    FindObjectOfType<CardEffects>().DugPieces++;
+                    break;
+                case GameState.Six:
+                    SetPieceState(2);
+                    _am.CollectTile(_am.CurrentPlayer, "Grass");
+                    FindObjectOfType<CardEffects>().DugPieces++;
+                    break;
+                case GameState.Two:
+                    SetPieceState(3);
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt");
+                    FindObjectOfType<CardEffects>().DugPieces++;
+                    break;
+                case GameState.Three:
+                    SetPieceState(4);
+                    if (HasGold)
+                    {
+                        _am.CollectTile(_am.CurrentPlayer, "Gold");
+                    }
+                    else
+                    {
+                        _am.CollectTile(_am.CurrentPlayer, "Stone");
+                    }
+                    FindObjectOfType<CardEffects>().DugPieces++;
+                    break;
+            }
+        }    
     }
 
     /// <summary>
