@@ -134,7 +134,7 @@ public class ActionManager : MonoBehaviour
     /// <param name="player">1 or 2</param>
     public void StartBuild(int player, string building)
     {
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         foreach (MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
         {
             script.StopAllCoroutines();
@@ -434,18 +434,64 @@ public class ActionManager : MonoBehaviour
     {
         if(player == 1)
         {
-            P1CollectedPile[0] += P1BuiltBuildings[2];
-            P1CollectedPile[1] += P1BuiltBuildings[3];
-            P1CollectedPile[2] += P1BuiltBuildings[4];
+            for(int i = P1BuiltBuildings[2]; i != 0; i--)
+            {
+                if(SupplyPile[0] > 0)
+                {
+                    SupplyPile[0]--;
+                    P1CollectedPile[0]++;
+                }
+            }
+            for (int i = P1BuiltBuildings[3]; i != 0; i--)
+            {
+                if (SupplyPile[1] > 0)
+                {
+                    SupplyPile[1]--;
+                    P1CollectedPile[1]++;
+                }
+            }
+            for (int i = P1BuiltBuildings[4]; i != 0; i--)
+            {
+                if (SupplyPile[2] > 0)
+                {
+                    SupplyPile[2]--;
+                    P1CollectedPile[2]++;
+                }
+            }
         }
         else if(player == 2)
         {
-            P2CollectedPile[0] += P2BuiltBuildings[2];
-            P2CollectedPile[1] += P2BuiltBuildings[3];
-            P2CollectedPile[2] += P2BuiltBuildings[4];
+            for (int i = P2BuiltBuildings[2]; i != 0; i--)
+            {
+                if (SupplyPile[0] > 0)
+                {
+                    SupplyPile[0]--;
+                    P2CollectedPile[0]++;
+                }
+            }
+            for (int i = P2BuiltBuildings[3]; i != 0; i--)
+            {
+                if (SupplyPile[1] > 0)
+                {
+                    SupplyPile[1]--;
+                    P2CollectedPile[1]++;
+                }
+            }
+            for (int i = P2BuiltBuildings[4]; i != 0; i--)
+            {
+                if (SupplyPile[2] > 0)
+                {
+                    SupplyPile[2]--;
+                    P2CollectedPile[2]++;
+                }
+            }
         }
     }
 
+    /// <summary>
+    /// Ends the player's turn
+    /// </summary>
+    /// <param name="player">1 or 2</param>
     public void EndTurn(int player)
     {
         if(player == 1)

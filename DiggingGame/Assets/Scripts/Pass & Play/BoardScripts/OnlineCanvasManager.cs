@@ -258,7 +258,7 @@ public class OnlineCanvasManager : MonoBehaviour
     public void ToThenPhase()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         _am.CurrentTurnPhase++;
 
         _thenZone.SetActive(true);
@@ -275,7 +275,7 @@ public class OnlineCanvasManager : MonoBehaviour
     public void Move()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
 
         _am.StartMove(_am.CurrentPlayer);
         _thenZone.SetActive(true);
@@ -291,7 +291,7 @@ public class OnlineCanvasManager : MonoBehaviour
     public void Dig()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
 
         _am.StartDig(_am.CurrentPlayer);
         _thenZone.SetActive(true);
@@ -307,7 +307,7 @@ public class OnlineCanvasManager : MonoBehaviour
     public void OpenBuildMenu()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
 
         _thenZone.SetActive(true);
         _thenBuildMenu.SetActive(true);
@@ -332,7 +332,7 @@ public class OnlineCanvasManager : MonoBehaviour
     /// <param name="buildingName">"Factory" "Burrow" or "Mine</param>
     public void Build(string buildingName)
     {
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         _am.StartBuild(_am.CurrentPlayer, buildingName);
 
         UpdateTextBothPlayers();
@@ -344,7 +344,7 @@ public class OnlineCanvasManager : MonoBehaviour
     public void ToFinallyPhase()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         _am.CurrentTurnPhase++;
 
         _finallyZone.SetActive(true);
@@ -368,7 +368,7 @@ public class OnlineCanvasManager : MonoBehaviour
     public void Back()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         //I HATE THIS PART OF CODE. If a workaround appears I wanna change it ASAP.
         foreach(MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
         {

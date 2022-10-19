@@ -54,7 +54,7 @@ public class BoardManager : MonoBehaviour
     /// <summary>
     /// Disables pawn checks with the board.
     /// </summary>
-    public void DisablePawnBoardInteractions()
+    public void DisableAllBoardInteractions()
     {
         foreach(GameObject piece in _boardPieces)
         {

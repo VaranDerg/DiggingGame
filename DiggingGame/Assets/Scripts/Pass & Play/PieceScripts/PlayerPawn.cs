@@ -165,7 +165,7 @@ public class PlayerPawn : MonoBehaviour
             else
             {
                 _gcm.UpdateCurrentActionText("No valid digging locations at this pawn.");
-                _bm.DisablePawnBoardInteractions();
+                _bm.DisableAllBoardInteractions();
                 _gcm.Back();
             }
 
@@ -223,7 +223,7 @@ public class PlayerPawn : MonoBehaviour
             else
             {
                 _gcm.UpdateCurrentActionText("No valid building locations at this pawn.");
-                _bm.DisablePawnBoardInteractions();
+                _bm.DisableAllBoardInteractions();
                 _gcm.Back();
             }
 

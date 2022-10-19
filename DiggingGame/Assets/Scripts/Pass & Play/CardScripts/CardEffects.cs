@@ -15,8 +15,11 @@ public class CardEffects : MonoBehaviour
     [Header("General Values")]
     [SerializeField] private float activateAnimWaitTime;
 
-    [Header("Flowers")]
-    [SerializeField] private int grassPiecesToPlace;
+    [Header("Placement Effects")]
+    [SerializeField] private int _gardenPiecesToPlace;
+    [SerializeField] private int _flowersPiecesToPlace;
+    [SerializeField] private int _fertilizerPiecesToPlace;
+    [SerializeField] private int _compactionPiecesToPlace;
 
     [Header("Placing")]
     [HideInInspector] public int PlacedPieces = 0;
@@ -179,6 +182,17 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Flowers()
     {
         _gcm.DisableListObjects();
+        bool enoughPieces;
+        int newPieceCount = 0;
+        if(_am.SupplyPile[0] >= _flowersPiecesToPlace)
+        {
+            enoughPieces = true;
+            newPieceCount = _flowersPiecesToPlace - _am.SupplyPile[0];
+        }
+        else
+        {
+            enoughPieces = false;
+        }
 
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
@@ -188,7 +202,36 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        yield return null;
+        if(enoughPieces)
+        {
+            while (PlacedPieces != _flowersPiecesToPlace)
+            {
+                yield return null;
+            }
+        }
+        else
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                yield return null;
+            }
+        }
+
+        if(enoughPieces)
+        {
+            if(_am.CurrentPlayer == 1)
+            {
+                _am.P1Score++;
+            }
+            else
+            {
+                _am.P2Score++;
+            }
+        }
+
+        PlacedPieces = 0;
+        _bm.DisableAllBoardInteractions();
+        _gcm.ToFinallyPhase();
     }
 
     /// <summary>
@@ -197,6 +240,14 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Garden()
     {
+        if(_am.CurrentPlayer == 1)
+        {
+
+        }
+        else
+        {
+
+        }
         yield return null;
     }
 
@@ -298,7 +349,57 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Fertilizer()
     {
-        yield return null;
+        _gcm.DisableListObjects();
+        bool enoughPieces;
+        int newPieceCount = 0;
+        if (_am.SupplyPile[1] >= _fertilizerPiecesToPlace)
+        {
+            enoughPieces = true;
+            newPieceCount = _fertilizerPiecesToPlace - _am.SupplyPile[1];
+        }
+        else
+        {
+            enoughPieces = false;
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            {
+                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+            }
+        }
+
+        if (enoughPieces)
+        {
+            while (PlacedPieces != _fertilizerPiecesToPlace)
+            {
+                yield return null;
+            }
+        }
+        else
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                yield return null;
+            }
+        }
+
+        if (enoughPieces)
+        {
+            if (_am.CurrentPlayer == 1)
+            {
+                _am.P1Score++;
+            }
+            else
+            {
+                _am.P2Score++;
+            }
+        }
+
+        PlacedPieces = 0;
+        _bm.DisableAllBoardInteractions();
+        _gcm.ToFinallyPhase();
     }
 
     /// <summary>
@@ -354,7 +455,57 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Compaction()
     {
-        yield return null;
+        _gcm.DisableListObjects();
+        bool enoughPieces;
+        int newPieceCount = 0;
+        if (_am.SupplyPile[2] >= _compactionPiecesToPlace)
+        {
+            enoughPieces = true;
+            newPieceCount = _compactionPiecesToPlace - _am.SupplyPile[2];
+        }
+        else
+        {
+            enoughPieces = false;
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+            {
+                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+            }
+        }
+
+        if (enoughPieces)
+        {
+            while (PlacedPieces != _compactionPiecesToPlace)
+            {
+                yield return null;
+            }
+        }
+        else
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                yield return null;
+            }
+        }
+
+        if (enoughPieces)
+        {
+            if (_am.CurrentPlayer == 1)
+            {
+                _am.P1Score++;
+            }
+            else
+            {
+                _am.P2Score++;
+            }
+        }
+
+        PlacedPieces = 0;
+        _bm.DisableAllBoardInteractions();
+        _gcm.ToFinallyPhase();
     }
 
     /// <summary>

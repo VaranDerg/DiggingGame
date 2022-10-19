@@ -41,7 +41,6 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public bool HasPawn;
     [HideInInspector] public GameObject CurrentPawn;
     [HideInInspector] public bool PieceIsSelected = true;
-    private string _pieceSuitGettingPlaced;
     private BoardManager _bm;
     private ActionManager _am;
     private CardManager _cm;
@@ -198,16 +197,19 @@ public class PieceController : MonoBehaviour
             switch (ObjState)
             {
                 case GameState.Two:
-                    SetPieceState(1);
+                    SetPieceState(6);
                     _am.PlaceTile(_am.CurrentPlayer, "Grass");
+                    _am.SupplyPile[0]--;
                     break;
                 case GameState.Three:
                     SetPieceState(2);
                     _am.PlaceTile(_am.CurrentPlayer, "Dirt");
+                    _am.SupplyPile[1]--;
                     break;
                 case GameState.Four:
                     SetPieceState(3);
                     _am.PlaceTile(_am.CurrentPlayer, "Stone");
+                    _am.SupplyPile[2]--;
                     break;
             }
         }
@@ -600,7 +602,7 @@ public class PieceController : MonoBehaviour
     /// <summary>
     /// Updates tiles for piece placement.
     /// </summary>
-    public void ShowHidePlaceable(bool show, string currentPlacement)
+    public void ShowHidePlaceable(bool show)
     {
         if (show)
         {
