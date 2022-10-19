@@ -231,10 +231,19 @@ public class OnlineCanvasManager : MonoBehaviourPun
         }
         else
         {
-            _opponentInfoZone.SetActive(true);
-            _showHideOpponentInfoText.text = "Hide Opponent Info";
-            _opponentViewShowing = true;
+            ShowOpponentInfo();
         }
+    }
+
+    /// <summary>
+    /// Shows the opponent info
+    /// </summary>
+    [PunRPC]
+    public void ShowOpponentInfo()
+    {
+        _opponentInfoZone.SetActive(true);
+        _showHideOpponentInfoText.text = "Hide Opponent Info";
+        _opponentViewShowing = true;
     }
 
     /// <summary>
@@ -403,6 +412,9 @@ public class OnlineCanvasManager : MonoBehaviourPun
         UpdateTextBothPlayers();
     }
 
+    /// <summary>
+    /// Edit: Andrea SD: Modified for online play
+    /// </summary>
     public void EndTurn()
     {
         DisableListObjects();
@@ -423,8 +435,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _factory.sprite = _moleFactory;
             _burrow.sprite = _moleBurrow;
             _mine.sprite = _moleMine;
-        }
-
+        }     
         UpdateTextBothPlayers();
+        _am.EndTurn(_am.CurrentPlayer);
     }  
 }

@@ -75,6 +75,13 @@ public class OnlineActionManager : MonoBehaviourPun
         PrepareStartingValues();
     }
 
+    private void Start()
+    {
+        // Board is disbled for player 2 at the start and enabled for player 1
+        DisableBoard();
+        photonView.RPC("EnableBoard", RpcTarget.MasterClient);     
+    }
+
     /// <summary>
     /// Sets up every internal variable with the serialized ones.
     /// </summary>
@@ -450,6 +457,10 @@ public class OnlineActionManager : MonoBehaviourPun
         }
     }
 
+    /// <summary>
+    /// Edit: Andrea SD, modified for online play
+    /// </summary>
+    /// <param name="player"></param>
     public void EndTurn(int player)
     {
         if (player == 1)
@@ -462,7 +473,6 @@ public class OnlineActionManager : MonoBehaviourPun
 
             CurrentTurnPhase = 0;
             photonView.RPC("ChangeTurn", RpcTarget.All, 2);     //ASD
-            DisableBoard();
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
@@ -477,29 +487,58 @@ public class OnlineActionManager : MonoBehaviourPun
             CurrentTurnPhase = 0;
             photonView.RPC("ChangeTurn", RpcTarget.All, 1);     //ASD
             CurrentRound++;
-            _gcm.StartTurnButton.SetActive(true);
+            
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
 
+        //Enables the start button for the other player then disables your own board 
+        DisableBoard();
     }
 
     [PunRPC]
+    public void EnableStartButton()
+    {
+        _gcm.StartTurnButton.SetActive(true);
+    }
+
+    public void DisableStartButton()
+    {
+        _gcm.StartTurnButton.SetActive(false);
+    }
+    /// <summary>
+    /// Changes the turn to the next player for online play
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="nextTurn"></param>
+    [PunRPC]
     private void ChangeTurn(int nextTurn)
     {
-        CurrentPlayer = nextTurn;
-        
+        CurrentPlayer = nextTurn;     
     }
 
     /// <summary>
     /// Disables all interactions by the player. This occurs when it is not
-    /// their turn.
+    /// their turn. Enables the board for the other player.
     /// Author: Andrea SD
     /// </summary>
-    [PunRPC]
     private void DisableBoard()
-    {
+    { 
+        _gcm.ShowOpponentInfo();
+        DisableStartButton();
         EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         eventSystem.enabled = false;
+        photonView.RPC("EnableBoard", RpcTarget.Others);
     }
 
+    /// <summary>
+    /// Enables all interactions by the playyer. This occurs when their turn is
+    /// resumed.
+    /// </summary>
+    [PunRPC]
+    private void EnableBoard()
+    {
+        EnableStartButton();
+        EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+        eventSystem.enabled = true;
+    }
 }
