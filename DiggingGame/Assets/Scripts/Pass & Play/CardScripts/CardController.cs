@@ -184,19 +184,19 @@ public class CardController : MonoBehaviour
 
                 if(cv.ThisCard.GrassSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName);
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody);
                 }
                 else if(cv.ThisCard.DirtSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName);
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody);
                 }
                 else if(cv.ThisCard.StoneSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName);
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody);
                 }
                 else if(cv.ThisCard.GoldSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName);
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody);
                 }
                 _am.P1Score++;
                 _cm.AllowedActivations--;
@@ -222,19 +222,19 @@ public class CardController : MonoBehaviour
 
                 if (cv.ThisCard.GrassSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName);
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody);
                 }
                 else if (cv.ThisCard.DirtSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName);
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody);
                 }
                 else if (cv.ThisCard.StoneSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName);
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody);
                 }
                 else if (cv.ThisCard.GoldSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName);
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody);
                 }
                 _am.P2Score++;
                 _cm.AllowedActivations--;

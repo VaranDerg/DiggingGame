@@ -49,6 +49,7 @@ public class PieceController : MonoBehaviour
 
     [Header("Card Activation Stuff")]
     [HideInInspector] public bool FromActivatedCard = false;
+    [HideInInspector] public bool MovingForFree = false, JustMovedForFree = false;
 
     private void Awake()
     {
@@ -287,28 +288,31 @@ public class PieceController : MonoBehaviour
                     pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
                 }
 
-                if (ObjState == GameState.One)
+                if(!MovingForFree)
                 {
-                    _cm.PrepareCardSelection(1, "Grass", false);
-                }
-                else if (ObjState == GameState.Two)
-                {
-                    _cm.PrepareCardSelection(1, "Dirt", false);
-                }
-                else if (ObjState == GameState.Three || ObjState == GameState.Five)
-                {
-                    _cm.PrepareCardSelection(1, "Stone", false);
-                }
-                else if (ObjState == GameState.Four)
-                {
-                    _cm.PrepareCardSelection(1, "Any", false);
-                }
+                    if (ObjState == GameState.One)
+                    {
+                        _cm.PrepareCardSelection(1, "Grass", false);
+                    }
+                    else if (ObjState == GameState.Two)
+                    {
+                        _cm.PrepareCardSelection(1, "Dirt", false);
+                    }
+                    else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                    {
+                        _cm.PrepareCardSelection(1, "Stone", false);
+                    }
+                    else if (ObjState == GameState.Four)
+                    {
+                        _cm.PrepareCardSelection(1, "Any", false);
+                    }
 
-                while (!_cm.CheckCardSelection())
-                {
-                    yield return null;
+                    while (!_cm.CheckCardSelection())
+                    {
+                        yield return null;
+                    }
+                    _cm. PrepareCardSelection(0, "", true);
                 }
-                _cm. PrepareCardSelection(0, "", true);
             }
 
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
@@ -317,7 +321,67 @@ public class PieceController : MonoBehaviour
             HasPawn = true;
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
 
-            if(_am.CurrentTurnPhase == 1)
+            //Start of Morning Jog code
+            bool hasMorningJog = false;
+            foreach(GameObject pCard in FindObjectOfType<PersistentCardManager>().P1PersistentCards)
+            {
+                if(hasMorningJog)
+                {
+                    continue;
+                }
+
+                if(pCard.name == "Morning Jog")
+                {
+                    hasMorningJog = true;
+                }
+                else
+                {
+                    hasMorningJog = false;
+                }
+            }
+            foreach (GameObject pCard in FindObjectOfType<PersistentCardManager>().P2PersistentCards)
+            {
+                if (hasMorningJog)
+                {
+                    continue;
+                }
+
+                if (pCard.name == "Morning Jog")
+                {
+                    hasMorningJog = true;
+                }
+                else
+                {
+                    hasMorningJog = false;
+                }
+            }
+
+            if (CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().ObjState == GameState.One || CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().ObjState == GameState.Six)
+            {
+                foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("PlayerPawn"))
+                {
+                    if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+                    {
+                        pawn.GetComponent<PlayerPawn>().MorningJogMove = true;
+                    }
+                }
+
+                if(MovingForFree && !JustMovedForFree)
+                {
+                    _am.StartMove(_am.CurrentPlayer);
+                    _gcm.UpdateCurrentActionText("Take a Move with Morning Jog.");
+                    JustMovedForFree = true;
+                    yield break;
+                }
+                else if(MovingForFree && JustMovedForFree)
+                {
+                    JustMovedForFree = false;
+                    MovingForFree = false;
+                }
+            }
+            //End of Morning Jog code
+
+            if (_am.CurrentTurnPhase == 1)
             {
                 _gcm.ToThenPhase();
             }
@@ -423,7 +487,7 @@ public class PieceController : MonoBehaviour
             _am.P2BuiltBuildings[buildingIndex]++;
         }
 
-        InstantitateBuildingAndPawn(buildingName);
+        InstantitateBuildingAndPawn(buildingName, buildingIndex);
 
         CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
@@ -434,7 +498,7 @@ public class PieceController : MonoBehaviour
     /// Places a building. Returns false and removes it if it's adjacent to another building. Also will spawn another Pawn if 3rd building is placed.
     /// </summary>
     /// <param name="building">"Factory" "Burrow" or "Mine"</param>
-    private bool InstantitateBuildingAndPawn(string buildingName)
+    private bool InstantitateBuildingAndPawn(string buildingName, int buildingArrayNum)
     {
         GameObject building = null;
         if(_am.CurrentPlayer == 1)
@@ -480,7 +544,28 @@ public class PieceController : MonoBehaviour
         if(canPlaceOnTile)
         {
             bool spawnPawn = false;
-            Instantiate(building, _buildingSlot);
+            GameObject thisBuilding = Instantiate(building, _buildingSlot);
+            if(buildingArrayNum == 1)
+            {
+                thisBuilding.GetComponent<Building>().BuildingType = "Factory";
+            }
+            else if(buildingArrayNum == 2)
+            {
+                thisBuilding.GetComponent<Building>().BuildingType = "Burrow";
+            }
+            else if(buildingArrayNum == 3)
+            {
+                thisBuilding.GetComponent<Building>().BuildingType = "GMine";
+            }
+            else if(buildingArrayNum == 4)
+            {
+                thisBuilding.GetComponent<Building>().BuildingType = "DMine";
+            }
+            else if(buildingArrayNum == 5)
+            {
+                thisBuilding.GetComponent<Building>().BuildingType = "SMine";
+            }
+            thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;
 
             if (_am.CurrentPlayer == 1)
             {

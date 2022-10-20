@@ -52,7 +52,7 @@ public class CardEffects : MonoBehaviour
     /// </summary>
     /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
     /// <param name="effectName">Name of the effect, matches coroutine. Capitalize each letter, spaces between words.</param>
-    public IEnumerator ActivateCardEffect(string suit, string effectName)
+    public IEnumerator ActivateCardEffect(string suit, string effectName, GameObject pCardObject)
     {
         ShowActivationText(suit, effectName);
 
@@ -71,10 +71,10 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Lawnmower());
                 break;
             case "Morning Jog":
-                StartCoroutine(MorningJog());
+                StartCoroutine(MorningJog(pCardObject));
                 break;
             case "Planned Profit":
-                StartCoroutine(PlannedProfit());
+                StartCoroutine(PlannedProfit(pCardObject));
                 break;
             case "Thief":
                 StartCoroutine(Thief());
@@ -83,10 +83,10 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Walkway());
                 break;
             case "Weed Whacker":
-                StartCoroutine(WeedWhacker());
+                StartCoroutine(WeedWhacker(pCardObject));
                 break;
             case "Dam":
-                StartCoroutine(Dam());
+                StartCoroutine(Dam(pCardObject));
                 break;
             case "Dirty Thief":
                 StartCoroutine(DirtyThief());
@@ -104,10 +104,10 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Mudslide());
                 break;
             case "Secret Tunnels":
-                StartCoroutine(SecretTunnels());
+                StartCoroutine(SecretTunnels(pCardObject));
                 break;
             case "Shovel":
-                StartCoroutine(Shovel());
+                StartCoroutine(Shovel(pCardObject));
                 break;
             case "Thunderstorm":
                 StartCoroutine(Thunderstorm());
@@ -122,10 +122,10 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Erosion());
                 break;
             case "Geologist":
-                StartCoroutine(Geologist());
+                StartCoroutine(Geologist(pCardObject));
                 break;
             case "Master Builder":
-                StartCoroutine(MasterBuilder());
+                StartCoroutine(MasterBuilder(pCardObject));
                 break;
             case "Metal Detector":
                 StartCoroutine(MetalDetector());
@@ -152,7 +152,7 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Regeneration());
                 break;
             case "Retribution":
-                StartCoroutine(Retribution());
+                StartCoroutine(Retribution(pCardObject));
                 break;
             case "Teleportation":
                 StartCoroutine(Teleportation());
@@ -401,11 +401,13 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Morning Jog. 
+    /// (P) Card effect Coroutine for Morning Jog. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator MorningJog()
+    public IEnumerator MorningJog(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();
@@ -425,11 +427,13 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Planned Profit. 
+    /// (P) Card effect Coroutine for Planned Profit. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator PlannedProfit()
+    public IEnumerator PlannedProfit(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();
@@ -461,11 +465,13 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Weed Whacker. 
+    /// (P) Card effect Coroutine for Weed Whacker. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator WeedWhacker()
+    public IEnumerator WeedWhacker(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();
@@ -475,11 +481,13 @@ public class CardEffects : MonoBehaviour
     //Dirt Cards
 
     /// <summary>
-    /// Card effect Coroutine for Dam. 
+    /// (P) Card effect Coroutine for Dam. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator Dam()
+    public IEnumerator Dam(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();
@@ -639,11 +647,13 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Secret Tunnels. 
+    /// (P) Card effect Coroutine for Secret Tunnels. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator SecretTunnels()
+    public IEnumerator SecretTunnels(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();
@@ -651,11 +661,13 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Shovel. 
+    /// (P) Card effect Coroutine for Shovel. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator Shovel()
+    public IEnumerator Shovel(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();
@@ -805,11 +817,13 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Geologist. 
+    /// (P) Card effect Coroutine for Geologist. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator Geologist()
+    public IEnumerator Geologist(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();
@@ -817,11 +831,13 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Master Builder. 
+    /// (P) Card effect Coroutine for Master Builder. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator MasterBuilder()
+    public IEnumerator MasterBuilder(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();
@@ -927,11 +943,13 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Retribution. 
+    /// (P) Card effect Coroutine for Retribution. 
     /// </summary>
     /// <returns>Wait & Hold time</returns>
-    public IEnumerator Retribution()
+    public IEnumerator Retribution(GameObject cardBody)
     {
+        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();

@@ -31,6 +31,7 @@ public class PlayerPawn : MonoBehaviour
     [Header("Pawn Status for Other Scripts")]
     [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false, IsPlacing;
     [HideInInspector] public string BuildingToBuild = "";
+    [HideInInspector] public bool MorningJogMove;
 
     /// <summary>
     /// Adds every board piece to a list.
@@ -102,29 +103,60 @@ public class PlayerPawn : MonoBehaviour
     }
 
     /// <summary>
-    /// Preps pawn for moving.
+    /// Preps pawn for moving. Only selects Grass Pieces if moving with morning jog.
     /// </summary>
     private void PreparePawnMovement()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            if(!MorningJogMove)
             {
-                if(piece.GetComponent<PieceController>().HasPawn)
+                foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
                 {
-                    continue;
+                    if(piece.GetComponent<PieceController>().HasPawn)
+                    {
+                        continue;
+                    }
+
+                    piece.GetComponent<PieceController>().ShowHideMovable(true);
+                    _shownPieces.Add(piece);
                 }
 
-                piece.GetComponent<PieceController>().ShowHideMovable(true);
-                _shownPieces.Add(piece);
+                if(_shownPieces.Count > 0)
+                {
+                    foreach(GameObject piece in _shownPieces)
+                    {
+                        piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    }
+                }
             }
-
-            if(_shownPieces.Count > 0)
+            else
             {
-                foreach(GameObject piece in _shownPieces)
+                foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
                 {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    if (piece.GetComponent<PieceController>().HasPawn)
+                    {
+                        continue;
+                    }
+
+                    if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.One && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Six)
+                    {
+                        continue;
+                    }
+
+                    piece.GetComponent<PieceController>().ShowHideMovable(true);
+                    _shownPieces.Add(piece);
                 }
+
+                if (_shownPieces.Count > 0)
+                {
+                    foreach (GameObject piece in _shownPieces)
+                    {
+                        piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    }
+                }
+
+                MorningJogMove = false;
             }
 
             _bm.BoardColliderSwitch(true);

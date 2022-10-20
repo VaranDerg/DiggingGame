@@ -13,10 +13,24 @@ using UnityEngine;
 [System.Serializable]
 public class Building : MonoBehaviour
 {
-    [HideInInspector] public bool Damaged;
+    public int BuildingHealth = 2;
+    [HideInInspector] public int PlayerOwning = 0;
+    [HideInInspector] public string BuildingType = "";
 
     private List<GameObject> _boardPieces = new List<GameObject>();
+    private ActionManager _am;
 
+    /// <summary>
+    /// Assigns partner scripts.
+    /// </summary>
+    private void Awake()
+    {
+        _am = FindObjectOfType<ActionManager>();
+    }
+
+    /// <summary>
+    /// Calls FindBoardPieces.
+    /// </summary>
     private void Start()
     {
         FindBoardPieces();
@@ -33,8 +47,66 @@ public class Building : MonoBehaviour
         }
     }
 
-    public virtual void DamageBuiliding()
+    /// <summary>
+    /// Damages a building.
+    /// </summary>
+    /// <param name="damage">The amount of damage (1 or 2, for now)</param>
+    public void DamageBuiliding(int damage)
     {
+        BuildingHealth -= damage;
 
+        if(BuildingHealth <= 0)
+        {
+            Debug.Log("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
+
+            if(_am.CurrentPlayer == 1)
+            {
+                if (BuildingType == "Factory")
+                {
+                    _am.P1BuiltBuildings[0]--;
+                }
+                else if (BuildingType == "Burrow")
+                {
+                    _am.P1BuiltBuildings[1]--;
+                }
+                else if (BuildingType == "GMine")
+                {
+                    _am.P1BuiltBuildings[2]--;
+                }
+                else if (BuildingType == "DMine")
+                {
+                    _am.P1BuiltBuildings[3]--;
+                }
+                else if (BuildingType == "SMine")
+                {
+                    _am.P1BuiltBuildings[4]--;
+                }
+            }
+            else
+            {
+                if (BuildingType == "Factory")
+                {
+                    _am.P2BuiltBuildings[0]--;
+                }
+                else if (BuildingType == "Burrow")
+                {
+                    _am.P2BuiltBuildings[1]--;
+                }
+                else if (BuildingType == "GMine")
+                {
+                    _am.P2BuiltBuildings[2]--;
+                }
+                else if (BuildingType == "DMine")
+                {
+                    _am.P2BuiltBuildings[3]--;
+                }
+                else if (BuildingType == "SMine")
+                {
+                    _am.P2BuiltBuildings[4]--;
+                }
+            }
+
+            Destroy(gameObject);
+        }
     }
 }
