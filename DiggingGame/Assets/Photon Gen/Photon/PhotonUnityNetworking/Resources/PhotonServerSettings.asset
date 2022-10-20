@@ -52,6 +52,9 @@ MonoBehaviour:
   - EnableStartButton
   - ChangeOpponentTextOne
   - ChangeOpponentTextTwo
+  - UpdateCollected
+  - EmptyCollection
+  - UpdateRefined
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

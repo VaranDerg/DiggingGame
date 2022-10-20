@@ -10,6 +10,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+//using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -204,7 +205,9 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Collects a tile and adds it to one of the "collected" variables. 
+    /// Collects a tile and adds it to one of the "collected" variables.
+    /// 
+    /// Author: Andrea SD
     /// </summary>
     /// <param name="type">"Grass" "Dirt" "Stone" or "Gold"</param>
     public void CollectTile(int player, string type)
@@ -214,22 +217,22 @@ public class OnlineActionManager : MonoBehaviourPun
             switch (type)
             {
                 case "Grass":
-                    P1CollectedPile[0]++;
+                    photonView.RPC("UpdateCollected", RpcTarget.All, 1, 0, 1);
                     _gcm.UpdateTextBothPlayers();
                     _gcm.Back();
                     break;
                 case "Dirt":
-                    P1CollectedPile[1]++;
+                    photonView.RPC("UpdateCollected", RpcTarget.All, 1, 1, 1);
                     _gcm.UpdateTextBothPlayers();
                     _gcm.Back();
                     break;
                 case "Stone":
-                    P1CollectedPile[2]++;
+                    photonView.RPC("UpdateCollected", RpcTarget.All, 1, 2, 1);
                     _gcm.UpdateTextBothPlayers();
                     _gcm.Back();
                     break;
                 case "Gold":
-                    P1CollectedPile[3]++;
+                    photonView.RPC("UpdateCollected", RpcTarget.All, 1, 3, 1);
                     _gcm.UpdateTextBothPlayers();
                     _gcm.Back();
                     break;
@@ -240,22 +243,22 @@ public class OnlineActionManager : MonoBehaviourPun
             switch (type)
             {
                 case "Grass":
-                    P2CollectedPile[0]++;
+                    photonView.RPC("UpdateCollected", RpcTarget.All, 2, 0, 1);
                     _gcm.UpdateTextBothPlayers();
                     _gcm.Back();
                     break;
                 case "Dirt":
-                    P2CollectedPile[1]++;
+                    photonView.RPC("UpdateCollected", RpcTarget.All, 2, 1, 1);
                     _gcm.UpdateTextBothPlayers();
                     _gcm.Back();
                     break;
                 case "Stone":
-                    P2CollectedPile[2]++;
+                    photonView.RPC("UpdateCollected", RpcTarget.All, 2, 2, 1);
                     _gcm.UpdateTextBothPlayers();
                     _gcm.Back();
                     break;
                 case "Gold":
-                    P2CollectedPile[3]++;
+                    photonView.RPC("UpdateCollected", RpcTarget.All, 2, 3, 1);
                     _gcm.UpdateTextBothPlayers();
                     _gcm.Back();
                     break;
@@ -265,32 +268,28 @@ public class OnlineActionManager : MonoBehaviourPun
 
     /// <summary>
     /// Moves tiles from the Collected pile to the Refined pile. 
+    /// 
+    /// Edited: Andrea SD - Modified for online usage.
     /// </summary>
     public void RefineTiles(int player)
     {
         if (player == 1)
         {
-            P1RefinedPile[0] += P1CollectedPile[0];
-            P1RefinedPile[1] += P1CollectedPile[1];
-            P1RefinedPile[2] += P1CollectedPile[2];
-            P1RefinedPile[3] += P1CollectedPile[3];
+            photonView.RPC("UpdateRefined", RpcTarget.All, 1, 0, P1CollectedPile[0]);
+            photonView.RPC("UpdateRefined", RpcTarget.All, 1, 1, P1CollectedPile[1]);
+            photonView.RPC("UpdateRefined", RpcTarget.All, 1, 2, P1CollectedPile[2]);
+            photonView.RPC("UpdateRefined", RpcTarget.All, 1, 3, P1CollectedPile[3]);
 
-            P1CollectedPile[0] = 0;
-            P1CollectedPile[1] = 0;
-            P1CollectedPile[2] = 0;
-            P1CollectedPile[3] = 0;
+            photonView.RPC("EmptyCollection", RpcTarget.All, 1);
         }
         else if (player == 2)
         {
-            P2RefinedPile[0] += P2CollectedPile[0];
-            P2RefinedPile[1] += P2CollectedPile[1];
-            P2RefinedPile[2] += P2CollectedPile[2];
-            P2RefinedPile[3] += P2CollectedPile[3];
+            photonView.RPC("UpdateRefined", RpcTarget.All, 2, 0, P2CollectedPile[0]);
+            photonView.RPC("UpdateRefined", RpcTarget.All, 2, 1, P2CollectedPile[1]);
+            photonView.RPC("UpdateRefined", RpcTarget.All, 2, 2, P2CollectedPile[2]);
+            photonView.RPC("UpdateRefined", RpcTarget.All, 2, 3, P2CollectedPile[3]);
 
-            P2CollectedPile[0] = 0;
-            P2CollectedPile[1] = 0;
-            P2CollectedPile[2] = 0;
-            P2CollectedPile[3] = 0;
+            photonView.RPC("EmptyCollection", RpcTarget.All, 2);
         }
     }
 
@@ -544,5 +543,77 @@ public class OnlineActionManager : MonoBehaviourPun
         EnableStartButton();
         EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         eventSystem.enabled = true;
+    }
+
+    /// <summary>
+    /// Updates a material in Collected Pieces
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player who's pieces are updated </param>
+    /// <param name="material"> which material is updated </param>
+    /// <param name="amount"> how much the # pieces changes by </param>
+    [PunRPC]
+    private void UpdateCollected(int player, int material, int amount)
+    {
+        switch(player)
+        {
+            case 1:
+                P1CollectedPile[material] += amount;
+                break;
+            case 2:
+                P2CollectedPile[material] += amount;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Updates a material in Refined Pieces
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player who's pieces are updated </param>
+    /// <param name="material"> which material is updated </param>
+    /// <param name="amount"> how much the # pieces changes by </param>
+    [PunRPC]
+    private void UpdateRefined(int player, int material, int amount)
+    {
+        switch (player)
+        {
+            case 1:
+                P1RefinedPile[material] += amount;
+                break;
+            case 2:
+                P2RefinedPile[material] += amount;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Sets all collected pieces value to 0
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player who's collection is emptied </param>
+    [PunRPC]
+    private void EmptyCollection(int player)
+    {
+        switch(player)
+        {
+            case 1:
+                P1CollectedPile.Initialize();
+                /*P1CollectedPile[0] = 0;
+                P1CollectedPile[1] = 0;
+                P1CollectedPile[2] = 0;
+                P1CollectedPile[3] = 0;*/
+                break;
+            case 2:
+                P2CollectedPile.Initialize();
+                /*P2CollectedPile[0] = 0;
+                P2CollectedPile[1] = 0;
+                P2CollectedPile[2] = 0;
+                P2CollectedPile[3] = 0;*/
+                break;
+        }    
     }
 }
