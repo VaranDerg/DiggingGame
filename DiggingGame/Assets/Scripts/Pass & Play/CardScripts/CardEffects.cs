@@ -30,6 +30,9 @@ public class CardEffects : MonoBehaviour
     [HideInInspector] public int PlacedPieces = 0;
     [HideInInspector] public int DugPieces = 0;
 
+    [Header("Damaging Buildings")]
+    private int[] _damageBuildingDie = new int[4];
+
     [Header("Other")]
     private GameCanvasManagerNew _gcm;
     private CardManager _cm;
@@ -420,6 +423,17 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Overgrowth()
     {
+        _gcm.DisableListObjects();
+        _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
+
+        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if(building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+
+            }
+        }
+
         yield return null;
 
         _bm.DisableAllBoardInteractions();

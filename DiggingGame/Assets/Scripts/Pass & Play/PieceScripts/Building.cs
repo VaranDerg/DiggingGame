@@ -13,9 +13,14 @@ using UnityEngine;
 [System.Serializable]
 public class Building : MonoBehaviour
 {
+    [Header("Values")]
+    [SerializeField] private Color _damagedColor;
+
     public int BuildingHealth = 2;
     [HideInInspector] public int PlayerOwning = 0;
     [HideInInspector] public string BuildingType = "";
+    [HideInInspector] public bool CanBeDamaged;
+    [HideInInspector] public int DamageTaken;
 
     private List<GameObject> _boardPieces = new List<GameObject>();
     private ActionManager _am;
@@ -44,6 +49,17 @@ public class Building : MonoBehaviour
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             _boardPieces.Add(piece);
+        }
+    }
+
+    private void OnMouseOver()
+    {
+        if(CanBeDamaged)
+        {
+            if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                DamageBuiliding(DamageTaken);
+            }
         }
     }
 

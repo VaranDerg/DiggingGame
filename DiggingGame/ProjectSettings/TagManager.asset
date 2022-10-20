@@ -10,6 +10,7 @@ TagManager:
   - BoardPiece
   - Pawn
   - GoldCard
+  - Building
   layers:
   - Default
   - TransparentFX
