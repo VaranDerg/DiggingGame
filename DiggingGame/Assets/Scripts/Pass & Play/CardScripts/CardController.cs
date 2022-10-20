@@ -40,6 +40,10 @@ public class CardController : MonoBehaviour
     [HideInInspector] public bool CanBeActivated;
     [HideInInspector] public bool Selected;
 
+    [Header("Activation Variables")]
+    [HideInInspector] public bool MadePersistentP1;
+    [HideInInspector] public bool MadePersistentP2;
+
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
     /// </summary>
@@ -58,6 +62,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        if(MadePersistentP1)
+        {
+            return;
+        }
+
         if(Selected)
         {
             transform.position = _selectedPos.position;
@@ -75,6 +84,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseEnter()
     {
+        if(MadePersistentP1)
+        {
+            return;
+        }
+
         NextPos = _mouseOverPos.position;
     }
 
@@ -83,6 +97,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
+        if(MadePersistentP1)
+        {
+            return;
+        }
+
         NextPos = _defaultPos.position;
         if(_currentlyMaximized)
         {
@@ -94,6 +113,11 @@ public class CardController : MonoBehaviour
     private void OnMouseOver()
     {
         MaximizeCard(_cardVisualToMaximize);
+
+        if(MadePersistentP1)
+        {
+            return;
+        }
 
         if(CanBeDiscarded)
         {
@@ -227,6 +251,11 @@ public class CardController : MonoBehaviour
 
     public void ToDiscard()
     {
+        if(MadePersistentP1 || MadePersistentP2)
+        {
+            return;
+        }
+
         if(HeldByPlayer == 1)
         {
             if (_cardBody.CompareTag("Card"))

@@ -22,7 +22,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     [SerializeField] private GameObject _finallyZone;
     [SerializeField] private GameObject _thenActions;
     [SerializeField] private GameObject _thenBuildMenu;
-    [SerializeField] private GameObject _thenMDRMenu;
+    [SerializeField] private GameObject _backButton;
     [SerializeField] private GameObject _endPhaseButton;
     [SerializeField] private TextMeshProUGUI _currentPlayerScore;
     [SerializeField] private TextMeshProUGUI[] _currentPlayerCollectedPieces = new TextMeshProUGUI[4];
@@ -66,7 +66,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         _allObjects.Add(_finallyZone);
         _allObjects.Add(_thenActions);
         _allObjects.Add(_thenBuildMenu);
-        _allObjects.Add(_thenMDRMenu);
+        _allObjects.Add(_backButton);
         _allObjects.Add(_endPhaseButton);
     }
 
@@ -279,7 +279,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
         _am.StartMove(_am.CurrentPlayer);
         _thenZone.SetActive(true);
-        _thenMDRMenu.SetActive(true);
+        _backButton.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to Move, then a Piece to move onto.");
@@ -295,7 +295,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
         _am.StartDig(_am.CurrentPlayer);
         _thenZone.SetActive(true);
-        _thenMDRMenu.SetActive(true);
+        _backButton.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to Dig with, then a Piece to Dig.");
@@ -311,6 +311,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
         _thenZone.SetActive(true);
         _thenBuildMenu.SetActive(true);
+        _backButton.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Building to Build.");
@@ -332,7 +333,11 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// <param name="buildingName">"Factory" "Burrow" or "Mine</param>
     public void Build(string buildingName)
     {
+        DisableListObjects();
         _bm.DisableAllBoardInteractions();
+
+        _thenZone.SetActive(true);
+        _backButton.SetActive(true);
         _am.StartBuild(_am.CurrentPlayer, buildingName);
 
         UpdateCurrentActionText("Select a Pawn, then Piece for your " + buildingName + ".");
