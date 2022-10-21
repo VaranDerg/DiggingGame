@@ -21,9 +21,11 @@ public class Building : MonoBehaviour
     [HideInInspector] public string BuildingType = "";
     [HideInInspector] public bool CanBeDamaged;
     [HideInInspector] public int DamageTaken;
+    [HideInInspector] public string SuitOfPiece;
 
     private List<GameObject> _boardPieces = new List<GameObject>();
     private ActionManager _am;
+    private Animator _anims;
 
     /// <summary>
     /// Assigns partner scripts.
@@ -31,6 +33,7 @@ public class Building : MonoBehaviour
     private void Awake()
     {
         _am = FindObjectOfType<ActionManager>();
+        _anims = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -58,7 +61,7 @@ public class Building : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
-                DamageBuiliding(DamageTaken);
+                FindObjectOfType<CardEffects>().SelectedBuilding = this;
             }
         }
     }
@@ -122,7 +125,13 @@ public class Building : MonoBehaviour
                 }
             }
 
+            _anims.Play("TempPawnDefault");
             Destroy(gameObject);
+        }
+        else if(BuildingHealth == 1)
+        {
+            GetComponent<SpriteRenderer>().color = _damagedColor;
+            _anims.Play("TempPawnDefault");
         }
     }
 }

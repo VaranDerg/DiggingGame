@@ -31,7 +31,14 @@ public class CardEffects : MonoBehaviour
     [HideInInspector] public int DugPieces = 0;
 
     [Header("Damaging Buildings")]
-    private int[] _damageBuildingDie = new int[4];
+    [SerializeField] private int _overgrowthDamages;
+    [SerializeField] private int _floodDamages;
+    [SerializeField] private int _earthquakeDamages;
+    [SerializeField] private int _thunderstormDamages;
+    [SerializeField] private int _tornadoDamages;
+    private int _damageBuildingDieSides = 4;
+    [HideInInspector] public Building SelectedBuilding;
+    [HideInInspector] public int AllowedDamages;
 
     [Header("Other")]
     private GameCanvasManagerNew _gcm;
@@ -196,6 +203,31 @@ public class CardEffects : MonoBehaviour
         }
 
         return pawns;
+    }
+
+    /// <summary>
+    /// Damages a building based on a dice roll.
+    /// </summary>
+    /// <returns>A number from 0 to 2</returns>
+    private int CalculateBuildingDamage()
+    {
+        int sideOfDie = Random.Range(0, _damageBuildingDieSides + 1);
+        int damageToTake = 0;
+
+        if(sideOfDie != 0 && sideOfDie != _damageBuildingDieSides)
+        {
+            damageToTake = 1;
+        }
+        else if(sideOfDie == _damageBuildingDieSides)
+        {
+            damageToTake = 2;
+        }
+        else
+        {
+            damageToTake = 0;
+        }
+
+        return damageToTake;
     }
 
     //Grass Cards
@@ -426,15 +458,40 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
 
-        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
-        {
-            if(building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
-            {
+        AllowedDamages = _overgrowthDamages;
 
+        int buildingCount = 0;
+        for(int i = AllowedDamages; i != 0; i--)
+        {
+            foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+            {
+                if (building.GetComponent<Building>().PlayerOwning != _am.CurrentPlayer)
+                {
+                    if (building.GetComponent<Building>().SuitOfPiece == "Grass")
+                    {
+                        building.GetComponent<Animator>().Play("TempPawnBlink");
+                        building.GetComponent<Building>().CanBeDamaged = true;
+                        buildingCount++;
+                    }
+                }
+            }
+
+            if(buildingCount != 0)
+            {
+                while (SelectedBuilding == null)
+                {
+                    yield return null;
+                }
+
+                SelectedBuilding.DamageBuiliding(CalculateBuildingDamage());
+
+                SelectedBuilding = null;
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("Opponent has no buildings on Grass!");
             }
         }
-
-        yield return null;
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
@@ -642,7 +699,45 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Flood()
     {
-        yield return null;
+        //Add discard persistent card part
+
+        _gcm.DisableListObjects();
+        _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
+
+        AllowedDamages = _floodDamages;
+
+        int buildingCount = 0;
+        for (int i = AllowedDamages; i != 0; i--)
+        {
+            foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+            {
+                if (building.GetComponent<Building>().PlayerOwning != _am.CurrentPlayer)
+                {
+                    if (building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                    {
+                        building.GetComponent<Animator>().Play("TempPawnBlink");
+                        building.GetComponent<Building>().CanBeDamaged = true;
+                        buildingCount++;
+                    }
+                }
+            }
+
+            if (buildingCount != 0)
+            {
+                while (SelectedBuilding == null)
+                {
+                    yield return null;
+                }
+
+                SelectedBuilding.DamageBuiliding(CalculateBuildingDamage());
+
+                SelectedBuilding = null;
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("Opponent has no buildings on Dirt!");
+            }
+        }
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
@@ -694,7 +789,45 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Thunderstorm()
     {
-        yield return null;
+        //Add part where you damage your own building.
+
+        _gcm.DisableListObjects();
+        _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
+
+        AllowedDamages = _thunderstormDamages;
+
+        int buildingCount = 0;
+        for (int i = AllowedDamages; i != 0; i--)
+        {
+            foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+            {
+                if (building.GetComponent<Building>().PlayerOwning != _am.CurrentPlayer)
+                {
+                    if (building.GetComponent<Building>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                    {
+                        building.GetComponent<Animator>().Play("TempPawnBlink");
+                        building.GetComponent<Building>().CanBeDamaged = true;
+                        buildingCount++;
+                    }
+                }
+            }
+
+            if (buildingCount != 0)
+            {
+                while (SelectedBuilding == null)
+                {
+                    yield return null;
+                }
+
+                SelectedBuilding.DamageBuiliding(CalculateBuildingDamage());
+
+                SelectedBuilding = null;
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("Opponent has no buildings on Grass or Dirt!");
+            }
+        }
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
