@@ -9,11 +9,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CardEffects : MonoBehaviour
 {
     [Header("General Values")]
     [SerializeField] private float activateAnimWaitTime;
+
+    [Header("UI References")]
+    [SerializeField] private GameObject _morningJogUI;
+    [SerializeField] private GameObject _thiefUI;
+    [SerializeField] private GameObject _grassThiefButton, _dirtThiefButton, _stoneThiefButton, _goldThiefButton;
+    [SerializeField] private TextMeshProUGUI _remainingStealsText;
 
     [Header("Placement Effects")]
     [SerializeField] private int _gardenPiecesToPlace;
@@ -38,13 +45,24 @@ public class CardEffects : MonoBehaviour
     [SerializeField] private int _tornadoDamages;
     private int _damageBuildingDieSides = 4;
     [HideInInspector] public Building SelectedBuilding;
+    [HideInInspector] public PieceController SelectedPiece;
     [HideInInspector] public int AllowedDamages;
+
+    [Header("Planned Profit")]
+    public int PiecesToCollect;
+
+    [Header("Thief Cards")]
+    public int ThiefPiecesToTake;
+    public int DirtyThiefPiecesToTake;
+    public int MasterThiefPiecesToTake;
+    private int _remainingPiecesToSteal;
 
     [Header("Other")]
     private GameCanvasManagerNew _gcm;
     private CardManager _cm;
     private BoardManager _bm;
     private ActionManager _am;
+    private PersistentCardManager _pcm;
 
     /// <summary>
     /// Assigns partner scripts.
@@ -55,6 +73,21 @@ public class CardEffects : MonoBehaviour
         _cm = FindObjectOfType<CardManager>();
         _bm = FindObjectOfType<BoardManager>();
         _am = FindObjectOfType<ActionManager>();
+        _pcm = FindObjectOfType<PersistentCardManager>();
+        DisableCardEffectUI();
+    }
+
+    /// <summary>
+    /// Disables all card effect UI.
+    /// </summary>
+    public void DisableCardEffectUI()
+    {
+        _morningJogUI.SetActive(false);
+        _thiefUI.SetActive(false);
+        _grassThiefButton.SetActive(false);
+        _dirtThiefButton.SetActive(false);
+        _stoneThiefButton.SetActive(false);
+        _goldThiefButton.SetActive(false);
     }
 
     /// <summary>
@@ -206,13 +239,127 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
+    /// Steals a Piece from your opponent.
+    /// </summary>
+    /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
+    public void StealPiece(string suit)
+    {
+        if(_am.CurrentPlayer == 1)
+        {
+            if(suit == "Grass")
+            {
+                _am.P1CollectedPile[0]++;
+                if(_am.P2CollectedPile[0] != 0)
+                {
+                    _am.P2CollectedPile[0]--;
+                }
+                else
+                {
+                    _am.P2RefinedPile[0]--;
+                }
+            }
+            else if (suit == "Dirt")
+            {
+                _am.P1CollectedPile[1]++;
+                if (_am.P2CollectedPile[1] != 0)
+                {
+                    _am.P2CollectedPile[1]--;
+                }
+                else
+                {
+                    _am.P2RefinedPile[1]--;
+                }
+            }
+            else if (suit == "Stone")
+            {
+                _am.P1CollectedPile[2]++;
+                if (_am.P2CollectedPile[2] != 0)
+                {
+                    _am.P2CollectedPile[2]--;
+                }
+                else
+                {
+                    _am.P2RefinedPile[2]--;
+                }
+            }
+            else if (suit == "Gold")
+            {
+                _am.P1CollectedPile[2]++;
+                if (_am.P2CollectedPile[2] != 0)
+                {
+                    _am.P2CollectedPile[2]--;
+                }
+                else
+                {
+                    _am.P2RefinedPile[2]--;
+                }
+            }
+        }
+        else
+        {
+            if (suit == "Grass")
+            {
+                _am.P2CollectedPile[0]++;
+                if (_am.P1CollectedPile[0] != 0)
+                {
+                    _am.P1CollectedPile[0]--;
+                }
+                else
+                {
+                    _am.P1RefinedPile[0]--;
+                }
+            }
+            else if (suit == "Dirt")
+            {
+                _am.P2CollectedPile[1]++;
+                if (_am.P1CollectedPile[1] != 0)
+                {
+                    _am.P1CollectedPile[1]--;
+                }
+                else
+                {
+                    _am.P1RefinedPile[1]--;
+                }
+            }
+            else if (suit == "Stone")
+            {
+                _am.P2CollectedPile[2]++;
+                if (_am.P1CollectedPile[2] != 0)
+                {
+                    _am.P1CollectedPile[2]--;
+                }
+                else
+                {
+                    _am.P1RefinedPile[2]--;
+                }
+            }
+            else if (suit == "Gold")
+            {
+                _am.P2CollectedPile[2]++;
+                if (_am.P1CollectedPile[2] != 0)
+                {
+                    _am.P1CollectedPile[2]--;
+                }
+                else
+                {
+                    _am.P1RefinedPile[2]--;
+                }
+                _remainingPiecesToSteal--;
+            }
+        }
+
+        _remainingPiecesToSteal--;
+        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+    }
+
+    /// <summary>
     /// Damages a building based on a dice roll.
     /// </summary>
     /// <returns>A number from 0 to 2</returns>
     private int CalculateBuildingDamage()
     {
         int sideOfDie = Random.Range(0, _damageBuildingDieSides + 1);
-        int damageToTake = 0;
+        int damageToTake;
 
         if(sideOfDie != 0 && sideOfDie != _damageBuildingDieSides)
         {
@@ -493,6 +640,12 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            building.GetComponent<Building>().CanBeDamaged = false;
+            building.GetComponent<Animator>().Play("TempPawnDefault");
+        }
+
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
     }
@@ -517,7 +670,64 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Thief()
     {
-        yield return null;
+        _gcm.UpdateCurrentActionText("Complete Thief actions!");
+        _thiefUI.SetActive(true);
+        _grassThiefButton.SetActive(true);
+        _dirtThiefButton.SetActive(true);
+        _goldThiefButton.SetActive(true);
+        _remainingPiecesToSteal = ThiefPiecesToTake;
+        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+
+        if (_am.CurrentPlayer == 1)
+        {
+            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2RefinedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            {
+                if (_remainingPiecesToSteal != ThiefPiecesToTake)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
+                if(_am.P2CollectedPile[0] + _am.P2RefinedPile[0] == 0)
+                {
+                    _grassThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                {
+                    _dirtThiefButton.SetActive(false);
+                }
+
+                yield return null;
+            }
+        }
+        else
+        {
+            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1RefinedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            {
+                if (_remainingPiecesToSteal != ThiefPiecesToTake)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[0] + _am.P2RefinedPile[0] == 0)
+                {
+                    _grassThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                {
+                    _dirtThiefButton.SetActive(false);
+                }
+
+                yield return null;
+            }
+        }
+
+        _thiefUI.SetActive(false);
+        _grassThiefButton.SetActive(false);
+        _dirtThiefButton.SetActive(false);
+        _stoneThiefButton.SetActive(false);
+        _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
@@ -571,7 +781,64 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator DirtyThief()
     {
-        yield return null;
+        _gcm.UpdateCurrentActionText("Complete Dirty Thief actions!");
+        _thiefUI.SetActive(true);
+        _stoneThiefButton.SetActive(true);
+        _dirtThiefButton.SetActive(true);
+        _goldThiefButton.SetActive(true);
+        _remainingPiecesToSteal = DirtyThiefPiecesToTake;
+        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+
+        if (_am.CurrentPlayer == 1)
+        {
+            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2RefinedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            {
+                if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                {
+                    _dirtThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[2] + _am.P2RefinedPile[2] == 0)
+                {
+                    _stoneThiefButton.SetActive(false);
+                }
+
+                yield return null;
+            }
+        }
+        else
+        {
+            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1RefinedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            {
+                if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                {
+                    _dirtThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[2] + _am.P2RefinedPile[2] == 0)
+                {
+                    _stoneThiefButton.SetActive(false);
+                }
+
+                yield return null;
+            }
+        }
+
+        _thiefUI.SetActive(false);
+        _grassThiefButton.SetActive(false);
+        _dirtThiefButton.SetActive(false);
+        _stoneThiefButton.SetActive(false);
+        _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
@@ -699,10 +966,8 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Flood()
     {
-        //Add discard persistent card part
-
         _gcm.DisableListObjects();
-        _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
+        _gcm.UpdateCurrentActionText("Select a building on a Dirt Piece to damage!");
 
         AllowedDamages = _floodDamages;
 
@@ -739,8 +1004,13 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            building.GetComponent<Building>().CanBeDamaged = false;
+            building.GetComponent<Animator>().Play("TempPawnDefault");
+        }
+
+        StartCoroutine(_pcm.PersistentCardDiscardProcess());
     }
 
     /// <summary>
@@ -789,10 +1059,8 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Thunderstorm()
     {
-        //Add part where you damage your own building.
-
         _gcm.DisableListObjects();
-        _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
+        _gcm.UpdateCurrentActionText("Select a building on a Grass or Dirt Piece to damage!");
 
         AllowedDamages = _thunderstormDamages;
 
@@ -827,6 +1095,52 @@ public class CardEffects : MonoBehaviour
             {
                 _gcm.UpdateCurrentActionText("Opponent has no buildings on Grass or Dirt!");
             }
+        }
+
+        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            building.GetComponent<Building>().CanBeDamaged = false;
+            building.GetComponent<Animator>().Play("TempPawnDefault");
+        }
+
+        _gcm.UpdateCurrentActionText("Select a building on a Grass or Dirt Piece to damage!");
+        int yourBuildingCount = 0;
+        for (int i = AllowedDamages; i != 0; i--)
+        {
+            foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+            {
+                if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+                {
+                    if (building.GetComponent<Building>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                    {
+                        building.GetComponent<Animator>().Play("TempPawnBlink");
+                        building.GetComponent<Building>().CanBeDamaged = true;
+                        yourBuildingCount++;
+                    }
+                }
+            }
+
+            if (yourBuildingCount != 0)
+            {
+                while (SelectedBuilding == null)
+                {
+                    yield return null;
+                }
+
+                SelectedBuilding.DamageBuiliding(CalculateBuildingDamage());
+
+                SelectedBuilding = null;
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("Opponent has no buildings on Grass or Dirt!");
+            }
+        }
+
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            building.GetComponent<Building>().CanBeDamaged = false;
+            building.GetComponent<Animator>().Play("TempPawnDefault");
         }
 
         _bm.DisableAllBoardInteractions();
@@ -902,7 +1216,56 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Earthquake()
     {
-        yield return null;
+        _gcm.DisableListObjects();
+        _gcm.UpdateCurrentActionText("Select a Stone Piece for Earthquake!");
+
+        AllowedDamages = _earthquakeDamages;
+
+        int pieceCount = 0;
+        for (int i = AllowedDamages; i != 0; i--)
+        {
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            {
+                if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+                {
+                    if(piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                    {
+                        continue;
+                    }
+
+                    piece.GetComponent<PieceController>().ShowHideEarthquake(true);
+                    pieceCount++;
+                }
+            }
+
+            if (pieceCount != 0)
+            {
+                while (SelectedPiece == null)
+                {
+                    yield return null;
+                }
+
+                foreach(GameObject piece in _bm.GenerateAdjacentPieceList(SelectedPiece.gameObject))
+                {
+                    if(piece.GetComponentInChildren<Building>())
+                    {
+                        piece.GetComponentInChildren<Building>().DamageBuiliding(CalculateBuildingDamage());
+                    }
+                }
+
+                SelectedPiece = null;
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("Opponent has no buildings on Dirt!");
+            }
+        }
+
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            building.GetComponent<Building>().CanBeDamaged = false;
+            building.GetComponent<Animator>().Play("TempPawnDefault");
+        }
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
@@ -1059,7 +1422,64 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator MasterThief()
     {
-        yield return null;
+        _gcm.UpdateCurrentActionText("Complete Master Thief actions!");
+        _thiefUI.SetActive(true);
+        _stoneThiefButton.SetActive(true);
+        _dirtThiefButton.SetActive(true);
+        _grassThiefButton.SetActive(true);
+        _remainingPiecesToSteal = MasterThiefPiecesToTake;
+        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+
+        if (_am.CurrentPlayer == 1)
+        {
+            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2RefinedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[0] + _am.P2RefinedPile[0] != 0)
+            {
+                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                {
+                    _dirtThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[2] + _am.P2RefinedPile[2] == 0)
+                {
+                    _stoneThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[0] + _am.P2RefinedPile[0] == 0)
+                {
+                    _grassThiefButton.SetActive(false);
+                }
+
+                yield return null;
+            }
+        }
+        else
+        {
+            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1RefinedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[0] + _am.P1RefinedPile[0] != 0)
+            {
+                if (_am.P1CollectedPile[1] + _am.P1RefinedPile[1] == 0)
+                {
+                    _dirtThiefButton.SetActive(false);
+                }
+
+                if (_am.P1CollectedPile[2] + _am.P1RefinedPile[2] == 0)
+                {
+                    _stoneThiefButton.SetActive(false);
+                }
+
+                if (_am.P1CollectedPile[0] + _am.P1RefinedPile[0] == 0)
+                {
+                    _grassThiefButton.SetActive(false);
+                }
+
+                yield return null;
+            }
+        }
+
+        _thiefUI.SetActive(false);
+        _grassThiefButton.SetActive(false);
+        _dirtThiefButton.SetActive(false);
+        _stoneThiefButton.SetActive(false);
+        _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();

@@ -428,63 +428,84 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Collects pieces from the supply and adds them to the current player's collected pile.
+    /// </summary>
+    /// <param name="amount">Int, number of pieces to collect</param>
+    /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
+    public void CollectPiecesFromSupply(int amount, string suit)
+    {
+        if(CurrentPlayer == 1)
+        {
+            if(suit == "Grass")
+            {
+                if(SupplyPile[0] > 0)
+                {
+                    SupplyPile[0] -= amount;
+                    P1CollectedPile[0] += amount;
+                }
+            }
+            else if(suit == "Dirt")
+            {
+                if (SupplyPile[1] > 0)
+                {
+                    SupplyPile[1] -= amount;
+                    P1CollectedPile[1] += amount;
+                }
+            }
+            else if(suit == "Stone")
+            {
+                if (SupplyPile[2] > 0)
+                {
+                    SupplyPile[2] -= amount;
+                    P1CollectedPile[0] += amount;
+                }
+            }
+        }
+        else
+        {
+            if (suit == "Grass")
+            {
+                if (SupplyPile[0] > 0)
+                {
+                    SupplyPile[0] -= amount;
+                    P2CollectedPile[0] += amount;
+                }
+            }
+            else if (suit == "Dirt")
+            {
+                if (SupplyPile[1] > 0)
+                {
+                    SupplyPile[1] -= amount;
+                    P2CollectedPile[1] += amount;
+                }
+            }
+            else if (suit == "Stone")
+            {
+                if (SupplyPile[2] > 0)
+                {
+                    SupplyPile[2] -= amount;
+                    P2CollectedPile[0] += amount;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Activates mines and adds tiles. 
     /// </summary>
     public void ActivateMines(int player)
     {
         if(player == 1)
         {
-            for(int i = P1BuiltBuildings[2]; i != 0; i--)
-            {
-                if(SupplyPile[0] > 0)
-                {
-                    SupplyPile[0]--;
-                    P1CollectedPile[0]++;
-                }
-            }
-            for (int i = P1BuiltBuildings[3]; i != 0; i--)
-            {
-                if (SupplyPile[1] > 0)
-                {
-                    SupplyPile[1]--;
-                    P1CollectedPile[1]++;
-                }
-            }
-            for (int i = P1BuiltBuildings[4]; i != 0; i--)
-            {
-                if (SupplyPile[2] > 0)
-                {
-                    SupplyPile[2]--;
-                    P1CollectedPile[2]++;
-                }
-            }
+            CollectPiecesFromSupply(P1BuiltBuildings[2], "Grass");
+            CollectPiecesFromSupply(P1BuiltBuildings[3], "Dirt");
+            CollectPiecesFromSupply(P1BuiltBuildings[4], "Stone");
         }
         else if(player == 2)
         {
-            for (int i = P2BuiltBuildings[2]; i != 0; i--)
-            {
-                if (SupplyPile[0] > 0)
-                {
-                    SupplyPile[0]--;
-                    P2CollectedPile[0]++;
-                }
-            }
-            for (int i = P2BuiltBuildings[3]; i != 0; i--)
-            {
-                if (SupplyPile[1] > 0)
-                {
-                    SupplyPile[1]--;
-                    P2CollectedPile[1]++;
-                }
-            }
-            for (int i = P2BuiltBuildings[4]; i != 0; i--)
-            {
-                if (SupplyPile[2] > 0)
-                {
-                    SupplyPile[2]--;
-                    P2CollectedPile[2]++;
-                }
-            }
+            CollectPiecesFromSupply(P2BuiltBuildings[2], "Grass");
+            CollectPiecesFromSupply(P2BuiltBuildings[3], "Dirt");
+            CollectPiecesFromSupply(P2BuiltBuildings[4], "Stone");
         }
     }
 

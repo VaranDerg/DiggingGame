@@ -45,11 +45,13 @@ public class PieceController : MonoBehaviour
     private ActionManager _am;
     private CardManager _cm;
     private GameCanvasManagerNew _gcm;
+    private CardEffects _ce;
     [HideInInspector] public bool HasGold;    //true if the piece reveals gold when flipped
 
     [Header("Card Activation Stuff")]
     [HideInInspector] public bool FromActivatedCard = false;
     [HideInInspector] public bool MovingForFree = false, JustMovedForFree = false;
+    [HideInInspector] public bool IsEarthquakeable;
 
     private void Awake()
     {
@@ -58,6 +60,7 @@ public class PieceController : MonoBehaviour
         _am = FindObjectOfType<ActionManager>();
         _cm = FindObjectOfType<CardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
+        _ce = FindObjectOfType<CardEffects>();
     }
 
     /// <summary>
@@ -116,6 +119,14 @@ public class PieceController : MonoBehaviour
         if(!HasP1Building && !HasP2Building && IsBuildable)
         {
             StartBuildingPlacement();
+        }
+
+        if(IsEarthquakeable)
+        {
+            if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                FindObjectOfType<CardEffects>().SelectedPiece = this;
+            }
         }
     }
 
@@ -568,6 +579,39 @@ public class PieceController : MonoBehaviour
             thisBuilding.GetComponent<Building>().SuitOfPiece = pieceSuit;
             thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;
 
+            //Planned Profit Code Start
+            bool hasPlannedProfit = false;
+            if(_am.CurrentPlayer == 1)
+            {
+                foreach (GameObject card in FindObjectOfType<PersistentCardManager>().P1PersistentCards)
+                {
+                    if (card.name == "PlannedProfit")
+                    {
+                        hasPlannedProfit = true;
+                        card.GetComponent<CardController>().ToDiscard();
+                    }
+                }
+            }
+            else
+            {
+                foreach (GameObject card in FindObjectOfType<PersistentCardManager>().P2PersistentCards)
+                {
+                    if (card.name == "PlannedProfit")
+                    {
+                        hasPlannedProfit = true;
+                        card.GetComponent<CardController>().ToDiscard();
+                    }
+                }
+            }
+
+            if(hasPlannedProfit)
+            {
+                _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Grass");
+                _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Dirt");
+                _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Stone");
+            }
+            //Planned Profit Code End
+
             if (_am.CurrentPlayer == 1)
             {
                 _am.P1Score++;
@@ -755,6 +799,21 @@ public class PieceController : MonoBehaviour
             _sr.color = _defaultColor;
             PieceIsSelected = false;
             IsPlaceable = false;
+        }
+    }
+
+    public void ShowHideEarthquake(bool show)
+    {
+        if(show)
+        {
+            _sr.color = _selectedColor;
+            IsEarthquakeable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            PieceIsSelected = false;
+            IsEarthquakeable = false;
         }
     }
 
