@@ -22,7 +22,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     [SerializeField] private GameObject _finallyZone;
     [SerializeField] private GameObject _thenActions;
     [SerializeField] private GameObject _thenBuildMenu;
-    [SerializeField] private GameObject _thenMDRMenu;
+    [SerializeField] private GameObject _backButton;
     [SerializeField] private GameObject _endPhaseButton;
     [SerializeField] private TextMeshProUGUI _currentPlayerScore;
     [SerializeField] private TextMeshProUGUI[] _currentPlayerCollectedPieces = new TextMeshProUGUI[4];
@@ -51,6 +51,8 @@ public class GameCanvasManagerNew : MonoBehaviour
     private ActionManager _am;
     private BoardManager _bm;
     private CardManager _cm;
+    private CardEffects _ce;
+    private PersistentCardManager _pcm;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -66,7 +68,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         _allObjects.Add(_finallyZone);
         _allObjects.Add(_thenActions);
         _allObjects.Add(_thenBuildMenu);
-        _allObjects.Add(_thenMDRMenu);
+        _allObjects.Add(_backButton);
         _allObjects.Add(_endPhaseButton);
     }
 
@@ -78,13 +80,15 @@ public class GameCanvasManagerNew : MonoBehaviour
         _am = FindObjectOfType<ActionManager>();
         _bm = FindObjectOfType<BoardManager>();
         _cm = FindObjectOfType<CardManager>();
+        _ce = FindObjectOfType<CardEffects>();
+        _pcm = FindObjectOfType<PersistentCardManager>();
         AddObjectsToList();
     }
 
     /// <summary>
     /// Disables every object in AllObjects
     /// </summary>
-    private void DisableListObjects()
+    public void DisableListObjects()
     {
         foreach (GameObject obj in _allObjects)
         {
@@ -112,9 +116,20 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[0].text = _am.P1RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
-            _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
-            _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
-            _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
+            //Master Builder Code
+            if(_pcm.CheckForPersistentCard("Master Builder", false))
+            {
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
+            }
+            else
+            {
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
+            }
+            //End Master Builder Code
         }
         else
         {
@@ -130,9 +145,20 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[0].text = _am.P2RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
-            _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
-            _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
-            _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
+            //Master Builder Code
+            if (_pcm.CheckForPersistentCard("Master Builder", false))
+            {
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
+            }
+            else
+            {
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
+            }
+            //End Master Builder Code
         }
     }
 
@@ -258,7 +284,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void ToThenPhase()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         _am.CurrentTurnPhase++;
 
         _thenZone.SetActive(true);
@@ -275,11 +301,11 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void Move()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
 
         _am.StartMove(_am.CurrentPlayer);
         _thenZone.SetActive(true);
-        _thenMDRMenu.SetActive(true);
+        _backButton.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to Move, then a Piece to move onto.");
@@ -291,11 +317,11 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void Dig()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
 
         _am.StartDig(_am.CurrentPlayer);
         _thenZone.SetActive(true);
-        _thenMDRMenu.SetActive(true);
+        _backButton.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to Dig with, then a Piece to Dig.");
@@ -307,10 +333,11 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void OpenBuildMenu()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
 
         _thenZone.SetActive(true);
         _thenBuildMenu.SetActive(true);
+        _backButton.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Building to Build.");
@@ -332,7 +359,11 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// <param name="buildingName">"Factory" "Burrow" or "Mine</param>
     public void Build(string buildingName)
     {
-        _bm.DisablePawnBoardInteractions();
+        DisableListObjects();
+        _bm.DisableAllBoardInteractions();
+
+        _thenZone.SetActive(true);
+        _backButton.SetActive(true);
         _am.StartBuild(_am.CurrentPlayer, buildingName);
 
         UpdateCurrentActionText("Select a Pawn, then Piece for your " + buildingName + ".");
@@ -345,7 +376,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void ToFinallyPhase()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         _am.CurrentTurnPhase++;
 
         _finallyZone.SetActive(true);
@@ -369,7 +400,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void Back()
     {
         DisableListObjects();
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         //I HATE THIS PART OF CODE. If a workaround appears I wanna change it ASAP.
         foreach(MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
         {

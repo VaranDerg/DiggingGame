@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 4251760763736238803}
   - component: {fileID: 4251760763736238800}
   - component: {fileID: 6919811466466465735}
+  - component: {fileID: -5383208771006440271}
   m_Layer: 7
   m_Name: MoleFactory
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,4 +98,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df11d85d17f09d64bab968942276d66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damaged: 0
+  _damagedColor: {r: 1, g: 0.48584908, b: 0.48584908, a: 1}
+  BuildingHealth: 2
+  PlayerOwning: 0
+  BuildingType: 
+  CanBeDamaged: 0
+  DamageTaken: 0
+  SuitOfPiece: 
+--- !u!95 &-5383208771006440271
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4251760763736238801}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c5937c83155b1af4293ca052ee625270, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -54,7 +54,7 @@ public class BoardManager : MonoBehaviour
     /// <summary>
     /// Disables pawn checks with the board.
     /// </summary>
-    public void DisablePawnBoardInteractions()
+    public void DisableAllBoardInteractions()
     {
         foreach(GameObject piece in _boardPieces)
         {
@@ -62,6 +62,7 @@ public class BoardManager : MonoBehaviour
             piece.GetComponent<PieceController>().ShowHideDiggable(false);
             piece.GetComponent<PieceController>().ShowHideMovable(false);
             piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+            piece.GetComponent<PieceController>().ShowHideEarthquake(false);
             _am.StopPawnActions(_am.CurrentPlayer);
         }
     }

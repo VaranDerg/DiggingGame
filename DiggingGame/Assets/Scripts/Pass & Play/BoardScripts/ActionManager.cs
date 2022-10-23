@@ -55,9 +55,13 @@ public class ActionManager : MonoBehaviour
     public int BaseBuildingPrice;
     public int TotalBuildings;
 
+    [Header("Card Effects")]
+    [HideInInspector] public bool ShovelUsed;
+
     [Header("Script References")]
     private BoardManager _bm;
     private CardManager _cm;
+    private PersistentCardManager _pcm;
     private GameCanvasManagerNew _gcm;
 
     /// <summary>
@@ -68,6 +72,7 @@ public class ActionManager : MonoBehaviour
         _bm = FindObjectOfType<BoardManager>();
         _cm = FindObjectOfType<CardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
+        _pcm = FindObjectOfType<PersistentCardManager>();
         PrepareStartingValues();
     }
 
@@ -134,7 +139,7 @@ public class ActionManager : MonoBehaviour
     /// <param name="player">1 or 2</param>
     public void StartBuild(int player, string building)
     {
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         foreach (MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
         {
             script.StopAllCoroutines();
@@ -304,6 +309,14 @@ public class ActionManager : MonoBehaviour
                 }
                 _cm.PrepareCardSelection(0, "", true);
 
+                //Start of Geologist code.
+                bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
+                if(hasGeologist)
+                {
+                    P1Score++;
+                }
+                //End of Geologist code.
+
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
@@ -323,6 +336,14 @@ public class ActionManager : MonoBehaviour
                     yield return null;
                 }
                 _cm.PrepareCardSelection(0, "", true);
+
+                //Start of Geologist code.
+                bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
+                if (hasGeologist)
+                {
+                    P2Score++;
+                }
+                //End of Geologist code.
 
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
@@ -428,24 +449,91 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Collects pieces from the supply and adds them to the current player's collected pile.
+    /// </summary>
+    /// <param name="amount">Int, number of pieces to collect</param>
+    /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
+    public void CollectPiecesFromSupply(int amount, string suit)
+    {
+        if(CurrentPlayer == 1)
+        {
+            if(suit == "Grass")
+            {
+                if(SupplyPile[0] > 0)
+                {
+                    SupplyPile[0] -= amount;
+                    P1CollectedPile[0] += amount;
+                }
+            }
+            else if(suit == "Dirt")
+            {
+                if (SupplyPile[1] > 0)
+                {
+                    SupplyPile[1] -= amount;
+                    P1CollectedPile[1] += amount;
+                }
+            }
+            else if(suit == "Stone")
+            {
+                if (SupplyPile[2] > 0)
+                {
+                    SupplyPile[2] -= amount;
+                    P1CollectedPile[0] += amount;
+                }
+            }
+        }
+        else
+        {
+            if (suit == "Grass")
+            {
+                if (SupplyPile[0] > 0)
+                {
+                    SupplyPile[0] -= amount;
+                    P2CollectedPile[0] += amount;
+                }
+            }
+            else if (suit == "Dirt")
+            {
+                if (SupplyPile[1] > 0)
+                {
+                    SupplyPile[1] -= amount;
+                    P2CollectedPile[1] += amount;
+                }
+            }
+            else if (suit == "Stone")
+            {
+                if (SupplyPile[2] > 0)
+                {
+                    SupplyPile[2] -= amount;
+                    P2CollectedPile[0] += amount;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Activates mines and adds tiles. 
     /// </summary>
     public void ActivateMines(int player)
     {
         if(player == 1)
         {
-            P1CollectedPile[0] += P1BuiltBuildings[2];
-            P1CollectedPile[1] += P1BuiltBuildings[3];
-            P1CollectedPile[2] += P1BuiltBuildings[4];
+            CollectPiecesFromSupply(P1BuiltBuildings[2], "Grass");
+            CollectPiecesFromSupply(P1BuiltBuildings[3], "Dirt");
+            CollectPiecesFromSupply(P1BuiltBuildings[4], "Stone");
         }
         else if(player == 2)
         {
-            P2CollectedPile[0] += P2BuiltBuildings[2];
-            P2CollectedPile[1] += P2BuiltBuildings[3];
-            P2CollectedPile[2] += P2BuiltBuildings[4];
+            CollectPiecesFromSupply(P2BuiltBuildings[2], "Grass");
+            CollectPiecesFromSupply(P2BuiltBuildings[3], "Dirt");
+            CollectPiecesFromSupply(P2BuiltBuildings[4], "Stone");
         }
     }
 
+    /// <summary>
+    /// Ends the player's turn
+    /// </summary>
+    /// <param name="player">1 or 2</param>
     public void EndTurn(int player)
     {
         if(player == 1)
@@ -475,5 +563,7 @@ public class ActionManager : MonoBehaviour
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
+
+        ShovelUsed = false;
     }
 }

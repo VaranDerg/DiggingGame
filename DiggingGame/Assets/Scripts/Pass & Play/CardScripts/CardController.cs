@@ -27,7 +27,9 @@ public class CardController : MonoBehaviour
     private ActionManager _am;
     private GameCanvasManagerNew _gcm;
     private BoardManager _bm;
+    private PersistentCardManager _pcm;
     [HideInInspector] public int HandPosition;
+    [HideInInspector] public int PHandPosition;
     [HideInInspector] public int HeldByPlayer;
     private bool _currentlyMaximized = false;
     private GameObject _maximizedCard;
@@ -40,6 +42,10 @@ public class CardController : MonoBehaviour
     [HideInInspector] public bool CanBeActivated;
     [HideInInspector] public bool Selected;
 
+    [Header("Activation Variables")]
+    [HideInInspector] public bool MadePersistentP1;
+    [HideInInspector] public bool MadePersistentP2;
+
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
     /// </summary>
@@ -50,6 +56,7 @@ public class CardController : MonoBehaviour
         _am = FindObjectOfType<ActionManager>();
         _bm = FindObjectOfType<BoardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
+        _pcm = FindObjectOfType<PersistentCardManager>();
         HeldByPlayer = 0;
     }
 
@@ -58,6 +65,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        if(MadePersistentP1)
+        {
+            return;
+        }
+
         if(Selected)
         {
             transform.position = _selectedPos.position;
@@ -75,6 +87,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseEnter()
     {
+        if(MadePersistentP1)
+        {
+            return;
+        }
+
         NextPos = _mouseOverPos.position;
     }
 
@@ -83,6 +100,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
+        if(MadePersistentP1)
+        {
+            return;
+        }
+
         NextPos = _defaultPos.position;
         if(_currentlyMaximized)
         {
@@ -103,7 +125,12 @@ public class CardController : MonoBehaviour
             }
         }
 
-        if(CanBeSelected)
+        if (MadePersistentP1)
+        {
+            return;
+        }
+
+        if (CanBeSelected)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -136,9 +163,10 @@ public class CardController : MonoBehaviour
 
     private void ActivateCard()
     {
-        int grassCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.GrassCost;
-        int dirtCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.DirtCost;
-        int stoneCost = _cardBody.GetComponentInChildren<CardVisuals>().ThisCard.StoneCost;
+        CardVisuals cv = _cardBody.GetComponentInChildren<CardVisuals>();
+        int grassCost = cv.ThisCard.GrassCost;
+        int dirtCost = cv.ThisCard.DirtCost;
+        int stoneCost = cv.ThisCard.StoneCost;
 
         if(_cm.AllowedActivations == 0)
         {
@@ -157,8 +185,22 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
-                Debug.Log("Activation code will go in this line in the future.");
+                if(cv.ThisCard.GrassSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody);
+                }
+                else if(cv.ThisCard.DirtSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody);
+                }
+                else if(cv.ThisCard.StoneSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody);
+                }
+                else if(cv.ThisCard.GoldSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody);
+                }
                 _am.P1Score++;
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
@@ -181,13 +223,30 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
-                Debug.Log("Activation code will go in this line in the future.");
+                if (cv.ThisCard.GrassSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody);
+                }
+                else if (cv.ThisCard.DirtSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody);
+                }
+                else if (cv.ThisCard.StoneSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody);
+                }
+                else if (cv.ThisCard.GoldSuit)
+                {
+                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody);
+                }
                 _am.P2Score++;
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
 
-                ToDiscard();
+                if (!MadePersistentP1 && !MadePersistentP2)
+                {
+                    ToDiscard();
+                }
             }
             else
             {
@@ -198,45 +257,72 @@ public class CardController : MonoBehaviour
 
     public void ToDiscard()
     {
-        if(HeldByPlayer == 1)
+        if (!MadePersistentP1 && !MadePersistentP2)
         {
-            if (_cardBody.CompareTag("Card"))
+            if (HeldByPlayer == 1)
             {
-                _am.P1Cards--;
+                if (_cardBody.CompareTag("Card"))
+                {
+                    _am.P1Cards--;
+                }
+                else if (_cardBody.CompareTag("GoldCard"))
+                {
+                    _am.P1GoldCards--;
+                }
+                _cm.P1OpenHandPositions[HandPosition] = true;
+                _cm.P1Hand.Remove(_cardBody);
             }
-            else if (_cardBody.CompareTag("GoldCard"))
+            else if (HeldByPlayer == 2)
             {
-                _am.P1GoldCards--;
+                if (_cardBody.CompareTag("Card"))
+                {
+                    _am.P2Cards--;
+                }
+                else if (_cardBody.CompareTag("GoldCard"))
+                {
+                    _am.P2GoldCards--;
+                }
+                _cm.P2OpenHandPositions[HandPosition] = true;
+                _cm.P2Hand.Remove(_cardBody);
             }
-            _cm.P1OpenHandPositions[HandPosition] = true;
-            _cm.P1Hand.Remove(_cardBody);
+            HeldByPlayer = 0;
+            Selected = false;
+            CanBeSelected = false;
+            CanBeDiscarded = false;
+            CanBeActivated = false;
+            _cm.DPile.Add(_cardBody);
+            _cm.UpdatePileText();
         }
-        else if(HeldByPlayer == 2)
+        else
         {
-            if (_cardBody.CompareTag("Card"))
+            HeldByPlayer = 0;
+            Selected = false;
+            CanBeSelected = false;
+            CanBeDiscarded = false;
+            CanBeActivated = false;
+            MadePersistentP1 = false;
+            MadePersistentP2 = false;
+            _pcm.DiscardedPersistentCard = true;
+            if(_am.CurrentPlayer == 1)
             {
-                _am.P2Cards--;
+                _pcm.P1OpenPCardSlots[PHandPosition] = true;
+                _pcm.P1PersistentCards.Remove(_cardBody);
             }
-            else if (_cardBody.CompareTag("GoldCard"))
+            else
             {
-                _am.P2GoldCards--;
+                _pcm.P2OpenPCardSlots[PHandPosition] = true;
+                _pcm.P2PersistentCards.Remove(_cardBody);
             }
-            _cm.P2OpenHandPositions[HandPosition] = true;
-            _cm.P2Hand.Remove(_cardBody);
+            _cm.DPile.Add(_cardBody);
+            _cm.UpdatePileText();
         }
-        HeldByPlayer = 0;
-        Selected = false;
-        CanBeSelected = false;
-        CanBeDiscarded = false;
-        CanBeActivated = false;
-        _cm.DPile.Add(_cardBody);
-        _cm.UpdatePileText();
 
         if (_currentlyMaximized)
         {
             Destroy(_maximizedCard);
             _currentlyMaximized = false;
         }
+
         _cardBody.SetActive(false);
     }
 

@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Erosion
   m_EditorClassIdentifier: 
   CardName: Erosion
-  CardDescription: Remove up to 3 Stone Pieces.
+  CardDescription: Remove up to 4 adjacent Stone Pieces.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1
   GoldSuit: 0
-  GrassCost: 2
+  GrassCost: 1
   DirtCost: 2
   StoneCost: 0
   persistent: 0
