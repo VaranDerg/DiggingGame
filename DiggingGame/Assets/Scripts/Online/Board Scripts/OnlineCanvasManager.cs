@@ -153,38 +153,35 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _supplyPieces[3].text = "x" + _am.SupplyPile[3];
     }
 
-    /// <summary>
+/*    /// <summary>
     /// Updates the Opponent View text.
-    /// Edit: Andrea SD - Modified for online use
+    /// Edit: Andrea SD - Modified for online use. 
+    /// Edit 2: Andrea SD - Commented out since it is no longer used
     /// </summary>
     /// <param name="curOpponent">1 or 2</param>
     private void UpdateOpponentText(int curOpponent)
     {
         if (curOpponent == 1)
         {
-            _opponentScoreText.text = "Score: " + _am.P1Score;
-            _opponentCardText.text = "Cards: " + _am.P1Cards;
-            _opponentGoldCardText.text = "Gold Cards: " + _am.P1GoldCards;
-
             photonView.RPC("ChangeOpponentTextOne", RpcTarget.All);     //Andrea SD
         }
         else
-        {
-            _opponentScoreText.text = "Score: " + _am.P2Score;
-            _opponentCardText.text = "Cards: " + _am.P2Cards;
-            _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
-
-            photonView.RPC("ChangeOpponentTextTwo", RpcTarget.All);     //Andrea SD
+        {          
+            photonView.RPC("ChangeOpponentTextTwo", RpcTarget.All);     //Aea SD
         }
-    }
+    }*/
 
     /// <summary>
-    /// Changes the opponents text across live servers
+    /// Changes the opponent text on player two's screen with player one's vals
     /// Author: Andrea SD
     /// </summary>
     [PunRPC]
     public void ChangeOpponentTextOne()
     {
+        _opponentScoreText.text = "Score: " + _am.P1Score;
+        _opponentCardText.text = "Cards: " + _am.P1Cards;
+        _opponentGoldCardText.text = "Gold Cards: " + _am.P1GoldCards;
+
         _opponentPieces[0].text = "Grass: " + (_am.P1CollectedPile[0] + _am.P1RefinedPile[0]);
         _opponentPieces[1].text = "Dirt: " + (_am.P1CollectedPile[1] + _am.P1RefinedPile[1]);
         _opponentPieces[2].text = "Stone: " + (_am.P1CollectedPile[2] + _am.P1RefinedPile[2]);
@@ -192,12 +189,16 @@ public class OnlineCanvasManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Changes the opponents text across live servers
+    /// Changes the opponent text on player one's screen with player two's vals
     /// Author: Andrea SD
     /// </summary>
     [PunRPC]
     public void ChangeOpponentTextTwo()
     {
+        _opponentScoreText.text = "Score: " + _am.P2Score;
+        _opponentCardText.text = "Cards: " + _am.P2Cards;
+        _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
+
         _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
         _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
         _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
@@ -222,11 +223,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
         UpdateAlwaysActiveText();
         if (_am.CurrentPlayer == 1)
         {
-            UpdateOpponentText(2);
+            photonView.RPC("ChangeOpponentTextTwo", RpcTarget.Others);     //Andrea SD
         }
         else
         {
-            UpdateOpponentText(1);
+            photonView.RPC("ChangeOpponentTextOne", RpcTarget.Others);     //Andrea SD
         }
     }
 

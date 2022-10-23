@@ -498,18 +498,30 @@ public class OnlineActionManager : MonoBehaviourPun
         DisableBoard();
     }
 
+    /// <summary>
+    /// Enables & shows the start turn button
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
     [PunRPC]
     public void EnableStartButton()
     {
         _gcm.StartTurnButton.SetActive(true);
     }
 
+    /// <summary>
+    /// Disables & hides start turn button
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
     public void DisableStartButton()
     {
         _gcm.StartTurnButton.SetActive(false);
     }
+
     /// <summary>
     /// Changes the turn to the next player for online play
+    ///
     /// Author: Andrea SD
     /// </summary>
     /// <param name="player">P Player who's turn it is changing to </param>
@@ -522,14 +534,17 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <summary>
     /// Disables all interactions by the player. This occurs when it is not
     /// their turn. Enables the board for the other player.
+    ///
     /// Author: Andrea SD
     /// </summary>
     private void DisableBoard()
     { 
         _gcm.ShowOpponentInfo();
         DisableStartButton();
-        EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-        eventSystem.enabled = false;
+
+        //EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+        //eventSystem.enabled = false;
+
         photonView.RPC("EnableBoard", RpcTarget.Others);
     }
 
@@ -541,8 +556,9 @@ public class OnlineActionManager : MonoBehaviourPun
     private void EnableBoard()
     {
         EnableStartButton();
-        EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-        eventSystem.enabled = true;
+
+        //EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+        //eventSystem.enabled = true;
     }
 
     /// <summary>

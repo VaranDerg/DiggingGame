@@ -55,6 +55,10 @@ MonoBehaviour:
   - UpdateCollected
   - EmptyCollection
   - UpdateRefined
+  - EndPlayer1
+  - EndPlayer2
+  - StartPlayer1
+  - StartPlayer2
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
