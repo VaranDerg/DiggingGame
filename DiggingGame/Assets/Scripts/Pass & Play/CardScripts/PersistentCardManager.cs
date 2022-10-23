@@ -22,10 +22,14 @@ public class PersistentCardManager : MonoBehaviour
     [HideInInspector] public bool DecidedSecretTunnelsMove;
     [HideInInspector] public bool SecretTunnelsMoveDecision;
 
+    [Header("Retribution")]
+    [HideInInspector] public int BuildingsDamaged;
+
     [Header("Partner Scripts")]
     private ActionManager _am;
     private BoardManager _bm;
     private CardManager _cm;
+    private CardEffects _ce;
     private GameCanvasManagerNew _gcm;
 
     private void Awake()
@@ -33,6 +37,7 @@ public class PersistentCardManager : MonoBehaviour
         _am = FindObjectOfType<ActionManager>();
         _bm = FindObjectOfType<BoardManager>();
         _cm = FindObjectOfType<CardManager>();
+        _ce = FindObjectOfType<CardEffects>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
     }
 
@@ -220,5 +225,40 @@ public class PersistentCardManager : MonoBehaviour
     {
         DecidedSecretTunnelsMove = true;
         SecretTunnelsMoveDecision = answer;
+    }
+
+    /// <summary>
+    /// Coroutine for Retribtion process.
+    /// </summary>
+    /// <returns>Default hold time.</returns>
+    public IEnumerator StartRetribution()
+    {
+        int possibleDamages = 0;
+        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if(building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            building.GetComponent<Building>().CanBeDamaged = true;
+            possibleDamages++;
+        }
+
+        if(possibleDamages >= _ce.RetributionDamages)
+        {
+            possibleDamages = _ce.RetributionDamages;
+        }
+
+        BuildingsDamaged = 0;
+
+        while(BuildingsDamaged != possibleDamages)
+        {
+            _gcm.UpdateCurrentActionText("Damage " + (possibleDamages - BuildingsDamaged) + " more Buildings!");
+            yield return null;
+        }
+
+        _bm.DisableAllBoardInteractions();
+        _gcm.ToFinallyPhase();
     }
 }

@@ -201,7 +201,7 @@ public class CardController : MonoBehaviour
                 {
                     FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody);
                 }
-                _am.P1Score++;
+                _am.ScorePoints(1);
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
 
@@ -239,7 +239,7 @@ public class CardController : MonoBehaviour
                 {
                     FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody);
                 }
-                _am.P2Score++;
+                _am.ScorePoints(1);
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Golden Shovel
   m_EditorClassIdentifier: 
   CardName: Golden Shovel
-  CardDescription: Remove a 2x2 area of Pieces.
+  CardDescription: Remove each adjacent Piece.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
