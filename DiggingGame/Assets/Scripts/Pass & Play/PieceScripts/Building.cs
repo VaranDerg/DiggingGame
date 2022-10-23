@@ -15,11 +15,13 @@ public class Building : MonoBehaviour
 {
     [Header("Values")]
     [SerializeField] private Color _damagedColor;
+    [SerializeField] private Color _defaultColor;
 
     public int BuildingHealth = 2;
     [HideInInspector] public int PlayerOwning = 0;
     [HideInInspector] public string BuildingType = "";
     [HideInInspector] public bool CanBeDamaged;
+    [HideInInspector] public bool CanBeRepaired;
     [HideInInspector] public int DamageTaken;
     [HideInInspector] public string SuitOfPiece;
     [HideInInspector] public bool ActiveBuilding;
@@ -70,6 +72,14 @@ public class Building : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
                 FindObjectOfType<CardEffects>().SelectedBuilding = this;
+            }
+        }
+
+        if(CanBeRepaired)
+        {
+            if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                RepairBuilding();
             }
         }
     }
@@ -173,7 +183,7 @@ public class Building : MonoBehaviour
         {
             Debug.Log("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
 
-            if(_am.CurrentPlayer == 1)
+            if(PlayerOwning == 1)
             {
                 if (BuildingType == "Factory")
                 {
@@ -220,8 +230,27 @@ public class Building : MonoBehaviour
                 }
             }
 
+            if(_am.CurrentPlayer == 1)
+            {
+                GetComponentInParent<PieceController>().HasP1Building = false;
+                if (_pcm.CheckForPersistentCard("Retribution", true))
+                {
+                    _pcm.StartCoroutine(_pcm.StartRetribution());
+                }
+            }
+            else
+            {
+                GetComponentInParent<PieceController>().HasP2Building = false;
+                if (_pcm.CheckForPersistentCard("Retribution", true))
+                {
+                    _pcm.StartCoroutine(_pcm.StartRetribution());
+                }
+            }
+
+            _am.ScorePoints(1);
+
             _anims.Play("TempPawnDefault");
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
         else if(BuildingHealth == 1)
         {
@@ -229,6 +258,31 @@ public class Building : MonoBehaviour
             _anims.Play("TempPawnDefault");
         }
 
+        _pcm.BuildingsDamaged++;
         ActiveBuilding = false;
+    }
+
+    /// <summary>
+    /// Repairs a building.
+    /// </summary>
+    public void RepairBuilding()
+    {
+        BuildingHealth++;
+        GetComponent<SpriteRenderer>().color = _defaultColor;
+        _ce.RepairedBuildings++;
+        _anims.Play("TempPawnDefault");
+        CanBeRepaired = false;
+
+        //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
+        if(_am.CurrentPlayer == 1 && PlayerOwning == 2)
+        {
+            _am.P1Score++;
+            _gcm.UpdateTextBothPlayers();
+        }
+        else if(_am.CurrentPlayer == 2 && PlayerOwning == 1)
+        {
+            _am.P2Score++;
+            _gcm.UpdateTextBothPlayers();
+        }
     }
 }

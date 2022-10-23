@@ -27,6 +27,7 @@ public class PlayerPawn : MonoBehaviour
     private PersistentCardManager _pcm;
     private GameCanvasManagerNew _gcm;
     private Animator _anims;
+    private CardEffects _ce;
     [SerializeField] private SpriteRenderer _sr;
 
     [Header("Pawn Status for Other Scripts")]
@@ -38,6 +39,7 @@ public class PlayerPawn : MonoBehaviour
     [HideInInspector] public bool SecretTunnelsMove;
     [HideInInspector] public bool MudslideMove;
     [HideInInspector] public bool WalkwaySelect;
+    [HideInInspector] public bool TeleportationMove;
 
     /// <summary>
     /// Adds every board piece to a list.
@@ -77,6 +79,7 @@ public class PlayerPawn : MonoBehaviour
         _am = FindObjectOfType<ActionManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         _pcm = FindObjectOfType<PersistentCardManager>();
+        _ce = FindObjectOfType<CardEffects>();
         _anims = GetComponent<Animator>();
     }
 
@@ -147,17 +150,21 @@ public class PlayerPawn : MonoBehaviour
 
         if(hasSecretTunnels)
         {
+            _ce.SecretTunnelsUI.SetActive(true);
+
             while(!_pcm.DecidedSecretTunnelsMove)
             {
                 yield return null;
             }
+
+            _ce.SecretTunnelsUI.SetActive(false);
 
             _pcm.DecidedSecretTunnelsMove = false;
             SecretTunnelsMove = _pcm.SecretTunnelsMoveDecision;
         }
         //End of Secret Tunnels code
 
-        if(!MorningJogMove && !SecretTunnelsMove)
+        if(!MorningJogMove && !SecretTunnelsMove && !TeleportationMove)
         {
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -225,6 +232,21 @@ public class PlayerPawn : MonoBehaviour
             }
 
             SecretTunnelsMove = false;
+        }
+        else if(TeleportationMove)
+        {
+            foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            {
+                if(piece.GetComponent<PieceController>().HasPawn)
+                {
+                    continue;
+                }
+
+                piece.GetComponent<PieceController>().ShowHideMovable(true);
+                _shownPieces.Add(piece);
+            }
+
+            TeleportationMove = false;
         }
 
         _bm.BoardColliderSwitch(true);

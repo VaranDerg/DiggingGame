@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Retribution
   m_EditorClassIdentifier: 
   CardName: Retribution
-  CardDescription: The next time a Building of yours is removed, damage 2 of your
-    opponent's Buildings. For every Building removed this way, score 1 point.
+  CardDescription: "The next time a Building of yours is destroyed, damage 3 of your
+    opponent\u2019s Buildings."
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 1
   GrassCost: 1
-  DirtCost: 1
+  DirtCost: 2
   StoneCost: 0
   persistent: 1
   disaster: 0

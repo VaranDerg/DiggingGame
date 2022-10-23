@@ -102,6 +102,24 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Scores points for players.
+    /// </summary>
+    /// <param name="amount">Amount of points to score.</param>
+    public void ScorePoints(int amount)
+    {
+        if(CurrentPlayer == 1)
+        {
+            P1Score += amount;
+        }
+        else
+        {
+            P2Score += amount;
+        }
+
+        _gcm.UpdateTextBothPlayers();
+    }
+
+    /// <summary>
     /// Draws cards up to the starting cards for each player if it's the first round.
     /// </summary>
     public void DrawStartingCards()
@@ -313,7 +331,7 @@ public class ActionManager : MonoBehaviour
                 bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
                 if(hasGeologist)
                 {
-                    P1Score++;
+                    ScorePoints(1);
                 }
                 //End of Geologist code.
 
@@ -341,7 +359,7 @@ public class ActionManager : MonoBehaviour
                 bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
                 if (hasGeologist)
                 {
-                    P2Score++;
+                    ScorePoints(1);
                 }
                 //End of Geologist code.
 

@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Transmutation
   m_EditorClassIdentifier: 
   CardName: Transmutation
-  CardDescription: Score X / 2 points, rounded down.
+  CardDescription: Score 1 Point.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 1
   GrassCost: 0
   DirtCost: 0
-  StoneCost: 10
+  StoneCost: 2
   persistent: 0
   disaster: 0
   CardArt: {fileID: 21300000, guid: 4fe6bfd2fe916574cb005205dd49449c, type: 3}

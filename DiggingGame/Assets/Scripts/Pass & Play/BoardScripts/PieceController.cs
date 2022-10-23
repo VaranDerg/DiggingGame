@@ -55,6 +55,7 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public bool IsEarthquakeable;
     [HideInInspector] public bool WalkwayDig;
     [HideInInspector] public bool IsFlippable;
+    [HideInInspector] public bool DiscerningEye;
 
     private void Awake()
     {
@@ -247,6 +248,10 @@ public class PieceController : MonoBehaviour
         if(HasGold)
         {
             SetPieceState(5);
+            if(DiscerningEye)
+            {
+                _am.ScorePoints(1);
+            }
         }
 
         ShowHideFlippable(false);
@@ -631,7 +636,7 @@ public class PieceController : MonoBehaviour
 
             if (_am.CurrentPlayer == 1)
             {
-                _am.P1Score++;
+                _am.ScorePoints(1);
 
                 if (buildingName == "Factory")
                 {
@@ -657,7 +662,7 @@ public class PieceController : MonoBehaviour
             }
             else
             {
-                _am.P2Score++;
+                _am.ScorePoints(1);
 
                 if (buildingName == "Factory")
                 {
