@@ -51,6 +51,8 @@ public class GameCanvasManagerNew : MonoBehaviour
     private ActionManager _am;
     private BoardManager _bm;
     private CardManager _cm;
+    private CardEffects _ce;
+    private PersistentCardManager _pcm;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -78,6 +80,8 @@ public class GameCanvasManagerNew : MonoBehaviour
         _am = FindObjectOfType<ActionManager>();
         _bm = FindObjectOfType<BoardManager>();
         _cm = FindObjectOfType<CardManager>();
+        _ce = FindObjectOfType<CardEffects>();
+        _pcm = FindObjectOfType<PersistentCardManager>();
         AddObjectsToList();
     }
 
@@ -112,9 +116,20 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[0].text = _am.P1RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
-            _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
-            _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
-            _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
+            //Master Builder Code
+            if(_pcm.CheckForPersistentCard("Master Builder", false))
+            {
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
+            }
+            else
+            {
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
+            }
+            //End Master Builder Code
         }
         else
         {
@@ -130,9 +145,20 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[0].text = _am.P2RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
-            _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
-            _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
-            _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
+            //Master Builder Code
+            if (_pcm.CheckForPersistentCard("Master Builder", false))
+            {
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
+            }
+            else
+            {
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
+            }
+            //End Master Builder Code
         }
     }
 

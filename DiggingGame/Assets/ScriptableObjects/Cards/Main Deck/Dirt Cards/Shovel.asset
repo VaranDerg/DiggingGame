@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Shovel
   m_EditorClassIdentifier: 
   CardName: Shovel
-  CardDescription: Whenever you remove a Dirt Piece, you may remove another Dirt
-    Piece. This card cannot trigger its own effect.
+  CardDescription: Once a turn, you may remove an adjacent Dirt Piece without spending
+    a Card.
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0
   GoldSuit: 0
   GrassCost: 0
-  DirtCost: 2
-  StoneCost: 0
+  DirtCost: 1
+  StoneCost: 1
   persistent: 1
   disaster: 0
   CardArt: {fileID: -2002532713, guid: c98ba8e7180ee07459682f41f9d07bc0, type: 3}

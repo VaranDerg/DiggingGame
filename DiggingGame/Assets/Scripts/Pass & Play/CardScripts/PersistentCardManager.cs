@@ -17,8 +17,10 @@ public class PersistentCardManager : MonoBehaviour
     [HideInInspector] public bool[] P2OpenPCardSlots;
 
     [Header("Other")]
-    private bool InfoShowing;
     [HideInInspector] public bool DiscardedPersistentCard;
+    [HideInInspector] public bool DecidedBuildingProtection;
+    [HideInInspector] public bool DecidedSecretTunnelsMove;
+    [HideInInspector] public bool SecretTunnelsMoveDecision;
 
     [Header("Partner Scripts")]
     private ActionManager _am;
@@ -106,6 +108,42 @@ public class PersistentCardManager : MonoBehaviour
         }
     }
 
+    public bool CheckForPersistentCard(string cardName, bool discardAfterUse)
+    {
+        if (_am.CurrentPlayer == 1)
+        {
+            foreach (GameObject card in P1PersistentCards)
+            {
+                if (card.gameObject.name == cardName)
+                {
+                    if(discardAfterUse)
+                    {
+                        card.GetComponent<CardController>().ToDiscard();
+                    }
+
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            foreach (GameObject card in P2PersistentCards)
+            {
+                if (card.gameObject.name == cardName)
+                {
+                    if (discardAfterUse)
+                    {
+                        card.GetComponent<CardController>().ToDiscard();
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Discard a Persistent Card.
     /// </summary>
@@ -158,5 +196,29 @@ public class PersistentCardManager : MonoBehaviour
         }
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
+    }
+
+    /// <summary>
+    /// Simple yes/no for using a building protection card.
+    /// </summary>
+    /// <param name="answer">Yes/No</param>
+    /// <returns></returns>
+    public void ProtectBuilding(bool answer)
+    {
+        DecidedBuildingProtection = true;
+
+        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if(building.GetComponent<Building>().ActiveBuilding)
+            {
+                building.GetComponent<Building>().DamageProtectionResponse = answer;
+            }
+        }
+    }
+
+    public void MoveWithSecretTunnels(bool answer)
+    {
+        DecidedSecretTunnelsMove = true;
+        SecretTunnelsMoveDecision = answer;
     }
 }

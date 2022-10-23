@@ -55,9 +55,13 @@ public class ActionManager : MonoBehaviour
     public int BaseBuildingPrice;
     public int TotalBuildings;
 
+    [Header("Card Effects")]
+    [HideInInspector] public bool ShovelUsed;
+
     [Header("Script References")]
     private BoardManager _bm;
     private CardManager _cm;
+    private PersistentCardManager _pcm;
     private GameCanvasManagerNew _gcm;
 
     /// <summary>
@@ -68,6 +72,7 @@ public class ActionManager : MonoBehaviour
         _bm = FindObjectOfType<BoardManager>();
         _cm = FindObjectOfType<CardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
+        _pcm = FindObjectOfType<PersistentCardManager>();
         PrepareStartingValues();
     }
 
@@ -304,6 +309,14 @@ public class ActionManager : MonoBehaviour
                 }
                 _cm.PrepareCardSelection(0, "", true);
 
+                //Start of Geologist code.
+                bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
+                if(hasGeologist)
+                {
+                    P1Score++;
+                }
+                //End of Geologist code.
+
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
@@ -323,6 +336,14 @@ public class ActionManager : MonoBehaviour
                     yield return null;
                 }
                 _cm.PrepareCardSelection(0, "", true);
+
+                //Start of Geologist code.
+                bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
+                if (hasGeologist)
+                {
+                    P2Score++;
+                }
+                //End of Geologist code.
 
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
@@ -542,5 +563,7 @@ public class ActionManager : MonoBehaviour
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
+
+        ShovelUsed = false;
     }
 }

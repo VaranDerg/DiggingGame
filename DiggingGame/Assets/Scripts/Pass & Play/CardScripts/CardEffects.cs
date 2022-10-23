@@ -19,6 +19,7 @@ public class CardEffects : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject _morningJogUI;
     [SerializeField] private GameObject _thiefUI;
+    public GameObject ProtectBuildingUI;
     [SerializeField] private GameObject _grassThiefButton, _dirtThiefButton, _stoneThiefButton, _goldThiefButton;
     [SerializeField] private TextMeshProUGUI _remainingStealsText;
 
@@ -50,6 +51,16 @@ public class CardEffects : MonoBehaviour
 
     [Header("Planned Profit")]
     public int PiecesToCollect;
+
+    [Header("Master Builder")]
+    public int NewBuildingCost;
+
+    [Header("Planned Gamble")]
+    public int PlannedGambleCardsToDraw;
+
+    [Header("Stone Flipping")]
+    public int MetalDetectorStoneToFlip;
+    [HideInInspector] public int RemainingFlips;
 
     [Header("Thief Cards")]
     public int ThiefPiecesToTake;
@@ -84,6 +95,7 @@ public class CardEffects : MonoBehaviour
     {
         _morningJogUI.SetActive(false);
         _thiefUI.SetActive(false);
+        ProtectBuildingUI.SetActive(false);
         _grassThiefButton.SetActive(false);
         _dirtThiefButton.SetActive(false);
         _stoneThiefButton.SetActive(false);
@@ -123,7 +135,7 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Thief());
                 break;
             case "Walkway":
-                StartCoroutine(Walkway());
+                Walkway();
                 break;
             case "Weed Whacker":
                 StartCoroutine(WeedWhacker(pCardObject));
@@ -144,7 +156,7 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Flood());
                 break;
             case "Mudslide":
-                StartCoroutine(Mudslide());
+                Mudslide();
                 break;
             case "Secret Tunnels":
                 StartCoroutine(SecretTunnels(pCardObject));
@@ -174,7 +186,7 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(MetalDetector());
                 break;
             case "Planned Gamble":
-                StartCoroutine(PlannedGamble());
+                PlannedGamble();
                 break;
             case "Discerning Eye":
                 StartCoroutine(DiscerningEye());
@@ -630,7 +642,7 @@ public class CardEffects : MonoBehaviour
                     yield return null;
                 }
 
-                SelectedBuilding.DamageBuiliding(CalculateBuildingDamage());
+                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
 
                 SelectedBuilding = null;
             }
@@ -734,15 +746,22 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Card effect Coroutine for Walkway. 
+    /// Card effect method for Walkway. 
     /// </summary>
-    /// <returns>Wait & Hold time</returns>
-    public IEnumerator Walkway()
+    public void Walkway()
     {
-        yield return null;
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            {
+                pawn.GetComponent<PlayerPawn>().IsDigging = true;
+                pawn.GetComponent<PlayerPawn>().WalkwaySelect = true;
+                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+            }
+        }
 
+        _bm.BoardColliderSwitch(false);
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
     }
 
     /// <summary>
@@ -994,7 +1013,7 @@ public class CardEffects : MonoBehaviour
                     yield return null;
                 }
 
-                SelectedBuilding.DamageBuiliding(CalculateBuildingDamage());
+                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
 
                 SelectedBuilding = null;
             }
@@ -1016,13 +1035,17 @@ public class CardEffects : MonoBehaviour
     /// <summary>
     /// Card effect Coroutine for Mudslide. 
     /// </summary>
-    /// <returns>Wait & Hold time</returns>
-    public IEnumerator Mudslide()
+    public void Mudslide()
     {
-        yield return null;
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            pawn.GetComponent<PlayerPawn>().MudslideMove = true;
+            pawn.GetComponent<Animator>().Play("TempPawnBlink");
+        }
 
+        _bm.BoardColliderSwitch(false);
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.UpdateCurrentActionText("Select a pawn to move and Dirt Piece to move onto.");
     }
 
     /// <summary>
@@ -1087,7 +1110,7 @@ public class CardEffects : MonoBehaviour
                     yield return null;
                 }
 
-                SelectedBuilding.DamageBuiliding(CalculateBuildingDamage());
+                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
 
                 SelectedBuilding = null;
             }
@@ -1127,7 +1150,7 @@ public class CardEffects : MonoBehaviour
                     yield return null;
                 }
 
-                SelectedBuilding.DamageBuiliding(CalculateBuildingDamage());
+                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
 
                 SelectedBuilding = null;
             }
@@ -1249,7 +1272,7 @@ public class CardEffects : MonoBehaviour
                 {
                     if(piece.GetComponentInChildren<Building>())
                     {
-                        piece.GetComponentInChildren<Building>().DamageBuiliding(CalculateBuildingDamage());
+                        StartCoroutine(piece.GetComponentInChildren<Building>().DamageBuiliding(CalculateBuildingDamage()));
                     }
                 }
 
@@ -1360,7 +1383,45 @@ public class CardEffects : MonoBehaviour
     /// <returns>Wait & Hold time</returns>
     public IEnumerator MetalDetector()
     {
-        yield return null;
+        int stoneOnBoard = 0;
+        foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
+            {
+                if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
+                stoneOnBoard++;
+                piece.GetComponent<PieceController>().ShowHideFlippable(true);
+            }
+        }
+
+        if(stoneOnBoard >= MetalDetectorStoneToFlip)
+        {
+            RemainingFlips = MetalDetectorStoneToFlip;
+        }
+        else if(stoneOnBoard != 0)
+        {
+            RemainingFlips = stoneOnBoard;
+        }
+        else
+        {
+            _gcm.UpdateCurrentActionText("No Stone to Flip!");
+            RemainingFlips = 0;
+        }
+
+        while(RemainingFlips != 0)
+        {
+            _gcm.UpdateCurrentActionText("Select " + RemainingFlips + " Stone Pieces to look for Gold in!");
+            yield return null;
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideFlippable(false);
+        }
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
@@ -1369,10 +1430,32 @@ public class CardEffects : MonoBehaviour
     /// <summary>
     /// Card effect Coroutine for Planned Gamble. 
     /// </summary>
-    /// <returns>Wait & Hold time</returns>
-    public IEnumerator PlannedGamble()
+    public void PlannedGamble()
     {
-        yield return null;
+        if(_am.CurrentPlayer == 1)
+        {
+            foreach(GameObject card in _cm.P1Hand)
+            {
+                card.GetComponent<CardController>().ToDiscard();
+            }
+
+            for(int i = PlannedGambleCardsToDraw; i != 0; i--)
+            {
+                _cm.DrawCard("Universal");
+            }
+        }
+        else
+        {
+            foreach (GameObject card in _cm.P2Hand)
+            {
+                card.GetComponent<CardController>().ToDiscard();
+            }
+
+            for (int i = PlannedGambleCardsToDraw; i != 0; i--)
+            {
+                _cm.DrawCard("Universal");
+            }
+        }
 
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();

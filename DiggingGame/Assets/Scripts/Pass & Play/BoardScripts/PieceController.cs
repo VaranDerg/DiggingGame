@@ -45,6 +45,7 @@ public class PieceController : MonoBehaviour
     private ActionManager _am;
     private CardManager _cm;
     private GameCanvasManagerNew _gcm;
+    private PersistentCardManager _pcm;
     private CardEffects _ce;
     [HideInInspector] public bool HasGold;    //true if the piece reveals gold when flipped
 
@@ -52,6 +53,8 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public bool FromActivatedCard = false;
     [HideInInspector] public bool MovingForFree = false, JustMovedForFree = false;
     [HideInInspector] public bool IsEarthquakeable;
+    [HideInInspector] public bool WalkwayDig;
+    [HideInInspector] public bool IsFlippable;
 
     private void Awake()
     {
@@ -61,6 +64,7 @@ public class PieceController : MonoBehaviour
         _cm = FindObjectOfType<CardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         _ce = FindObjectOfType<CardEffects>();
+        _pcm = FindObjectOfType<PersistentCardManager>();
     }
 
     /// <summary>
@@ -128,6 +132,11 @@ public class PieceController : MonoBehaviour
                 FindObjectOfType<CardEffects>().SelectedPiece = this;
             }
         }
+
+        if (IsFlippable)
+        {
+            FlipPiece();
+        }
     }
 
     /// <summary>
@@ -137,68 +146,110 @@ public class PieceController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            _sr.color = _waitingColor;
-            PieceIsSelected = true;
-            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+            //Start of Shovel Code
+            bool hasShovel = _pcm.CheckForPersistentCard("Shovel", false);
+            if(hasShovel)
             {
-                pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
-            }
-
-            if (ObjState == GameState.One || ObjState == GameState.Six)
-            {
-                _cm.PrepareCardSelection(1, "Grass", false);
-            }
-            else if (ObjState == GameState.Two)
-            {
-                _cm.PrepareCardSelection(1, "Dirt", false);
-            }
-            else if (ObjState == GameState.Three || ObjState == GameState.Five)
-            {
-                _cm.PrepareCardSelection(1, "Stone", false);
-            }
-            else if (ObjState == GameState.Four)
-            {
-                _cm.PrepareCardSelection(1, "Any", false);
-            }
-
-            while (!_cm.CheckCardSelection())
-            {
-                yield return null;
-            }
-            _cm.PrepareCardSelection(0, "", true);
-
-            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-            _gcm.Back();
-
-            switch (ObjState)
-            {
-                case GameState.One:
-                    SetPieceState(2);
-                    _am.CollectTile(_am.CurrentPlayer, "Grass");
-                    break;
-                case GameState.Six:
-                    SetPieceState(2);
-                    _am.CollectTile(_am.CurrentPlayer, "Grass");
-                    break;
-                case GameState.Two:
+                if(ObjState == GameState.Two && !_am.ShovelUsed)
+                {
                     SetPieceState(3);
                     _am.CollectTile(_am.CurrentPlayer, "Dirt");
-                    break;
-                case GameState.Three:
-                    SetPieceState(4);
+                    _am.ShovelUsed = true;
+                }
+            }
+            else if(!WalkwayDig)
+            {
+                _sr.color = _waitingColor;
+                PieceIsSelected = true;
+                foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+                {
+                    pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
+                }
 
-                    if(HasGold)
-                    {
-                        _am.CollectTile(_am.CurrentPlayer, "Gold");
-                    }
-                    else
-                    {
-                        _am.CollectTile(_am.CurrentPlayer, "Stone");
-                    }
+                if (ObjState == GameState.One || ObjState == GameState.Six)
+                {
+                    _cm.PrepareCardSelection(1, "Grass", false);
+                }
+                else if (ObjState == GameState.Two)
+                {
+                    _cm.PrepareCardSelection(1, "Dirt", false);
+                }
+                else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                {
+                    _cm.PrepareCardSelection(1, "Stone", false);
+                }
+                else if (ObjState == GameState.Four)
+                {
+                    _cm.PrepareCardSelection(1, "Any", false);
+                }
 
-                    break;
+                while (!_cm.CheckCardSelection())
+                {
+                    yield return null;
+                }
+                _cm.PrepareCardSelection(0, "", true);
+
+                CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+                _gcm.Back();
+
+                switch (ObjState)
+                {
+                    case GameState.One:
+                        SetPieceState(2);
+                        _am.CollectTile(_am.CurrentPlayer, "Grass");
+                        break;
+                    case GameState.Six:
+                        SetPieceState(2);
+                        _am.CollectTile(_am.CurrentPlayer, "Grass");
+                        break;
+                    case GameState.Two:
+                        SetPieceState(3);
+                        _am.CollectTile(_am.CurrentPlayer, "Dirt");
+                        break;
+                    case GameState.Three:
+                        SetPieceState(4);
+
+                        if(HasGold)
+                        {
+                            _am.CollectTile(_am.CurrentPlayer, "Gold");
+                        }
+                        else
+                        {
+                            _am.CollectTile(_am.CurrentPlayer, "Stone");
+                        }
+
+                        break;
+                }
+            }
+            else
+            {
+                _am.CollectTile(_am.CurrentPlayer, "Grass");
+                _am.CollectTile(_am.CurrentPlayer, "Dirt");
+                SetPieceState(3);
+
+                CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
+                CurrentPawn.transform.position = gameObject.transform.position;
+                HasPawn = true;
+                CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+                WalkwayDig = false;
+                _gcm.Back();
             }
         }
+    }
+
+    /// <summary>
+    /// Flips a stone piece to see if it has gold or not.
+    /// </summary>
+    private void FlipPiece()
+    {
+        _ce.RemainingFlips--;
+
+        if(HasGold)
+        {
+            SetPieceState(5);
+        }
+
+        ShowHideFlippable(false);
     }
 
     /// <summary>
@@ -290,7 +341,7 @@ public class PieceController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
             //For the game's initial free move. The player has to spend cards unless this is true.
-            if(_am.CurrentTurnPhase != 1)
+            if(_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
             {
                 _sr.color = _waitingColor;
                 PieceIsSelected = true;
@@ -333,61 +384,31 @@ public class PieceController : MonoBehaviour
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
 
             //Start of Morning Jog code
-            bool hasMorningJog = false;
-            foreach(GameObject pCard in FindObjectOfType<PersistentCardManager>().P1PersistentCards)
+            bool hasMorningJog = _pcm.CheckForPersistentCard("Morning Jog", false);
+            if(hasMorningJog)
             {
-                if(hasMorningJog)
+                if (CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().ObjState == GameState.One || CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().ObjState == GameState.Six)
                 {
-                    continue;
-                }
-
-                if(pCard.name == "Morning Jog")
-                {
-                    hasMorningJog = true;
-                }
-                else
-                {
-                    hasMorningJog = false;
-                }
-            }
-            foreach (GameObject pCard in FindObjectOfType<PersistentCardManager>().P2PersistentCards)
-            {
-                if (hasMorningJog)
-                {
-                    continue;
-                }
-
-                if (pCard.name == "Morning Jog")
-                {
-                    hasMorningJog = true;
-                }
-                else
-                {
-                    hasMorningJog = false;
-                }
-            }
-
-            if (CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().ObjState == GameState.One || CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().ObjState == GameState.Six)
-            {
-                foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("PlayerPawn"))
-                {
-                    if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+                    foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("PlayerPawn"))
                     {
-                        pawn.GetComponent<PlayerPawn>().MorningJogMove = true;
+                        if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+                        {
+                            pawn.GetComponent<PlayerPawn>().MorningJogMove = true;
+                        }
                     }
-                }
 
-                if(MovingForFree && !JustMovedForFree)
-                {
-                    _am.StartMove(_am.CurrentPlayer);
-                    _gcm.UpdateCurrentActionText("Take a Move with Morning Jog.");
-                    JustMovedForFree = true;
-                    yield break;
-                }
-                else if(MovingForFree && JustMovedForFree)
-                {
-                    JustMovedForFree = false;
-                    MovingForFree = false;
+                    if (MovingForFree && !JustMovedForFree)
+                    {
+                        _am.StartMove(_am.CurrentPlayer);
+                        _gcm.UpdateCurrentActionText("Take a Move with Morning Jog.");
+                        JustMovedForFree = true;
+                        yield break;
+                    }
+                    else if (MovingForFree && JustMovedForFree)
+                    {
+                        JustMovedForFree = false;
+                        MovingForFree = false;
+                    }
                 }
             }
             //End of Morning Jog code
@@ -396,7 +417,7 @@ public class PieceController : MonoBehaviour
             {
                 _gcm.ToThenPhase();
             }
-            else if(_am.CurrentTurnPhase == 2)
+            else if(_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3)
             {
                 _gcm.Back();
             }
@@ -470,14 +491,24 @@ public class PieceController : MonoBehaviour
             pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
         }
 
-        if (_am.CurrentPlayer == 1)
+        //Master Builder Code
+        bool hasMasterBuilder = _pcm.CheckForPersistentCard("Master Builder", false);
+        if (hasMasterBuilder)
         {
-            _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+            _cm.PrepareCardSelection(_ce.NewBuildingCost, suitOfPiece, false);
         }
         else
         {
-            _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+            if (_am.CurrentPlayer == 1)
+            {
+                _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+            }
+            else
+            {
+                _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+            }
         }
+        //End Master Builder Code
 
         while (!_cm.CheckCardSelection())
         {
@@ -497,6 +528,14 @@ public class PieceController : MonoBehaviour
             _am.P2RemainingBuildings[buildingIndex]--;
             _am.P2BuiltBuildings[buildingIndex]++;
         }
+
+        //Master Builder Code
+        if(hasMasterBuilder)
+        {
+            //Discards Master Builder.
+            _pcm.CheckForPersistentCard("Master Builder", true);
+        }
+        //End Master Builder
 
         InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
@@ -580,29 +619,7 @@ public class PieceController : MonoBehaviour
             thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;
 
             //Planned Profit Code Start
-            bool hasPlannedProfit = false;
-            if(_am.CurrentPlayer == 1)
-            {
-                foreach (GameObject card in FindObjectOfType<PersistentCardManager>().P1PersistentCards)
-                {
-                    if (card.name == "PlannedProfit")
-                    {
-                        hasPlannedProfit = true;
-                        card.GetComponent<CardController>().ToDiscard();
-                    }
-                }
-            }
-            else
-            {
-                foreach (GameObject card in FindObjectOfType<PersistentCardManager>().P2PersistentCards)
-                {
-                    if (card.name == "PlannedProfit")
-                    {
-                        hasPlannedProfit = true;
-                        card.GetComponent<CardController>().ToDiscard();
-                    }
-                }
-            }
+            bool hasPlannedProfit = _pcm.CheckForPersistentCard("Planned Profit", true);
 
             if(hasPlannedProfit)
             {
@@ -802,6 +819,10 @@ public class PieceController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates tiles for earthquake.
+    /// </summary>
+    /// <param name="show">Show or Hide</param>
     public void ShowHideEarthquake(bool show)
     {
         if(show)
@@ -814,6 +835,25 @@ public class PieceController : MonoBehaviour
             _sr.color = _defaultColor;
             PieceIsSelected = false;
             IsEarthquakeable = false;
+        }
+    }
+
+    /// <summary>
+    /// Updates tiles for flipping.
+    /// </summary>
+    /// <param name="show">Show or Hide</param>
+    public void ShowHideFlippable(bool show)
+    {
+        if (show)
+        {
+            _sr.color = _selectedColor;
+            IsFlippable = true;
+        }
+        else
+        {
+            _sr.color = _defaultColor;
+            PieceIsSelected = false;
+            IsFlippable = false;
         }
     }
 
