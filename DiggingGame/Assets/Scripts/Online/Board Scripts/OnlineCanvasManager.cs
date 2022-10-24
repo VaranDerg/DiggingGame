@@ -459,7 +459,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _burrow.sprite = _moleBurrow;
             _mine.sprite = _moleMine;
         }
-        _am.EndTurn(_am.CurrentPlayer);
+
+        _am.EndTurn(_am.CurrentPlayer);     //Andrea SD
         UpdateTextBothPlayers();
     }  
 }
