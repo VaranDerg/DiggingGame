@@ -472,7 +472,7 @@ public class OnlineActionManager : MonoBehaviourPun
 
             CurrentTurnPhase = 0;
             
-            _gcm.StartTurnButton.SetActive(true);
+            //_gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
 
             photonView.RPC("ChangeTurn", RpcTarget.All, 2);     //ASD
@@ -616,18 +616,18 @@ public class OnlineActionManager : MonoBehaviourPun
         switch(player)
         {
             case 1:
-                P1CollectedPile.Initialize();
-                /*P1CollectedPile[0] = 0;
+                // P1CollectedPile.Initialize();
+                P1CollectedPile[0] = 0;
                 P1CollectedPile[1] = 0;
                 P1CollectedPile[2] = 0;
-                P1CollectedPile[3] = 0;*/
+                P1CollectedPile[3] = 0;
                 break;
             case 2:
-                P2CollectedPile.Initialize();
-                /*P2CollectedPile[0] = 0;
+               // P2CollectedPile.Initialize();
+                P2CollectedPile[0] = 0;
                 P2CollectedPile[1] = 0;
                 P2CollectedPile[2] = 0;
-                P2CollectedPile[3] = 0;*/
+                P2CollectedPile[3] = 0;
                 break;
         }    
     }
