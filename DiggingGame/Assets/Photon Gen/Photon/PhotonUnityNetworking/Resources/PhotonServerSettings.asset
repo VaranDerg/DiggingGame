@@ -59,6 +59,8 @@ MonoBehaviour:
   - EndPlayer2
   - StartPlayer1
   - StartPlayer2
+  - ChangeOpponentText
+  - UpdateScore
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -99,6 +99,20 @@ public class OnlineCanvasManager : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Sets the game into a basic opening state upon startup.
+    /// </summary>
+    private void Start()
+    {
+        DisableListObjects();
+
+        StartTurnButton.SetActive(true);
+        _opponentInfoZone.SetActive(false);
+
+        UpdateTextBothPlayers();
+        UpdateCurrentActionText("Press Start Turn to begin!");
+    }
+
+    /// <summary>
     /// Disables every object in AllObjects
     /// </summary>
     private void DisableListObjects()
@@ -111,9 +125,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     /// <summary>
     /// Updates text for the current player.
+    /// 
+    /// Edited: Andrea SD - modified for online use
     /// </summary>
     /// <param name="curPlayer">1 or 2</param>
-    private void UpdateCurrentPlayerText(int curPlayer)
+    private void UpdateCurrentPlayerText()
     {
         if (PhotonNetwork.IsMasterClient)   /*curPlayer == 1*/ //Edited: Andrea SD
         {
@@ -189,19 +205,33 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// Author: Andrea SD
     /// </summary>
     [PunRPC]
-    public void ChangeOpponentTextOne()
+    public void ChangeOpponentText()
     {
-        _opponentScoreText.text = "Score: " + _am.P1Score;
-        _opponentCardText.text = "Cards: " + _am.P1Cards;
-        _opponentGoldCardText.text = "Gold Cards: " + _am.P1GoldCards;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _opponentScoreText.text = "Score: " + _am.P2Score;
+            _opponentCardText.text = "Cards: " + _am.P2Cards;
+            _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
 
-        _opponentPieces[0].text = "Grass: " + (_am.P1CollectedPile[0] + _am.P1RefinedPile[0]);
-        _opponentPieces[1].text = "Dirt: " + (_am.P1CollectedPile[1] + _am.P1RefinedPile[1]);
-        _opponentPieces[2].text = "Stone: " + (_am.P1CollectedPile[2] + _am.P1RefinedPile[2]);
-        _opponentPieces[3].text = "Gold: " + (_am.P1CollectedPile[3] + _am.P1RefinedPile[3]);
+            _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
+            _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
+            _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
+            _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
+        }
+        else
+        {
+            _opponentScoreText.text = "Score: " + _am.P1Score;
+            _opponentCardText.text = "Cards: " + _am.P1Cards;
+            _opponentGoldCardText.text = "Gold Cards: " + _am.P1GoldCards;
+
+            _opponentPieces[0].text = "Grass: " + (_am.P1CollectedPile[0] + _am.P1RefinedPile[0]);
+            _opponentPieces[1].text = "Dirt: " + (_am.P1CollectedPile[1] + _am.P1RefinedPile[1]);
+            _opponentPieces[2].text = "Stone: " + (_am.P1CollectedPile[2] + _am.P1RefinedPile[2]);
+            _opponentPieces[3].text = "Gold: " + (_am.P1CollectedPile[3] + _am.P1RefinedPile[3]);
+        }
     }
 
-    /// <summary>
+/*    /// <summary>
     /// Changes the opponent text on player one's screen with player two's vals
     /// Author: Andrea SD
     /// </summary>
@@ -216,7 +246,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
         _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
         _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
-    }
+    }*/
 
     /// <summary>
     /// Updates the Current Action text.
@@ -232,30 +262,19 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void UpdateTextBothPlayers()
     {
-        UpdateCurrentPlayerText(_am.CurrentPlayer);
+        UpdateCurrentPlayerText(/*_am.CurrentPlayer*/);
         UpdateAlwaysActiveText();
-        if (_am.CurrentPlayer == 1)
+
+        /*if (_am.CurrentPlayer == 1)
         {
             photonView.RPC("ChangeOpponentTextTwo", RpcTarget.Others);     //Andrea SD
         }
         else
         {
             photonView.RPC("ChangeOpponentTextOne", RpcTarget.Others);     //Andrea SD
-        }
-    }
+        }*/
 
-    /// <summary>
-    /// Sets the game into a basic opening state upon startup.
-    /// </summary>
-    private void Start()
-    {
-        DisableListObjects();
-
-        StartTurnButton.SetActive(true);
-        _opponentInfoZone.SetActive(false);
-
-        UpdateTextBothPlayers();
-        UpdateCurrentActionText("Press Start Turn to begin!");
+        photonView.RPC("ChangeOpponentText", RpcTarget.All);     //Andrea SD
     }
 
     public void OpponentInfoToggle()

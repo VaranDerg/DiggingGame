@@ -454,7 +454,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             if (_am.CurrentPlayer == 1)
             {
-                _am.P1Score++;
+                _am.CallUpdateScore(1, 1);  // Andrea SD
 
                 if (buildingName == "Factory")
                 {
@@ -480,7 +480,7 @@ public class OnlinePieceController : MonoBehaviourPun
             }
             else
             {
-                _am.P2Score++;
+                _am.CallUpdateScore(2, 1);  // Andrea SD
 
                 if (buildingName == "Factory")
                 {

@@ -631,4 +631,27 @@ public class OnlineActionManager : MonoBehaviourPun
                 break;
         }    
     }
+
+    public void CallUpdateScore(int player, int amount)
+    {
+        photonView.RPC("UpdateScore", RpcTarget.All, player, amount);
+    }
+    /// <summary>
+    /// Updates the players scores across the network
+    /// </summary>
+    /// <param name="player"> player who's score is being updated </param>
+    /// <param name="amount"> amount the player's score is being changed by
+    /// </param>
+    [PunRPC]
+    public void UpdateScore(int player, int amount)
+    {
+        if(player == 1)
+        {
+            P1Score += amount;
+        }
+        else
+        {
+            P2Score += amount;
+        }             
+    }
 }

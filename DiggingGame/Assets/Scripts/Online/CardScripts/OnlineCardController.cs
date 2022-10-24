@@ -6,11 +6,12 @@
 // Brief Description : Script managing card/mouse interactivity and Activation.
 *****************************************************************************/
 
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnlineCardController : MonoBehaviour
+public class OnlineCardController : MonoBehaviourPun
 {
     //Edit: Andrea SD - Added online functionality
 
@@ -161,7 +162,7 @@ public class OnlineCardController : MonoBehaviour
 
                 _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
                 Debug.Log("Activation code will go in this line in the future.");
-                _am.P1Score++;
+                _am.CallUpdateScore(1, 1);    // Andrea SD
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
 
@@ -185,7 +186,7 @@ public class OnlineCardController : MonoBehaviour
 
                 _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
                 Debug.Log("Activation code will go in this line in the future.");
-                _am.P2Score++;
+                _am.CallUpdateScore(2, 1);
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
 
