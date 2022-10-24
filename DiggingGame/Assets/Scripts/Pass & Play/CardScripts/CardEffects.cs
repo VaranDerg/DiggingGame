@@ -129,7 +129,6 @@ public class CardEffects : MonoBehaviour
         _holyIdolUI.SetActive(false);
         SecretTunnelsUI.SetActive(false);
         _tornadoUI.SetActive(false);
-        _activateResponseBox.SetActive(false);
     }
 
     /// <summary>
