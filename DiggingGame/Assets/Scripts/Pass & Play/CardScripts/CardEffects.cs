@@ -659,16 +659,16 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Flowers()
     {
         _gcm.DisableListObjects();
-        bool enoughPieces;
+        bool canPlaceAll;
         int newPieceCount = 0;
         if(_am.SupplyPile[0] >= _flowersPiecesToPlace)
         {
-            enoughPieces = true;
-            newPieceCount = _flowersPiecesToPlace - _am.SupplyPile[0];
+            canPlaceAll = true;
         }
         else
         {
-            enoughPieces = false;
+            newPieceCount = _flowersPiecesToPlace - _am.SupplyPile[0];
+            canPlaceAll = false;
         }
 
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -679,7 +679,7 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        if(enoughPieces)
+        if(canPlaceAll)
         {
             _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto the Board!");
             while (PlacedPieces != _flowersPiecesToPlace)
@@ -696,7 +696,7 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        if(enoughPieces)
+        if(canPlaceAll)
         {
             _am.ScorePoints(1);
         }
@@ -718,10 +718,10 @@ public class CardEffects : MonoBehaviour
         if (_am.SupplyPile[0] >= _gardenPiecesToPlace)
         {
             enoughPieces = true;
-            newPieceCount = _gardenPiecesToPlace - _am.SupplyPile[0];
         }
         else
         {
+            newPieceCount = _gardenPiecesToPlace - _am.SupplyPile[0];
             enoughPieces = false;
         }
 
@@ -1191,10 +1191,10 @@ public class CardEffects : MonoBehaviour
         if (_am.SupplyPile[1] >= _fertilizerPiecesToPlace)
         {
             enoughPieces = true;
-            newPieceCount = _fertilizerPiecesToPlace - _am.SupplyPile[1];
         }
         else
         {
+            newPieceCount = _fertilizerPiecesToPlace - _am.SupplyPile[1];
             enoughPieces = false;
         }
 
@@ -1443,10 +1443,10 @@ public class CardEffects : MonoBehaviour
         if (_am.SupplyPile[2] >= _compactionPiecesToPlace)
         {
             enoughPieces = true;
-            newPieceCount = _compactionPiecesToPlace - _am.SupplyPile[2];
         }
         else
         {
+            newPieceCount = _compactionPiecesToPlace - _am.SupplyPile[2];
             enoughPieces = false;
         }
 
