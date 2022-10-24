@@ -154,7 +154,7 @@ public class PieceController : MonoBehaviour
                 if(ObjState == GameState.Two && !_am.ShovelUsed)
                 {
                     SetPieceState(3);
-                    _am.CollectTile(_am.CurrentPlayer, "Dirt");
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                     _am.ShovelUsed = true;
                 }
             }
@@ -197,26 +197,26 @@ public class PieceController : MonoBehaviour
                 {
                     case GameState.One:
                         SetPieceState(2);
-                        _am.CollectTile(_am.CurrentPlayer, "Grass");
+                        _am.CollectTile(_am.CurrentPlayer, "Grass", true);
                         break;
                     case GameState.Six:
                         SetPieceState(2);
-                        _am.CollectTile(_am.CurrentPlayer, "Grass");
+                        _am.CollectTile(_am.CurrentPlayer, "Grass", true);
                         break;
                     case GameState.Two:
                         SetPieceState(3);
-                        _am.CollectTile(_am.CurrentPlayer, "Dirt");
+                        _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                         break;
                     case GameState.Three:
                         SetPieceState(4);
 
                         if(HasGold)
                         {
-                            _am.CollectTile(_am.CurrentPlayer, "Gold");
+                            _am.CollectTile(_am.CurrentPlayer, "Gold", true);
                         }
                         else
                         {
-                            _am.CollectTile(_am.CurrentPlayer, "Stone");
+                            _am.CollectTile(_am.CurrentPlayer, "Stone", true);
                         }
 
                         break;
@@ -224,8 +224,8 @@ public class PieceController : MonoBehaviour
             }
             else
             {
-                _am.CollectTile(_am.CurrentPlayer, "Grass");
-                _am.CollectTile(_am.CurrentPlayer, "Dirt");
+                _am.CollectTile(_am.CurrentPlayer, "Grass", false);
+                _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                 SetPieceState(3);
 
                 CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
@@ -273,32 +273,34 @@ public class PieceController : MonoBehaviour
             {
                 case GameState.One:
                     SetPieceState(2);
-                    _am.CollectTile(_am.CurrentPlayer, "Grass");
+                    _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     FindObjectOfType<CardEffects>().DugPieces++;
                     break;
                 case GameState.Six:
                     SetPieceState(2);
-                    _am.CollectTile(_am.CurrentPlayer, "Grass");
+                    _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     FindObjectOfType<CardEffects>().DugPieces++;
                     break;
                 case GameState.Two:
                     SetPieceState(3);
-                    _am.CollectTile(_am.CurrentPlayer, "Dirt");
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
                     FindObjectOfType<CardEffects>().DugPieces++;
                     break;
                 case GameState.Three:
                     SetPieceState(4);
                     if (HasGold)
                     {
-                        _am.CollectTile(_am.CurrentPlayer, "Gold");
+                        _am.CollectTile(_am.CurrentPlayer, "Gold", false);
                     }
                     else
                     {
-                        _am.CollectTile(_am.CurrentPlayer, "Stone");
+                        _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     }
                     FindObjectOfType<CardEffects>().DugPieces++;
                     break;
             }
+
+            FromActivatedCard = false;
         }    
     }
 

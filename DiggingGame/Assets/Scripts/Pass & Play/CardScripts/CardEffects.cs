@@ -159,6 +159,9 @@ public class CardEffects : MonoBehaviour
             case "Morning Jog":
                 StartCoroutine(MorningJog(pCardObject));
                 break;
+            case "Overgrowth!":
+                StartCoroutine(Overgrowth());
+                break;
             case "Planned Profit":
                 StartCoroutine(PlannedProfit(pCardObject));
                 break;
@@ -183,7 +186,7 @@ public class CardEffects : MonoBehaviour
             case "Fertilizer":
                 StartCoroutine(Fertilizer());
                 break;
-            case "Flood":
+            case "Flood!":
                 StartCoroutine(Flood());
                 break;
             case "Mudslide":
@@ -195,13 +198,13 @@ public class CardEffects : MonoBehaviour
             case "Shovel":
                 StartCoroutine(Shovel(pCardObject));
                 break;
-            case "Thunderstorm":
+            case "Thunderstorm!":
                 StartCoroutine(Thunderstorm());
                 break;
             case "Compaction":
                 StartCoroutine(Compaction());
                 break;
-            case "Earthquake":
+            case "Earthquake!":
                 StartCoroutine(Earthquake());
                 break;
             case "Erosion":
@@ -243,7 +246,7 @@ public class CardEffects : MonoBehaviour
             case "Teleportation":
                 Teleportation();
                 break;
-            case "Tornado":
+            case "Tornado!":
                 StartCoroutine(Tornado());
                 break;
             case "Transmutation":
@@ -813,6 +816,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        DugPieces = 0;
+
         if(possiblePieces >= _lawnmowerPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
@@ -829,6 +834,8 @@ public class CardEffects : MonoBehaviour
                 yield return null;
             }
         }
+
+        DugPieces = 0;
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
@@ -1158,6 +1165,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        DugPieces = 0;
+
         if (possiblePieces >= _excavatorPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
@@ -1174,6 +1183,8 @@ public class CardEffects : MonoBehaviour
                 yield return null;
             }
         }
+
+        DugPieces = 0;
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
@@ -1801,6 +1812,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        DugPieces = 0;
+
         if (possiblePieces >= _goldenShovelPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _goldenShovelPiecesToDig + " Grass Pieces adjacent to your Pawns!");
@@ -1817,6 +1830,8 @@ public class CardEffects : MonoBehaviour
                 yield return null;
             }
         }
+
+        DugPieces = 0;
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();

@@ -220,7 +220,7 @@ public class ActionManager : MonoBehaviour
     /// Collects a tile and adds it to one of the "collected" variables. 
     /// </summary>
     /// <param name="type">"Grass" "Dirt" "Stone" or "Gold"</param>
-    public void CollectTile(int player, string type)
+    public void CollectTile(int player, string type, bool goBack)
     {
         if (player == 1)
         {
@@ -229,22 +229,34 @@ public class ActionManager : MonoBehaviour
                 case "Grass":
                     P1CollectedPile[0]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if(goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Dirt":
                     P1CollectedPile[1]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Stone":
                     P1CollectedPile[2]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Gold":
                     P1CollectedPile[3]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
             }
         }
@@ -255,22 +267,34 @@ public class ActionManager : MonoBehaviour
                 case "Grass":
                     P2CollectedPile[0]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Dirt":
                     P2CollectedPile[1]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Stone":
                     P2CollectedPile[2]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Gold":
                     P2CollectedPile[3]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
             }
         }
