@@ -181,7 +181,7 @@ public class Building : MonoBehaviour
 
         if(BuildingHealth <= 0)
         {
-            Debug.Log("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
 
             if(PlayerOwning == 1)
             {

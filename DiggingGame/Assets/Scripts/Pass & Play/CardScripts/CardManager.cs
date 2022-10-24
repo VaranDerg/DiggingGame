@@ -128,7 +128,9 @@ public class CardManager : MonoBehaviour
         {
             if(_gDeck.Count == 0)
             {
-                Debug.Log("No Gold Cards remain!");
+                _gcm.UpdateCurrentActionText("Gold deck is empty! Scored 1 Point!");
+                _am.ScorePoints(1);
+                //Debug.Log("No Gold Cards remain!");
                 return;
             }
 
@@ -355,7 +357,7 @@ public class CardManager : MonoBehaviour
                 }
             }
 
-            Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
+            //Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
 
             DPile.Clear();
             UpdatePileText();

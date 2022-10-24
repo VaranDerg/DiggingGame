@@ -721,7 +721,7 @@ public class PieceController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Cannot place " + building.name + " adjacent to another building.");
+            _gcm.UpdateCurrentActionText("Cannot place " + building.name + " adjacent to another building.");
             return false;
         }
     }

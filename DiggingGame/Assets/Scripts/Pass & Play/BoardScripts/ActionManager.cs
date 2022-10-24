@@ -378,7 +378,7 @@ public class ActionManager : MonoBehaviour
     /// <param name="type">"Grass" "Dirt" or "Stone"</param>
     public void PlaceTile(int player, string type)
     {
-        Debug.Log("Player " + player + " placed a " + type + " tile!");
+        //Debug.Log("Player " + player + " placed a " + type + " tile!");
 
         switch (type)
         {
