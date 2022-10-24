@@ -89,7 +89,7 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseEnter()
     {
-        if(MadePersistentP1)
+        if(MadePersistentP1 || MadePersistentP2)
         {
             return;
         }
@@ -102,7 +102,7 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
-        if(MadePersistentP1)
+        if(MadePersistentP1 || MadePersistentP2)
         {
             return;
         }
@@ -122,7 +122,7 @@ public class CardController : MonoBehaviour
     {
         MaximizeCard(_cardVisualToMaximize);
 
-        if (MadePersistentP1)
+        if (MadePersistentP1 || MadePersistentP2)
         {
             return;
         }

@@ -262,7 +262,7 @@ public class CardEffects : MonoBehaviour
     /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
     private void ShowActivationText(string suit, string effectName, bool start)
     {
-        _gcm.UpdateCurrentActionText("Player " + _am.CurrentPlayer + " has activated " + effectName + "!");
+        _gcm.UpdateCurrentActionText("Activated Card!");
         _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
         if(suit == "Grass")
         {
