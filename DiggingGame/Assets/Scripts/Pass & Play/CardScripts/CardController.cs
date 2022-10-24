@@ -215,7 +215,7 @@ public class CardController : MonoBehaviour
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
                 _cm.StopCardActivating(_am.CurrentPlayer);
-                if (!GetComponent<CardVisuals>().ThisCard.persistent)
+                if (!GetComponentInChildren<CardVisuals>().ThisCard.persistent)
                 {
                     ToDiscard();
                 }
@@ -255,7 +255,7 @@ public class CardController : MonoBehaviour
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
                 _cm.StopCardActivating(_am.CurrentPlayer);
-                if (!GetComponent<CardVisuals>().ThisCard.persistent)
+                if (!GetComponentInChildren<CardVisuals>().ThisCard.persistent)
                 {
                     ToDiscard();
                 }

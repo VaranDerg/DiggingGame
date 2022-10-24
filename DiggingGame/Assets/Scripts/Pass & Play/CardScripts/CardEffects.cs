@@ -665,7 +665,7 @@ public class CardEffects : MonoBehaviour
 
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -738,7 +738,7 @@ public class CardEffects : MonoBehaviour
 
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -793,7 +793,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -807,7 +807,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -835,6 +835,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _bm.BoardColliderSwitch(false);
+
         for (int i = AllowedDamages; i != 0; i--)
         {
             if (buildingCount != 0)
@@ -861,7 +863,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -875,7 +877,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -944,7 +946,7 @@ public class CardEffects : MonoBehaviour
         _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -963,7 +965,6 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.BoardColliderSwitch(false);
-        _bm.DisableAllBoardInteractions();
     }
 
     /// <summary>
@@ -977,7 +978,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     //Dirt Cards
@@ -993,7 +994,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1062,7 +1063,7 @@ public class CardEffects : MonoBehaviour
         _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1117,7 +1118,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1171,7 +1172,7 @@ public class CardEffects : MonoBehaviour
 
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1198,6 +1199,8 @@ public class CardEffects : MonoBehaviour
                 }
             }
         }
+
+        _bm.BoardColliderSwitch(false);
 
         for (int i = AllowedDamages; i != 0; i--)
         {
@@ -1239,7 +1242,6 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.BoardColliderSwitch(false);
-        _bm.DisableAllBoardInteractions();
         _gcm.UpdateCurrentActionText("Select a pawn to move and Dirt Piece to move onto.");
     }
 
@@ -1254,7 +1256,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1268,7 +1270,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1295,6 +1297,8 @@ public class CardEffects : MonoBehaviour
                 }
             }
         }
+
+        _bm.BoardColliderSwitch(false);
 
         for (int i = AllowedDamages; i != 0; i--)
         {
@@ -1336,6 +1340,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _bm.BoardColliderSwitch(false);
+
         for (int i = AllowedDamages; i != 0; i--)
         {
             if (yourBuildingCount != 0)
@@ -1362,7 +1368,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     //Stone Cards
@@ -1418,7 +1424,7 @@ public class CardEffects : MonoBehaviour
 
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1479,7 +1485,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1534,7 +1540,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1548,7 +1554,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1562,7 +1568,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1612,7 +1618,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1646,7 +1652,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     //Gold Cards
@@ -1700,7 +1706,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1755,7 +1761,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1773,7 +1779,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1842,7 +1848,7 @@ public class CardEffects : MonoBehaviour
         _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1875,7 +1881,7 @@ public class CardEffects : MonoBehaviour
         RepairedBuildings = 0;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1922,7 +1928,7 @@ public class CardEffects : MonoBehaviour
         _regenSpotsOnBoard = 0;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1936,7 +1942,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1957,7 +1963,7 @@ public class CardEffects : MonoBehaviour
         _bm.BoardColliderSwitch(false);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -2032,7 +2038,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -2043,6 +2049,6 @@ public class CardEffects : MonoBehaviour
         _am.ScorePoints(1);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 }

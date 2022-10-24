@@ -245,7 +245,9 @@ public class PersistentCardManager : MonoBehaviour
             possibleDamages++;
         }
 
-        if(possibleDamages >= _ce.RetributionDamages)
+        _bm.BoardColliderSwitch(false);
+
+        if (possibleDamages >= _ce.RetributionDamages)
         {
             possibleDamages = _ce.RetributionDamages;
         }
