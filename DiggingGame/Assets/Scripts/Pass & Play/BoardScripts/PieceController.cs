@@ -316,7 +316,10 @@ public class PieceController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            if(CurrentPawn != null)
+            {
+                CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            }
             FindObjectOfType<CardEffects>().PlacedPieces++;
 
             switch (ObjState)

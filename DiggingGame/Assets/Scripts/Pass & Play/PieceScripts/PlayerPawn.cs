@@ -403,6 +403,7 @@ public class PlayerPawn : MonoBehaviour
             }
         }
 
+        MudslideMove = false;
         _bm.BoardColliderSwitch(true);
     }
 

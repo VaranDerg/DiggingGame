@@ -2044,9 +2044,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.BoardColliderSwitch(false);
-
-        _bm.DisableAllBoardInteractions();
-        _gcm.Back();
+        _gcm.UpdateCurrentActionText("Select a pawn to teleport and Piece to teleport onto.");
     }
 
     /// <summary>
