@@ -397,7 +397,7 @@ public class OnlineCardManager : MonoBehaviour
             }
 
            // HideCards(_am.CurrentPlayer);
-            _am.EndTurn(_am.CurrentPlayer);
+            //_am.EndTurn(_am.CurrentPlayer);   // Andrea SD - commented out
         }
         else if (player == 2)
         {
@@ -414,7 +414,7 @@ public class OnlineCardManager : MonoBehaviour
             }
 
            // HideCards(_am.CurrentPlayer);
-            _am.EndTurn(_am.CurrentPlayer);
+            //_am.EndTurn(_am.CurrentPlayer);   // Andrea SD - commented out
         }
     }
 

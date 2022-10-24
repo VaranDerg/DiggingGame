@@ -54,7 +54,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     private OnlineActionManager _am;
     private OnlineBoardManager _bm;
     private OnlineCardManager _cm;
-    private TurnController _tm;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -459,7 +458,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _factory.sprite = _moleFactory;
             _burrow.sprite = _moleBurrow;
             _mine.sprite = _moleMine;
-        }     
+        }
+        _am.EndTurn(_am.CurrentPlayer);
         UpdateTextBothPlayers();
     }  
 }

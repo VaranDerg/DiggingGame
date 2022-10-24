@@ -486,7 +486,6 @@ public class OnlineActionManager : MonoBehaviourPun
             }
 
             CurrentTurnPhase = 0;
-            photonView.RPC("ChangeTurn", RpcTarget.All, 1);     //ASD
             CurrentRound++;
 
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
