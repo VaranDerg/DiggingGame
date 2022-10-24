@@ -27,6 +27,7 @@ public class CardController : MonoBehaviour
     private ActionManager _am;
     private GameCanvasManagerNew _gcm;
     private BoardManager _bm;
+    private CardEffects _ce;
     private PersistentCardManager _pcm;
     [HideInInspector] public int HandPosition;
     [HideInInspector] public int PHandPosition;
@@ -57,6 +58,7 @@ public class CardController : MonoBehaviour
         _bm = FindObjectOfType<BoardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         _pcm = FindObjectOfType<PersistentCardManager>();
+        _ce = FindObjectOfType<CardEffects>();
         HeldByPlayer = 0;
     }
 
@@ -113,17 +115,12 @@ public class CardController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// On click events with the card.
+    /// </summary>
     private void OnMouseOver()
     {
         MaximizeCard(_cardVisualToMaximize);
-
-        if(CanBeDiscarded)
-        {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                ToDiscard();
-            }
-        }
 
         if (MadePersistentP1)
         {
@@ -145,8 +142,19 @@ public class CardController : MonoBehaviour
                 ActivateCard();
             }
         }
+
+        if (CanBeDiscarded)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                ToDiscard();
+            }
+        }
     }
 
+    /// <summary>
+    /// Selects the card.
+    /// </summary>
     private void SelectCard()
     {
         if(!Selected)
@@ -161,6 +169,9 @@ public class CardController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Activates the card through cardeffects.
+    /// </summary>
     private void ActivateCard()
     {
         CardVisuals cv = _cardBody.GetComponentInChildren<CardVisuals>();
@@ -185,27 +196,29 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                if(cv.ThisCard.GrassSuit)
+                if (cv.ThisCard.GrassSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody);
+                    _ce.StartCoroutine(_ce.ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody));
                 }
-                else if(cv.ThisCard.DirtSuit)
+                else if (cv.ThisCard.DirtSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody);
+                    _ce.StartCoroutine(_ce.ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody));
                 }
-                else if(cv.ThisCard.StoneSuit)
+                else if (cv.ThisCard.StoneSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody);
+                    _ce.StartCoroutine(_ce.ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody));
                 }
-                else if(cv.ThisCard.GoldSuit)
+                else if (cv.ThisCard.GoldSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody);
+                    _ce.StartCoroutine(_ce.ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody));
                 }
-                _am.ScorePoints(1);
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
-
-                ToDiscard();
+                _cm.StopCardActivating(_am.CurrentPlayer);
+                if (!GetComponent<CardVisuals>().ThisCard.persistent)
+                {
+                    ToDiscard();
+                }
             }
             else
             {
@@ -225,25 +238,24 @@ public class CardController : MonoBehaviour
 
                 if (cv.ThisCard.GrassSuit)
                 {
-                    FindObjectOfType<CardEffects>().StartCoroutine(FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody));
+                    _ce.StartCoroutine(_ce.ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody));
                 }
                 else if (cv.ThisCard.DirtSuit)
                 {
-                    FindObjectOfType<CardEffects>().StartCoroutine(FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody));
+                    _ce.StartCoroutine(_ce.ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody));
                 }
                 else if (cv.ThisCard.StoneSuit)
                 {
-                    FindObjectOfType<CardEffects>().StartCoroutine(FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody));
+                    _ce.StartCoroutine(_ce.ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody));
                 }
                 else if (cv.ThisCard.GoldSuit)
                 {
-                    FindObjectOfType<CardEffects>().StartCoroutine(FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody));
+                    _ce.StartCoroutine(_ce.ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody));
                 }
-                _am.ScorePoints(1);
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
-
-                if (!MadePersistentP1 && !MadePersistentP2)
+                _cm.StopCardActivating(_am.CurrentPlayer);
+                if (!GetComponent<CardVisuals>().ThisCard.persistent)
                 {
                     ToDiscard();
                 }
@@ -255,6 +267,9 @@ public class CardController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Discards the card.
+    /// </summary>
     public void ToDiscard()
     {
         if (!MadePersistentP1 && !MadePersistentP2)

@@ -456,7 +456,7 @@ public class CardManager : MonoBehaviour
         }
         else
         {
-            foreach (GameObject card in P1Hand)
+            foreach (GameObject card in P2Hand)
             {
                 card.GetComponentInChildren<CardController>().CanBeActivated = false;
             }

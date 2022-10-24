@@ -82,7 +82,7 @@ public class PersistentCardManager : MonoBehaviour
                     }
                     P1PersistentCards.Add(card);
                     P1OpenPCardSlots[i] = false;
-                    Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
+                    //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
                 }
             }
@@ -106,7 +106,7 @@ public class PersistentCardManager : MonoBehaviour
                     }
                     P2PersistentCards.Add(card);
                     P2OpenPCardSlots[i] = false;
-                    Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
+                    //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
                 }
             }
