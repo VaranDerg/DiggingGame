@@ -10,13 +10,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class CardEffects : MonoBehaviour
 {
     [Header("General Values")]
     [SerializeField] private float activateAnimWaitTime;
 
-    [Header("UI References")]
+    [Header("Activation UI References")]
+    [SerializeField] private GameObject _activateResponseBox;
+    [SerializeField] private Color _grassColor, _dirtColor, _stoneColor, _goldColor;
+    [SerializeField] private TextMeshProUGUI _cardActivatedText;
+
+    [Header("Card UI References")]
     [SerializeField] private GameObject _morningJogUI;
     [SerializeField] private GameObject _thiefUI;
     public GameObject SecretTunnelsUI;
@@ -123,6 +129,7 @@ public class CardEffects : MonoBehaviour
         _holyIdolUI.SetActive(false);
         SecretTunnelsUI.SetActive(false);
         _tornadoUI.SetActive(false);
+        _activateResponseBox.SetActive(false);
     }
 
     /// <summary>
@@ -132,12 +139,14 @@ public class CardEffects : MonoBehaviour
     /// <param name="effectName">Name of the effect, matches coroutine. Capitalize each letter, spaces between words.</param>
     public IEnumerator ActivateCardEffect(string suit, string effectName, GameObject pCardObject)
     {
-        ShowActivationText(suit, effectName);
+        ShowActivationText(suit, effectName, true);
 
         yield return new WaitForSeconds(activateAnimWaitTime);
 
+        ShowActivationText(suit, effectName, false);
+
         //DO NOT OPEN THIS YOU WILL BE JUMPSCARED
-        switch(effectName)
+        switch (effectName)
         {
             case "Flowers":
                 StartCoroutine(Flowers());
@@ -250,11 +259,39 @@ public class CardEffects : MonoBehaviour
     /// <summary>
     /// Function that plays an animation when a player activates a card.
     /// </summary>
-    /// <param name="effectName"></param>
-    private void ShowActivationText(string suit, string effectName)
+    /// <param name="effectName">"Name of the Effect"</param>
+    /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
+    private void ShowActivationText(string suit, string effectName, bool start)
     {
-        Debug.Log("Play " + suit + " animation here.");
         _gcm.UpdateCurrentActionText("Player " + _am.CurrentPlayer + " has activated " + effectName + "!");
+        _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
+        if(suit == "Grass")
+        {
+            _activateResponseBox.GetComponent<Image>().color = _grassColor;
+        }
+        else if(suit == "Dirt")
+        {
+            _activateResponseBox.GetComponent<Image>().color = _dirtColor;
+        }
+        else if(suit == "Stone")
+        {
+            _activateResponseBox.GetComponent<Image>().color = _stoneColor;
+        }
+        else if(suit == "Gold")
+        {
+            _activateResponseBox.GetComponent<Image>().color = _goldColor;
+        }
+
+        if (start)
+        {
+            _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeIn");
+            _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeIn");
+        }
+        else
+        {
+            _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeOut");
+            _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeOut");
+        }
     }
 
     /// <summary>
@@ -385,7 +422,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _remainingPiecesToSteal--;
-        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+        _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
         _gcm.UpdateTextBothPlayers();
     }
 
