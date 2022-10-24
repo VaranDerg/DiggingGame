@@ -99,12 +99,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damagedColor: {r: 1, g: 0.48584908, b: 0.48584908, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   BuildingHealth: 2
   PlayerOwning: 0
   BuildingType: 
   CanBeDamaged: 0
+  CanBeRepaired: 0
   DamageTaken: 0
   SuitOfPiece: 
+  ActiveBuilding: 0
+  DamageProtectionResponse: 0
 --- !u!95 &530540349095201087
 Animator:
   serializedVersion: 4

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Flowers
   m_EditorClassIdentifier: 
   CardName: Flowers
-  CardDescription: Place 3 Grass Pieces onto Dirt Pieces. Score 1 point if all are
+  CardDescription: Place 3 Grass Pieces onto Dirt Pieces. Score 1 Point if all are
     placed.
   GrassSuit: 1
   DirtSuit: 0

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Reconstruction
   m_EditorClassIdentifier: 
   CardName: Reconstruction
-  CardDescription: Repair any Buildings of your choice. Score 1 point for every enemy
-    Building you repair.
+  CardDescription: Repair 3 Buildings of your choice. For every enemy Building repaired
+    this way, score 1 point.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0

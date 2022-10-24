@@ -225,19 +225,19 @@ public class CardController : MonoBehaviour
 
                 if (cv.ThisCard.GrassSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody);
+                    FindObjectOfType<CardEffects>().StartCoroutine(FindObjectOfType<CardEffects>().ActivateCardEffect("Grass", cv.ThisCard.CardName, _cardBody));
                 }
                 else if (cv.ThisCard.DirtSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody);
+                    FindObjectOfType<CardEffects>().StartCoroutine(FindObjectOfType<CardEffects>().ActivateCardEffect("Dirt", cv.ThisCard.CardName, _cardBody));
                 }
                 else if (cv.ThisCard.StoneSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody);
+                    FindObjectOfType<CardEffects>().StartCoroutine(FindObjectOfType<CardEffects>().ActivateCardEffect("Stone", cv.ThisCard.CardName, _cardBody));
                 }
                 else if (cv.ThisCard.GoldSuit)
                 {
-                    FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody);
+                    FindObjectOfType<CardEffects>().StartCoroutine(FindObjectOfType<CardEffects>().ActivateCardEffect("Gold", cv.ThisCard.CardName, _cardBody));
                 }
                 _am.ScorePoints(1);
                 _cm.AllowedActivations--;

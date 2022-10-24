@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Excavator
   m_EditorClassIdentifier: 
   CardName: Excavator
-  CardDescription: Remove up to 4 adjacent Dirt Pieces.
+  CardDescription: 'Remove 4 adjacent Dirt Pieces. '
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0

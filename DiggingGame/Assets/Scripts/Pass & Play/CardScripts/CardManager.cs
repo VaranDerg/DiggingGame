@@ -64,7 +64,7 @@ public class CardManager : MonoBehaviour
             gCard.SetActive(false);
             gCardAmount++;
         }
-        Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
+        //Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public class CardManager : MonoBehaviour
             P2OpenHandPositions[i] = true;
         }
 
-        Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
+        //Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ public class CardManager : MonoBehaviour
                         _am.P1GoldCards++;
                         _gDeck.Remove(randomCard);
                     }
-                    Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+                    //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     UpdatePileText();
                     return;
                 }
@@ -191,7 +191,7 @@ public class CardManager : MonoBehaviour
                         _am.P2GoldCards++;
                         _gDeck.Remove(randomCard);
                     }
-                    Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+                    //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     UpdatePileText();
                     return;
                 }
@@ -291,7 +291,7 @@ public class CardManager : MonoBehaviour
 
         if(selectedCardValue == requiredCardValue)
         {
-            Debug.Log("Adequate cards provided!");
+            //Debug.Log("Adequate cards provided!");
             SpendSelectedCards();
             return true;
         }
@@ -372,7 +372,7 @@ public class CardManager : MonoBehaviour
         {
             DrawCard("Universal");
         }
-        Debug.Log("Drew " + cardsToDraw + " cards!");
+        //Debug.Log("Drew " + cardsToDraw + " cards!");
     }
 
     /// <summary>

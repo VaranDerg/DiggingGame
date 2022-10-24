@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Regeneration
   m_EditorClassIdentifier: 
   CardName: Regeneration
-  CardDescription: Choose any type of Resource. Place up to 10 back onto their respective
-    Piece. Score 1 point for every 2 Pieces placed.
+  CardDescription: 'Choose a type of Piece. Place 10 of those Pieces back onto the
+    board. For every 3 replaced Pieces, score 1 point. '
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0

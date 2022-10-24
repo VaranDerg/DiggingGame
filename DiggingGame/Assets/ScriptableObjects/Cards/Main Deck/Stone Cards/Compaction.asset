@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Compaction
   m_EditorClassIdentifier: 
   CardName: Compaction
-  CardDescription: Place 2 Stone Pieces onto any Bedrock Pieces. Score 1 point if
-    all are placed.
+  CardDescription: 'Place 2 Stone Pieces onto any Bedrock Pieces. Score 1 point if
+    all are placed. '
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1

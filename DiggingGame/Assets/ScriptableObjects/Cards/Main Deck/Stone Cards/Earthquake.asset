@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Earthquake
   m_EditorClassIdentifier: 
   CardName: Earthquake!
-  CardDescription: Pick an empty Stone Piece. Damage every Building within a two
-    Piece range.
+  CardDescription: 'Pick an empty Stone Piece. Damage every adjacent Building. '
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1

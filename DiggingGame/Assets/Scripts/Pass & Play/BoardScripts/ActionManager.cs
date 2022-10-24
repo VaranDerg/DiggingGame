@@ -338,6 +338,7 @@ public class ActionManager : MonoBehaviour
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
+                _gcm.UpdateCurrentActionText("Gold retrieved!");
             }
         }
         else if (player == 2)

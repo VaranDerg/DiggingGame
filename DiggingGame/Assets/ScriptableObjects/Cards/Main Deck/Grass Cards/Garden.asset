@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Garden
   m_EditorClassIdentifier: 
   CardName: Garden
-  CardDescription: Place up to 3 Grass Pieces onto adjacent Dirt Pieces. Score 1
-    point if you place any and an additional point if you place all 3.
+  CardDescription: 'Place 3 Grass Pieces on adjacent Dirt Pieces. Score 2 points
+    if all 3 are placed, but only 1 point if 1 or more are placed. '
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Dam
   m_EditorClassIdentifier: 
   CardName: Dam
-  CardDescription: Discard this card to prevent a Building on a Dirt Piece from taking
-    damage.
+  CardDescription: 'Discard this card to prevent a Building on a Dirt Piece from
+    taking damage. '
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0

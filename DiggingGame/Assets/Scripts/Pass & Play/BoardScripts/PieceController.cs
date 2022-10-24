@@ -506,11 +506,25 @@ public class PieceController : MonoBehaviour
         {
             if (_am.CurrentPlayer == 1)
             {
-                _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+                if(buildingIndex == 0 || buildingIndex == 1)
+                {
+                    _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+                }
+                else
+                {
+                    _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[2], suitOfPiece, false);
+                }
             }
             else
             {
-                _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+                if (buildingIndex == 0 || buildingIndex == 1)
+                {
+                    _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
+                }
+                else
+                {
+                    _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[2], suitOfPiece, false);
+                }
             }
         }
         //End Master Builder Code
