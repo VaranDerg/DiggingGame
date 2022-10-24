@@ -421,9 +421,12 @@ public class CardManager : MonoBehaviour
     /// </summary>
     /// <param name="player">1 or 2</param>
     /// <param name="maxActivateAmount">Default amount + Burrows</param>
-    public void PrepareCardActivating(int player, int maxActivateAmount)
+    public void PrepareCardActivating(int player, int maxActivateAmount, bool activatePhaseJustStarted)
     {
-        AllowedActivations = maxActivateAmount;
+        if(activatePhaseJustStarted)
+        {
+            AllowedActivations = maxActivateAmount;
+        }
 
         if (player == 1)
         {

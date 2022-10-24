@@ -386,6 +386,7 @@ public class CardEffects : MonoBehaviour
 
         _remainingPiecesToSteal--;
         _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+        _gcm.UpdateTextBothPlayers();
     }
 
     /// <summary>
@@ -509,6 +510,7 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _gcm.UpdateTextBothPlayers();
         _claimedPieces = true;
     }
 
@@ -913,6 +915,11 @@ public class CardEffects : MonoBehaviour
                     _dirtThiefButton.SetActive(false);
                 }
 
+                if(_am.P2CollectedPile[3] + _am.P2RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
                 yield return null;
             }
         }
@@ -925,14 +932,19 @@ public class CardEffects : MonoBehaviour
                     _goldThiefButton.SetActive(false);
                 }
 
-                if (_am.P2CollectedPile[0] + _am.P2RefinedPile[0] == 0)
+                if (_am.P1CollectedPile[0] + _am.P1RefinedPile[0] == 0)
                 {
                     _grassThiefButton.SetActive(false);
                 }
 
-                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                if (_am.P1CollectedPile[1] + _am.P1RefinedPile[1] == 0)
                 {
                     _dirtThiefButton.SetActive(false);
+                }
+
+                if (_am.P1CollectedPile[3] + _am.P1RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
                 }
 
                 yield return null;
@@ -1030,6 +1042,11 @@ public class CardEffects : MonoBehaviour
                     _stoneThiefButton.SetActive(false);
                 }
 
+                if (_am.P2CollectedPile[3] + _am.P2RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
                 yield return null;
             }
         }
@@ -1042,14 +1059,19 @@ public class CardEffects : MonoBehaviour
                     _goldThiefButton.SetActive(false);
                 }
 
-                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                if (_am.P1CollectedPile[1] + _am.P1RefinedPile[1] == 0)
                 {
                     _dirtThiefButton.SetActive(false);
                 }
 
-                if (_am.P2CollectedPile[2] + _am.P2RefinedPile[2] == 0)
+                if (_am.P1CollectedPile[2] + _am.P1RefinedPile[2] == 0)
                 {
                     _stoneThiefButton.SetActive(false);
+                }
+
+                if (_am.P1CollectedPile[3] + _am.P1RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
                 }
 
                 yield return null;
@@ -1815,6 +1837,11 @@ public class CardEffects : MonoBehaviour
                     _grassThiefButton.SetActive(false);
                 }
 
+                if (_am.P2CollectedPile[3] + _am.P2RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
                 yield return null;
             }
         }
@@ -1835,6 +1862,11 @@ public class CardEffects : MonoBehaviour
                 if (_am.P1CollectedPile[0] + _am.P1RefinedPile[0] == 0)
                 {
                     _grassThiefButton.SetActive(false);
+                }
+
+                if (_am.P1CollectedPile[3] + _am.P1RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
                 }
 
                 yield return null;

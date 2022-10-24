@@ -385,12 +385,12 @@ public class GameCanvasManagerNew : MonoBehaviour
         if(_am.CurrentPlayer == 1)
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + " Card(s).");
-            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1]);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1], true);
         }
         else
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + " Card(s).");
-            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1]);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1], true);
         }
     }
 
@@ -401,11 +401,10 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
-        //I HATE THIS PART OF CODE. If a workaround appears I wanna change it ASAP.
-        foreach(MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
-        {
-            script.StopAllCoroutines();
-        }
+        //foreach(MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
+        //{
+        //    script.StopAllCoroutines();
+        //}
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 
@@ -419,13 +418,14 @@ public class GameCanvasManagerNew : MonoBehaviour
         else if(_am.CurrentTurnPhase == 3)
         {
             _finallyZone.SetActive(true);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations, false);
             if (_am.CurrentPlayer == 1)
             {
-                UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + " Cards.");
+                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Cards.");
             }
             else
             {
-                UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + " Cards.");
+                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations  + " Cards.");
             }
         }
 

@@ -385,6 +385,16 @@ public class PlayerPawn : MonoBehaviour
             _shownPieces.Add(piece);
         }
 
+        foreach(GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if(pawn == this)
+            {
+                continue;
+            }
+
+            pawn.GetComponent<Animator>().Play("TempPawnDefault");
+        }
+
         if (_shownPieces.Count > 0)
         {
             foreach (GameObject piece in _shownPieces)
