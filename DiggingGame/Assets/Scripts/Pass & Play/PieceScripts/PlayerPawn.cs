@@ -35,7 +35,6 @@ public class PlayerPawn : MonoBehaviour
     [HideInInspector] public string BuildingToBuild = "";
 
     [Header("Card Effect Things")]
-    [HideInInspector] public bool MorningJogMove;
     [HideInInspector] public bool SecretTunnelsMove;
     [HideInInspector] public bool MudslideMove;
     [HideInInspector] public bool WalkwaySelect;
@@ -164,7 +163,7 @@ public class PlayerPawn : MonoBehaviour
         }
         //End of Secret Tunnels code
 
-        if(!MorningJogMove && !SecretTunnelsMove && !TeleportationMove)
+        if(!SecretTunnelsMove && !TeleportationMove)
         {
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -185,34 +184,6 @@ public class PlayerPawn : MonoBehaviour
                 }
             }
         }
-        else if(MorningJogMove)
-        {
-            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
-            {
-                if (piece.GetComponent<PieceController>().HasPawn)
-                {
-                    continue;
-                }
-
-                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.One && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Six)
-                {
-                    continue;
-                }
-
-                piece.GetComponent<PieceController>().ShowHideMovable(true);
-                _shownPieces.Add(piece);
-            }
-
-            if (_shownPieces.Count > 0)
-            {
-                foreach (GameObject piece in _shownPieces)
-                {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
-                }
-            }
-
-            MorningJogMove = false;
-        }
         else if(SecretTunnelsMove)
         {
             foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -231,6 +202,14 @@ public class PlayerPawn : MonoBehaviour
                 _shownPieces.Add(piece);
             }
 
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                }
+            }
+
             SecretTunnelsMove = false;
         }
         else if(TeleportationMove)
@@ -244,6 +223,14 @@ public class PlayerPawn : MonoBehaviour
 
                 piece.GetComponent<PieceController>().ShowHideMovable(true);
                 _shownPieces.Add(piece);
+            }
+
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                }
             }
 
             TeleportationMove = false;
@@ -450,7 +437,6 @@ public class PlayerPawn : MonoBehaviour
         IsBuilding = false;
         IsDigging = false;
         IsPlacing = false;
-        MorningJogMove = false;
         WalkwaySelect = false;
         SecretTunnelsMove = false;
         MudslideMove = false;

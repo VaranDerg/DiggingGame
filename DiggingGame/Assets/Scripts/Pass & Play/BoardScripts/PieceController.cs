@@ -51,11 +51,11 @@ public class PieceController : MonoBehaviour
 
     [Header("Card Activation Stuff")]
     [HideInInspector] public bool FromActivatedCard = false;
-    [HideInInspector] public bool MovingForFree = false, JustMovedForFree = false;
     [HideInInspector] public bool IsEarthquakeable;
     [HideInInspector] public bool WalkwayDig;
     [HideInInspector] public bool IsFlippable;
     [HideInInspector] public bool DiscerningEye;
+    [HideInInspector] public bool MovingForFree;
 
     private void Awake()
     {
@@ -190,7 +190,10 @@ public class PieceController : MonoBehaviour
                 }
                 _cm.PrepareCardSelection(0, "", true);
 
-                CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+                if(CurrentPawn != null)
+                {
+                    CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+                }
                 _gcm.Back();
 
                 switch (ObjState)
@@ -269,22 +272,22 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
+            ShowHideDiggable(false);
+            FindObjectOfType<CardEffects>().DugPieces++;
+
             switch (ObjState)
             {
                 case GameState.One:
                     SetPieceState(2);
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
-                    FindObjectOfType<CardEffects>().DugPieces++;
                     break;
                 case GameState.Six:
                     SetPieceState(2);
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
-                    FindObjectOfType<CardEffects>().DugPieces++;
                     break;
                 case GameState.Two:
                     SetPieceState(3);
                     _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
-                    FindObjectOfType<CardEffects>().DugPieces++;
                     break;
                 case GameState.Three:
                     SetPieceState(4);
@@ -296,7 +299,6 @@ public class PieceController : MonoBehaviour
                     {
                         _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     }
-                    FindObjectOfType<CardEffects>().DugPieces++;
                     break;
             }
 
@@ -322,22 +324,21 @@ public class PieceController : MonoBehaviour
             }
             FindObjectOfType<CardEffects>().PlacedPieces++;
 
+            ShowHidePlaceable(false);
+
             switch (ObjState)
             {
                 case GameState.Two:
                     SetPieceState(6);
                     _am.PlaceTile(_am.CurrentPlayer, "Grass");
-                    _am.SupplyPile[0]--;
                     break;
                 case GameState.Three:
                     SetPieceState(2);
                     _am.PlaceTile(_am.CurrentPlayer, "Dirt");
-                    _am.SupplyPile[1]--;
                     break;
                 case GameState.Four:
                     SetPieceState(3);
                     _am.PlaceTile(_am.CurrentPlayer, "Stone");
-                    _am.SupplyPile[2]--;
                     break;
             }
         }
@@ -360,9 +361,21 @@ public class PieceController : MonoBehaviour
                     pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
                 }
 
-                if(!MovingForFree)
+                //Start of Morning Jog
+                bool hasMorningJog = _pcm.CheckForPersistentCard("Morning Jog", false);
+                if(hasMorningJog && !_am.MorningJogUsed)
                 {
-                    if (ObjState == GameState.One)
+                    if(ObjState == GameState.One || ObjState == GameState.Six)
+                    {
+                        MovingForFree = true;
+                        _am.MorningJogUsed = true;
+                    }
+                }
+                //End of Morning Jog
+
+                if (!MovingForFree)
+                {
+                    if (ObjState == GameState.One || ObjState == GameState.Six)
                     {
                         _cm.PrepareCardSelection(1, "Grass", false);
                     }
@@ -390,38 +403,9 @@ public class PieceController : MonoBehaviour
             //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
             CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
             CurrentPawn.transform.position = gameObject.transform.position;
-            HasPawn = true;
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-
-            //Start of Morning Jog code
-            bool hasMorningJog = _pcm.CheckForPersistentCard("Morning Jog", false);
-            if(hasMorningJog)
-            {
-                if (CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().ObjState == GameState.One || CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().ObjState == GameState.Six)
-                {
-                    foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("PlayerPawn"))
-                    {
-                        if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
-                        {
-                            pawn.GetComponent<PlayerPawn>().MorningJogMove = true;
-                        }
-                    }
-
-                    if (MovingForFree && !JustMovedForFree)
-                    {
-                        _am.StartMove(_am.CurrentPlayer);
-                        _gcm.UpdateCurrentActionText("Take a Move with Morning Jog.");
-                        JustMovedForFree = true;
-                        yield break;
-                    }
-                    else if (MovingForFree && JustMovedForFree)
-                    {
-                        JustMovedForFree = false;
-                        MovingForFree = false;
-                    }
-                }
-            }
-            //End of Morning Jog code
+            HasPawn = true;
+            MovingForFree = false;
 
             if (_am.CurrentTurnPhase == 1)
             {
@@ -542,15 +526,33 @@ public class PieceController : MonoBehaviour
 
         if (_am.CurrentPlayer == 1)
         {
-            _am.P1CurrentBuildingPrices[buildingIndex]++;
-            _am.P1RemainingBuildings[buildingIndex]--;
-            _am.P1BuiltBuildings[buildingIndex]++;
+            if (buildingIndex == 0 || buildingIndex == 1)
+            {
+                _am.P1CurrentBuildingPrices[buildingIndex]++;
+                _am.P1RemainingBuildings[buildingIndex]--;
+                _am.P1BuiltBuildings[buildingIndex]++;
+            }
+            else
+            {
+                _am.P1CurrentBuildingPrices[2]++;
+                _am.P1RemainingBuildings[2]--;
+                _am.P1BuiltBuildings[2]++;
+            }
         }
         else
         {
-            _am.P2CurrentBuildingPrices[buildingIndex]++;
-            _am.P2RemainingBuildings[buildingIndex]--;
-            _am.P2BuiltBuildings[buildingIndex]++;
+            if (buildingIndex == 0 || buildingIndex == 1)
+            {
+                _am.P2CurrentBuildingPrices[buildingIndex]++;
+                _am.P2RemainingBuildings[buildingIndex]--;
+                _am.P2BuiltBuildings[buildingIndex]++;
+            }
+            else
+            {
+                _am.P2CurrentBuildingPrices[2]++;
+                _am.P2RemainingBuildings[2]--;
+                _am.P2BuiltBuildings[2]++;
+            }
         }
 
         //Master Builder Code

@@ -53,6 +53,7 @@ public class CardController : MonoBehaviour
     private void Awake()
     {
         _maximizeAnchor = GameObject.FindGameObjectWithTag("MaximizeAnchor").GetComponent<Transform>();
+        _cardBody.gameObject.name = GetComponentInChildren<CardVisuals>().ThisCard.CardName;
         _cm = FindObjectOfType<CardManager>();
         _am = FindObjectOfType<ActionManager>();
         _bm = FindObjectOfType<BoardManager>();
@@ -67,8 +68,9 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if(MadePersistentP1)
+        if(MadePersistentP1 || MadePersistentP2)
         {
+            transform.position = _defaultPos.position;
             return;
         }
 

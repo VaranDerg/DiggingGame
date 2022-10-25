@@ -678,13 +678,18 @@ public class CardEffects : MonoBehaviour
         {
             if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
             {
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
 
         if(canPlaceAll)
         {
-            _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto the Board!");
+            _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto Dirt Pieces!");
             while (PlacedPieces != _flowersPiecesToPlace)
             {
                 yield return null;
@@ -692,7 +697,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces onto the Board!");
+            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces onto Dirt Pieces!");
             while (PlacedPieces != newPieceCount)
             {
                 yield return null;
@@ -1213,13 +1218,18 @@ public class CardEffects : MonoBehaviour
         {
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
             {
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
 
         if (enoughPieces)
         {
-            _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces adjacent to your Pawns!");
+            _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces onto Stone Pieces!");
             while (PlacedPieces != _fertilizerPiecesToPlace)
             {
                 yield return null;
@@ -1227,7 +1237,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces adjacent to your Pawns!");
+            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces onto Stone Pieces!");
             while (PlacedPieces != newPieceCount)
             {
                 yield return null;
@@ -1465,13 +1475,18 @@ public class CardEffects : MonoBehaviour
         {
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
             {
+                if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
 
         if (enoughPieces)
         {
-            _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces adjacent to your Pawns!");
+            _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
             while (PlacedPieces != _compactionPiecesToPlace)
             {
                 yield return null;
@@ -1479,7 +1494,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Stone Pieces adjacent to your Pawns!");
+            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Stone Pieces onto Bedrock Pieces!");
             while (PlacedPieces != newPieceCount)
             {
                 yield return null;

@@ -57,6 +57,7 @@ public class ActionManager : MonoBehaviour
 
     [Header("Card Effects")]
     [HideInInspector] public bool ShovelUsed;
+    [HideInInspector] public bool MorningJogUsed;
 
     [Header("Script References")]
     private BoardManager _bm;
@@ -607,6 +608,8 @@ public class ActionManager : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
 
+        //Refresh persistent cards.
         ShovelUsed = false;
+        MorningJogUsed = false;
     }
 }

@@ -386,9 +386,8 @@ public class CardManager : MonoBehaviour
         {
             if (_am.P1Cards + _am.P1GoldCards > _am.HandLimit)
             {
-                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
-
                 PrepareCardSelection(_am.P1Cards + _am.P1GoldCards - _am.HandLimit, "Any", false);
+                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
                 while (!CheckCardSelection())
                 {
                     yield return null;
@@ -403,9 +402,8 @@ public class CardManager : MonoBehaviour
         {
             if (_am.P2Cards + _am.P2GoldCards > _am.HandLimit)
             {
-                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
-
                 PrepareCardSelection(_am.P2Cards + _am.P2GoldCards - _am.HandLimit, "Any", false);
+                _gcm.UpdateCurrentActionText("Discard " + (_am.P2Cards + _am.P2GoldCards - _am.HandLimit) + " Cards.");
                 while (!CheckCardSelection())
                 {
                     yield return null;
