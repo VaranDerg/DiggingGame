@@ -40,16 +40,57 @@ public class BoardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Turns on/off the board colliders, so you can click on pawns. Why is this a thing?
+    /// Sets a specified collider to be active.
     /// </summary>
-    /// <param name="enable">True = Turn on</param>
-    public void BoardColliderSwitch(bool enable)
+    /// <param name="colliderType">"Board" "Pawn" or "Building"</param>
+    public void SetActiveCollider(string colliderType)
     {
-        foreach(GameObject piece in _boardPieces)
+        if(colliderType == "Board")
         {
-            piece.GetComponent<BoxCollider2D>().enabled = enable;
+            foreach (GameObject piece in _boardPieces)
+            {
+                piece.GetComponent<BoxCollider2D>().enabled = true;
+            }
+            foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+            {
+                building.GetComponent<BoxCollider2D>().enabled = false;
+            }
+            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+            {
+                pawn.GetComponent<BoxCollider2D>().enabled = false;
+            }
         }
-    }    
+        else if(colliderType == "Pawn")
+        {
+            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+            {
+                pawn.GetComponent<BoxCollider2D>().enabled = true;
+            }
+            foreach (GameObject piece in _boardPieces)
+            {
+                piece.GetComponent<BoxCollider2D>().enabled = false;
+            }
+            foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+            {
+                building.GetComponent<BoxCollider2D>().enabled = false;
+            }
+        }
+        else if(colliderType == "Building")
+        {
+            foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+            {
+                building.GetComponent<BoxCollider2D>().enabled = true;
+            }
+            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+            {
+                pawn.GetComponent<BoxCollider2D>().enabled = false;
+            }
+            foreach (GameObject piece in _boardPieces)
+            {
+                piece.GetComponent<BoxCollider2D>().enabled = false;
+            }
+        }
+    }
 
     /// <summary>
     /// Disables pawn checks with the board.

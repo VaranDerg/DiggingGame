@@ -148,8 +148,7 @@ public class PieceController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Start of Shovel Code
-            bool hasShovel = _pcm.CheckForPersistentCard("Shovel", false);
-            if(hasShovel)
+            if(_pcm.CheckForPersistentCard("Shovel", false))
             {
                 if(ObjState == GameState.Two && !_am.ShovelUsed)
                 {
@@ -158,7 +157,8 @@ public class PieceController : MonoBehaviour
                     _am.ShovelUsed = true;
                 }
             }
-            else if(!WalkwayDig)
+
+            if(!WalkwayDig)
             {
                 _sr.color = _waitingColor;
                 PieceIsSelected = true;
@@ -473,6 +473,10 @@ public class PieceController : MonoBehaviour
             {
                 StartCoroutine(BuildingCardSelection(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild, buildingIndex, pieceSuit));
             }
+            else
+            {
+                _gcm.Back();
+            }
         }
     }
 
@@ -565,7 +569,14 @@ public class PieceController : MonoBehaviour
 
         InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
-        CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        if(CurrentPawn != null)
+        {
+            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        }
+        else
+        {
+            Debug.LogWarning("Mystery CurrentPawn NRE called here.");
+        }
         _gcm.Back();
         _gcm.UpdateCurrentActionText("Built " + buildingName + ".");
     }

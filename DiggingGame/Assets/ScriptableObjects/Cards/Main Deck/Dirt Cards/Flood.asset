@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Flood
   m_EditorClassIdentifier: 
   CardName: Flood!
-  CardDescription: "Your opponent must discard a Persistent Effect they have of their
-    choice. Then, damage an opponent\u2019s Building on a Dirt Piece. "
+  CardDescription: "Damage an opponent\u2019s Building on a Dirt Piece. Then, they
+    must discard a Persistent Effect they have of their choice. "
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0

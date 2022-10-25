@@ -10808,6 +10808,7 @@ MonoBehaviour:
   DugPieces: 0
   _maxPiecesToRegenerate: 10
   _regenPiecesRequiredToScore: 3
+  BuildingDamageStatusWaitTime: 3
   _overgrowthDamages: 1
   _floodDamages: 1
   _earthquakeDamages: 1
@@ -10819,6 +10820,7 @@ MonoBehaviour:
   AllowedDamages: 0
   _allowedRepairs: 3
   RepairedBuildings: 0
+  CurrentDamages: 0
   PiecesToCollect: 1
   NewBuildingCost: 1
   PlannedGambleCardsToDraw: 3

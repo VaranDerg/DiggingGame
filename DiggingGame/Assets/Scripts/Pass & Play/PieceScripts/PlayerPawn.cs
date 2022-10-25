@@ -120,10 +120,25 @@ public class PlayerPawn : MonoBehaviour
     }
 
     /// <summary>
+    /// Stops animations on other pawns. 
+    /// </summary>
+    public void DeselectOtherPawns()
+    {
+        foreach(GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if(pawn != gameObject)
+            {
+                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+            }
+        }
+    }
+
+    /// <summary>
     /// Preps pawn for moving. Only selects Grass Pieces if moving with morning jog.
     /// </summary>
     private IEnumerator PreparePawnMovement()
     {
+        DeselectOtherPawns();
         //Start of Secret Tunnels code
         bool hasSecretTunnels = false;
         if(_am.CurrentPlayer == 1)
@@ -236,7 +251,7 @@ public class PlayerPawn : MonoBehaviour
             TeleportationMove = false;
         }
 
-        _bm.BoardColliderSwitch(true);
+        _bm.SetActiveCollider("Board");
     }
 
     /// <summary>
@@ -246,7 +261,8 @@ public class PlayerPawn : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            foreach(GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            DeselectOtherPawns();
+            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
                 if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
@@ -289,7 +305,7 @@ public class PlayerPawn : MonoBehaviour
                 _gcm.Back();
             }
 
-            _bm.BoardColliderSwitch(true);
+            _bm.SetActiveCollider("Board");
         }
     }
 
@@ -300,6 +316,7 @@ public class PlayerPawn : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
                 bool dontHighlight = false;
@@ -347,7 +364,7 @@ public class PlayerPawn : MonoBehaviour
                 _gcm.Back();
             }
 
-            _bm.BoardColliderSwitch(true);
+            _bm.SetActiveCollider("Board");
         }
     }
 
@@ -356,6 +373,7 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     private void PrepareMudslide()
     {
+        DeselectOtherPawns();
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             if (piece.GetComponent<PieceController>().HasPawn)
@@ -391,7 +409,7 @@ public class PlayerPawn : MonoBehaviour
         }
 
         MudslideMove = false;
-        _bm.BoardColliderSwitch(true);
+        _bm.SetActiveCollider("Board");
     }
 
     /// <summary>

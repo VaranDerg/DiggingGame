@@ -245,7 +245,7 @@ public class PersistentCardManager : MonoBehaviour
             possibleDamages++;
         }
 
-        _bm.BoardColliderSwitch(false);
+        _bm.SetActiveCollider("Building");
 
         if (possibleDamages >= _ce.RetributionDamages)
         {
@@ -260,6 +260,7 @@ public class PersistentCardManager : MonoBehaviour
             yield return null;
         }
 
+        _bm.SetActiveCollider("Pawn");
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();
     }

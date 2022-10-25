@@ -401,10 +401,10 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
-        //foreach(MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
-        //{
-        //    script.StopAllCoroutines();
-        //}
+        foreach(PieceController script in FindObjectsOfType<PieceController>())
+        {
+            script.StopAllCoroutines();
+        }
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 
