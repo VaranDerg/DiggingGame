@@ -69,6 +69,7 @@ public class CardEffects : MonoBehaviour
     [HideInInspector] public int RepairedBuildings;
     private string _tornadoBuildingToDamage;
     [HideInInspector] public int CurrentDamages;
+    [HideInInspector] public bool EarthquakePieceSelected;
 
 
     [Header("Planned Profit")]
@@ -664,16 +665,17 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Flowers()
     {
         _gcm.DisableListObjects();
-        bool canPlaceAll;
-        int newPieceCount = 0;
+        bool enoughInSupply;
+        int piecesThatWillBePlaced = 0;
+        int openPieces = 0;
         if(_am.SupplyPile[0] >= _flowersPiecesToPlace)
         {
-            canPlaceAll = true;
+            enoughInSupply = true;
         }
         else
         {
-            newPieceCount = _flowersPiecesToPlace - _am.SupplyPile[0];
-            canPlaceAll = false;
+            piecesThatWillBePlaced = _flowersPiecesToPlace - _am.SupplyPile[0];
+            enoughInSupply = false;
         }
 
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -686,10 +688,20 @@ public class CardEffects : MonoBehaviour
                 }
 
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                openPieces++;
             }
         }
 
-        if(canPlaceAll)
+        if(openPieces == 0)
+        {
+            PlacedPieces = 0;
+            _bm.DisableAllBoardInteractions();
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No open Pieces to place on!");
+            yield break;
+        }
+
+        if(enoughInSupply && openPieces >= _am.SupplyPile[0])
         {
             _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto Dirt Pieces!");
             while (PlacedPieces != _flowersPiecesToPlace)
@@ -699,14 +711,14 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces onto Dirt Pieces!");
-            while (PlacedPieces != newPieceCount)
+            _gcm.UpdateCurrentActionText("Place " + piecesThatWillBePlaced + " Grass Pieces onto Dirt Pieces!");
+            while (PlacedPieces != piecesThatWillBePlaced)
             {
                 yield return null;
             }
         }
 
-        if(canPlaceAll)
+        if(enoughInSupply)
         {
             _am.ScorePoints(1);
         }
@@ -725,6 +737,7 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         bool enoughPieces;
         int newPieceCount = 0;
+        int openPieces = 0;
         if (_am.SupplyPile[0] >= _gardenPiecesToPlace)
         {
             enoughPieces = true;
@@ -754,11 +767,21 @@ public class CardEffects : MonoBehaviour
                     }
 
                     piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                    openPieces++;
                 }
             }
         }
 
-        if (enoughPieces)
+        if(openPieces == 0)
+        {
+            PlacedPieces = 0;
+            _bm.DisableAllBoardInteractions();
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No open Pieces to place on!");
+            yield break;
+        }
+
+        if (enoughPieces && openPieces >= _am.SupplyPile[0])
         {
             _gcm.UpdateCurrentActionText("Place " + _gardenPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
             while (PlacedPieces != _gardenPiecesToPlace)
@@ -1017,12 +1040,12 @@ public class CardEffects : MonoBehaviour
         {
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
-                pawn.GetComponent<PlayerPawn>().IsDigging = true;
-                pawn.GetComponent<PlayerPawn>().WalkwaySelect = true;
+                pawn.GetComponent<PlayerPawn>().IsUsingWalkway = true;
                 pawn.GetComponent<Animator>().Play("TempPawnBlink");
             }
         }
 
+        _gcm.UpdateCurrentActionText("Select a Pawn to Dig and Move with Walkway!");
         _bm.SetActiveCollider("Pawn");
     }
 
@@ -1201,16 +1224,17 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Fertilizer()
     {
         _gcm.DisableListObjects();
-        bool enoughPieces;
-        int newPieceCount = 0;
+        bool enoughInSupply;
+        int piecesThatWillBePlaced = 0;
+        int openPieces = 0;
         if (_am.SupplyPile[1] >= _fertilizerPiecesToPlace)
         {
-            enoughPieces = true;
+            enoughInSupply = true;
         }
         else
         {
-            newPieceCount = _fertilizerPiecesToPlace - _am.SupplyPile[1];
-            enoughPieces = false;
+            piecesThatWillBePlaced = _fertilizerPiecesToPlace - _am.SupplyPile[0];
+            enoughInSupply = false;
         }
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -1223,10 +1247,20 @@ public class CardEffects : MonoBehaviour
                 }
 
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                openPieces++;
             }
         }
 
-        if (enoughPieces)
+        if (openPieces == 0)
+        {
+            PlacedPieces = 0;
+            _bm.DisableAllBoardInteractions();
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No open Pieces to place on!");
+            yield break;
+        }
+
+        if (enoughInSupply && openPieces >= _am.SupplyPile[1])
         {
             _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces onto Stone Pieces!");
             while (PlacedPieces != _fertilizerPiecesToPlace)
@@ -1236,14 +1270,14 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces onto Stone Pieces!");
-            while (PlacedPieces != newPieceCount)
+            _gcm.UpdateCurrentActionText("Place " + piecesThatWillBePlaced + " Dirt Pieces onto Stone Pieces!");
+            while (PlacedPieces != piecesThatWillBePlaced)
             {
                 yield return null;
             }
         }
 
-        if (enoughPieces)
+        if (enoughInSupply)
         {
             _am.ScorePoints(1);
         }
@@ -1452,32 +1486,43 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Compaction()
     {
         _gcm.DisableListObjects();
-        bool enoughPieces;
-        int newPieceCount = 0;
-        if (_am.SupplyPile[2] >= _compactionPiecesToPlace)
+        bool enoughInSupply;
+        int piecesThatWillBePlaced = 0;
+        int openPieces = 0;
+        if (_am.SupplyPile[0] >= _compactionPiecesToPlace)
         {
-            enoughPieces = true;
+            enoughInSupply = true;
         }
         else
         {
-            newPieceCount = _compactionPiecesToPlace - _am.SupplyPile[2];
-            enoughPieces = false;
+            piecesThatWillBePlaced = _compactionPiecesToPlace - _am.SupplyPile[2];
+            enoughInSupply = false;
         }
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
             {
-                if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     continue;
                 }
 
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                openPieces++;
             }
         }
 
-        if (enoughPieces)
+        if (openPieces == 0)
+        {
+            PlacedPieces = 0;
+            _bm.DisableAllBoardInteractions();
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No open Pieces to place on!");
+            yield break;
+        }
+
+        if (enoughInSupply && openPieces >= _am.SupplyPile[2])
         {
             _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
             while (PlacedPieces != _compactionPiecesToPlace)
@@ -1487,14 +1532,14 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Stone Pieces onto Bedrock Pieces!");
-            while (PlacedPieces != newPieceCount)
+            _gcm.UpdateCurrentActionText("Place " + piecesThatWillBePlaced + " Stone Pieces onto Bedrock Pieces!");
+            while (PlacedPieces != piecesThatWillBePlaced)
             {
                 yield return null;
             }
         }
 
-        if (enoughPieces)
+        if (enoughInSupply)
         {
             _am.ScorePoints(1);
         }
@@ -1513,8 +1558,6 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         _gcm.UpdateCurrentActionText("Select a Stone Piece for Earthquake!");
 
-        AllowedDamages = _earthquakeDamages;
-
         int pieceCount = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
@@ -1530,30 +1573,45 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        for (int i = AllowedDamages; i != 0; i--)
+        if (pieceCount == 0)
         {
-            if (pieceCount != 0)
-            {
-                while (SelectedPiece == null)
-                {
-                    yield return null;
-                }
+            _gcm.Back();
+            _bm.DisableAllBoardInteractions();
+            _gcm.UpdateCurrentActionText("No Stone Pieces to select for Earthquake!");
+            yield break;
+        }
 
-                foreach(GameObject piece in _bm.GenerateAdjacentPieceList(SelectedPiece.gameObject))
-                {
-                    if(piece.GetComponentInChildren<Building>())
-                    {
-                        StartCoroutine(piece.GetComponentInChildren<Building>().DamageBuiliding(CalculateBuildingDamage()));
-                    }
-                }
+        _gcm.UpdateCurrentActionText("Select a Stone Piece for Earthquake!");
 
-                SelectedPiece = null;
-            }
-            else
+        while (!EarthquakePieceSelected)
+        {
+            yield return null;
+        }
+        EarthquakePieceSelected = false;
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideEarthquake(false);
+        }
+
+        AllowedDamages = 0;
+        foreach (GameObject piece in _bm.GenerateAdjacentPieceList(SelectedPiece.gameObject))
+        {
+            if (piece.GetComponentInChildren<Building>())
             {
-                _gcm.UpdateCurrentActionText("Opponent has no buildings on Dirt!");
+                piece.GetComponentInChildren<Building>().CanBeDamaged = true;
+                AllowedDamages++;
             }
         }
+
+        SelectedPiece = null;
+
+        CurrentDamages = 0;
+        while (CurrentDamages != AllowedDamages)
+        {
+            yield return null;
+        }
+        CurrentDamages = 0;
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {

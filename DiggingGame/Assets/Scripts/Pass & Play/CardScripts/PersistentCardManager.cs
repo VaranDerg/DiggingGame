@@ -113,40 +113,52 @@ public class PersistentCardManager : MonoBehaviour
         }
     }
 
-    public bool CheckForPersistentCard(string cardName, bool discardAfterUse)
+    /// <summary>
+    /// Checks for a persistent card based on the card's name. 
+    /// </summary>
+    /// <param name="cardName">Name of the card.</param>
+    /// <param name="discardAfterUse">True if the card should be discarded after this check.</param>
+    /// <returns></returns>
+    public bool CheckForPersistentCard(int player, string cardName, bool discardAfterUse)
     {
-        if (_am.CurrentPlayer == 1)
+        bool hasCard = false;
+        if(player == 1)
         {
-            foreach (GameObject card in P1PersistentCards)
+            foreach(GameObject card in P1PersistentCards)
             {
-                if (card.gameObject.name == cardName)
+                if(card.gameObject.name == cardName)
                 {
-                    if(discardAfterUse)
+                    hasCard = true;
+                    if (discardAfterUse)
                     {
-                        card.GetComponent<CardController>().ToDiscard();
+                        card.GetComponentInChildren<CardController>().ToDiscard();
                     }
-
-                    return true;
+                }
+                else
+                {
+                    hasCard = false;
                 }
             }
         }
-        else
+        else if(player == 2)
         {
             foreach (GameObject card in P2PersistentCards)
             {
                 if (card.gameObject.name == cardName)
                 {
+                    hasCard = true;
                     if (discardAfterUse)
                     {
-                        card.GetComponent<CardController>().ToDiscard();
+                        card.GetComponentInChildren<CardController>().ToDiscard();
                     }
-
-                    return true;
+                }
+                else
+                {
+                    hasCard = false;
                 }
             }
         }
-
-        return false;
+        return hasCard;
     }
 
     /// <summary>
@@ -160,7 +172,7 @@ public class PersistentCardManager : MonoBehaviour
         {
             foreach(GameObject card in P1PersistentCards)
             {
-                card.GetComponent<CardController>().CanBeDiscarded = true;
+                card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
             }
 
             while (!DiscardedPersistentCard)
@@ -176,7 +188,7 @@ public class PersistentCardManager : MonoBehaviour
         {
             foreach (GameObject card in P2PersistentCards)
             {
-                card.GetComponent<CardController>().CanBeDiscarded = true;
+                card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
             }
 
             while (!DiscardedPersistentCard)

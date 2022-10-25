@@ -117,7 +117,7 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
             //Master Builder Code
-            if(_pcm.CheckForPersistentCard("Master Builder", false))
+            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", false))
             {
                 _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
                 _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
@@ -146,7 +146,7 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
             //Master Builder Code
-            if (_pcm.CheckForPersistentCard("Master Builder", false))
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", false))
             {
                 _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
                 _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
@@ -401,7 +401,8 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
-        foreach(PieceController script in FindObjectsOfType<PieceController>())
+        _ce.SecretTunnelsUI.SetActive(false);
+        foreach (PieceController script in FindObjectsOfType<PieceController>())
         {
             script.StopAllCoroutines();
         }

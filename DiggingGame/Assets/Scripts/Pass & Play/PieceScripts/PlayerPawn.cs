@@ -37,7 +37,7 @@ public class PlayerPawn : MonoBehaviour
     [Header("Card Effect Things")]
     [HideInInspector] public bool SecretTunnelsMove;
     [HideInInspector] public bool MudslideMove;
-    [HideInInspector] public bool WalkwaySelect;
+    [HideInInspector] public bool IsUsingWalkway;
     [HideInInspector] public bool TeleportationMove;
 
     /// <summary>
@@ -103,6 +103,11 @@ public class PlayerPawn : MonoBehaviour
             }
         }
 
+        if(IsUsingWalkway)
+        {
+            PrepareWalkway();
+        }
+
         if(IsBuilding)
         {
             PreparePawnBuilding();
@@ -129,6 +134,7 @@ public class PlayerPawn : MonoBehaviour
             if(pawn != gameObject)
             {
                 pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                //pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
             }
         }
     }
@@ -139,30 +145,9 @@ public class PlayerPawn : MonoBehaviour
     private IEnumerator PreparePawnMovement()
     {
         DeselectOtherPawns();
-        //Start of Secret Tunnels code
-        bool hasSecretTunnels = false;
-        if(_am.CurrentPlayer == 1)
-        {
-            foreach(GameObject card in _pcm.P1PersistentCards)
-            {
-                if(card.gameObject.name == "Secret Tunnels")
-                {
-                    hasSecretTunnels = true;
-                }
-            }
-        }
-        else
-        {
-            foreach (GameObject card in _pcm.P2PersistentCards)
-            {
-                if (card.gameObject.name == "Secret Tunnels")
-                {
-                    hasSecretTunnels = true;
-                }
-            }
-        }
 
-        if(hasSecretTunnels)
+        //Start of Secret Tunnels code
+        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Secret Tunnels", false))
         {
             _ce.SecretTunnelsUI.SetActive(true);
 
@@ -178,37 +163,16 @@ public class PlayerPawn : MonoBehaviour
         }
         //End of Secret Tunnels code
 
-        if(!SecretTunnelsMove && !TeleportationMove)
+        if(SecretTunnelsMove)
         {
-            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
-                if(piece.GetComponent<PieceController>().HasPawn)
+                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
                 {
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHideMovable(true);
-                _shownPieces.Add(piece);
-            }
-
-            if(_shownPieces.Count > 0)
-            {
-                foreach(GameObject piece in _shownPieces)
-                {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
-                }
-            }
-        }
-        else if(SecretTunnelsMove)
-        {
-            foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-            {
-                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
-                {
-                    continue;
-                }
-
-                if(piece.GetComponent<PieceController>().HasPawn)
+                if (piece.GetComponent<PieceController>().HasPawn)
                 {
                     continue;
                 }
@@ -224,14 +188,12 @@ public class PlayerPawn : MonoBehaviour
                     piece.GetComponent<PieceController>().CurrentPawn = gameObject;
                 }
             }
-
-            SecretTunnelsMove = false;
         }
         else if(TeleportationMove)
         {
-            foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
-                if(piece.GetComponent<PieceController>().HasPawn)
+                if (piece.GetComponent<PieceController>().HasPawn)
                 {
                     continue;
                 }
@@ -247,10 +209,31 @@ public class PlayerPawn : MonoBehaviour
                     piece.GetComponent<PieceController>().CurrentPawn = gameObject;
                 }
             }
+        }
+        else
+        {
+            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            {
+                if (piece.GetComponent<PieceController>().HasPawn)
+                {
+                    continue;
+                }
 
-            TeleportationMove = false;
+                piece.GetComponent<PieceController>().ShowHideMovable(true);
+                _shownPieces.Add(piece);
+            }
+
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                }
+            }
         }
 
+        SecretTunnelsMove = false;
+        TeleportationMove = false;
         _bm.SetActiveCollider("Board");
     }
 
@@ -274,19 +257,68 @@ public class PlayerPawn : MonoBehaviour
                     continue;
                 }
 
-                if(WalkwaySelect)
+                if(IsUsingWalkway)
                 {
-                    if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.One || piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Six)
+                    if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.One && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Six)
                     {
                         continue;
                     }
                 }
 
                 piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                if(WalkwaySelect)
+                if(IsUsingWalkway)
                 {
-                    piece.GetComponent<PieceController>().WalkwayDig = true;
-                    WalkwaySelect = false;
+                    piece.GetComponent<PieceController>().UsingWalkway = true;
+                    IsUsingWalkway = false;
+                }
+                _shownPieces.Add(piece);
+            }
+
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                }
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("No valid digging locations at this pawn.");
+                _bm.DisableAllBoardInteractions();
+                _gcm.Back();
+            }
+
+            _bm.SetActiveCollider("Board");
+        }
+    }
+
+    private void PrepareWalkway()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            DeselectOtherPawns();
+            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            {
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
+                if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+                {
+                    continue;
+                }
+
+                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.One && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Six)
+                {
+                    continue;
+                }
+
+                piece.GetComponent<PieceController>().ShowHideDiggable(true);
+                if (IsUsingWalkway)
+                {
+                    piece.GetComponent<PieceController>().UsingWalkway = true;
+                    IsUsingWalkway = false;
                 }
                 _shownPieces.Add(piece);
             }
@@ -455,7 +487,7 @@ public class PlayerPawn : MonoBehaviour
         IsBuilding = false;
         IsDigging = false;
         IsPlacing = false;
-        WalkwaySelect = false;
+        IsUsingWalkway = false;
         SecretTunnelsMove = false;
         MudslideMove = false;
         BuildingToBuild = "";

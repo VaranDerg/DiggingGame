@@ -124,6 +124,14 @@ public class CardController : MonoBehaviour
     {
         MaximizeCard(_cardVisualToMaximize);
 
+        if (CanBeDiscarded)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                ToDiscard();
+            }
+        }
+
         if (MadePersistentP1 || MadePersistentP2)
         {
             return;
@@ -142,14 +150,6 @@ public class CardController : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
                 ActivateCard();
-            }
-        }
-
-        if (CanBeDiscarded)
-        {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                ToDiscard();
             }
         }
     }

@@ -353,7 +353,7 @@ public class ActionManager : MonoBehaviour
                 _cm.PrepareCardSelection(0, "", true);
 
                 //Start of Geologist code.
-                bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
+                bool hasGeologist = _pcm.CheckForPersistentCard(CurrentPlayer, "Geologist", false);
                 if(hasGeologist)
                 {
                     ScorePoints(1);
@@ -383,7 +383,7 @@ public class ActionManager : MonoBehaviour
                 _cm.PrepareCardSelection(0, "", true);
 
                 //Start of Geologist code.
-                bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
+                bool hasGeologist = _pcm.CheckForPersistentCard(CurrentPlayer, "Geologist", false);
                 if (hasGeologist)
                 {
                     ScorePoints(1);
@@ -524,7 +524,7 @@ public class ActionManager : MonoBehaviour
                 if (SupplyPile[2] > amount)
                 {
                     SupplyPile[2] -= amount;
-                    P1CollectedPile[0] += amount;
+                    P1CollectedPile[2] += amount;
                 }
             }
         }
@@ -551,7 +551,7 @@ public class ActionManager : MonoBehaviour
                 if (SupplyPile[2] > amount)
                 {
                     SupplyPile[2] -= amount;
-                    P2CollectedPile[0] += amount;
+                    P2CollectedPile[2] += amount;
                 }
             }
         }
@@ -575,7 +575,7 @@ public class ActionManager : MonoBehaviour
             }
             for (int i = P1BuiltBuildings[3]; i != 0; i--)
             {
-                if (SupplyPile[0] == 0)
+                if (SupplyPile[1] == 0)
                 {
                     continue;
                 }
@@ -584,7 +584,7 @@ public class ActionManager : MonoBehaviour
             }
             for (int i = P1BuiltBuildings[4]; i != 0; i--)
             {
-                if (SupplyPile[0] == 0)
+                if (SupplyPile[2] == 0)
                 {
                     continue;
                 }
@@ -605,7 +605,7 @@ public class ActionManager : MonoBehaviour
             }
             for (int i = P2BuiltBuildings[3]; i != 0; i--)
             {
-                if (SupplyPile[0] == 0)
+                if (SupplyPile[1] == 0)
                 {
                     continue;
                 }
@@ -614,7 +614,7 @@ public class ActionManager : MonoBehaviour
             }
             for (int i = P2BuiltBuildings[4]; i != 0; i--)
             {
-                if (SupplyPile[0] == 0)
+                if (SupplyPile[2] == 0)
                 {
                     continue;
                 }

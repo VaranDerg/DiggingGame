@@ -33,6 +33,7 @@ public class Building : MonoBehaviour
     private GameCanvasManagerNew _gcm;
     private CardEffects _ce;
     private Animator _anims;
+    private BoardManager _bm;
 
     /// <summary>
     /// Assigns partner scripts.
@@ -44,6 +45,7 @@ public class Building : MonoBehaviour
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         _ce = FindObjectOfType<CardEffects>();
         _anims = GetComponent<Animator>();
+        _bm = FindObjectOfType<BoardManager>();
     }
 
     /// <summary>
@@ -92,15 +94,16 @@ public class Building : MonoBehaviour
     {
         bool hasCard = false;
         ActiveBuilding = true;
+        _bm.SetActiveCollider("Board");
 
         //Weed Whacker and Dam Code
         if (SuitOfPiece == "Grass")
         {
-            hasCard = _pcm.CheckForPersistentCard("Weed Whacker", false);
+            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker", false);
         }
         else if (SuitOfPiece == "Dirt")
         {
-            hasCard = _pcm.CheckForPersistentCard("Dam", false);
+            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Dam", false);
         }
 
         if (hasCard)
@@ -129,13 +132,14 @@ public class Building : MonoBehaviour
             {
                 if (SuitOfPiece == "Grass")
                 {
-                    _pcm.CheckForPersistentCard("Weed Whacker", true);
+                    _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Weed Whacker", true);
                 }
                 else if (SuitOfPiece == "Dirt")
                 {
-                    _pcm.CheckForPersistentCard("Dam", true);
+                    _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Dam", true);
                 }
                 _ce.CurrentDamages++;
+                _bm.SetActiveCollider("Building");
                 yield break;
             }
 
@@ -200,7 +204,7 @@ public class Building : MonoBehaviour
             GetComponentInParent<PieceController>().HasP1Building = false;
             GetComponentInParent<PieceController>().HasP2Building = false;
 
-            if (_pcm.CheckForPersistentCard("Retribution", true))
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Retribution", true))
             {
                 _pcm.StartCoroutine(_pcm.StartRetribution());
             }
@@ -219,10 +223,12 @@ public class Building : MonoBehaviour
         }
         else if(BuildingHealth == 2)
         {
-            _gcm.UpdateCurrentActionText("Bad Luck! Player " + PlayerOwning + "'s Building has taken no damage!");
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s Building has taken no damage!");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
+        _bm.SetActiveCollider("Building");
+        _gcm.UpdateCurrentActionText("Damage " + _ce.AllowedDamages + " more Buildings!");
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
         ActiveBuilding = false;
