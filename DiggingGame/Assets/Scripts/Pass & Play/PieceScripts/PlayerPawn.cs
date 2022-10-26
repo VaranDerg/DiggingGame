@@ -35,7 +35,6 @@ public class PlayerPawn : MonoBehaviour
     [HideInInspector] public string BuildingToBuild = "";
 
     [Header("Card Effect Things")]
-    [HideInInspector] public bool SecretTunnelsMove;
     [HideInInspector] public bool MudslideMove;
     [HideInInspector] public bool IsUsingWalkway;
     [HideInInspector] public bool TeleportationMove;
@@ -99,7 +98,7 @@ public class PlayerPawn : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
-                StartCoroutine(PreparePawnMovement());
+                PreparePawnMovement();
             }
         }
 
@@ -142,54 +141,11 @@ public class PlayerPawn : MonoBehaviour
     /// <summary>
     /// Preps pawn for moving. Only selects Grass Pieces if moving with morning jog.
     /// </summary>
-    private IEnumerator PreparePawnMovement()
+    private void PreparePawnMovement()
     {
         DeselectOtherPawns();
 
-        //Start of Secret Tunnels code
-        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Secret Tunnels", false))
-        {
-            _ce.SecretTunnelsUI.SetActive(true);
-
-            while(!_pcm.DecidedSecretTunnelsMove)
-            {
-                yield return null;
-            }
-
-            _ce.SecretTunnelsUI.SetActive(false);
-
-            _pcm.DecidedSecretTunnelsMove = false;
-            SecretTunnelsMove = _pcm.SecretTunnelsMoveDecision;
-        }
-        //End of Secret Tunnels code
-
-        if(SecretTunnelsMove)
-        {
-            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-            {
-                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
-                {
-                    continue;
-                }
-
-                if (piece.GetComponent<PieceController>().HasPawn)
-                {
-                    continue;
-                }
-
-                piece.GetComponent<PieceController>().ShowHideMovable(true);
-                _shownPieces.Add(piece);
-            }
-
-            if (_shownPieces.Count > 0)
-            {
-                foreach (GameObject piece in _shownPieces)
-                {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
-                }
-            }
-        }
-        else if(TeleportationMove)
+        if(TeleportationMove)
         {
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
@@ -223,6 +179,32 @@ public class PlayerPawn : MonoBehaviour
                 _shownPieces.Add(piece);
             }
 
+            //Start of Secret Tunnels code
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Secret Tunnels", false))
+            {
+                foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+                {
+                    if(_shownPieces.Contains(piece))
+                    {
+                        continue;
+                    }
+
+                    if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                    {
+                        continue;
+                    }
+
+                    if (piece.GetComponent<PieceController>().HasPawn)
+                    {
+                        continue;
+                    }
+
+                    piece.GetComponent<PieceController>().ShowHideMovable(true);
+                    _shownPieces.Add(piece);
+                }
+            }
+            //End of Secret Tunnels code
+
             if (_shownPieces.Count > 0)
             {
                 foreach (GameObject piece in _shownPieces)
@@ -232,7 +214,6 @@ public class PlayerPawn : MonoBehaviour
             }
         }
 
-        SecretTunnelsMove = false;
         TeleportationMove = false;
         _bm.SetActiveCollider("Board");
     }
@@ -405,43 +386,47 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     private void PrepareMudslide()
     {
-        DeselectOtherPawns();
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (piece.GetComponent<PieceController>().HasPawn)
+            DeselectOtherPawns();
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
-                continue;
+                if (piece.GetComponent<PieceController>().HasPawn)
+                {
+                    continue;
+                }
+
+                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                {
+                    continue;
+                }
+
+                piece.GetComponent<PieceController>().ShowHideMovable(true);
+                _shownPieces.Add(piece);
             }
 
-            if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
             {
-                continue;
+                if (pawn == this)
+                {
+                    continue;
+                }
+
+                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                pawn.GetComponent<PlayerPawn>().MudslideMove = false;
             }
 
-            piece.GetComponent<PieceController>().ShowHideMovable(true);
-            _shownPieces.Add(piece);
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                }
+            }
+
+            MudslideMove = false;
+            _bm.SetActiveCollider("Board");
         }
-
-        foreach(GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
-        {
-            if(pawn == this)
-            {
-                continue;
-            }
-
-            pawn.GetComponent<Animator>().Play("TempPawnDefault");
-        }
-
-        if (_shownPieces.Count > 0)
-        {
-            foreach (GameObject piece in _shownPieces)
-            {
-                piece.GetComponent<PieceController>().CurrentPawn = gameObject;
-            }
-        }
-
-        MudslideMove = false;
-        _bm.SetActiveCollider("Board");
     }
 
     /// <summary>
@@ -488,7 +473,6 @@ public class PlayerPawn : MonoBehaviour
         IsDigging = false;
         IsPlacing = false;
         IsUsingWalkway = false;
-        SecretTunnelsMove = false;
         MudslideMove = false;
         BuildingToBuild = "";
         _anims.Play("TempPawnDefault");

@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardController : MonoBehaviour
 {
@@ -18,9 +19,12 @@ public class CardController : MonoBehaviour
     [SerializeField] private Transform _defaultPos;
     [SerializeField] private GameObject _cardVisualToMaximize;
     [SerializeField] private GameObject _cardBody;
+    [SerializeField] private GameObject _cardBackground;
 
     [Header("Values")]
     [SerializeField] private float _cardSlideSpeed;
+    [SerializeField] private Color _cardDiscardColor;
+    [SerializeField] private Color _cardDefaultColor;
 
     [Header("Other")]
     private CardManager _cm;
@@ -91,6 +95,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseEnter()
     {
+        if(CanBeDiscarded)
+        {
+            _cardBackground.GetComponent<Image>().color = _cardDiscardColor;
+        }
+
         if(MadePersistentP1 || MadePersistentP2)
         {
             return;
@@ -104,17 +113,23 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
-        if(MadePersistentP1 || MadePersistentP2)
+        if (CanBeDiscarded)
+        {
+            _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
+        }
+
+        if (_currentlyMaximized)
+        {
+            Destroy(_maximizedCard);
+            _currentlyMaximized = false;
+        }
+
+        if (MadePersistentP1 || MadePersistentP2)
         {
             return;
         }
 
         NextPos = _defaultPos.position;
-        if(_currentlyMaximized)
-        {
-            Destroy(_maximizedCard);
-            _currentlyMaximized = false;
-        }
     }
 
     /// <summary>
@@ -274,6 +289,7 @@ public class CardController : MonoBehaviour
     /// </summary>
     public void ToDiscard()
     {
+        _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
         if (!MadePersistentP1 && !MadePersistentP2)
         {
             if (HeldByPlayer == 1)

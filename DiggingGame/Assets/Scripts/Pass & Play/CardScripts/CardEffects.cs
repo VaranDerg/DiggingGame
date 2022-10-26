@@ -25,7 +25,6 @@ public class CardEffects : MonoBehaviour
     [Header("Card UI References")]
     [SerializeField] private GameObject _morningJogUI;
     [SerializeField] private GameObject _thiefUI;
-    public GameObject SecretTunnelsUI;
     public GameObject ProtectBuildingUI;
     [SerializeField] private GameObject _grassThiefButton, _dirtThiefButton, _stoneThiefButton, _goldThiefButton;
     [SerializeField] private TextMeshProUGUI _remainingStealsText;
@@ -130,7 +129,6 @@ public class CardEffects : MonoBehaviour
         _stoneThiefButton.SetActive(false);
         _goldThiefButton.SetActive(false);
         _holyIdolUI.SetActive(false);
-        SecretTunnelsUI.SetActive(false);
         _tornadoUI.SetActive(false);
     }
 
@@ -665,17 +663,17 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Flowers()
     {
         _gcm.DisableListObjects();
-        bool enoughInSupply;
-        int piecesThatWillBePlaced = 0;
+        bool enoughPieces;
+        int newPieceCount = 0;
         int openPieces = 0;
         if(_am.SupplyPile[0] >= _flowersPiecesToPlace)
         {
-            enoughInSupply = true;
+            enoughPieces = true;
         }
         else
         {
-            piecesThatWillBePlaced = _flowersPiecesToPlace - _am.SupplyPile[0];
-            enoughInSupply = false;
+            newPieceCount = _am.SupplyPile[0];
+            enoughPieces = false;
         }
 
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -687,8 +685,11 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
+                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                openPieces++;
             }
         }
 
@@ -701,24 +702,32 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        if(enoughInSupply && openPieces >= _am.SupplyPile[0])
+        if (enoughPieces && openPieces >= _am.SupplyPile[0])
         {
-            _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto Dirt Pieces!");
             while (PlacedPieces != _flowersPiecesToPlace)
             {
+                _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
+                yield return null;
+            }
+        }
+        else if (openPieces >= newPieceCount)
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + piecesThatWillBePlaced + " Grass Pieces onto Dirt Pieces!");
-            while (PlacedPieces != piecesThatWillBePlaced)
+            while (PlacedPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
 
-        if(enoughInSupply)
+        if (enoughPieces)
         {
             _am.ScorePoints(1);
         }
@@ -744,7 +753,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            newPieceCount = _gardenPiecesToPlace - _am.SupplyPile[0];
+            newPieceCount = _am.SupplyPile[0];
             enoughPieces = false;
         }
 
@@ -766,8 +775,11 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                    openPieces++;
                 }
             }
         }
@@ -783,17 +795,25 @@ public class CardEffects : MonoBehaviour
 
         if (enoughPieces && openPieces >= _am.SupplyPile[0])
         {
-            _gcm.UpdateCurrentActionText("Place " + _gardenPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
             while (PlacedPieces != _gardenPiecesToPlace)
             {
+                _gcm.UpdateCurrentActionText("Place " + _gardenPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
+                yield return null;
+            }
+        }
+        else if(openPieces >= newPieceCount)
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces adjacent to your Pawns!");
-            while (PlacedPieces != newPieceCount)
+            while (PlacedPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -820,7 +840,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        int possiblePieces = 0;
+        int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
@@ -839,16 +859,19 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().FromActivatedCard = true;
                     piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                    possiblePieces++;
                 }
             }
         }
 
         DugPieces = 0;
 
-        if(possiblePieces >= _lawnmowerPiecesToDig)
+        if(openPieces >= _lawnmowerPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
@@ -858,8 +881,8 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + possiblePieces + " Grass Pieces adjacent to your Pawns!");
-            while (DugPieces != possiblePieces)
+            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
+            while (DugPieces != openPieces)
             {
                 yield return null;
             }
@@ -1166,7 +1189,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        int possiblePieces = 0;
+        int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
@@ -1185,16 +1208,19 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().FromActivatedCard = true;
                     piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                    possiblePieces++;
                 }
             }
         }
 
         DugPieces = 0;
 
-        if (possiblePieces >= _excavatorPiecesToDig)
+        if (openPieces >= _excavatorPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != _excavatorPiecesToDig)
@@ -1204,8 +1230,8 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + possiblePieces + " Dirt Pieces adjacent to your Pawns!");
-            while (DugPieces != possiblePieces)
+            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
+            while (DugPieces != openPieces)
             {
                 yield return null;
             }
@@ -1224,17 +1250,17 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Fertilizer()
     {
         _gcm.DisableListObjects();
-        bool enoughInSupply;
-        int piecesThatWillBePlaced = 0;
+        bool enoughPieces;
+        int newPieceCount = 0;
         int openPieces = 0;
         if (_am.SupplyPile[1] >= _fertilizerPiecesToPlace)
         {
-            enoughInSupply = true;
+            enoughPieces = true;
         }
         else
         {
-            piecesThatWillBePlaced = _fertilizerPiecesToPlace - _am.SupplyPile[0];
-            enoughInSupply = false;
+            newPieceCount = _am.SupplyPile[1];
+            enoughPieces = false;
         }
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -1246,8 +1272,11 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
+                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                openPieces++;
             }
         }
 
@@ -1260,24 +1289,32 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        if (enoughInSupply && openPieces >= _am.SupplyPile[1])
+        if (enoughPieces && openPieces >= _am.SupplyPile[1])
         {
-            _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces onto Stone Pieces!");
             while (PlacedPieces != _fertilizerPiecesToPlace)
             {
+                _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces adjacent to your Pawns!");
+                yield return null;
+            }
+        }
+        else if (openPieces >= newPieceCount)
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + piecesThatWillBePlaced + " Dirt Pieces onto Stone Pieces!");
-            while (PlacedPieces != piecesThatWillBePlaced)
+            while (PlacedPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
 
-        if (enoughInSupply)
+        if (enoughPieces)
         {
             _am.ScorePoints(1);
         }
@@ -1486,30 +1523,33 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Compaction()
     {
         _gcm.DisableListObjects();
-        bool enoughInSupply;
-        int piecesThatWillBePlaced = 0;
+        bool enoughPieces;
+        int newPieceCount = 0;
         int openPieces = 0;
         if (_am.SupplyPile[0] >= _compactionPiecesToPlace)
         {
-            enoughInSupply = true;
+            enoughPieces = true;
         }
         else
         {
-            piecesThatWillBePlaced = _compactionPiecesToPlace - _am.SupplyPile[2];
-            enoughInSupply = false;
+            newPieceCount = _compactionPiecesToPlace - _am.SupplyPile[2];
+            enoughPieces = false;
         }
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     continue;
                 }
 
+                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                openPieces++;
             }
         }
 
@@ -1522,24 +1562,32 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        if (enoughInSupply && openPieces >= _am.SupplyPile[2])
+        if (enoughPieces && openPieces >= _am.SupplyPile[2])
         {
-            _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
-            while (PlacedPieces != _compactionPiecesToPlace)
+            while (PlacedPieces != _gardenPiecesToPlace)
             {
+                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces adjacent to your Pawns!");
+                yield return null;
+            }
+        }
+        else if (openPieces >= newPieceCount)
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + piecesThatWillBePlaced + " Stone Pieces onto Bedrock Pieces!");
-            while (PlacedPieces != piecesThatWillBePlaced)
+            while (PlacedPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
 
-        if (enoughInSupply)
+        if (enoughPieces)
         {
             _am.ScorePoints(1);
         }
@@ -1631,7 +1679,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        int possiblePieces = 0;
+        int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
@@ -1650,14 +1698,17 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().FromActivatedCard = true;
                     piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                    possiblePieces++;
                 }
             }
         }
 
-        if (possiblePieces >= _erosionPiecesToDig)
+        if (openPieces >= _erosionPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
@@ -1667,8 +1718,8 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + possiblePieces + " Stone Pieces adjacent to your Pawns!");
-            while (DugPieces != possiblePieces)
+            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
+            while (DugPieces != openPieces)
             {
                 yield return null;
             }
@@ -1852,7 +1903,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        int possiblePieces = 0;
+        int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
@@ -1871,18 +1922,21 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().FromActivatedCard = true;
                     piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                    possiblePieces++;
                 }
             }
         }
 
         DugPieces = 0;
 
-        if (possiblePieces >= _goldenShovelPiecesToDig)
+        if (openPieces >= _goldenShovelPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _goldenShovelPiecesToDig + " Grass Pieces adjacent to your Pawns!");
+            _gcm.UpdateCurrentActionText("Dig " + _goldenShovelPiecesToDig + " Pieces adjacent to your Pawns!");
             while (DugPieces != _goldenShovelPiecesToDig)
             {
                 yield return null;
@@ -1890,8 +1944,8 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + possiblePieces + " Grass Pieces adjacent to your Pawns!");
-            while (DugPieces != possiblePieces)
+            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Pieces adjacent to your Pawns!");
+            while (DugPieces != openPieces)
             {
                 yield return null;
             }

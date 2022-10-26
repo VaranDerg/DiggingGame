@@ -48,6 +48,7 @@ public class PieceController : MonoBehaviour
     private PersistentCardManager _pcm;
     private CardEffects _ce;
     [HideInInspector] public bool HasGold;    //true if the piece reveals gold when flipped
+    [HideInInspector] public bool CheckedByPawn;
 
     [Header("Card Activation Stuff")]
     [HideInInspector] public bool FromActivatedCard = false;
@@ -238,15 +239,18 @@ public class PieceController : MonoBehaviour
     /// </summary>
     private void UseWalkway()
     {
-        CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
-        CurrentPawn.transform.position = gameObject.transform.position;
-        HasPawn = true;
-        CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-        UsingWalkway = false;
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
+            CurrentPawn.transform.position = gameObject.transform.position;
+            HasPawn = true;
+            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            UsingWalkway = false;
 
-        SetPieceState(3);
-        _am.CollectTile(_am.CurrentPlayer, "Grass", false);
-        _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+            SetPieceState(3);
+            _am.CollectTile(_am.CurrentPlayer, "Grass", false);
+            _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+        }
     }
 
     /// <summary>
@@ -484,6 +488,7 @@ public class PieceController : MonoBehaviour
             else
             {
                 _gcm.Back();
+                _gcm.UpdateCurrentActionText("You've built all of those buildings!");
             }
         }
     }
@@ -799,12 +804,14 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _selectedColor;
             IsMovable = true;
+            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             IsMovable = false;
             PieceIsSelected = false;
+            CheckedByPawn = false;
         }
     }
 
@@ -817,12 +824,14 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _selectedColor;
             IsBuildable = true;
+            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             IsBuildable = false;
             PieceIsSelected = false;
+            CheckedByPawn = false;
         }
     }
 
@@ -835,12 +844,14 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _selectedColor;
             IsDiggable = true;
+            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             PieceIsSelected = false;
             IsDiggable = false;
+            CheckedByPawn = false;
         }
     }
 
@@ -853,12 +864,14 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _selectedColor;
             IsPlaceable = true;
+            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             PieceIsSelected = false;
             IsPlaceable = false;
+            CheckedByPawn = false;
         }
     }
 
@@ -872,12 +885,14 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _selectedColor;
             IsEarthquakeable = true;
+            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             PieceIsSelected = false;
             IsEarthquakeable = false;
+            CheckedByPawn = false;
         }
     }
 
@@ -891,12 +906,14 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _selectedColor;
             IsFlippable = true;
+            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             PieceIsSelected = false;
             IsFlippable = false;
+            CheckedByPawn = false;
         }
     }
 
@@ -910,12 +927,14 @@ public class PieceController : MonoBehaviour
         {
             _sr.color = _selectedColor;
             UsingWalkway = true;
+            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             UsingWalkway = false;
             PieceIsSelected = false;
+            CheckedByPawn = false;
         }
     }
 

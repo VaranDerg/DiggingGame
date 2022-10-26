@@ -132,11 +132,11 @@ public class Building : MonoBehaviour
             {
                 if (SuitOfPiece == "Grass")
                 {
-                    _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Weed Whacker", true);
+                    _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker", true);
                 }
                 else if (SuitOfPiece == "Dirt")
                 {
-                    _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Dam", true);
+                    _pcm.CheckForPersistentCard(PlayerOwning, "Dam", true);
                 }
                 _ce.CurrentDamages++;
                 _bm.SetActiveCollider("Building");

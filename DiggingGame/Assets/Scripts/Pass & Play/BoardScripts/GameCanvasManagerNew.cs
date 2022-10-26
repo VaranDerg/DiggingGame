@@ -117,17 +117,59 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
             //Master Builder Code
-            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", false))
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", false))
             {
-                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
-                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
-                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
+                if (_am.P2CurrentBuildingPrices[0] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
+                }
+                if (_am.P2CurrentBuildingPrices[1] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
+                }
+                if (_am.P2CurrentBuildingPrices[2] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
+                }
             }
             else
             {
-                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
-                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
-                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
+                if (_am.P2CurrentBuildingPrices[0] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
+                }
+                if (_am.P2CurrentBuildingPrices[1] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
+                }
+                if (_am.P2CurrentBuildingPrices[2] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
+                }
             }
             //End Master Builder Code
         }
@@ -148,15 +190,57 @@ public class GameCanvasManagerNew : MonoBehaviour
             //Master Builder Code
             if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", false))
             {
-                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
-                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
-                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
+                if(_am.P2CurrentBuildingPrices[0] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
+                }
+                if (_am.P2CurrentBuildingPrices[1] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
+                }
+                if (_am.P2CurrentBuildingPrices[2] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
+                }
             }
             else
             {
-                _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
-                _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
-                _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
+                if (_am.P2CurrentBuildingPrices[0] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
+                }
+                if (_am.P2CurrentBuildingPrices[1] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
+                }
+                if (_am.P2CurrentBuildingPrices[2] == 4)
+                {
+                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                }
+                else
+                {
+                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
+                }
             }
             //End Master Builder Code
         }
@@ -401,7 +485,6 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
-        _ce.SecretTunnelsUI.SetActive(false);
         foreach (PieceController script in FindObjectsOfType<PieceController>())
         {
             script.StopAllCoroutines();

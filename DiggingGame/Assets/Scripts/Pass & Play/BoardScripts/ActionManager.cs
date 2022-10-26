@@ -505,7 +505,7 @@ public class ActionManager : MonoBehaviour
         {
             if(suit == "Grass")
             {
-                if(SupplyPile[0] > amount)
+                if(SupplyPile[0] >= amount)
                 {
                     SupplyPile[0] -= amount;
                     P1CollectedPile[0] += amount;
@@ -513,7 +513,7 @@ public class ActionManager : MonoBehaviour
             }
             else if(suit == "Dirt")
             {
-                if (SupplyPile[1] > amount)
+                if (SupplyPile[1] >= amount)
                 {
                     SupplyPile[1] -= amount;
                     P1CollectedPile[1] += amount;
@@ -521,7 +521,7 @@ public class ActionManager : MonoBehaviour
             }
             else if(suit == "Stone")
             {
-                if (SupplyPile[2] > amount)
+                if (SupplyPile[2] >= amount)
                 {
                     SupplyPile[2] -= amount;
                     P1CollectedPile[2] += amount;
@@ -532,7 +532,7 @@ public class ActionManager : MonoBehaviour
         {
             if (suit == "Grass")
             {
-                if (SupplyPile[0] > amount)
+                if (SupplyPile[0] >= amount)
                 {
                     SupplyPile[0] -= amount;
                     P2CollectedPile[0] += amount;
@@ -540,7 +540,7 @@ public class ActionManager : MonoBehaviour
             }
             else if (suit == "Dirt")
             {
-                if (SupplyPile[1] > amount)
+                if (SupplyPile[1] >= amount)
                 {
                     SupplyPile[1] -= amount;
                     P2CollectedPile[1] += amount;
@@ -548,7 +548,7 @@ public class ActionManager : MonoBehaviour
             }
             else if (suit == "Stone")
             {
-                if (SupplyPile[2] > amount)
+                if (SupplyPile[2] >= amount)
                 {
                     SupplyPile[2] -= amount;
                     P2CollectedPile[2] += amount;

@@ -19,8 +19,6 @@ public class PersistentCardManager : MonoBehaviour
     [Header("Other")]
     [HideInInspector] public bool DiscardedPersistentCard;
     [HideInInspector] public bool DecidedBuildingProtection;
-    [HideInInspector] public bool DecidedSecretTunnelsMove;
-    [HideInInspector] public bool SecretTunnelsMoveDecision;
 
     [Header("Retribution")]
     [HideInInspector] public int BuildingsDamaged;
@@ -166,13 +164,14 @@ public class PersistentCardManager : MonoBehaviour
     /// </summary>
     public IEnumerator PersistentCardDiscardProcess()
     {
-        _gcm.UpdateCurrentActionText("Discard 1 Persistent Card.");
-
+        int cardCount = 0;
         if (_am.CurrentPlayer == 1)
         {
-            foreach(GameObject card in P1PersistentCards)
+            _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
+            foreach (GameObject card in P2PersistentCards)
             {
                 card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                cardCount++;
             }
 
             while (!DiscardedPersistentCard)
@@ -186,7 +185,8 @@ public class PersistentCardManager : MonoBehaviour
         }
         else
         {
-            foreach (GameObject card in P2PersistentCards)
+            _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
+            foreach (GameObject card in P1PersistentCards)
             {
                 card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
             }
@@ -231,12 +231,6 @@ public class PersistentCardManager : MonoBehaviour
                 building.GetComponent<Building>().DamageProtectionResponse = answer;
             }
         }
-    }
-
-    public void MoveWithSecretTunnels(bool answer)
-    {
-        DecidedSecretTunnelsMove = true;
-        SecretTunnelsMoveDecision = answer;
     }
 
     /// <summary>
