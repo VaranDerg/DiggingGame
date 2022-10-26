@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class OnlineCanvasManager : MonoBehaviourPun
 {
@@ -100,6 +101,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     /// <summary>
     /// Sets the game into a basic opening state upon startup.
+    /// 
+    /// Edit: Andrea SD - Modified for online
     /// </summary>
     private void Start()
     {
@@ -109,7 +112,17 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _opponentInfoZone.SetActive(false);
 
         UpdateTextBothPlayers();
-        UpdateCurrentActionText("Press Start Turn to begin!");
+        
+        // Author: Andrea SD
+        if(PhotonNetwork.IsMasterClient)
+        {
+            UpdateCurrentActionText("Press Start Turn to begin!");
+        }
+        else
+        {
+            UpdateCurrentActionText("Player 1 is going first!");
+        }
+
     }
 
     /// <summary>
@@ -253,6 +266,28 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     /// <param name="updatedText">New text to show</param>
     public void UpdateCurrentActionText(string updatedText)
+    {
+        _currentActionText.text = updatedText;
+    }
+
+    /// <summary>
+    /// Calls the local RPC to update opponent text across the network
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="updatedText"></param>
+    public void UpdateOpponentActionText(string updatedText)
+    {
+        photonView.RPC("UpdateOnlineActionText", RpcTarget.Others, updatedText);
+    }
+    /// <summary>
+    /// Updates the Current Action text for the non-active player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="updatedText"></param>
+    [PunRPC]
+    public void UpdateOnlineActionText(string updatedText)
     {
         _currentActionText.text = updatedText;
     }
@@ -473,6 +508,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void EndTurn()
     {
+        UpdateOpponentActionText("Start your turn.");
         DisableListObjects();
         _cm.StopCardActivating(_am.CurrentPlayer);
 

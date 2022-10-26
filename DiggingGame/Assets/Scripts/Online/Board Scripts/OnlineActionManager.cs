@@ -10,7 +10,6 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
-//using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -457,9 +456,10 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Updates round text values and progresses the game phase
     /// Edit: Andrea SD, modified for online play
     /// </summary>
-    /// <param name="player"></param>
+    /// <param name="player"> Player who's turn is ending </param>
     public void EndTurn(int player)
     {
         if (player == 1)
@@ -467,14 +467,14 @@ public class OnlineActionManager : MonoBehaviourPun
             if (P1Score >= 15)
             {
                 _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached 15 points!");
+                _gcm.UpdateOpponentActionText("Player 1 wins, as they've reached 15 points!");    //Andrea SD
                 return;
             }
 
             CurrentTurnPhase = 0;
-            
-            //_gcm.StartTurnButton.SetActive(true);
-            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
 
+            //_gcm.StartTurnButton.SetActive(true);
+            _gcm.UpdateCurrentActionText("Player 2 is starting their turn.");
             photonView.RPC("ChangeTurn", RpcTarget.All, 2);     //ASD
         }
         else
@@ -482,14 +482,15 @@ public class OnlineActionManager : MonoBehaviourPun
             if (P2Score >= 15)
             {
                 _gcm.UpdateCurrentActionText("Player 2 wins, as they've reached 15 points!");
+                _gcm.UpdateOpponentActionText("Player 2 wins, as they've reached 15 points!");    //Andrea SD
                 return;
             }
 
             CurrentTurnPhase = 0;
             CurrentRound++;
 
-            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
-
+            //_gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
+            _gcm.UpdateCurrentActionText("Player 1 is starting their turn.");
             photonView.RPC("ChangeTurn", RpcTarget.All, 1);     //ASD
         }
 
@@ -523,7 +524,7 @@ public class OnlineActionManager : MonoBehaviourPun
     ///
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="player">P Player who's turn it is changing to </param>
+    /// <param name="player"> Player who's turn it is changing to </param>
     [PunRPC]
     private void ChangeTurn(int player)
     {
