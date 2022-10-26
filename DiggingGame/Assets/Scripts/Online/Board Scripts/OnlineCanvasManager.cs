@@ -280,6 +280,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         photonView.RPC("UpdateOnlineActionText", RpcTarget.Others, updatedText);
     }
+
     /// <summary>
     /// Updates the Current Action text for the non-active player
     /// 
@@ -338,7 +339,21 @@ public class OnlineCanvasManager : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Modifies the current turn phase
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"> how the turn phase is modified </param>
+    [PunRPC]
+    public void ChangeTurnPhase(int amount)
+    {
+        _am.CurrentTurnPhase += amount;
+    }
+
+    /// <summary>
     /// Moves the turn into the "First..." phase.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void StartTurn()
     {
@@ -349,21 +364,25 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
         _am.StartMove(_am.CurrentPlayer);
-        _am.CurrentTurnPhase++;
+        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
         _cm.ShowCards(_am.CurrentPlayer);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
+        UpdateOpponentActionText(_am.CurrentPlayer + " is taking their first move!");       // Andrea SD
     }
 
     /// <summary>
     /// Moves the turn into the "Then..." phase.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void ToThenPhase()
     {
+        UpdateOpponentActionText(_am.CurrentPlayer + " is contemplating their next action...");     // Andrea SD
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
-        _am.CurrentTurnPhase++;
+        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
 
         _thenZone.SetActive(true);
         _thenActions.SetActive(true);
@@ -375,9 +394,12 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     /// <summary>
     /// Prepares a Move action.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void Move()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is moving...");      // Andrea SD
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
 
@@ -391,9 +413,12 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     /// <summary>
     /// Prepares a Dig action.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void Dig()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is digging...");     // Andrea SD
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
 
@@ -407,9 +432,12 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     /// <summary>
     /// Opens the Build menu.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void OpenBuildMenu()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is building...");
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
 
@@ -444,17 +472,20 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     /// <summary>
     /// Moves the turn into the "Finally..." phase.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void ToFinallyPhase()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of playing a card...");  //Andrea SD
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
-        _am.CurrentTurnPhase++;
+        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
 
         _finallyZone.SetActive(true);
 
         UpdateTextBothPlayers();
-        if(_am.CurrentPlayer == 1)
+        if (_am.CurrentPlayer == 1)
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + " Card(s).");
             _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1]);
@@ -471,6 +502,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void Back()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of their next action...");
         DisableListObjects();
         _bm.DisablePawnBoardInteractions();
         //I HATE THIS PART OF CODE. If a workaround appears I wanna change it ASAP.

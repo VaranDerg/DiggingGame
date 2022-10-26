@@ -79,7 +79,7 @@ public class OnlineActionManager : MonoBehaviourPun
     {
         // Board is disbled for player 2 at the start and enabled for player 1
         DisableBoard();
-        photonView.RPC("EnableBoard", RpcTarget.MasterClient);     
+        photonView.RPC("EnableBoard", RpcTarget.MasterClient);
     }
 
     /// <summary>
@@ -189,9 +189,9 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <param name="player">1 or 2</param>
     public void StopPawnActions(int player)
     {
-        foreach(GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            if(pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
             {
                 pawn.GetComponent<OnlinePlayerPawn>().IsMoving = false;
                 pawn.GetComponent<OnlinePlayerPawn>().IsBuilding = false;
@@ -472,10 +472,11 @@ public class OnlineActionManager : MonoBehaviourPun
             }
 
             CurrentTurnPhase = 0;
+            photonView.RPC("ResetTurnPhase", RpcTarget.All);    // Andrea SD
 
             //_gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player 2 is starting their turn.");
-            photonView.RPC("ChangeTurn", RpcTarget.All, 2);     //ASD
+            photonView.RPC("ChangeTurn", RpcTarget.All, 2);     // Andrea SD
         }
         else
         {
@@ -487,15 +488,37 @@ public class OnlineActionManager : MonoBehaviourPun
             }
 
             CurrentTurnPhase = 0;
-            CurrentRound++;
+            photonView.RPC("IncrementRound", RpcTarget.All);    // Andrea SD
 
             //_gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
             _gcm.UpdateCurrentActionText("Player 1 is starting their turn.");
-            photonView.RPC("ChangeTurn", RpcTarget.All, 1);     //ASD
+            photonView.RPC("ChangeTurn", RpcTarget.All, 1);     // Andrea SD
         }
 
         //Enables the start button for the other player then disables your own board 
         DisableBoard();
+    }
+
+    /// <summary>
+    /// Resets the current turn phase
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void ResetTurnPhase()
+    {
+        CurrentTurnPhase = 0;
+    }
+
+    /// <summary>
+    /// Increases the round number by 1 across all clients
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void IncrementRound()
+    {
+        CurrentRound++;
     }
 
     /// <summary>

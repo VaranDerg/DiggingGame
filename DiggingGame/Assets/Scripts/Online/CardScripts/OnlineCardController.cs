@@ -137,6 +137,9 @@ public class OnlineCardController : MonoBehaviourPun
         }
     }
 
+    /// <summary>
+    /// Edited: Andrea SD - online use
+    /// </summary>
     private void ActivateCard()
     {
         int grassCost = _cardBody.GetComponentInChildren<OnlineCardVisuals>().ThisCard.GrassCost;
@@ -161,6 +164,7 @@ public class OnlineCardController : MonoBehaviourPun
                 _am.SupplyPile[2] += stoneCost;
 
                 _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
+                _gcm.UpdateOpponentActionText(_am.CurrentPlayer + " has activated " + _cardBody.name + "!");    //Andrea SD
                 Debug.Log("Activation code will go in this line in the future.");
                 _am.CallUpdateScore(1, 1);    // Andrea SD
                 _cm.AllowedActivations--;
@@ -185,6 +189,8 @@ public class OnlineCardController : MonoBehaviourPun
                 _am.SupplyPile[2] += stoneCost;
 
                 _gcm.UpdateCurrentActionText("Activated " + _cardBody.name + "!");
+                _gcm.UpdateOpponentActionText(_am.CurrentPlayer + " has activated " + _cardBody.name + "!");    //Andrea SD
+                Debug.Log("Activation code will go in this line in the future.");
                 Debug.Log("Activation code will go in this line in the future.");
                 _am.CallUpdateScore(2, 1);
                 _cm.AllowedActivations--;
