@@ -133,7 +133,6 @@ public class PlayerPawn : MonoBehaviour
             if(pawn != gameObject)
             {
                 pawn.GetComponent<Animator>().Play("TempPawnDefault");
-                //pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
             }
         }
     }
@@ -143,53 +142,59 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     private void PreparePawnMovement()
     {
-        DeselectOtherPawns();
-
-        if(TeleportationMove)
+        if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-            {
-                if (piece.GetComponent<PieceController>().HasPawn)
-                {
-                    continue;
-                }
+            DeselectOtherPawns();
 
-                piece.GetComponent<PieceController>().ShowHideMovable(true);
-                _shownPieces.Add(piece);
-            }
-
-            if (_shownPieces.Count > 0)
+            if (TeleportationMove)
             {
-                foreach (GameObject piece in _shownPieces)
+                foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
                 {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
-                }
-            }
-        }
-        else
-        {
-            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
-            {
-                if (piece.GetComponent<PieceController>().HasPawn)
-                {
-                    continue;
-                }
-
-                piece.GetComponent<PieceController>().ShowHideMovable(true);
-                _shownPieces.Add(piece);
-            }
-
-            //Start of Secret Tunnels code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Secret Tunnels", false))
-            {
-                foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-                {
-                    if(_shownPieces.Contains(piece))
+                    if (piece.GetComponent<PieceController>().HasPawn)
                     {
                         continue;
                     }
 
-                    if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                    piece.GetComponent<PieceController>().ShowHideMovable(true);
+                    _shownPieces.Add(piece);
+                }
+
+                if (_shownPieces.Count > 0)
+                {
+                    foreach (GameObject piece in _shownPieces)
+                    {
+                        piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    }
+                }
+
+                TeleportationMove = false;
+            }
+            else
+            {
+                //Start of Secret Tunnels code
+                if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Secret Tunnels"))
+                {
+                    foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+                    {
+                        if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                        {
+                            continue;
+                        }
+
+                        if (piece.GetComponent<PieceController>().HasPawn)
+                        {
+                            continue;
+                        }
+
+                        piece.GetComponent<PieceController>().ShowHideMovable(true);
+                        _shownPieces.Add(piece);
+                    }
+                }
+                //End of Secret Tunnels code
+
+                foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+                {
+                    if (_shownPieces.Contains(piece))
                     {
                         continue;
                     }
@@ -202,20 +207,18 @@ public class PlayerPawn : MonoBehaviour
                     piece.GetComponent<PieceController>().ShowHideMovable(true);
                     _shownPieces.Add(piece);
                 }
-            }
-            //End of Secret Tunnels code
 
-            if (_shownPieces.Count > 0)
-            {
-                foreach (GameObject piece in _shownPieces)
+                if (_shownPieces.Count > 0)
                 {
-                    piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    foreach (GameObject piece in _shownPieces)
+                    {
+                        piece.GetComponent<PieceController>().CurrentPawn = gameObject;
+                    }
                 }
             }
-        }
 
-        TeleportationMove = false;
-        _bm.SetActiveCollider("Board");
+            _bm.SetActiveCollider("Board");
+        }
     }
 
     /// <summary>
@@ -273,6 +276,9 @@ public class PlayerPawn : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Movement method for Walkway.
+    /// </summary>
     private void PrepareWalkway()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -313,7 +319,7 @@ public class PlayerPawn : MonoBehaviour
             }
             else
             {
-                _gcm.UpdateCurrentActionText("No valid digging locations at this pawn.");
+                _gcm.UpdateCurrentActionText("No valid Walkway locations at this pawn.");
                 _bm.DisableAllBoardInteractions();
                 _gcm.Back();
             }

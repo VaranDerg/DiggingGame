@@ -116,10 +116,10 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[0].text = _am.P1RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
-            //Master Builder Code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", false))
+            //Master Builder + Sold Out Code 
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
             {
-                if (_am.P2CurrentBuildingPrices[0] == 4)
+                if (_am.P1CurrentBuildingPrices[0] == 4)
                 {
                     _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
                 }
@@ -127,7 +127,8 @@ public class GameCanvasManagerNew : MonoBehaviour
                 {
                     _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
                 }
-                if (_am.P2CurrentBuildingPrices[1] == 4)
+
+                if (_am.P1CurrentBuildingPrices[1] == 4)
                 {
                     _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
                 }
@@ -135,7 +136,8 @@ public class GameCanvasManagerNew : MonoBehaviour
                 {
                     _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
                 }
-                if (_am.P2CurrentBuildingPrices[2] == 4)
+
+                if (_am.P1CurrentBuildingPrices[2] == 4)
                 {
                     _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
                 }
@@ -146,7 +148,7 @@ public class GameCanvasManagerNew : MonoBehaviour
             }
             else
             {
-                if (_am.P2CurrentBuildingPrices[0] == 4)
+                if (_am.P1CurrentBuildingPrices[0] == 4)
                 {
                     _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
                 }
@@ -154,7 +156,8 @@ public class GameCanvasManagerNew : MonoBehaviour
                 {
                     _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
                 }
-                if (_am.P2CurrentBuildingPrices[1] == 4)
+
+                if (_am.P1CurrentBuildingPrices[1] == 4)
                 {
                     _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
                 }
@@ -162,7 +165,8 @@ public class GameCanvasManagerNew : MonoBehaviour
                 {
                     _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
                 }
-                if (_am.P2CurrentBuildingPrices[2] == 4)
+                
+                if (_am.P1CurrentBuildingPrices[2] == 4)
                 {
                     _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
                 }
@@ -171,7 +175,7 @@ public class GameCanvasManagerNew : MonoBehaviour
                     _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
                 }
             }
-            //End Master Builder Code
+            //End Master Builder + Sold Out Code
         }
         else
         {
@@ -187,8 +191,8 @@ public class GameCanvasManagerNew : MonoBehaviour
             _currentPlayerRemainingBuildings[0].text = _am.P2RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
-            //Master Builder Code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", false))
+            //Master Builder + Sold Out Code
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
             {
                 if(_am.P2CurrentBuildingPrices[0] == 4)
                 {
@@ -242,7 +246,7 @@ public class GameCanvasManagerNew : MonoBehaviour
                     _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
                 }
             }
-            //End Master Builder Code
+            //End Master Builder + Sold Out Code
         }
     }
 

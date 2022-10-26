@@ -106,6 +106,7 @@ public class BoardManager : MonoBehaviour
             piece.GetComponent<PieceController>().ShowHideEarthquake(false);
             piece.GetComponent<PieceController>().ShowHideFlippable(false);
             piece.GetComponent<PieceController>().ShowHideWalkway(false);
+            piece.GetComponent<PieceController>().PieceIsSelected = false;
             _am.StopPawnActions(_am.CurrentPlayer);
         }
     }

@@ -69,6 +69,7 @@ public class PersistentCardManager : MonoBehaviour
                 {
                     card.transform.position = _p1PCardPositions[i].position;
                     card.GetComponentInChildren<CardController>().MadePersistentP1 = true;
+                    card.GetComponentInChildren<CardController>().PHandPosition = i;
                     FindObjectOfType<CardManager>().P1Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {
@@ -93,6 +94,7 @@ public class PersistentCardManager : MonoBehaviour
                 {
                     card.transform.position = _p2PCardPositions[i].position;
                     card.GetComponentInChildren<CardController>().MadePersistentP2 = true;
+                    card.GetComponentInChildren<CardController>().PHandPosition = i;
                     FindObjectOfType<CardManager>().P2Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {
@@ -117,7 +119,7 @@ public class PersistentCardManager : MonoBehaviour
     /// <param name="cardName">Name of the card.</param>
     /// <param name="discardAfterUse">True if the card should be discarded after this check.</param>
     /// <returns></returns>
-    public bool CheckForPersistentCard(int player, string cardName, bool discardAfterUse)
+    public bool CheckForPersistentCard(int player, string cardName)
     {
         bool hasCard = false;
         if(player == 1)
@@ -127,10 +129,6 @@ public class PersistentCardManager : MonoBehaviour
                 if(card.gameObject.name == cardName)
                 {
                     hasCard = true;
-                    if (discardAfterUse)
-                    {
-                        card.GetComponentInChildren<CardController>().ToDiscard();
-                    }
                 }
                 else
                 {
@@ -145,10 +143,6 @@ public class PersistentCardManager : MonoBehaviour
                 if (card.gameObject.name == cardName)
                 {
                     hasCard = true;
-                    if (discardAfterUse)
-                    {
-                        card.GetComponentInChildren<CardController>().ToDiscard();
-                    }
                 }
                 else
                 {
@@ -157,6 +151,35 @@ public class PersistentCardManager : MonoBehaviour
             }
         }
         return hasCard;
+    }
+
+    /// <summary>
+    /// Discards a persistent card.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    /// <param name="cardName">Name of the card, like "Card Name"</param>
+    public void DiscardPersistentCard(int player, string cardName)
+    {
+        if (player == 1)
+        {
+            foreach (GameObject card in P1PersistentCards)
+            {
+                if (card.gameObject.name == cardName)
+                {
+                    card.GetComponentInChildren<CardController>().ToDiscard();
+                }
+            }
+        }
+        else if (player == 2)
+        {
+            foreach (GameObject card in P2PersistentCards)
+            {
+                if (card.gameObject.name == cardName)
+                {
+                    card.GetComponentInChildren<CardController>().ToDiscard();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -179,9 +202,15 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
+            foreach (GameObject card in P2PersistentCards)
+            {
+                card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
+                cardCount++;
+            }
+
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
-            _gcm.ToFinallyPhase();
+            _gcm.Back();
         }
         else
         {
@@ -196,9 +225,14 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
+            foreach (GameObject card in P1PersistentCards)
+            {
+                card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
+            }
+
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
-            _gcm.ToFinallyPhase();
+            _gcm.Back();
         }
     }
 

@@ -706,7 +706,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != _flowersPiecesToPlace)
             {
-                _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto Dirt Pieces!");
                 yield return null;
             }
         }
@@ -714,7 +714,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != newPieceCount)
             {
-                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces onto Dirt Pieces!");
                 yield return null;
             }
         }
@@ -1059,6 +1059,8 @@ public class CardEffects : MonoBehaviour
     /// </summary>
     public void Walkway()
     {
+        _bm.DisableAllBoardInteractions();
+
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
@@ -1526,7 +1528,7 @@ public class CardEffects : MonoBehaviour
         bool enoughPieces;
         int newPieceCount = 0;
         int openPieces = 0;
-        if (_am.SupplyPile[0] >= _compactionPiecesToPlace)
+        if (_am.SupplyPile[2] >= _compactionPiecesToPlace)
         {
             enoughPieces = true;
         }
@@ -1792,9 +1794,11 @@ public class CardEffects : MonoBehaviour
             RemainingFlips = 0;
         }
 
+        _bm.SetActiveCollider("Board");
+
         while(RemainingFlips != 0)
         {
-            _gcm.UpdateCurrentActionText("Select " + RemainingFlips + " Stone Pieces to look for Gold in!");
+            _gcm.UpdateCurrentActionText("Select " + RemainingFlips + " more Stone Pieces to look for Gold in!");
             yield return null;
         }
 
@@ -1878,6 +1882,8 @@ public class CardEffects : MonoBehaviour
             _gcm.UpdateCurrentActionText("No Stone to Flip!");
             RemainingFlips = 0;
         }
+
+        _bm.SetActiveCollider("Board");
 
         while (RemainingFlips != 0)
         {
@@ -2175,10 +2181,11 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Tornado()
     {
         _gcm.DisableListObjects();
-        _gcm.UpdateCurrentActionText("Select a Building type to damage!");
+
+        _tornadoBuildingToDamage = "N/A";
 
         _tornadoUI.SetActive(true);
-        while(_tornadoBuildingToDamage == "")
+        while(_tornadoBuildingToDamage == "N/A")
         {
             _gcm.UpdateCurrentActionText("Select a Building type to damage!");
             yield return null;
@@ -2210,11 +2217,12 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        _tornadoBuildingToDamage = "";
+        _tornadoBuildingToDamage = "N/A";
+
         _bm.SetActiveCollider("Building");
         CurrentDamages = 0;
 
-        if (buildingCount < AllowedDamages)
+        if (buildingCount >= AllowedDamages)
         {
             AllowedDamages = buildingCount;
         }
@@ -2222,6 +2230,8 @@ public class CardEffects : MonoBehaviour
         {
             AllowedDamages = _tornadoDamages;
         }
+
+        CurrentDamages = 0;
 
         while (CurrentDamages != AllowedDamages)
         {

@@ -353,8 +353,7 @@ public class ActionManager : MonoBehaviour
                 _cm.PrepareCardSelection(0, "", true);
 
                 //Start of Geologist code.
-                bool hasGeologist = _pcm.CheckForPersistentCard(CurrentPlayer, "Geologist", false);
-                if(hasGeologist)
+                if(_pcm.CheckForPersistentCard(CurrentPlayer, "Geologist"))
                 {
                     ScorePoints(1);
                 }
@@ -383,8 +382,7 @@ public class ActionManager : MonoBehaviour
                 _cm.PrepareCardSelection(0, "", true);
 
                 //Start of Geologist code.
-                bool hasGeologist = _pcm.CheckForPersistentCard(CurrentPlayer, "Geologist", false);
-                if (hasGeologist)
+                if (_pcm.CheckForPersistentCard(CurrentPlayer, "Geologist"))
                 {
                     ScorePoints(1);
                 }

@@ -99,11 +99,11 @@ public class Building : MonoBehaviour
         //Weed Whacker and Dam Code
         if (SuitOfPiece == "Grass")
         {
-            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker", false);
+            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker");
         }
         else if (SuitOfPiece == "Dirt")
         {
-            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Dam", false);
+            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Dam");
         }
 
         if (hasCard)
@@ -132,11 +132,11 @@ public class Building : MonoBehaviour
             {
                 if (SuitOfPiece == "Grass")
                 {
-                    _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker", true);
+                    _pcm.DiscardPersistentCard(PlayerOwning, "Weed Whacker");
                 }
                 else if (SuitOfPiece == "Dirt")
                 {
-                    _pcm.CheckForPersistentCard(PlayerOwning, "Dam", true);
+                    _pcm.DiscardPersistentCard(PlayerOwning, "Dam");
                 }
                 _ce.CurrentDamages++;
                 _bm.SetActiveCollider("Building");
@@ -204,8 +204,9 @@ public class Building : MonoBehaviour
             GetComponentInParent<PieceController>().HasP1Building = false;
             GetComponentInParent<PieceController>().HasP2Building = false;
 
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Retribution", true))
+            if (_pcm.CheckForPersistentCard(PlayerOwning, "Retribution"))
             {
+                _pcm.DiscardPersistentCard(PlayerOwning, "Retribution");
                 _pcm.StartCoroutine(_pcm.StartRetribution());
             }
 

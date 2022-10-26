@@ -156,14 +156,16 @@ public class PieceController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Start of Shovel Code
-            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel", false))
+            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel"))
             {
                 if(ObjState == GameState.Two && !_am.ShovelUsed)
                 {
                     SetPieceState(3);
-                    _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                     _am.ShovelUsed = true;
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                 }
+
+                yield break;
             }
             //End of Shovel Code
 
@@ -258,18 +260,21 @@ public class PieceController : MonoBehaviour
     /// </summary>
     private void FlipPiece()
     {
-        _ce.RemainingFlips--;
-
-        if(HasGold)
+        if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            SetPieceState(5);
-            if(DiscerningEye)
-            {
-                _am.ScorePoints(1);
-            }
-        }
+            _ce.RemainingFlips--;
 
-        ShowHideFlippable(false);
+            if (HasGold)
+            {
+                SetPieceState(5);
+                if (DiscerningEye)
+                {
+                    _am.ScorePoints(1);
+                }
+            }
+
+            ShowHideFlippable(false);
+        }
     }
 
     /// <summary>
@@ -374,7 +379,7 @@ public class PieceController : MonoBehaviour
                 }
 
                 //Start of Morning Jog
-                bool hasMorningJog = _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog", false);
+                bool hasMorningJog = _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog");
                 if(hasMorningJog && !_am.MorningJogUsed)
                 {
                     if(ObjState == GameState.One || ObjState == GameState.Six)
@@ -503,8 +508,7 @@ public class PieceController : MonoBehaviour
         }
 
         //Master Builder Code
-        bool hasMasterBuilder = _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", false);
-        if (hasMasterBuilder)
+        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
         {
             _cm.PrepareCardSelection(_ce.NewBuildingCost, suitOfPiece, false);
         }
@@ -573,23 +577,15 @@ public class PieceController : MonoBehaviour
         }
 
         //Master Builder Code
-        if(hasMasterBuilder)
+        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
         {
-            //Discards Master Builder.
-            _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder", true);
+            _pcm.DiscardPersistentCard(_am.CurrentPlayer, "Master Builder");
         }
         //End Master Builder
 
         InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
-        if(CurrentPawn != null)
-        {
-            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-        }
-        else
-        {
-            Debug.LogWarning("Mystery CurrentPawn NRE called here.");
-        }
+        CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
         _gcm.UpdateCurrentActionText("Built " + buildingName + ".");
     }
@@ -669,13 +665,12 @@ public class PieceController : MonoBehaviour
             thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;
 
             //Planned Profit Code Start
-            bool hasPlannedProfit = _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Planned Profit", true);
-
-            if(hasPlannedProfit)
+            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Planned Profit"))
             {
                 _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Grass");
                 _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Dirt");
                 _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Stone");
+                _pcm.DiscardPersistentCard(_am.CurrentPlayer, "Planned Profit");
             }
             //Planned Profit Code End
 
@@ -914,6 +909,7 @@ public class PieceController : MonoBehaviour
             PieceIsSelected = false;
             IsFlippable = false;
             CheckedByPawn = false;
+            DiscerningEye = false;
         }
     }
 
