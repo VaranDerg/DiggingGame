@@ -63,6 +63,9 @@ MonoBehaviour:
   - UpdateScore
   - UpdateOnlineActionText
   - IncrementRound
+  - ChangeTurnPhase
+  - ResetTurnPhase
+  - UpdateActiveTextOnline
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

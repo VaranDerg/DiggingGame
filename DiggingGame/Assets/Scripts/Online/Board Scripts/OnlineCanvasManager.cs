@@ -295,11 +295,13 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     /// <summary>
     /// Calls every "UpdateText"-type function except the Current Action Text one.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void UpdateTextBothPlayers()
     {
         UpdateCurrentPlayerText(/*_am.CurrentPlayer*/);
-        UpdateAlwaysActiveText();
+        photonView.RPC("UpdateActiveTextOnline", RpcTarget.All);
 
         /*if (_am.CurrentPlayer == 1)
         {
@@ -311,6 +313,17 @@ public class OnlineCanvasManager : MonoBehaviourPun
         }*/
 
         photonView.RPC("ChangeOpponentText", RpcTarget.All);     //Andrea SD
+    }
+
+    /// <summary>
+    /// Updates always active text for each player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC] 
+    public void UpdateActiveTextOnline()
+    {
+        UpdateAlwaysActiveText();
     }
 
     public void OpponentInfoToggle()
@@ -557,5 +570,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
         _am.EndTurn(_am.CurrentPlayer);     //Andrea SD
         UpdateTextBothPlayers();
+
     }  
 }

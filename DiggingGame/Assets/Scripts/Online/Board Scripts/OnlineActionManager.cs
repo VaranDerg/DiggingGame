@@ -497,6 +497,7 @@ public class OnlineActionManager : MonoBehaviourPun
 
         //Enables the start button for the other player then disables your own board 
         DisableBoard();
+        photonView.RPC("EnableBoard", RpcTarget.Others);
     }
 
     /// <summary>
@@ -660,6 +661,7 @@ public class OnlineActionManager : MonoBehaviourPun
     {
         photonView.RPC("UpdateScore", RpcTarget.All, player, amount);
     }
+
     /// <summary>
     /// Updates the players scores across the network
     /// </summary>
