@@ -139,6 +139,7 @@ public class Building : MonoBehaviour
                     _pcm.DiscardPersistentCard(PlayerOwning, "Dam");
                 }
                 _ce.CurrentDamages++;
+                _pcm.BuildingsDamaged++;
                 _bm.SetActiveCollider("Building");
                 yield break;
             }
@@ -207,7 +208,7 @@ public class Building : MonoBehaviour
             if (_pcm.CheckForPersistentCard(PlayerOwning, "Retribution"))
             {
                 _pcm.DiscardPersistentCard(PlayerOwning, "Retribution");
-                _pcm.StartCoroutine(_pcm.StartRetribution(PlayerOwning));
+                _pcm.StartCoroutine(_pcm.RetributionStart(PlayerOwning));
             }
 
             _am.ScorePoints(1);

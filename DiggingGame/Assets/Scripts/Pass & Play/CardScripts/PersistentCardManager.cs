@@ -286,7 +286,7 @@ public class PersistentCardManager : MonoBehaviour
     /// Coroutine for Retribtion process.
     /// </summary>
     /// <returns>Default hold time.</returns>
-    public IEnumerator StartRetribution(int retributionPlayer)
+    public IEnumerator RetributionStart(int retributionPlayer)
     {
         int possibleDamages = 0;
         foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
@@ -307,14 +307,16 @@ public class PersistentCardManager : MonoBehaviour
             possibleDamages = _ce.RetributionDamages;
         }
 
-        BuildingsDamaged = 0;
+        _gcm.UpdateCurrentActionText("Damage " + (possibleDamages - BuildingsDamaged) + " Buildings!");
 
+        BuildingsDamaged = 0;
         while(BuildingsDamaged != possibleDamages)
         {
-            _gcm.UpdateCurrentActionText("Damage " + (possibleDamages - BuildingsDamaged) + " more Buildings!");
             yield return null;
         }
+        BuildingsDamaged = 0;
 
+        DiscardPersistentCard(retributionPlayer, "Retribution");
         _bm.SetActiveCollider("Pawn");
         _bm.DisableAllBoardInteractions();
         _gcm.ToFinallyPhase();

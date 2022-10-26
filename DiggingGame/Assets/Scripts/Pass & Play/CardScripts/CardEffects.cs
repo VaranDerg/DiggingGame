@@ -66,7 +66,8 @@ public class CardEffects : MonoBehaviour
     [HideInInspector] public int AllowedDamages;
     [SerializeField] private int _allowedRepairs;
     [HideInInspector] public int RepairedBuildings;
-    private string _tornadoBuildingToDamage;
+    private int _tornadoBuildingToDamage;
+    private bool _tornadoBuildingChosen;
     [HideInInspector] public int CurrentDamages;
     [HideInInspector] public bool EarthquakePieceSelected;
 
@@ -695,9 +696,10 @@ public class CardEffects : MonoBehaviour
     /// For Tornado. Pick a building type to damage.
     /// </summary>
     /// <param name="type">"Factory" "Burrow" or "Mine"</param>
-    public void SelectBuildingToDamage(string type)
+    public void SelectBuildingToDamage(int buildingIndex)
     {
-        _tornadoBuildingToDamage = type;
+        _tornadoBuildingToDamage = buildingIndex;
+        _tornadoBuildingChosen = true;
     }
 
     /// <summary>
@@ -1701,6 +1703,8 @@ public class CardEffects : MonoBehaviour
         }
         EarthquakePieceSelected = false;
 
+        _bm.SetActiveCollider("Building");
+
         CurrentDamages = 0;
         while (CurrentDamages != AllowedDamages)
         {
@@ -2241,15 +2245,15 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        _tornadoBuildingToDamage = "N/A";
-
+        _tornadoBuildingChosen = false;
         _tornadoUI.SetActive(true);
-        while(_tornadoBuildingToDamage == "N/A")
+        while(!_tornadoBuildingChosen)
         {
             _gcm.UpdateCurrentActionText("Select a Building type to damage!");
             yield return null;
         }
         _tornadoUI.SetActive(false);
+        _tornadoBuildingChosen = false;
 
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
@@ -2259,25 +2263,33 @@ public class CardEffects : MonoBehaviour
                 continue;
             }
 
-            if (_tornadoBuildingToDamage != "Mine")
+            if (_tornadoBuildingToDamage == 0)
             {
-                if (building.GetComponent<Building>().BuildingType == _tornadoBuildingToDamage)
+                if (building.GetComponent<Building>().BuildingType == "Factory")
                 {
                     building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
-            else
+            else if(_tornadoBuildingToDamage == 1)
             {
-                building.GetComponent<Building>().PrepBuilidingDamaging(true);
-                buildingCount++;
+                if (building.GetComponent<Building>().BuildingType == "Burrow")
+                {
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    buildingCount++;
+                }
+            }
+            else if(_tornadoBuildingToDamage == 2)
+            {
+                if (building.GetComponent<Building>().BuildingType == "GMine" || building.GetComponent<Building>().BuildingType == "DMine" || building.GetComponent<Building>().BuildingType == "SMine")
+                {
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    buildingCount++;
+                }
             }
         }
 
-        _tornadoBuildingToDamage = "N/A";
-
         _bm.SetActiveCollider("Building");
-        CurrentDamages = 0;
 
         if (buildingCount >= AllowedDamages)
         {
@@ -2289,12 +2301,10 @@ public class CardEffects : MonoBehaviour
         }
 
         CurrentDamages = 0;
-
         while (CurrentDamages != AllowedDamages)
         {
             yield return null;
         }
-
         CurrentDamages = 0;
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
