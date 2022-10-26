@@ -436,6 +436,10 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     public void Retrieve()
     {
+        DisableListObjects();
+        _thenZone.SetActive(true);
+        _backButton.SetActive(true);
+
         StartCoroutine(_am.UseGold(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
@@ -489,6 +493,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
+
         foreach (PieceController script in FindObjectsOfType<PieceController>())
         {
             script.StopAllCoroutines();

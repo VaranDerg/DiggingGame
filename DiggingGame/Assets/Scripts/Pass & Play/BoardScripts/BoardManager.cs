@@ -109,6 +109,11 @@ public class BoardManager : MonoBehaviour
             piece.GetComponent<PieceController>().PieceIsSelected = false;
             _am.StopPawnActions(_am.CurrentPlayer);
         }
+
+        foreach(GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        }
     }
 
     /// <summary>

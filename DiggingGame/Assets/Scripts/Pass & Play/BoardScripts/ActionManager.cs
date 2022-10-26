@@ -401,7 +401,7 @@ public class ActionManager : MonoBehaviour
     /// Place a tile back onto the board. 
     /// </summary>
     /// <param name="type">"Grass" "Dirt" or "Stone"</param>
-    public void PlaceTile(int player, string type)
+    public void PlaceTile(string type)
     {
         //Debug.Log("Player " + player + " placed a " + type + " tile!");
 

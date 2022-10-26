@@ -162,21 +162,21 @@ public class PersistentCardManager : MonoBehaviour
     {
         if (player == 1)
         {
-            foreach (GameObject card in P1PersistentCards)
+            for(int i = 0; i < P1PersistentCards.Count; i++)
             {
-                if (card.gameObject.name == cardName)
+                if(P1PersistentCards[i].name == cardName)
                 {
-                    card.GetComponentInChildren<CardController>().ToDiscard();
+                    P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard();
                 }
             }
         }
         else if (player == 2)
         {
-            foreach (GameObject card in P2PersistentCards)
+            for (int i = 0; i < P2PersistentCards.Count; i++)
             {
-                if (card.gameObject.name == cardName)
+                if (P2PersistentCards[i].name == cardName)
                 {
-                    card.GetComponentInChildren<CardController>().ToDiscard();
+                    P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard();
                 }
             }
         }
@@ -187,14 +187,21 @@ public class PersistentCardManager : MonoBehaviour
     /// </summary>
     public IEnumerator PersistentCardDiscardProcess()
     {
-        int cardCount = 0;
         if (_am.CurrentPlayer == 1)
         {
+            int pCardCount = 0;
             _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
             foreach (GameObject card in P2PersistentCards)
             {
                 card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
-                cardCount++;
+                pCardCount++;
+            }
+
+            if (pCardCount == 0)
+            {
+                _bm.DisableAllBoardInteractions();
+                _gcm.Back();
+                yield break;
             }
 
             while (!DiscardedPersistentCard)
@@ -205,7 +212,6 @@ public class PersistentCardManager : MonoBehaviour
             foreach (GameObject card in P2PersistentCards)
             {
                 card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
-                cardCount++;
             }
 
             DiscardedPersistentCard = false;
@@ -214,10 +220,19 @@ public class PersistentCardManager : MonoBehaviour
         }
         else
         {
+            int pCardCount = 0;
             _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
             foreach (GameObject card in P1PersistentCards)
             {
                 card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                pCardCount++;
+            }
+
+            if(pCardCount == 0)
+            {
+                _bm.DisableAllBoardInteractions();
+                _gcm.Back();
+                yield break;
             }
 
             while (!DiscardedPersistentCard)
@@ -271,12 +286,12 @@ public class PersistentCardManager : MonoBehaviour
     /// Coroutine for Retribtion process.
     /// </summary>
     /// <returns>Default hold time.</returns>
-    public IEnumerator StartRetribution()
+    public IEnumerator StartRetribution(int retributionPlayer)
     {
         int possibleDamages = 0;
         foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if(building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            if(building.GetComponent<Building>().PlayerOwning == retributionPlayer)
             {
                 continue;
             }

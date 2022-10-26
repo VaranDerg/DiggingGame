@@ -207,12 +207,12 @@ public class Building : MonoBehaviour
             if (_pcm.CheckForPersistentCard(PlayerOwning, "Retribution"))
             {
                 _pcm.DiscardPersistentCard(PlayerOwning, "Retribution");
-                _pcm.StartCoroutine(_pcm.StartRetribution());
+                _pcm.StartCoroutine(_pcm.StartRetribution(PlayerOwning));
             }
 
             _am.ScorePoints(1);
 
-            _anims.Play("TempPawnDefault");
+            PrepBuilidingDamaging(false);
             gameObject.SetActive(false);
         }
         else if(BuildingHealth == 1)
@@ -220,7 +220,6 @@ public class Building : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s Building has taken damage!");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
             GetComponent<SpriteRenderer>().color = _damagedColor;
-            _anims.Play("TempPawnDefault");
         }
         else if(BuildingHealth == 2)
         {
@@ -232,8 +231,8 @@ public class Building : MonoBehaviour
         _gcm.UpdateCurrentActionText("Damage " + _ce.AllowedDamages + " more Buildings!");
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
+        PrepBuilidingDamaging(false);
         ActiveBuilding = false;
-        CanBeDamaged = false;
     }
 
     /// <summary>
@@ -244,8 +243,6 @@ public class Building : MonoBehaviour
         BuildingHealth++;
         GetComponent<SpriteRenderer>().color = _defaultColor;
         _ce.RepairedBuildings++;
-        _anims.Play("TempPawnDefault");
-        CanBeRepaired = false;
         ActiveBuilding = true;
 
         //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
@@ -260,7 +257,43 @@ public class Building : MonoBehaviour
             _gcm.UpdateTextBothPlayers();
         }
 
-        CanBeRepaired = false;
         ActiveBuilding = false;
+        PrepBuilidingReapiring(false);
+    }
+
+    /// <summary>
+    /// Prepares a building for taking damage.
+    /// </summary>
+    /// <param name="show">True = Blink</param>
+    public void PrepBuilidingDamaging(bool show)
+    {
+        if(show)
+        {
+            CanBeDamaged = true;
+            GetComponent<Animator>().Play("TempPawnBlink");
+        }
+        else
+        {
+            CanBeDamaged = false;
+            GetComponent<Animator>().Play("TempPawnDefault");
+        }
+    }
+
+    /// <summary>
+    /// Prepares a building for repairing.
+    /// </summary>
+    /// <param name="show">True = Blink</param>
+    public void PrepBuilidingReapiring(bool show)
+    {
+        if (show)
+        {
+            CanBeRepaired = true;
+            GetComponent<Animator>().Play("TempPawnBlink");
+        }
+        else
+        {
+            CanBeRepaired = false;
+            GetComponent<Animator>().Play("TempPawnDefault");
+        }
     }
 }

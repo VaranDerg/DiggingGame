@@ -134,12 +134,7 @@ public class PieceController : MonoBehaviour
 
         if (IsEarthquakeable)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                _ce.SelectedPiece = this;
-                _ce.EarthquakePieceSelected = true;
-                ShowHideEarthquake(false);
-            }
+            UseEarthquake();
         }
 
         if (IsFlippable)
@@ -162,76 +157,80 @@ public class PieceController : MonoBehaviour
                 {
                     SetPieceState(3);
                     _am.ShovelUsed = true;
+                    if (CurrentPawn != null)
+                    {
+                        CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+                    }
                     _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                 }
-
-                yield break;
             }
             //End of Shovel Code
+            else
+            {
+                _sr.color = _waitingColor;
+                PieceIsSelected = true;
+                foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+                {
+                    pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
+                }
 
-            _sr.color = _waitingColor;
-            PieceIsSelected = true;
-            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
-            {
-                pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
-            }
+                if (ObjState == GameState.One || ObjState == GameState.Six)
+                {
+                    _cm.PrepareCardSelection(1, "Grass", false);
+                }
+                else if (ObjState == GameState.Two)
+                {
+                    _cm.PrepareCardSelection(1, "Dirt", false);
+                }
+                else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                {
+                    _cm.PrepareCardSelection(1, "Stone", false);
+                }
+                else if (ObjState == GameState.Four)
+                {
+                    _cm.PrepareCardSelection(1, "Any", false);
+                }
 
-            if (ObjState == GameState.One || ObjState == GameState.Six)
-            {
-                _cm.PrepareCardSelection(1, "Grass", false);
-            }
-            else if (ObjState == GameState.Two)
-            {
-                _cm.PrepareCardSelection(1, "Dirt", false);
-            }
-            else if (ObjState == GameState.Three || ObjState == GameState.Five)
-            {
-                _cm.PrepareCardSelection(1, "Stone", false);
-            }
-            else if (ObjState == GameState.Four)
-            {
-                _cm.PrepareCardSelection(1, "Any", false);
-            }
+                while (!_cm.CheckCardSelection())
+                {
+                    yield return null;
+                }
+                _cm.PrepareCardSelection(0, "", true);
 
-            while (!_cm.CheckCardSelection())
-            {
-                yield return null;
-            }
-            _cm.PrepareCardSelection(0, "", true);
+                switch (ObjState)
+                {
+                    case GameState.One:
+                        SetPieceState(2);
+                        _am.CollectTile(_am.CurrentPlayer, "Grass", true);
+                        break;
+                    case GameState.Six:
+                        SetPieceState(2);
+                        _am.CollectTile(_am.CurrentPlayer, "Grass", true);
+                        break;
+                    case GameState.Two:
+                        SetPieceState(3);
+                        _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+                        break;
+                    case GameState.Three:
+                        SetPieceState(4);
 
-            if(CurrentPawn != null)
-            {
-                CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-            }
-            _gcm.Back();
+                        if (HasGold)
+                        {
+                            _am.CollectTile(_am.CurrentPlayer, "Gold", true);
+                        }
+                        else
+                        {
+                            _am.CollectTile(_am.CurrentPlayer, "Stone", true);
+                        }
 
-            switch (ObjState)
-            {
-                case GameState.One:
-                    SetPieceState(2);
-                    _am.CollectTile(_am.CurrentPlayer, "Grass", true);
-                    break;
-                case GameState.Six:
-                    SetPieceState(2);
-                    _am.CollectTile(_am.CurrentPlayer, "Grass", true);
-                    break;
-                case GameState.Two:
-                    SetPieceState(3);
-                    _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
-                    break;
-                case GameState.Three:
-                    SetPieceState(4);
+                        break;
+                }
 
-                    if(HasGold)
-                    {
-                        _am.CollectTile(_am.CurrentPlayer, "Gold", true);
-                    }
-                    else
-                    {
-                        _am.CollectTile(_am.CurrentPlayer, "Stone", true);
-                    }
-
-                    break;
+                if (CurrentPawn != null)
+                {
+                    CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+                }
+                _gcm.Back();
             }
         }
     }
@@ -252,6 +251,31 @@ public class PieceController : MonoBehaviour
             SetPieceState(3);
             _am.CollectTile(_am.CurrentPlayer, "Grass", false);
             _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+        }
+    }
+
+    /// <summary>
+    /// Uses the card Earthquake.
+    /// </summary>
+    private void UseEarthquake()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            _ce.EarthquakePieceSelected = true;
+
+            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
+            {
+                if(piece.GetComponentInChildren<Building>())
+                {
+                    piece.GetComponentInChildren<Building>().PrepBuilidingDamaging(true);
+                    _ce.AllowedDamages++;
+                }
+            }
+
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            {
+                piece.GetComponent<PieceController>().ShowHideEarthquake(false);
+            }
         }
     }
 
@@ -324,7 +348,7 @@ public class PieceController : MonoBehaviour
     }
 
     /// <summary>
-    /// (WIP) Allows the placement of pieces back onto the board.
+    /// Allows the placement of pieces back onto the board.
     /// </summary>
     private void PiecePlacement()
     {
@@ -347,15 +371,15 @@ public class PieceController : MonoBehaviour
             {
                 case GameState.Two:
                     SetPieceState(6);
-                    _am.PlaceTile(_am.CurrentPlayer, "Grass");
+                    _am.PlaceTile("Grass");
                     break;
                 case GameState.Three:
                     SetPieceState(2);
-                    _am.PlaceTile(_am.CurrentPlayer, "Dirt");
+                    _am.PlaceTile("Dirt");
                     break;
                 case GameState.Four:
                     SetPieceState(3);
-                    _am.PlaceTile(_am.CurrentPlayer, "Stone");
+                    _am.PlaceTile("Stone");
                     break;
             }
         }

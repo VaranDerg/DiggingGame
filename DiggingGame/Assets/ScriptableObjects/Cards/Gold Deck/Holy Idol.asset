@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Holy Idol
   m_EditorClassIdentifier: 
   CardName: Holy Idol
-  CardDescription: Take up to 4 of any one resource from the supply, or score 1 point.
+  CardDescription: Take 1 Gold Piece from the supply, or 4 of any other Piece from
+    the supply, or score 1 point.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
