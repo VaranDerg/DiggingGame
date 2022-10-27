@@ -347,7 +347,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8963238437065497122}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1635,7 +1635,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8963238438125540268}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1923,14 +1923,20 @@ MonoBehaviour:
   _defaultPos: {fileID: 7925999958643142583}
   _cardVisualToMaximize: {fileID: 8963238438185584236}
   _cardBody: {fileID: 8963238437072702106}
+  _cardBackground: {fileID: 6387981489063947845}
   _cardSlideSpeed: 7.5
+  _cardDiscardColor: {r: 1, g: 0.495283, b: 0.495283, a: 1}
+  _cardDefaultColor: {r: 1, g: 1, b: 1, a: 1}
   HandPosition: 0
+  PHandPosition: 0
   HeldByPlayer: 0
   NextPos: {x: 0, y: 0, z: 0}
   CanBeSelected: 0
   CanBeDiscarded: 0
   CanBeActivated: 0
   Selected: 0
+  MadePersistentP1: 0
+  MadePersistentP2: 0
 --- !u!1 &8963238438471516894
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,7 +2339,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8963238438692123200}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -2412,7 +2418,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8963238438724290618}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -2569,7 +2575,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8963238438969432892}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

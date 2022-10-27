@@ -33,6 +33,7 @@ public class Building : MonoBehaviour
     private GameCanvasManagerNew _gcm;
     private CardEffects _ce;
     private Animator _anims;
+    private BoardManager _bm;
 
     /// <summary>
     /// Assigns partner scripts.
@@ -44,6 +45,7 @@ public class Building : MonoBehaviour
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         _ce = FindObjectOfType<CardEffects>();
         _anims = GetComponent<Animator>();
+        _bm = FindObjectOfType<BoardManager>();
     }
 
     /// <summary>
@@ -67,15 +69,15 @@ public class Building : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if(CanBeDamaged)
+        if(CanBeDamaged && !ActiveBuilding)
         {
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
-                FindObjectOfType<CardEffects>().SelectedBuilding = this;
+                StartCoroutine(DamageBuiliding(_ce.CalculateBuildingDamage()));
             }
         }
 
-        if(CanBeRepaired)
+        if(CanBeRepaired && !ActiveBuilding)
         {
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -91,53 +93,30 @@ public class Building : MonoBehaviour
     public IEnumerator DamageBuiliding(int damage)
     {
         bool hasCard = false;
-        string cardName = "";
         ActiveBuilding = true;
+        _bm.SetActiveCollider("Board");
 
-        if(_am.CurrentPlayer == 1)
+        //Weed Whacker and Dam Code
+        if (SuitOfPiece == "Grass")
         {
-            foreach(GameObject card in _pcm.P1PersistentCards)
-            {
-                if(card.gameObject.name == "Weed Whacker" && SuitOfPiece == "Grass")
-                {
-                    hasCard = true;
-                    cardName = "Weed Whacker";
-                }
-                else if(card.gameObject.name == "Dam" && SuitOfPiece == "Dirt")
-                {
-                    hasCard = true;
-                    cardName = "Dam";
-                }
-            }
+            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker");
         }
-        else
+        else if (SuitOfPiece == "Dirt")
         {
-            foreach (GameObject card in _pcm.P2PersistentCards)
-            {
-                if (card.gameObject.name == "Weed Whacker" && SuitOfPiece == "Grass")
-                {
-                    hasCard = true;
-                    cardName = "Weed Whacker";
-                }
-                else if (card.gameObject.name == "Dam" && SuitOfPiece == "Dirt")
-                {
-                    hasCard = true;
-                    cardName = "Dam";
-                }
-            }
+            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Dam");
         }
 
-        if(hasCard)
+        if (hasCard)
         {
             _ce.ProtectBuildingUI.SetActive(true);
 
             if(PlayerOwning == 1)
             {
-                _gcm.UpdateCurrentActionText("Player 1, protect your building with " + cardName + "?");
+                _gcm.UpdateCurrentActionText("Player 1, protect your building?");
             }
             else
             {
-                _gcm.UpdateCurrentActionText("Player 2, protect your building with " + cardName + "?");
+                _gcm.UpdateCurrentActionText("Player 2, protect your building?");
             }
 
             while(!_pcm.DecidedBuildingProtection)
@@ -151,37 +130,30 @@ public class Building : MonoBehaviour
 
             if(DamageProtectionResponse == true)
             {
-                if(_am.CurrentPlayer == 1)
+                if (SuitOfPiece == "Grass")
                 {
-                    foreach (GameObject card in _pcm.P1PersistentCards)
-                    {
-                        if (card.gameObject.name == cardName)
-                        {
-                            card.GetComponent<CardController>().ToDiscard();
-                        }
-                    }
+                    _pcm.DiscardPersistentCard(PlayerOwning, "Weed Whacker");
                 }
-                else
+                else if (SuitOfPiece == "Dirt")
                 {
-                    foreach (GameObject card in _pcm.P2PersistentCards)
-                    {
-                        if (card.gameObject.name == cardName)
-                        {
-                            card.GetComponent<CardController>().ToDiscard();
-                        }
-                    }
+                    _pcm.DiscardPersistentCard(PlayerOwning, "Dam");
                 }
+                _ce.CurrentDamages++;
+                _pcm.BuildingsDamaged++;
+                _bm.SetActiveCollider("Building");
                 yield break;
             }
 
             ActiveBuilding = false;
         }
+        //End Weed Whacker and Dam Code
 
         BuildingHealth -= damage;
 
         if(BuildingHealth <= 0)
         {
-            Debug.Log("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
+            yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
             if(PlayerOwning == 1)
             {
@@ -230,35 +202,38 @@ public class Building : MonoBehaviour
                 }
             }
 
-            if(_am.CurrentPlayer == 1)
+            GetComponentInParent<PieceController>().HasP1Building = false;
+            GetComponentInParent<PieceController>().HasP2Building = false;
+
+            if (_pcm.CheckForPersistentCard(PlayerOwning, "Retribution"))
             {
-                GetComponentInParent<PieceController>().HasP1Building = false;
-                if (_pcm.CheckForPersistentCard("Retribution", true))
-                {
-                    _pcm.StartCoroutine(_pcm.StartRetribution());
-                }
-            }
-            else
-            {
-                GetComponentInParent<PieceController>().HasP2Building = false;
-                if (_pcm.CheckForPersistentCard("Retribution", true))
-                {
-                    _pcm.StartCoroutine(_pcm.StartRetribution());
-                }
+                _pcm.DiscardPersistentCard(PlayerOwning, "Retribution");
+                _pcm.RetributionStart(PlayerOwning, SuitOfPiece);
             }
 
             _am.ScorePoints(1);
 
-            _anims.Play("TempPawnDefault");
+            PrepBuilidingDamaging(false);
+            GetComponent<Animator>().enabled = false;
             gameObject.SetActive(false);
         }
         else if(BuildingHealth == 1)
         {
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
+            yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
             GetComponent<SpriteRenderer>().color = _damagedColor;
-            _anims.Play("TempPawnDefault");
+        }
+        else if(BuildingHealth == 2)
+        {
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has avoided damage!");
+            yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
+        _bm.SetActiveCollider("Building");
+        _gcm.UpdateCurrentActionText("Damage " + _ce.AllowedDamages + " more Buildings!");
+        _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
+        PrepBuilidingDamaging(false);
         ActiveBuilding = false;
     }
 
@@ -270,8 +245,7 @@ public class Building : MonoBehaviour
         BuildingHealth++;
         GetComponent<SpriteRenderer>().color = _defaultColor;
         _ce.RepairedBuildings++;
-        _anims.Play("TempPawnDefault");
-        CanBeRepaired = false;
+        ActiveBuilding = true;
 
         //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
         if(_am.CurrentPlayer == 1 && PlayerOwning == 2)
@@ -283,6 +257,45 @@ public class Building : MonoBehaviour
         {
             _am.P2Score++;
             _gcm.UpdateTextBothPlayers();
+        }
+
+        ActiveBuilding = false;
+        PrepBuilidingReapiring(false);
+    }
+
+    /// <summary>
+    /// Prepares a building for taking damage.
+    /// </summary>
+    /// <param name="show">True = Blink</param>
+    public void PrepBuilidingDamaging(bool show)
+    {
+        if(show)
+        {
+            CanBeDamaged = true;
+            GetComponent<Animator>().Play("TempPawnBlink");
+        }
+        else
+        {
+            CanBeDamaged = false;
+            GetComponent<Animator>().Play("TempPawnDefault");
+        }
+    }
+
+    /// <summary>
+    /// Prepares a building for repairing.
+    /// </summary>
+    /// <param name="show">True = Blink</param>
+    public void PrepBuilidingReapiring(bool show)
+    {
+        if (show)
+        {
+            CanBeRepaired = true;
+            GetComponent<Animator>().Play("TempPawnBlink");
+        }
+        else
+        {
+            CanBeRepaired = false;
+            GetComponent<Animator>().Play("TempPawnDefault");
         }
     }
 }

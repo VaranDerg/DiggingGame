@@ -64,7 +64,7 @@ public class CardManager : MonoBehaviour
             gCard.SetActive(false);
             gCardAmount++;
         }
-        Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
+        //Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public class CardManager : MonoBehaviour
             P2OpenHandPositions[i] = true;
         }
 
-        Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
+        //Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
     }
 
     /// <summary>
@@ -128,7 +128,8 @@ public class CardManager : MonoBehaviour
         {
             if(_gDeck.Count == 0)
             {
-                Debug.Log("No Gold Cards remain!");
+                _gcm.UpdateCurrentActionText("Gold deck is empty! Scored 1 Point!");
+                _am.ScorePoints(1);
                 return;
             }
 
@@ -154,15 +155,22 @@ public class CardManager : MonoBehaviour
                     P1OpenHandPositions[i] = false;
                     if(deck == "Universal")
                     {
-                        _am.P1Cards++;
                         _uDeck.Remove(randomCard);
                     }
                     else
                     {
-                        _am.P1GoldCards++;
                         _gDeck.Remove(randomCard);
                     }
-                    Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+
+                    if(randomCard.CompareTag("GoldCard"))
+                    {
+                        _am.P1GoldCards++;
+                    }
+                    else
+                    {
+                        _am.P1Cards++;
+                    }
+                    //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     UpdatePileText();
                     return;
                 }
@@ -183,15 +191,22 @@ public class CardManager : MonoBehaviour
                     P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
-                        _am.P2Cards++;
                         _uDeck.Remove(randomCard);
                     }
                     else
                     {
-                        _am.P2GoldCards++;
                         _gDeck.Remove(randomCard);
                     }
-                    Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+
+                    if (randomCard.CompareTag("GoldCard"))
+                    {
+                        _am.P2GoldCards++;
+                    }
+                    else
+                    {
+                        _am.P2Cards++;
+                    }
+                    //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     UpdatePileText();
                     return;
                 }
@@ -291,7 +306,7 @@ public class CardManager : MonoBehaviour
 
         if(selectedCardValue == requiredCardValue)
         {
-            Debug.Log("Adequate cards provided!");
+            //Debug.Log("Adequate cards provided!");
             SpendSelectedCards();
             return true;
         }
@@ -355,7 +370,7 @@ public class CardManager : MonoBehaviour
                 }
             }
 
-            Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
+            //Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
 
             DPile.Clear();
             UpdatePileText();
@@ -372,7 +387,7 @@ public class CardManager : MonoBehaviour
         {
             DrawCard("Universal");
         }
-        Debug.Log("Drew " + cardsToDraw + " cards!");
+        //Debug.Log("Drew " + cardsToDraw + " cards!");
     }
 
     /// <summary>
@@ -384,9 +399,8 @@ public class CardManager : MonoBehaviour
         {
             if (_am.P1Cards + _am.P1GoldCards > _am.HandLimit)
             {
-                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
-
                 PrepareCardSelection(_am.P1Cards + _am.P1GoldCards - _am.HandLimit, "Any", false);
+                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
                 while (!CheckCardSelection())
                 {
                     yield return null;
@@ -401,9 +415,8 @@ public class CardManager : MonoBehaviour
         {
             if (_am.P2Cards + _am.P2GoldCards > _am.HandLimit)
             {
-                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
-
                 PrepareCardSelection(_am.P2Cards + _am.P2GoldCards - _am.HandLimit, "Any", false);
+                _gcm.UpdateCurrentActionText("Discard " + (_am.P2Cards + _am.P2GoldCards - _am.HandLimit) + " Cards.");
                 while (!CheckCardSelection())
                 {
                     yield return null;
@@ -421,9 +434,12 @@ public class CardManager : MonoBehaviour
     /// </summary>
     /// <param name="player">1 or 2</param>
     /// <param name="maxActivateAmount">Default amount + Burrows</param>
-    public void PrepareCardActivating(int player, int maxActivateAmount)
+    public void PrepareCardActivating(int player, int maxActivateAmount, bool activatePhaseJustStarted)
     {
-        AllowedActivations = maxActivateAmount;
+        if(activatePhaseJustStarted)
+        {
+            AllowedActivations = maxActivateAmount;
+        }
 
         if (player == 1)
         {
@@ -456,7 +472,7 @@ public class CardManager : MonoBehaviour
         }
         else
         {
-            foreach (GameObject card in P1Hand)
+            foreach (GameObject card in P2Hand)
             {
                 card.GetComponentInChildren<CardController>().CanBeActivated = false;
             }

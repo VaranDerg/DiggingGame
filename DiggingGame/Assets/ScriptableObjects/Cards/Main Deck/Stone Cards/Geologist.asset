@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Geologist
   m_EditorClassIdentifier: 
   CardName: Geologist
-  CardDescription: Whenever you Retrieve, score 1 point.
+  CardDescription: 'Whenever you retrieve Gold, score a point. '
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1
   GoldSuit: 0
   GrassCost: 0
-  DirtCost: 0
-  StoneCost: 3
+  DirtCost: 1
+  StoneCost: 2
   persistent: 1
   disaster: 0
   CardArt: {fileID: 1911829311, guid: 9ac393a0c879b56449f198f026365d86, type: 3}

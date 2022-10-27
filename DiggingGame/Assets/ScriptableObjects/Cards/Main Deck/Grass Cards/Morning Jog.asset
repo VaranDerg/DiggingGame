@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Morning Jog
   m_EditorClassIdentifier: 
   CardName: Morning Jog
-  CardDescription: Whenever you move onto a Grass Piece, you may move onto another
-    Grass Piece. This card cannot trigger its own effect.
+  CardDescription: 'Once a turn, you may move onto an adjacent Grass Piece without
+    spending a Card. '
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0

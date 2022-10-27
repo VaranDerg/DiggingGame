@@ -10,16 +10,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class CardEffects : MonoBehaviour
 {
     [Header("General Values")]
     [SerializeField] private float activateAnimWaitTime;
 
-    [Header("UI References")]
-    [SerializeField] private GameObject _morningJogUI;
+    [Header("Activation UI References")]
+    [SerializeField] private GameObject _activateResponseBox;
+    [SerializeField] private Color _grassColor, _dirtColor, _stoneColor, _goldColor;
+    [SerializeField] private TextMeshProUGUI _cardActivatedText;
+
+    [Header("Card UI References")]
     [SerializeField] private GameObject _thiefUI;
-    public GameObject SecretTunnelsUI;
     public GameObject ProtectBuildingUI;
     [SerializeField] private GameObject _grassThiefButton, _dirtThiefButton, _stoneThiefButton, _goldThiefButton;
     [SerializeField] private TextMeshProUGUI _remainingStealsText;
@@ -42,12 +46,14 @@ public class CardEffects : MonoBehaviour
     [Header("Placing & Regeneration")]
     [HideInInspector] public int PlacedPieces = 0;
     [HideInInspector] public int DugPieces = 0;
-    [SerializeField] private int _maxPiecesToRegenerate;
+    [SerializeField] private int _maxPiecesToRegen;
     [SerializeField] private int _regenPiecesRequiredToScore;
+    private int _piecesToRegen;
     private int _regenSpotsOnBoard;
     private bool _regenSuitChosen;
 
     [Header("Damaging Buildings")]
+    public float BuildingDamageStatusWaitTime;
     [SerializeField] private int _overgrowthDamages;
     [SerializeField] private int _floodDamages;
     [SerializeField] private int _earthquakeDamages;
@@ -56,12 +62,13 @@ public class CardEffects : MonoBehaviour
     public int RetributionDamages;
     private int _damageBuildingDieSides = 4;
     [HideInInspector] public Building SelectedBuilding;
-    [HideInInspector] public PieceController SelectedPiece;
     [HideInInspector] public int AllowedDamages;
     [SerializeField] private int _allowedRepairs;
     [HideInInspector] public int RepairedBuildings;
-    private string _tornadoBuildingToDamage;
-
+    private int _tornadoBuildingToDamage;
+    private bool _tornadoBuildingChosen;
+    [HideInInspector] public int CurrentDamages;
+    [HideInInspector] public bool EarthquakePieceSelected;
 
     [Header("Planned Profit")]
     public int PiecesToCollect;
@@ -113,7 +120,6 @@ public class CardEffects : MonoBehaviour
     /// </summary>
     public void DisableCardEffectUI()
     {
-        _morningJogUI.SetActive(false);
         _thiefUI.SetActive(false);
         ProtectBuildingUI.SetActive(false);
         _grassThiefButton.SetActive(false);
@@ -121,7 +127,6 @@ public class CardEffects : MonoBehaviour
         _stoneThiefButton.SetActive(false);
         _goldThiefButton.SetActive(false);
         _holyIdolUI.SetActive(false);
-        SecretTunnelsUI.SetActive(false);
         _tornadoUI.SetActive(false);
     }
 
@@ -132,12 +137,14 @@ public class CardEffects : MonoBehaviour
     /// <param name="effectName">Name of the effect, matches coroutine. Capitalize each letter, spaces between words.</param>
     public IEnumerator ActivateCardEffect(string suit, string effectName, GameObject pCardObject)
     {
-        ShowActivationText(suit, effectName);
+        ShowActivationText(suit, effectName, true);
 
         yield return new WaitForSeconds(activateAnimWaitTime);
 
+        ShowActivationText(suit, effectName, false);
+
         //DO NOT OPEN THIS YOU WILL BE JUMPSCARED
-        switch(effectName)
+        switch (effectName)
         {
             case "Flowers":
                 StartCoroutine(Flowers());
@@ -150,6 +157,9 @@ public class CardEffects : MonoBehaviour
                 break;
             case "Morning Jog":
                 StartCoroutine(MorningJog(pCardObject));
+                break;
+            case "Overgrowth!":
+                StartCoroutine(Overgrowth());
                 break;
             case "Planned Profit":
                 StartCoroutine(PlannedProfit(pCardObject));
@@ -175,7 +185,7 @@ public class CardEffects : MonoBehaviour
             case "Fertilizer":
                 StartCoroutine(Fertilizer());
                 break;
-            case "Flood":
+            case "Flood!":
                 StartCoroutine(Flood());
                 break;
             case "Mudslide":
@@ -187,13 +197,13 @@ public class CardEffects : MonoBehaviour
             case "Shovel":
                 StartCoroutine(Shovel(pCardObject));
                 break;
-            case "Thunderstorm":
+            case "Thunderstorm!":
                 StartCoroutine(Thunderstorm());
                 break;
             case "Compaction":
                 StartCoroutine(Compaction());
                 break;
-            case "Earthquake":
+            case "Earthquake!":
                 StartCoroutine(Earthquake());
                 break;
             case "Erosion":
@@ -235,7 +245,7 @@ public class CardEffects : MonoBehaviour
             case "Teleportation":
                 Teleportation();
                 break;
-            case "Tornado":
+            case "Tornado!":
                 StartCoroutine(Tornado());
                 break;
             case "Transmutation":
@@ -250,11 +260,39 @@ public class CardEffects : MonoBehaviour
     /// <summary>
     /// Function that plays an animation when a player activates a card.
     /// </summary>
-    /// <param name="effectName"></param>
-    private void ShowActivationText(string suit, string effectName)
+    /// <param name="effectName">"Name of the Effect"</param>
+    /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
+    private void ShowActivationText(string suit, string effectName, bool start)
     {
-        Debug.Log("Play " + suit + " animation here.");
-        _gcm.UpdateCurrentActionText("Player " + _am.CurrentPlayer + " has activated " + effectName + "!");
+        _gcm.UpdateCurrentActionText("Activated Card!");
+        _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
+        if(suit == "Grass")
+        {
+            _activateResponseBox.GetComponent<Image>().color = _grassColor;
+        }
+        else if(suit == "Dirt")
+        {
+            _activateResponseBox.GetComponent<Image>().color = _dirtColor;
+        }
+        else if(suit == "Stone")
+        {
+            _activateResponseBox.GetComponent<Image>().color = _stoneColor;
+        }
+        else if(suit == "Gold")
+        {
+            _activateResponseBox.GetComponent<Image>().color = _goldColor;
+        }
+
+        if (start)
+        {
+            _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeIn");
+            _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeIn");
+        }
+        else
+        {
+            _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeOut");
+            _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeOut");
+        }
     }
 
     /// <summary>
@@ -385,7 +423,8 @@ public class CardEffects : MonoBehaviour
         }
 
         _remainingPiecesToSteal--;
-        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+        _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
+        _gcm.UpdateTextBothPlayers();
     }
 
     /// <summary>
@@ -509,6 +548,7 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _gcm.UpdateTextBothPlayers();
         _claimedPieces = true;
     }
 
@@ -519,9 +559,23 @@ public class CardEffects : MonoBehaviour
     /// <returns></returns>
     public void RegeneratePieces(string suit)
     {
-        if(suit == "Grass")
+        bool enoughPieces = false;
+        int newPieceCount = 0;
+        int openPieces = 0;
+
+        if (suit == "Grass")
         {
-            foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            if (_am.SupplyPile[0] >= _maxPiecesToRegen)
+            {
+                enoughPieces = true;
+            }
+            else
+            {
+                newPieceCount = _am.SupplyPile[0];
+                enoughPieces = false;
+            }
+
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
                 if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
@@ -533,13 +587,35 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                _regenSpotsOnBoard++;
+                openPieces++;
+            }
+
+            if(enoughPieces && openPieces >= _maxPiecesToRegen)
+            {
+                _piecesToRegen = _maxPiecesToRegen;
+            }
+            else if(openPieces >= newPieceCount)
+            {
+                _piecesToRegen = newPieceCount;
+            }
+            else
+            {
+                _piecesToRegen = openPieces;
             }
         }
         else if(suit == "Dirt")
         {
+            if (_am.SupplyPile[1] >= _maxPiecesToRegen)
+            {
+                enoughPieces = true;
+            }
+            else
+            {
+                newPieceCount = _am.SupplyPile[1];
+                enoughPieces = false;
+            }
+
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -553,11 +629,34 @@ public class CardEffects : MonoBehaviour
                 }
 
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                _regenSpotsOnBoard++;
+                openPieces++;
+            }
+
+            if (enoughPieces && openPieces >= _maxPiecesToRegen)
+            {
+                _piecesToRegen = _maxPiecesToRegen;
+            }
+            else if (openPieces >= newPieceCount)
+            {
+                _piecesToRegen = newPieceCount;
+            }
+            else
+            {
+                _piecesToRegen = openPieces;
             }
         }
         else if(suit == "Stone")
         {
+            if (_am.SupplyPile[2] >= _maxPiecesToRegen)
+            {
+                enoughPieces = true;
+            }
+            else
+            {
+                newPieceCount = _am.SupplyPile[2];
+                enoughPieces = false;
+            }
+
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -573,6 +672,19 @@ public class CardEffects : MonoBehaviour
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
                 _regenSpotsOnBoard++;
             }
+
+            if (enoughPieces && openPieces >= _maxPiecesToRegen)
+            {
+                _piecesToRegen = _maxPiecesToRegen;
+            }
+            else if (openPieces >= newPieceCount)
+            {
+                _piecesToRegen = newPieceCount;
+            }
+            else
+            {
+                _piecesToRegen = openPieces;
+            }
         }
 
         _regenSuitChosen = true;
@@ -582,16 +694,17 @@ public class CardEffects : MonoBehaviour
     /// For Tornado. Pick a building type to damage.
     /// </summary>
     /// <param name="type">"Factory" "Burrow" or "Mine"</param>
-    public void SelectBuildingToDamage(string type)
+    public void SelectBuildingToDamage(int buildingIndex)
     {
-        _tornadoBuildingToDamage = type;
+        _tornadoBuildingToDamage = buildingIndex;
+        _tornadoBuildingChosen = true;
     }
 
     /// <summary>
     /// Damages a building based on a dice roll.
     /// </summary>
     /// <returns>A number from 0 to 2</returns>
-    private int CalculateBuildingDamage()
+    public int CalculateBuildingDamage()
     {
         int sideOfDie = Random.Range(0, _damageBuildingDieSides + 1);
         int damageToTake;
@@ -623,13 +736,14 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         bool enoughPieces;
         int newPieceCount = 0;
+        int openPieces = 0;
         if(_am.SupplyPile[0] >= _flowersPiecesToPlace)
         {
             enoughPieces = true;
-            newPieceCount = _flowersPiecesToPlace - _am.SupplyPile[0];
         }
         else
         {
+            newPieceCount = _am.SupplyPile[0];
             enoughPieces = false;
         }
 
@@ -637,35 +751,62 @@ public class CardEffects : MonoBehaviour
         {
             if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
             {
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
+                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
 
-        if(enoughPieces)
+        if(openPieces == 0)
         {
-            _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto the Board!");
+            PlacedPieces = 0;
+            _bm.DisableAllBoardInteractions();
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No open Pieces to place on!");
+            yield break;
+        }
+
+        PlacedPieces = 0;
+        if (enoughPieces && openPieces >= _flowersPiecesToPlace)
+        {
             while (PlacedPieces != _flowersPiecesToPlace)
             {
+                _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto Dirt Pieces!");
+                yield return null;
+            }
+        }
+        else if (openPieces >= newPieceCount)
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces onto Dirt Pieces!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces onto the Board!");
-            while (PlacedPieces != newPieceCount)
+            while (PlacedPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces onto Dirt Pieces!");
                 yield return null;
             }
         }
 
-        if(enoughPieces)
+        if (enoughPieces)
         {
             _am.ScorePoints(1);
         }
 
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -677,13 +818,14 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         bool enoughPieces;
         int newPieceCount = 0;
+        int openPieces = 0;
         if (_am.SupplyPile[0] >= _gardenPiecesToPlace)
         {
             enoughPieces = true;
-            newPieceCount = _gardenPiecesToPlace - _am.SupplyPile[0];
         }
         else
         {
+            newPieceCount = _am.SupplyPile[0];
             enoughPieces = false;
         }
 
@@ -705,24 +847,46 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().ShowHidePlaceable(true);
                 }
             }
         }
 
-        if (enoughPieces)
+        if(openPieces == 0)
         {
-            _gcm.UpdateCurrentActionText("Place " + _gardenPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
+            PlacedPieces = 0;
+            _bm.DisableAllBoardInteractions();
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No open Pieces to place on!");
+            yield break;
+        }
+
+        PlacedPieces = 0;
+        if (enoughPieces && openPieces >= _gardenPiecesToPlace)
+        {
             while (PlacedPieces != _gardenPiecesToPlace)
             {
+                _gcm.UpdateCurrentActionText("Place " + _gardenPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
+                yield return null;
+            }
+        }
+        else if(openPieces >= newPieceCount)
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces adjacent to your Pawns!");
-            while (PlacedPieces != newPieceCount)
+            while (PlacedPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -738,7 +902,7 @@ public class CardEffects : MonoBehaviour
 
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -749,7 +913,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        int possiblePieces = 0;
+        int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
@@ -768,14 +932,19 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().FromActivatedCard = true;
                     piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                    possiblePieces++;
                 }
             }
         }
 
-        if(possiblePieces >= _lawnmowerPiecesToDig)
+        DugPieces = 0;
+
+        if(openPieces >= _lawnmowerPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
@@ -785,15 +954,17 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + possiblePieces + " Grass Pieces adjacent to your Pawns!");
-            while (DugPieces != possiblePieces)
+            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
+            while (DugPieces != openPieces)
             {
                 yield return null;
             }
         }
 
+        DugPieces = 0;
+
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -807,7 +978,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -819,8 +990,6 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
 
-        AllowedDamages = _overgrowthDamages;
-
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
@@ -828,40 +997,39 @@ public class CardEffects : MonoBehaviour
             {
                 if (building.GetComponent<Building>().SuitOfPiece == "Grass")
                 {
-                    building.GetComponent<Animator>().Play("TempPawnBlink");
-                    building.GetComponent<Building>().CanBeDamaged = true;
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
         }
 
-        for (int i = AllowedDamages; i != 0; i--)
+        _bm.SetActiveCollider("Building");
+        CurrentDamages = 0;
+
+        if(buildingCount < AllowedDamages)
         {
-            if (buildingCount != 0)
-            {
-                while (SelectedBuilding == null)
-                {
-                    yield return null;
-                }
-
-                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
-
-                SelectedBuilding = null;
-            }
-            else
-            {
-                _gcm.UpdateCurrentActionText("Opponent has no buildings on Grass!");
-            }
+            AllowedDamages = buildingCount;
         }
+        else
+        {
+            AllowedDamages = _overgrowthDamages;
+        }
+
+        while(CurrentDamages != AllowedDamages)
+        {
+            yield return null;
+        }
+
+        CurrentDamages = 0;
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().CanBeDamaged = false;
-            building.GetComponent<Animator>().Play("TempPawnDefault");
+            building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
+        _bm.SetActiveCollider("Board");
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -875,7 +1043,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -890,7 +1058,7 @@ public class CardEffects : MonoBehaviour
         _dirtThiefButton.SetActive(true);
         _goldThiefButton.SetActive(true);
         _remainingPiecesToSteal = ThiefPiecesToTake;
-        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+        _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
 
         if (_am.CurrentPlayer == 1)
         {
@@ -911,6 +1079,11 @@ public class CardEffects : MonoBehaviour
                     _dirtThiefButton.SetActive(false);
                 }
 
+                if(_am.P2CollectedPile[3] + _am.P2RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
                 yield return null;
             }
         }
@@ -923,14 +1096,19 @@ public class CardEffects : MonoBehaviour
                     _goldThiefButton.SetActive(false);
                 }
 
-                if (_am.P2CollectedPile[0] + _am.P2RefinedPile[0] == 0)
+                if (_am.P1CollectedPile[0] + _am.P1RefinedPile[0] == 0)
                 {
                     _grassThiefButton.SetActive(false);
                 }
 
-                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                if (_am.P1CollectedPile[1] + _am.P1RefinedPile[1] == 0)
                 {
                     _dirtThiefButton.SetActive(false);
+                }
+
+                if (_am.P1CollectedPile[3] + _am.P1RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
                 }
 
                 yield return null;
@@ -944,7 +1122,7 @@ public class CardEffects : MonoBehaviour
         _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -952,18 +1130,19 @@ public class CardEffects : MonoBehaviour
     /// </summary>
     public void Walkway()
     {
+        _bm.DisableAllBoardInteractions();
+
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
-                pawn.GetComponent<PlayerPawn>().IsDigging = true;
-                pawn.GetComponent<PlayerPawn>().WalkwaySelect = true;
+                pawn.GetComponent<PlayerPawn>().IsUsingWalkway = true;
                 pawn.GetComponent<Animator>().Play("TempPawnBlink");
             }
         }
 
-        _bm.BoardColliderSwitch(false);
-        _bm.DisableAllBoardInteractions();
+        _gcm.UpdateCurrentActionText("Select a Pawn to Dig and Move with Walkway!");
+        _bm.SetActiveCollider("Pawn");
     }
 
     /// <summary>
@@ -977,7 +1156,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     //Dirt Cards
@@ -993,7 +1172,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1008,7 +1187,7 @@ public class CardEffects : MonoBehaviour
         _dirtThiefButton.SetActive(true);
         _goldThiefButton.SetActive(true);
         _remainingPiecesToSteal = DirtyThiefPiecesToTake;
-        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+        _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
 
         if (_am.CurrentPlayer == 1)
         {
@@ -1029,6 +1208,11 @@ public class CardEffects : MonoBehaviour
                     _stoneThiefButton.SetActive(false);
                 }
 
+                if (_am.P2CollectedPile[3] + _am.P2RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
                 yield return null;
             }
         }
@@ -1041,14 +1225,19 @@ public class CardEffects : MonoBehaviour
                     _goldThiefButton.SetActive(false);
                 }
 
-                if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
+                if (_am.P1CollectedPile[1] + _am.P1RefinedPile[1] == 0)
                 {
                     _dirtThiefButton.SetActive(false);
                 }
 
-                if (_am.P2CollectedPile[2] + _am.P2RefinedPile[2] == 0)
+                if (_am.P1CollectedPile[2] + _am.P1RefinedPile[2] == 0)
                 {
                     _stoneThiefButton.SetActive(false);
+                }
+
+                if (_am.P1CollectedPile[3] + _am.P1RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
                 }
 
                 yield return null;
@@ -1062,7 +1251,7 @@ public class CardEffects : MonoBehaviour
         _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1073,7 +1262,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        int possiblePieces = 0;
+        int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
@@ -1092,14 +1281,19 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().FromActivatedCard = true;
                     piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                    possiblePieces++;
                 }
             }
         }
 
-        if (possiblePieces >= _excavatorPiecesToDig)
+        DugPieces = 0;
+
+        if (openPieces >= _excavatorPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != _excavatorPiecesToDig)
@@ -1109,15 +1303,17 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + possiblePieces + " Dirt Pieces adjacent to your Pawns!");
-            while (DugPieces != possiblePieces)
+            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
+            while (DugPieces != openPieces)
             {
                 yield return null;
             }
         }
 
+        DugPieces = 0;
+
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1129,13 +1325,14 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         bool enoughPieces;
         int newPieceCount = 0;
+        int openPieces = 0;
         if (_am.SupplyPile[1] >= _fertilizerPiecesToPlace)
         {
             enoughPieces = true;
-            newPieceCount = _fertilizerPiecesToPlace - _am.SupplyPile[1];
         }
         else
         {
+            newPieceCount = _am.SupplyPile[1];
             enoughPieces = false;
         }
 
@@ -1143,23 +1340,50 @@ public class CardEffects : MonoBehaviour
         {
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
             {
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
+                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
 
-        if (enoughPieces)
+        if (openPieces == 0)
         {
-            _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces adjacent to your Pawns!");
+            PlacedPieces = 0;
+            _bm.DisableAllBoardInteractions();
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No open Pieces to place on!");
+            yield break;
+        }
+
+        PlacedPieces = 0;
+        if (enoughPieces && openPieces >= _fertilizerPiecesToPlace)
+        {
             while (PlacedPieces != _fertilizerPiecesToPlace)
             {
+                _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces onto Stone Pieces!");
+                yield return null;
+            }
+        }
+        else if (openPieces >= newPieceCount)
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces onto Stone Pieces!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces adjacent to your Pawns!");
-            while (PlacedPieces != newPieceCount)
+            while (PlacedPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Dirt Pieces onto Stone Pieces!");
                 yield return null;
             }
         }
@@ -1171,7 +1395,7 @@ public class CardEffects : MonoBehaviour
 
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1192,36 +1416,35 @@ public class CardEffects : MonoBehaviour
             {
                 if (building.GetComponent<Building>().SuitOfPiece == "Dirt")
                 {
-                    building.GetComponent<Animator>().Play("TempPawnBlink");
-                    building.GetComponent<Building>().CanBeDamaged = true;
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
         }
 
-        for (int i = AllowedDamages; i != 0; i--)
+        _bm.SetActiveCollider("Building");
+        CurrentDamages = 0;
+
+        if (buildingCount < AllowedDamages)
         {
-            if (buildingCount != 0)
-            {
-                while (SelectedBuilding == null)
-                {
-                    yield return null;
-                }
-
-                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
-
-                SelectedBuilding = null;
-            }
-            else
-            {
-                _gcm.UpdateCurrentActionText("Opponent has no buildings on Dirt!");
-            }
+            AllowedDamages = buildingCount;
         }
+        else
+        {
+            AllowedDamages = _floodDamages;
+        }
+
+        while (CurrentDamages != AllowedDamages)
+        {
+            yield return null;
+        }
+
+        CurrentDamages = 0;
+        _bm.SetActiveCollider("Pawn");
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().CanBeDamaged = false;
-            building.GetComponent<Animator>().Play("TempPawnDefault");
+            building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
         StartCoroutine(_pcm.PersistentCardDiscardProcess());
@@ -1238,8 +1461,7 @@ public class CardEffects : MonoBehaviour
             pawn.GetComponent<Animator>().Play("TempPawnBlink");
         }
 
-        _bm.BoardColliderSwitch(false);
-        _bm.DisableAllBoardInteractions();
+        _bm.SetActiveCollider("Pawn");
         _gcm.UpdateCurrentActionText("Select a pawn to move and Dirt Piece to move onto.");
     }
 
@@ -1254,7 +1476,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1268,7 +1490,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1280,8 +1502,6 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         _gcm.UpdateCurrentActionText("Select a building on a Grass or Dirt Piece to damage!");
 
-        AllowedDamages = _thunderstormDamages;
-
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
@@ -1289,36 +1509,34 @@ public class CardEffects : MonoBehaviour
             {
                 if (building.GetComponent<Building>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
                 {
-                    building.GetComponent<Animator>().Play("TempPawnBlink");
-                    building.GetComponent<Building>().CanBeDamaged = true;
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
         }
 
-        for (int i = AllowedDamages; i != 0; i--)
+        _bm.SetActiveCollider("Building");
+        CurrentDamages = 0;
+
+        if (buildingCount < AllowedDamages)
         {
-            if (buildingCount != 0)
-            {
-                while (SelectedBuilding == null)
-                {
-                    yield return null;
-                }
-
-                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
-
-                SelectedBuilding = null;
-            }
-            else
-            {
-                _gcm.UpdateCurrentActionText("Opponent has no buildings on Grass or Dirt!");
-            }
+            AllowedDamages = buildingCount;
+        }
+        else
+        {
+            AllowedDamages = _thunderstormDamages;
         }
 
-        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        while (CurrentDamages != AllowedDamages)
         {
-            building.GetComponent<Building>().CanBeDamaged = false;
-            building.GetComponent<Animator>().Play("TempPawnDefault");
+            yield return null;
+        }
+
+        CurrentDamages = 0;
+
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
         _gcm.UpdateCurrentActionText("Select a building on a Grass or Dirt Piece to damage!");
@@ -1329,40 +1547,39 @@ public class CardEffects : MonoBehaviour
             {
                 if (building.GetComponent<Building>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
                 {
-                    building.GetComponent<Animator>().Play("TempPawnBlink");
-                    building.GetComponent<Building>().CanBeDamaged = true;
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     yourBuildingCount++;
                 }
             }
         }
 
-        for (int i = AllowedDamages; i != 0; i--)
+        _bm.SetActiveCollider("Building");
+        CurrentDamages = 0;
+
+        if (yourBuildingCount < AllowedDamages)
         {
-            if (yourBuildingCount != 0)
-            {
-                while (SelectedBuilding == null)
-                {
-                    yield return null;
-                }
-
-                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
-
-                SelectedBuilding = null;
-            }
-            else
-            {
-                _gcm.UpdateCurrentActionText("Opponent has no buildings on Grass or Dirt!");
-            }
+            AllowedDamages = yourBuildingCount;
         }
+        else
+        {
+            AllowedDamages = _thunderstormDamages;
+        }
+
+        while (CurrentDamages != AllowedDamages)
+        {
+            yield return null;
+        }
+
+        CurrentDamages = 0;
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().CanBeDamaged = false;
-            building.GetComponent<Animator>().Play("TempPawnDefault");
+            building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
+        _bm.SetActiveCollider("Pawn");
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     //Stone Cards
@@ -1376,13 +1593,14 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         bool enoughPieces;
         int newPieceCount = 0;
+        int openPieces = 0;
         if (_am.SupplyPile[2] >= _compactionPiecesToPlace)
         {
             enoughPieces = true;
-            newPieceCount = _compactionPiecesToPlace - _am.SupplyPile[2];
         }
         else
         {
+            newPieceCount = _compactionPiecesToPlace - _am.SupplyPile[2];
             enoughPieces = false;
         }
 
@@ -1390,23 +1608,50 @@ public class CardEffects : MonoBehaviour
         {
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
             {
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
+                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
 
-        if (enoughPieces)
+        if (openPieces == 0)
         {
-            _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces adjacent to your Pawns!");
+            PlacedPieces = 0;
+            _bm.DisableAllBoardInteractions();
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No open Pieces to place on!");
+            yield break;
+        }
+
+        PlacedPieces = 0;
+        if (enoughPieces && openPieces >= _compactionPiecesToPlace)
+        {
             while (PlacedPieces != _compactionPiecesToPlace)
             {
+                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
+                yield return null;
+            }
+        }
+        else if (openPieces >= newPieceCount)
+        {
+            while (PlacedPieces != newPieceCount)
+            {
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Stone Pieces onto Bedrock Pieces!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Stone Pieces adjacent to your Pawns!");
-            while (PlacedPieces != newPieceCount)
+            while (PlacedPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Stone Pieces onto Bedrock Pieces!");
                 yield return null;
             }
         }
@@ -1418,7 +1663,7 @@ public class CardEffects : MonoBehaviour
 
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1429,8 +1674,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
         _gcm.UpdateCurrentActionText("Select a Stone Piece for Earthquake!");
-
-        AllowedDamages = _earthquakeDamages;
+        AllowedDamages = 0;
 
         int pieceCount = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -1447,39 +1691,37 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        for (int i = AllowedDamages; i != 0; i--)
+        if (pieceCount == 0)
         {
-            if (pieceCount != 0)
-            {
-                while (SelectedPiece == null)
-                {
-                    yield return null;
-                }
-
-                foreach(GameObject piece in _bm.GenerateAdjacentPieceList(SelectedPiece.gameObject))
-                {
-                    if(piece.GetComponentInChildren<Building>())
-                    {
-                        StartCoroutine(piece.GetComponentInChildren<Building>().DamageBuiliding(CalculateBuildingDamage()));
-                    }
-                }
-
-                SelectedPiece = null;
-            }
-            else
-            {
-                _gcm.UpdateCurrentActionText("Opponent has no buildings on Dirt!");
-            }
+            _gcm.Back();
+            _bm.DisableAllBoardInteractions();
+            _gcm.UpdateCurrentActionText("No Stone Pieces to select for Earthquake!");
+            yield break;
         }
+
+        while (!EarthquakePieceSelected)
+        {
+            yield return null;
+        }
+        EarthquakePieceSelected = false;
+
+        _bm.SetActiveCollider("Building");
+
+        CurrentDamages = 0;
+        _gcm.UpdateCurrentActionText("Damage every adjacent Building!");
+        while (CurrentDamages != AllowedDamages)
+        {
+            yield return null;
+        }
+        CurrentDamages = 0;
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().CanBeDamaged = false;
-            building.GetComponent<Animator>().Play("TempPawnDefault");
+            building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1490,7 +1732,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        int possiblePieces = 0;
+        int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
@@ -1499,7 +1741,7 @@ public class CardEffects : MonoBehaviour
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three)
+                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Five)
                     {
                         continue;
                     }
@@ -1509,14 +1751,17 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().FromActivatedCard = true;
                     piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                    possiblePieces++;
                 }
             }
         }
 
-        if (possiblePieces >= _erosionPiecesToDig)
+        if (openPieces >= _erosionPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
@@ -1526,15 +1771,15 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + possiblePieces + " Stone Pieces adjacent to your Pawns!");
-            while (DugPieces != possiblePieces)
+            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
+            while (DugPieces != openPieces)
             {
                 yield return null;
             }
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1548,7 +1793,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1562,7 +1807,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1574,7 +1819,7 @@ public class CardEffects : MonoBehaviour
         int stoneOnBoard = 0;
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
+            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
             {
                 if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
@@ -1600,9 +1845,11 @@ public class CardEffects : MonoBehaviour
             RemainingFlips = 0;
         }
 
+        _bm.SetActiveCollider("Board");
+
         while(RemainingFlips != 0)
         {
-            _gcm.UpdateCurrentActionText("Select " + RemainingFlips + " Stone Pieces to look for Gold in!");
+            _gcm.UpdateCurrentActionText("Select " + RemainingFlips + " more Stone Pieces to look for Gold in!");
             yield return null;
         }
 
@@ -1612,7 +1859,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1624,7 +1871,7 @@ public class CardEffects : MonoBehaviour
         {
             foreach(GameObject card in _cm.P1Hand)
             {
-                card.GetComponent<CardController>().ToDiscard();
+                card.GetComponentInChildren<CardController>().ToDiscard();
             }
 
             for(int i = PlannedGambleCardsToDraw; i != 0; i--)
@@ -1636,7 +1883,7 @@ public class CardEffects : MonoBehaviour
         {
             foreach (GameObject card in _cm.P2Hand)
             {
-                card.GetComponent<CardController>().ToDiscard();
+                card.GetComponentInChildren<CardController>().ToDiscard();
             }
 
             for (int i = PlannedGambleCardsToDraw; i != 0; i--)
@@ -1646,7 +1893,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     //Gold Cards
@@ -1660,7 +1907,7 @@ public class CardEffects : MonoBehaviour
         int stoneOnBoard = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
@@ -1687,6 +1934,8 @@ public class CardEffects : MonoBehaviour
             RemainingFlips = 0;
         }
 
+        _bm.SetActiveCollider("Board");
+
         while (RemainingFlips != 0)
         {
             _gcm.UpdateCurrentActionText("Select " + RemainingFlips + " Stone Pieces to look for Gold in!");
@@ -1700,7 +1949,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1711,7 +1960,7 @@ public class CardEffects : MonoBehaviour
     {
         _gcm.DisableListObjects();
 
-        int possiblePieces = 0;
+        int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
@@ -1730,16 +1979,21 @@ public class CardEffects : MonoBehaviour
                         continue;
                     }
 
+                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    {
+                        openPieces++;
+                    }
                     piece.GetComponent<PieceController>().FromActivatedCard = true;
                     piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                    possiblePieces++;
                 }
             }
         }
 
-        if (possiblePieces >= _goldenShovelPiecesToDig)
+        DugPieces = 0;
+
+        if (openPieces >= _goldenShovelPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _goldenShovelPiecesToDig + " Grass Pieces adjacent to your Pawns!");
+            _gcm.UpdateCurrentActionText("Dig " + _goldenShovelPiecesToDig + " Pieces adjacent to your Pawns!");
             while (DugPieces != _goldenShovelPiecesToDig)
             {
                 yield return null;
@@ -1747,15 +2001,17 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + possiblePieces + " Grass Pieces adjacent to your Pawns!");
-            while (DugPieces != possiblePieces)
+            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Pieces adjacent to your Pawns!");
+            while (DugPieces != openPieces)
             {
                 yield return null;
             }
         }
 
+        DugPieces = 0;
+
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1772,8 +2028,11 @@ public class CardEffects : MonoBehaviour
             yield return null;
         }
 
+        _claimedPieces = false;
+        _holyIdolUI.SetActive(false);
+
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1788,7 +2047,7 @@ public class CardEffects : MonoBehaviour
         _dirtThiefButton.SetActive(true);
         _grassThiefButton.SetActive(true);
         _remainingPiecesToSteal = MasterThiefPiecesToTake;
-        _remainingStealsText.text = _remainingPiecesToSteal + "Remaining";
+        _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
 
         if (_am.CurrentPlayer == 1)
         {
@@ -1807,6 +2066,11 @@ public class CardEffects : MonoBehaviour
                 if (_am.P2CollectedPile[0] + _am.P2RefinedPile[0] == 0)
                 {
                     _grassThiefButton.SetActive(false);
+                }
+
+                if (_am.P2CollectedPile[3] + _am.P2RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
                 }
 
                 yield return null;
@@ -1831,6 +2095,11 @@ public class CardEffects : MonoBehaviour
                     _grassThiefButton.SetActive(false);
                 }
 
+                if (_am.P1CollectedPile[3] + _am.P1RefinedPile[3] == 0)
+                {
+                    _goldThiefButton.SetActive(false);
+                }
+
                 yield return null;
             }
         }
@@ -1842,7 +2111,7 @@ public class CardEffects : MonoBehaviour
         _goldThiefButton.SetActive(false);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1854,12 +2123,16 @@ public class CardEffects : MonoBehaviour
         int maxRepairs = 0;
         foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().CanBeRepaired = true;
-            building.GetComponent<Animator>().Play("TempPawnBlink");
+            if(building.GetComponent<Building>().BuildingHealth != 1)
+            {
+                continue;
+            }
+
+            building.GetComponent<Building>().PrepBuilidingReapiring(true);
             maxRepairs++;
         }
 
-        _bm.BoardColliderSwitch(false);
+        _bm.SetActiveCollider("Building");
         
         if(maxRepairs >= _allowedRepairs)
         {
@@ -1872,10 +2145,21 @@ public class CardEffects : MonoBehaviour
             yield return null;
         }
 
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if (building.GetComponent<Building>().BuildingHealth != 1)
+            {
+                continue;
+            }
+
+            building.GetComponent<Building>().PrepBuilidingReapiring(false);
+        }
+
         RepairedBuildings = 0;
 
+        _bm.SetActiveCollider("Pawn");
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1886,26 +2170,21 @@ public class CardEffects : MonoBehaviour
     {
         _regenerationUI.SetActive(true);
         _gcm.UpdateCurrentActionText("Select a Piece to Regenerate!");
-
         while(!_regenSuitChosen)
         {
             yield return null;
         }
+        _regenerationUI.SetActive(false);
 
-        if(_regenSpotsOnBoard >= _maxPiecesToRegenerate)
+        while(PlacedPieces != _piecesToRegen)
         {
-            _regenSpotsOnBoard = _maxPiecesToRegenerate;
-        }
-
-        while(PlacedPieces != _regenSpotsOnBoard)
-        {
-            _gcm.UpdateCurrentActionText("Regenerate " + (_regenSpotsOnBoard - PlacedPieces) + " Pieces!");
+            _gcm.UpdateCurrentActionText("Regenerate " + (_piecesToRegen - PlacedPieces) + " more Pieces!");
             yield return null;
         }
 
         int pointsToScore = 0;
         int curInterval = 0;
-        for(int i = 0; i != _regenSpotsOnBoard; i++)
+        for(int i = 0; i != _piecesToRegen; i++)
         {
             if(curInterval != _regenPiecesRequiredToScore)
             {
@@ -1918,11 +2197,13 @@ public class CardEffects : MonoBehaviour
 
         _am.ScorePoints(pointsToScore);
 
+        PlacedPieces = 0;
+        _piecesToRegen = 0;
         _regenSuitChosen = false;
         _regenSpotsOnBoard = 0;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1936,7 +2217,7 @@ public class CardEffects : MonoBehaviour
         yield return null;
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -1954,10 +2235,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        _bm.BoardColliderSwitch(false);
-
-        _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _bm.SetActiveCollider("Pawn");
+        _gcm.UpdateCurrentActionText("Select a pawn to teleport and Piece to teleport onto.");
     }
 
     /// <summary>
@@ -1967,17 +2246,16 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Tornado()
     {
         _gcm.DisableListObjects();
-        _gcm.UpdateCurrentActionText("Select a Building type to damage!");
 
-        AllowedDamages = _tornadoDamages;
-
+        _tornadoBuildingChosen = false;
         _tornadoUI.SetActive(true);
-        while(_tornadoBuildingToDamage == "")
+        while(!_tornadoBuildingChosen)
         {
             _gcm.UpdateCurrentActionText("Select a Building type to damage!");
             yield return null;
         }
         _tornadoUI.SetActive(false);
+        _tornadoBuildingChosen = false;
 
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
@@ -1987,52 +2265,60 @@ public class CardEffects : MonoBehaviour
                 continue;
             }
 
-            if (_tornadoBuildingToDamage != "Mine")
+            if (_tornadoBuildingToDamage == 0)
             {
-                if (building.GetComponent<Building>().BuildingType == _tornadoBuildingToDamage)
+                if (building.GetComponent<Building>().BuildingType == "Factory")
                 {
-                    building.GetComponent<Animator>().Play("TempPawnBlink");
-                    building.GetComponent<Building>().CanBeDamaged = true;
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
-            else
+            else if(_tornadoBuildingToDamage == 1)
             {
-                building.GetComponent<Animator>().Play("TempPawnBlink");
-                building.GetComponent<Building>().CanBeDamaged = true;
-                buildingCount++;
-            }
-        }
-
-        _tornadoBuildingToDamage = "";
-
-        for (int i = AllowedDamages; i != 0; i--)
-        {
-            if (buildingCount != 0)
-            {
-                while (SelectedBuilding == null)
+                if (building.GetComponent<Building>().BuildingType == "Burrow")
                 {
-                    yield return null;
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    buildingCount++;
                 }
-
-                StartCoroutine(SelectedBuilding.DamageBuiliding(CalculateBuildingDamage()));
-
-                SelectedBuilding = null;
             }
-            else
+            else if(_tornadoBuildingToDamage == 2)
             {
-                _gcm.UpdateCurrentActionText("Opponent has no buildings of that type!");
+                if (building.GetComponent<Building>().BuildingType == "Grass Mine" || building.GetComponent<Building>().BuildingType == "Dirt Mine" || building.GetComponent<Building>().BuildingType == "Stone Mine")
+                {
+                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    buildingCount++;
+                }
             }
         }
+
+        _bm.SetActiveCollider("Building");
+
+        _gcm.UpdateCurrentActionText("Damage every Building of that type!");
+
+        if (buildingCount >= AllowedDamages)
+        {
+            AllowedDamages = buildingCount;
+        }
+        else
+        {
+            AllowedDamages = _tornadoDamages;
+        }
+
+        CurrentDamages = 0;
+        while (CurrentDamages != AllowedDamages)
+        {
+            yield return null;
+        }
+        CurrentDamages = 0;
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().CanBeDamaged = false;
-            building.GetComponent<Animator>().Play("TempPawnDefault");
+            building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
+        _bm.SetActiveCollider("Pawn");
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 
     /// <summary>
@@ -2043,6 +2329,6 @@ public class CardEffects : MonoBehaviour
         _am.ScorePoints(1);
 
         _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.Back();
     }
 }

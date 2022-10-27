@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Retribution
   m_EditorClassIdentifier: 
   CardName: Retribution
-  CardDescription: "The next time a Building of yours is destroyed, damage 3 of your
-    opponent\u2019s Buildings."
+  CardDescription: "The next time a Building of yours is destroyed, your opponent
+    must send all of their Pieces matching that Building\u2019s Piece to the Supply. "
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 1
   GrassCost: 1
-  DirtCost: 2
-  StoneCost: 0
+  DirtCost: 1
+  StoneCost: 1
   persistent: 1
   disaster: 0
   CardArt: {fileID: -1362304560, guid: 2720b28cf0cd8b84ba10ec7c2adc1b17, type: 3}

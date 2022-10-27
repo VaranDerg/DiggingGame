@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Thief
   m_EditorClassIdentifier: 
   CardName: Thief
-  CardDescription: Take a Gold Piece or up to 2 Grass or Dirt Pieces from an adjacent
-    opponent.
+  CardDescription: Take a Gold Piece or 2 Grass or Dirt pieces from an opponent.
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0

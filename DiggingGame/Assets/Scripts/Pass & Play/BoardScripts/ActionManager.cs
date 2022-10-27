@@ -57,6 +57,7 @@ public class ActionManager : MonoBehaviour
 
     [Header("Card Effects")]
     [HideInInspector] public bool ShovelUsed;
+    [HideInInspector] public bool MorningJogUsed;
 
     [Header("Script References")]
     private BoardManager _bm;
@@ -148,7 +149,7 @@ public class ActionManager : MonoBehaviour
             }
         }
 
-        _bm.BoardColliderSwitch(false);
+        _bm.SetActiveCollider("Pawn");
     }
 
     /// <summary>
@@ -174,7 +175,7 @@ public class ActionManager : MonoBehaviour
             }
         }
 
-        _bm.BoardColliderSwitch(false);
+        _bm.SetActiveCollider("Pawn");
     }
 
     /// <summary>
@@ -192,7 +193,7 @@ public class ActionManager : MonoBehaviour
             }
         }
 
-        _bm.BoardColliderSwitch(false);
+        _bm.SetActiveCollider("Pawn");
     }
 
     /// <summary>
@@ -213,14 +214,14 @@ public class ActionManager : MonoBehaviour
             }
         }
 
-        _bm.BoardColliderSwitch(true);
+        _bm.SetActiveCollider("Board");
     }
 
     /// <summary>
     /// Collects a tile and adds it to one of the "collected" variables. 
     /// </summary>
     /// <param name="type">"Grass" "Dirt" "Stone" or "Gold"</param>
-    public void CollectTile(int player, string type)
+    public void CollectTile(int player, string type, bool goBack)
     {
         if (player == 1)
         {
@@ -229,22 +230,34 @@ public class ActionManager : MonoBehaviour
                 case "Grass":
                     P1CollectedPile[0]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if(goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Dirt":
                     P1CollectedPile[1]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Stone":
                     P1CollectedPile[2]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Gold":
                     P1CollectedPile[3]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
             }
         }
@@ -255,22 +268,34 @@ public class ActionManager : MonoBehaviour
                 case "Grass":
                     P2CollectedPile[0]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Dirt":
                     P2CollectedPile[1]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Stone":
                     P2CollectedPile[2]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Gold":
                     P2CollectedPile[3]++;
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
             }
         }
@@ -316,6 +341,7 @@ public class ActionManager : MonoBehaviour
         {
             if (P1RefinedPile[3] == 0 || P1Cards == 0)
             {
+                _gcm.Back();
                 _gcm.UpdateCurrentActionText("No Refined Gold or Cards to retrieve with!");
             }
             else
@@ -328,8 +354,7 @@ public class ActionManager : MonoBehaviour
                 _cm.PrepareCardSelection(0, "", true);
 
                 //Start of Geologist code.
-                bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
-                if(hasGeologist)
+                if(_pcm.CheckForPersistentCard(CurrentPlayer, "Geologist"))
                 {
                     ScorePoints(1);
                 }
@@ -338,6 +363,9 @@ public class ActionManager : MonoBehaviour
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
+                _gcm.UpdateTextBothPlayers();
+                _gcm.Back();
+                _gcm.UpdateCurrentActionText("Gold retrieved!");
             }
         }
         else if (player == 2)
@@ -356,28 +384,28 @@ public class ActionManager : MonoBehaviour
                 _cm.PrepareCardSelection(0, "", true);
 
                 //Start of Geologist code.
-                bool hasGeologist = _pcm.CheckForPersistentCard("Geologist", false);
-                if (hasGeologist)
+                if (_pcm.CheckForPersistentCard(CurrentPlayer, "Geologist"))
                 {
                     ScorePoints(1);
                 }
                 //End of Geologist code.
 
                 _cm.DrawCard("Gold");
-                P1RefinedPile[3]--;
+                P2RefinedPile[3]--;
                 SupplyPile[3]++;
                 _gcm.UpdateCurrentActionText("Gold retrieved!");
+                _gcm.UpdateTextBothPlayers();
             }
         }
     }
 
     /// <summary>
-    /// (WIP) Place a tile back onto the board. 
+    /// Place a tile back onto the board. 
     /// </summary>
     /// <param name="type">"Grass" "Dirt" or "Stone"</param>
-    public void PlaceTile(int player, string type)
+    public void PlaceTile(string type)
     {
-        Debug.Log("Player " + player + " placed a " + type + " tile!");
+        //Debug.Log("Player " + player + " placed a " + type + " tile!");
 
         switch (type)
         {
@@ -477,7 +505,7 @@ public class ActionManager : MonoBehaviour
         {
             if(suit == "Grass")
             {
-                if(SupplyPile[0] > 0)
+                if(SupplyPile[0] >= amount)
                 {
                     SupplyPile[0] -= amount;
                     P1CollectedPile[0] += amount;
@@ -485,7 +513,7 @@ public class ActionManager : MonoBehaviour
             }
             else if(suit == "Dirt")
             {
-                if (SupplyPile[1] > 0)
+                if (SupplyPile[1] >= amount)
                 {
                     SupplyPile[1] -= amount;
                     P1CollectedPile[1] += amount;
@@ -493,10 +521,10 @@ public class ActionManager : MonoBehaviour
             }
             else if(suit == "Stone")
             {
-                if (SupplyPile[2] > 0)
+                if (SupplyPile[2] >= amount)
                 {
                     SupplyPile[2] -= amount;
-                    P1CollectedPile[0] += amount;
+                    P1CollectedPile[2] += amount;
                 }
             }
         }
@@ -504,7 +532,7 @@ public class ActionManager : MonoBehaviour
         {
             if (suit == "Grass")
             {
-                if (SupplyPile[0] > 0)
+                if (SupplyPile[0] >= amount)
                 {
                     SupplyPile[0] -= amount;
                     P2CollectedPile[0] += amount;
@@ -512,7 +540,7 @@ public class ActionManager : MonoBehaviour
             }
             else if (suit == "Dirt")
             {
-                if (SupplyPile[1] > 0)
+                if (SupplyPile[1] >= amount)
                 {
                     SupplyPile[1] -= amount;
                     P2CollectedPile[1] += amount;
@@ -520,10 +548,10 @@ public class ActionManager : MonoBehaviour
             }
             else if (suit == "Stone")
             {
-                if (SupplyPile[2] > 0)
+                if (SupplyPile[2] >= amount)
                 {
                     SupplyPile[2] -= amount;
-                    P2CollectedPile[0] += amount;
+                    P2CollectedPile[2] += amount;
                 }
             }
         }
@@ -536,15 +564,63 @@ public class ActionManager : MonoBehaviour
     {
         if(player == 1)
         {
-            CollectPiecesFromSupply(P1BuiltBuildings[2], "Grass");
-            CollectPiecesFromSupply(P1BuiltBuildings[3], "Dirt");
-            CollectPiecesFromSupply(P1BuiltBuildings[4], "Stone");
+            for(int i = P1BuiltBuildings[2]; i != 0; i--)
+            {
+                if(SupplyPile[0] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Grass");
+            }
+            for (int i = P1BuiltBuildings[3]; i != 0; i--)
+            {
+                if (SupplyPile[1] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Dirt");
+            }
+            for (int i = P1BuiltBuildings[4]; i != 0; i--)
+            {
+                if (SupplyPile[2] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Stone");
+            }
         }
         else if(player == 2)
         {
-            CollectPiecesFromSupply(P2BuiltBuildings[2], "Grass");
-            CollectPiecesFromSupply(P2BuiltBuildings[3], "Dirt");
-            CollectPiecesFromSupply(P2BuiltBuildings[4], "Stone");
+            for (int i = P2BuiltBuildings[2]; i != 0; i--)
+            {
+                if (SupplyPile[0] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Grass");
+            }
+            for (int i = P2BuiltBuildings[3]; i != 0; i--)
+            {
+                if (SupplyPile[1] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Dirt");
+            }
+            for (int i = P2BuiltBuildings[4]; i != 0; i--)
+            {
+                if (SupplyPile[2] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Stone");
+            }
         }
     }
 
@@ -582,6 +658,8 @@ public class ActionManager : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }
 
+        //Refresh persistent cards.
         ShovelUsed = false;
+        MorningJogUsed = false;
     }
 }

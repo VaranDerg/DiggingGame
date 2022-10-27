@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Weed Whacker
   m_EditorClassIdentifier: 
   CardName: Weed Whacker
-  CardDescription: Discard this card to prevent a Building on a Grass Piece from
-    taking damage.
+  CardDescription: 'Discard this card to prevent a Building on a Grass Piece from
+    taking damage. '
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Metal Detector
   m_EditorClassIdentifier: 
   CardName: Metal Detector
-  CardDescription: Flip up to 4 Stone Pieces.
+  CardDescription: 'Flip 4 Stone Pieces. '
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1

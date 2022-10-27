@@ -19,8 +19,6 @@ public class PersistentCardManager : MonoBehaviour
     [Header("Other")]
     [HideInInspector] public bool DiscardedPersistentCard;
     [HideInInspector] public bool DecidedBuildingProtection;
-    [HideInInspector] public bool DecidedSecretTunnelsMove;
-    [HideInInspector] public bool SecretTunnelsMoveDecision;
 
     [Header("Retribution")]
     [HideInInspector] public int BuildingsDamaged;
@@ -71,6 +69,8 @@ public class PersistentCardManager : MonoBehaviour
                 {
                     card.transform.position = _p1PCardPositions[i].position;
                     card.GetComponentInChildren<CardController>().MadePersistentP1 = true;
+                    card.GetComponentInChildren<CardController>().PHandPosition = i;
+                    FindObjectOfType<CardManager>().P1OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
                     FindObjectOfType<CardManager>().P1Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {
@@ -82,7 +82,7 @@ public class PersistentCardManager : MonoBehaviour
                     }
                     P1PersistentCards.Add(card);
                     P1OpenPCardSlots[i] = false;
-                    Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
+                    //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
                 }
             }
@@ -95,6 +95,8 @@ public class PersistentCardManager : MonoBehaviour
                 {
                     card.transform.position = _p2PCardPositions[i].position;
                     card.GetComponentInChildren<CardController>().MadePersistentP2 = true;
+                    card.GetComponentInChildren<CardController>().PHandPosition = i;
+                    FindObjectOfType<CardManager>().P2OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
                     FindObjectOfType<CardManager>().P2Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {
@@ -106,47 +108,80 @@ public class PersistentCardManager : MonoBehaviour
                     }
                     P2PersistentCards.Add(card);
                     P2OpenPCardSlots[i] = false;
-                    Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
+                    //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
                 }
             }
         }
     }
 
-    public bool CheckForPersistentCard(string cardName, bool discardAfterUse)
+    /// <summary>
+    /// Checks for a persistent card based on the card's name. 
+    /// </summary>
+    /// <param name="cardName">Name of the card.</param>
+    /// <param name="discardAfterUse">True if the card should be discarded after this check.</param>
+    /// <returns></returns>
+    public bool CheckForPersistentCard(int player, string cardName)
     {
-        if (_am.CurrentPlayer == 1)
+        bool hasCard = false;
+        if(player == 1)
         {
-            foreach (GameObject card in P1PersistentCards)
+            foreach(GameObject card in P1PersistentCards)
             {
-                if (card.gameObject.name == cardName)
+                if(card.gameObject.name == cardName)
                 {
-                    if(discardAfterUse)
-                    {
-                        card.GetComponent<CardController>().ToDiscard();
-                    }
-
-                    return true;
+                    hasCard = true;
+                }
+                else
+                {
+                    hasCard = false;
                 }
             }
         }
-        else
+        else if(player == 2)
         {
             foreach (GameObject card in P2PersistentCards)
             {
                 if (card.gameObject.name == cardName)
                 {
-                    if (discardAfterUse)
-                    {
-                        card.GetComponent<CardController>().ToDiscard();
-                    }
-
-                    return true;
+                    hasCard = true;
+                }
+                else
+                {
+                    hasCard = false;
                 }
             }
         }
+        return hasCard;
+    }
 
-        return false;
+    /// <summary>
+    /// Discards a persistent card.
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    /// <param name="cardName">Name of the card, like "Card Name"</param>
+    public void DiscardPersistentCard(int player, string cardName)
+    {
+        if (player == 1)
+        {
+            for(int i = 0; i < P1PersistentCards.Count; i++)
+            {
+                if(P1PersistentCards[i].name == cardName)
+                {
+                    P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard();
+                }
+            }
+        }
+        else if (player == 2)
+        {
+            for (int i = 0; i < P2PersistentCards.Count; i++)
+            {
+                if (P2PersistentCards[i].name == cardName)
+                {
+                    P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -154,13 +189,21 @@ public class PersistentCardManager : MonoBehaviour
     /// </summary>
     public IEnumerator PersistentCardDiscardProcess()
     {
-        _gcm.UpdateCurrentActionText("Discard 1 Persistent Card.");
-
         if (_am.CurrentPlayer == 1)
         {
-            foreach(GameObject card in P1PersistentCards)
+            int pCardCount = 0;
+            _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
+            foreach (GameObject card in P2PersistentCards)
             {
-                card.GetComponent<CardController>().CanBeDiscarded = true;
+                card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                pCardCount++;
+            }
+
+            if (pCardCount == 0)
+            {
+                _bm.DisableAllBoardInteractions();
+                _gcm.Back();
+                yield break;
             }
 
             while (!DiscardedPersistentCard)
@@ -168,15 +211,30 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
+            foreach (GameObject card in P2PersistentCards)
+            {
+                card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
+            }
+
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
-            _gcm.ToFinallyPhase();
+            _gcm.Back();
         }
         else
         {
-            foreach (GameObject card in P2PersistentCards)
+            int pCardCount = 0;
+            _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
+            foreach (GameObject card in P1PersistentCards)
             {
-                card.GetComponent<CardController>().CanBeDiscarded = true;
+                card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                pCardCount++;
+            }
+
+            if(pCardCount == 0)
+            {
+                _bm.DisableAllBoardInteractions();
+                _gcm.Back();
+                yield break;
             }
 
             while (!DiscardedPersistentCard)
@@ -184,23 +242,15 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
+            foreach (GameObject card in P1PersistentCards)
+            {
+                card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
+            }
+
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
-            _gcm.ToFinallyPhase();
+            _gcm.Back();
         }
-    }
-
-    /// <summary>
-    /// UI Button that lets the player skip movement with Morning Jog.
-    /// </summary>
-    public void SkipMorningJog()
-    {
-        foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
-            piece.GetComponent<PieceController>().StopCoroutine("PawnMovement");
-        }
-        _bm.DisableAllBoardInteractions();
-        _gcm.Back();
     }
 
     /// <summary>
@@ -221,44 +271,71 @@ public class PersistentCardManager : MonoBehaviour
         }
     }
 
-    public void MoveWithSecretTunnels(bool answer)
-    {
-        DecidedSecretTunnelsMove = true;
-        SecretTunnelsMoveDecision = answer;
-    }
-
     /// <summary>
-    /// Coroutine for Retribtion process.
+    /// Retribution method.
     /// </summary>
-    /// <returns>Default hold time.</returns>
-    public IEnumerator StartRetribution()
+    /// <param name="retributionPlayer">1 or 2</param>
+    /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
+    public void RetributionStart(int retributionPlayer, string suit)
     {
-        int possibleDamages = 0;
-        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        int sentPieces = 0;
+
+        //Note, should affect the opposite player.
+        if(retributionPlayer == 2)
         {
-            if(building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            if(suit == "Grass")
             {
-                continue;
+                sentPieces += _am.P1CollectedPile[0];
+                sentPieces += _am.P1RefinedPile[0];
+                _am.SupplyPile[0] += sentPieces;
+                _am.P1CollectedPile[0] = 0;
+                _am.P1RefinedPile[0] = 0;
             }
-
-            building.GetComponent<Building>().CanBeDamaged = true;
-            possibleDamages++;
+            else if(suit == "Dirt")
+            {
+                sentPieces += _am.P1CollectedPile[1];
+                sentPieces += _am.P1RefinedPile[1];
+                _am.SupplyPile[1] += sentPieces;
+                _am.P1CollectedPile[1] = 0;
+                _am.P1RefinedPile[1] = 0;
+            }
+            else if(suit == "Stone")
+            {
+                sentPieces += _am.P1CollectedPile[2];
+                sentPieces += _am.P1RefinedPile[2];
+                _am.SupplyPile[2] += sentPieces;
+                _am.P1CollectedPile[2] = 0;
+                _am.P1RefinedPile[2] = 0;
+            }
         }
-
-        if(possibleDamages >= _ce.RetributionDamages)
+        else
         {
-            possibleDamages = _ce.RetributionDamages;
+            if (suit == "Grass")
+            {
+                sentPieces += _am.P2CollectedPile[0];
+                sentPieces += _am.P2RefinedPile[0];
+                _am.SupplyPile[0] += sentPieces;
+                _am.P2CollectedPile[0] = 0;
+                _am.P2RefinedPile[0] = 0;
+            }
+            else if (suit == "Dirt")
+            {
+                sentPieces += _am.P2CollectedPile[1];
+                sentPieces += _am.P2RefinedPile[1];
+                _am.SupplyPile[1] += sentPieces;
+                _am.P2CollectedPile[1] = 0;
+                _am.P2RefinedPile[1] = 0;
+            }
+            else if (suit == "Stone")
+            {
+                sentPieces += _am.P2CollectedPile[2];
+                sentPieces += _am.P2RefinedPile[2];
+                _am.SupplyPile[2] += sentPieces;
+                _am.P2CollectedPile[2] = 0;
+                _am.P2RefinedPile[2] = 0;
+            }
         }
 
-        BuildingsDamaged = 0;
-
-        while(BuildingsDamaged != possibleDamages)
-        {
-            _gcm.UpdateCurrentActionText("Damage " + (possibleDamages - BuildingsDamaged) + " more Buildings!");
-            yield return null;
-        }
-
-        _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.UpdateCurrentActionText("Player " + retributionPlayer + " suffered Retribution! " + sentPieces + " of their " + suit + " Pieces were sent to the Supply!");
     }
 }
