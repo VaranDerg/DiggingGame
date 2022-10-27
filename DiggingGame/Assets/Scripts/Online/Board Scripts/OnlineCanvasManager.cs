@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         GameCanvasManagerNew.cs
-// Author :            Rudy Wolfer
+// Author :            Rudy Wolfer, Andrea SD
 // Creation Date :     October 10th, 2022
 //
 // Brief Description : Better version of GameCanvasManager. A script that 
@@ -12,9 +12,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class OnlineCanvasManager : MonoBehaviour
+public class OnlineCanvasManager : MonoBehaviourPun
 {
+    //Edit: Andrea SD - Added online functionality
+
     [Header("Text and Object References, Current Player View")]
     public GameObject StartTurnButton;
     [SerializeField] private GameObject _firstZone;
@@ -48,9 +52,9 @@ public class OnlineCanvasManager : MonoBehaviour
     public bool _opponentViewShowing = false;
     [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine, _meerkatFactory, _meerkatBurrow, _meerkatMine;
     [SerializeField] private Image _factory, _burrow, _mine;
-    private ActionManager _am;
-    private BoardManager _bm;
-    private CardManager _cm;
+    private OnlineActionManager _am;
+    private OnlineBoardManager _bm;
+    private OnlineCardManager _cm;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -75,10 +79,50 @@ public class OnlineCanvasManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _am = FindObjectOfType<ActionManager>();
-        _bm = FindObjectOfType<BoardManager>();
-        _cm = FindObjectOfType<CardManager>();
+        _am = FindObjectOfType<OnlineActionManager>();
+        _bm = FindObjectOfType<OnlineBoardManager>();
+        _cm = FindObjectOfType<OnlineCardManager>();
         AddObjectsToList();
+
+        // Author: Andrea SD
+        if(PhotonNetwork.IsMasterClient)
+        {
+            _factory.sprite = _moleFactory;
+            _burrow.sprite = _moleBurrow;
+            _mine.sprite = _moleMine;
+        }
+        else
+        {
+            _factory.sprite = _meerkatFactory;
+            _burrow.sprite = _meerkatBurrow;
+            _mine.sprite = _meerkatMine;
+        }
+    }
+
+    /// <summary>
+    /// Sets the game into a basic opening state upon startup.
+    /// 
+    /// Edit: Andrea SD - Modified for online
+    /// </summary>
+    private void Start()
+    {
+        DisableListObjects();
+
+        StartTurnButton.SetActive(true);
+        _opponentInfoZone.SetActive(false);
+
+        UpdateTextBothPlayers();
+        
+        // Author: Andrea SD
+        if(PhotonNetwork.IsMasterClient)
+        {
+            UpdateCurrentActionText("Press Start Turn to begin!");
+        }
+        else
+        {
+            UpdateCurrentActionText("Player 1 is going first!");
+        }
+
     }
 
     /// <summary>
@@ -94,11 +138,13 @@ public class OnlineCanvasManager : MonoBehaviour
 
     /// <summary>
     /// Updates text for the current player.
+    /// 
+    /// Edited: Andrea SD - modified for online use
     /// </summary>
     /// <param name="curPlayer">1 or 2</param>
-    private void UpdateCurrentPlayerText(int curPlayer)
+    private void UpdateCurrentPlayerText()
     {
-        if (curPlayer == 1)
+        if (PhotonNetwork.IsMasterClient)   /*curPlayer == 1*/ //Edited: Andrea SD
         {
             _currentPlayerScore.text = "Score: " + _am.P1Score;
             _currentPlayerCollectedPieces[0].text = "x" + _am.P1CollectedPile[0];
@@ -149,33 +195,71 @@ public class OnlineCanvasManager : MonoBehaviour
         _supplyPieces[3].text = "x" + _am.SupplyPile[3];
     }
 
-    /// <summary>
-    /// Updates the Opponent View text. 
+/*    /// <summary>
+    /// Updates the Opponent View text.
+    /// Edit: Andrea SD - Modified for online use. 
+    /// Edit 2: Andrea SD - Commented out since it is no longer used
     /// </summary>
     /// <param name="curOpponent">1 or 2</param>
     private void UpdateOpponentText(int curOpponent)
     {
         if (curOpponent == 1)
         {
-            _opponentScoreText.text = "Score: " + _am.P1Score;
-            _opponentCardText.text = "Cards: " + _am.P1Cards;
-            _opponentGoldCardText.text = "Gold Cards: " + _am.P1GoldCards;
-            _opponentPieces[0].text = "Grass: " + (_am.P1CollectedPile[0] + _am.P1RefinedPile[0]);
-            _opponentPieces[1].text = "Dirt: " + (_am.P1CollectedPile[1] + _am.P1RefinedPile[1]);
-            _opponentPieces[2].text = "Stone: " + (_am.P1CollectedPile[2] + _am.P1RefinedPile[2]);
-            _opponentPieces[3].text = "Gold: " + (_am.P1CollectedPile[3] + _am.P1RefinedPile[3]);
+            photonView.RPC("ChangeOpponentTextOne", RpcTarget.All);     //Andrea SD
         }
         else
+        {          
+            photonView.RPC("ChangeOpponentTextTwo", RpcTarget.All);     //Aea SD
+        }
+    }*/
+
+    /// <summary>
+    /// Changes the opponent text on player two's screen with player one's vals
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void ChangeOpponentText()
+    {
+        if (PhotonNetwork.IsMasterClient)
         {
             _opponentScoreText.text = "Score: " + _am.P2Score;
             _opponentCardText.text = "Cards: " + _am.P2Cards;
             _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
+
             _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
             _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
             _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
             _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
         }
+        else
+        {
+            _opponentScoreText.text = "Score: " + _am.P1Score;
+            _opponentCardText.text = "Cards: " + _am.P1Cards;
+            _opponentGoldCardText.text = "Gold Cards: " + _am.P1GoldCards;
+
+            _opponentPieces[0].text = "Grass: " + (_am.P1CollectedPile[0] + _am.P1RefinedPile[0]);
+            _opponentPieces[1].text = "Dirt: " + (_am.P1CollectedPile[1] + _am.P1RefinedPile[1]);
+            _opponentPieces[2].text = "Stone: " + (_am.P1CollectedPile[2] + _am.P1RefinedPile[2]);
+            _opponentPieces[3].text = "Gold: " + (_am.P1CollectedPile[3] + _am.P1RefinedPile[3]);
+        }
     }
+
+/*    /// <summary>
+    /// Changes the opponent text on player one's screen with player two's vals
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void ChangeOpponentTextTwo()
+    {
+        _opponentScoreText.text = "Score: " + _am.P2Score;
+        _opponentCardText.text = "Cards: " + _am.P2Cards;
+        _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
+
+        _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
+        _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
+        _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
+        _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
+    }*/
 
     /// <summary>
     /// Updates the Current Action text.
@@ -187,34 +271,59 @@ public class OnlineCanvasManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Calls every "UpdateText"-type function except the Current Action Text one.
+    /// Calls the local RPC to update opponent text across the network
+    /// 
+    /// Author: Andrea SD
     /// </summary>
-    public void UpdateTextBothPlayers()
+    /// <param name="updatedText"></param>
+    public void UpdateOpponentActionText(string updatedText)
     {
-        UpdateCurrentPlayerText(_am.CurrentPlayer);
-        UpdateAlwaysActiveText();
-        if (_am.CurrentPlayer == 1)
-        {
-            UpdateOpponentText(2);
-        }
-        else
-        {
-            UpdateOpponentText(1);
-        }
+        photonView.RPC("UpdateOnlineActionText", RpcTarget.Others, updatedText);
     }
 
     /// <summary>
-    /// Sets the game into a basic opening state upon startup.
+    /// Updates the Current Action text for the non-active player
+    /// 
+    /// Author: Andrea SD
     /// </summary>
-    private void Start()
+    /// <param name="updatedText"></param>
+    [PunRPC]
+    public void UpdateOnlineActionText(string updatedText)
     {
-        DisableListObjects();
+        _currentActionText.text = updatedText;
+    }
 
-        StartTurnButton.SetActive(true);
-        _opponentInfoZone.SetActive(false);
+    /// <summary>
+    /// Calls every "UpdateText"-type function except the Current Action Text one.
+    /// 
+    /// Edited: Andrea SD - online use
+    /// </summary>
+    public void UpdateTextBothPlayers()
+    {
+        UpdateCurrentPlayerText(/*_am.CurrentPlayer*/);
+        photonView.RPC("UpdateActiveTextOnline", RpcTarget.All);
 
-        UpdateTextBothPlayers();
-        UpdateCurrentActionText("Press Start Turn to begin!");
+        /*if (_am.CurrentPlayer == 1)
+        {
+            photonView.RPC("ChangeOpponentTextTwo", RpcTarget.Others);     //Andrea SD
+        }
+        else
+        {
+            photonView.RPC("ChangeOpponentTextOne", RpcTarget.Others);     //Andrea SD
+        }*/
+
+        photonView.RPC("ChangeOpponentText", RpcTarget.All);     //Andrea SD
+    }
+
+    /// <summary>
+    /// Updates always active text for each player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC] 
+    public void UpdateActiveTextOnline()
+    {
+        UpdateAlwaysActiveText();
     }
 
     public void OpponentInfoToggle()
@@ -227,14 +336,37 @@ public class OnlineCanvasManager : MonoBehaviour
         }
         else
         {
-            _opponentInfoZone.SetActive(true);
-            _showHideOpponentInfoText.text = "Hide Opponent Info";
-            _opponentViewShowing = true;
+            ShowOpponentInfo();
         }
     }
 
     /// <summary>
+    /// Shows the opponent info
+    /// </summary>
+    [PunRPC]
+    public void ShowOpponentInfo()
+    {
+        _opponentInfoZone.SetActive(true);
+        _showHideOpponentInfoText.text = "Hide Opponent Info";
+        _opponentViewShowing = true;
+    }
+
+    /// <summary>
+    /// Modifies the current turn phase
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"> how the turn phase is modified </param>
+    [PunRPC]
+    public void ChangeTurnPhase(int amount)
+    {
+        _am.CurrentTurnPhase += amount;
+    }
+
+    /// <summary>
     /// Moves the turn into the "First..." phase.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void StartTurn()
     {
@@ -245,21 +377,25 @@ public class OnlineCanvasManager : MonoBehaviour
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
         _am.StartMove(_am.CurrentPlayer);
-        _am.CurrentTurnPhase++;
+        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
         _cm.ShowCards(_am.CurrentPlayer);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
+        UpdateOpponentActionText(_am.CurrentPlayer + " is taking their first move!");       // Andrea SD
     }
 
     /// <summary>
     /// Moves the turn into the "Then..." phase.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void ToThenPhase()
     {
+        UpdateOpponentActionText(_am.CurrentPlayer + " is contemplating their next action...");     // Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
-        _am.CurrentTurnPhase++;
+        _bm.DisablePawnBoardInteractions();
+        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
 
         _thenZone.SetActive(true);
         _thenActions.SetActive(true);
@@ -271,11 +407,14 @@ public class OnlineCanvasManager : MonoBehaviour
 
     /// <summary>
     /// Prepares a Move action.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void Move()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is moving...");      // Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
 
         _am.StartMove(_am.CurrentPlayer);
         _thenZone.SetActive(true);
@@ -287,11 +426,14 @@ public class OnlineCanvasManager : MonoBehaviour
 
     /// <summary>
     /// Prepares a Dig action.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void Dig()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is digging...");     // Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
 
         _am.StartDig(_am.CurrentPlayer);
         _thenZone.SetActive(true);
@@ -303,11 +445,14 @@ public class OnlineCanvasManager : MonoBehaviour
 
     /// <summary>
     /// Opens the Build menu.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void OpenBuildMenu()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is building...");
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
 
         _thenZone.SetActive(true);
         _thenBuildMenu.SetActive(true);
@@ -332,7 +477,7 @@ public class OnlineCanvasManager : MonoBehaviour
     /// <param name="buildingName">"Factory" "Burrow" or "Mine</param>
     public void Build(string buildingName)
     {
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
         _am.StartBuild(_am.CurrentPlayer, buildingName);
 
         UpdateTextBothPlayers();
@@ -340,25 +485,28 @@ public class OnlineCanvasManager : MonoBehaviour
 
     /// <summary>
     /// Moves the turn into the "Finally..." phase.
+    /// 
+    /// Edited: Andrea SD - online use
     /// </summary>
     public void ToFinallyPhase()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of playing a card...");  //Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
-        _am.CurrentTurnPhase++;
+        _bm.DisablePawnBoardInteractions();
+        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
 
         _finallyZone.SetActive(true);
 
         UpdateTextBothPlayers();
-        if(_am.CurrentPlayer == 1)
+        if (_am.CurrentPlayer == 1)
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + " Card(s).");
-            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1], true);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1]);
         }
         else
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + " Card(s).");
-            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1], true);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1]);
         }
     }
 
@@ -367,8 +515,9 @@ public class OnlineCanvasManager : MonoBehaviour
     /// </summary>
     public void Back()
     {
+        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of their next action...");
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
         //I HATE THIS PART OF CODE. If a workaround appears I wanna change it ASAP.
         foreach(MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
         {
@@ -399,8 +548,12 @@ public class OnlineCanvasManager : MonoBehaviour
         UpdateTextBothPlayers();
     }
 
+    /// <summary>
+    /// Edit: Andrea SD: Modified for online play
+    /// </summary>
     public void EndTurn()
     {
+        UpdateOpponentActionText("Start your turn.");
         DisableListObjects();
         _cm.StopCardActivating(_am.CurrentPlayer);
 
@@ -408,19 +561,15 @@ public class OnlineCanvasManager : MonoBehaviour
         {
             _cm.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
             StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
-            _factory.sprite = _meerkatFactory;
-            _burrow.sprite = _meerkatBurrow;
-            _mine.sprite = _meerkatMine;
         }
         else
         {
             _cm.DrawAlottedCards(_am.CardDraw + _am.P2BuiltBuildings[0]);
             StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
-            _factory.sprite = _moleFactory;
-            _burrow.sprite = _moleBurrow;
-            _mine.sprite = _moleMine;
         }
 
+        _am.EndTurn(_am.CurrentPlayer);     //Andrea SD
         UpdateTextBothPlayers();
-    }
+
+    }  
 }

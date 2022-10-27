@@ -10,14 +10,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiBoardManager : MonoBehaviour
+public class OnlineBoardManager : MonoBehaviour
 {
     private List<GameObject> _boardPieces = new List<GameObject>();
-    private MultiActionManager _am;
+    private OnlineActionManager _am;
 
     private void Awake()
     {
-        _am = FindObjectOfType<MultiActionManager>();
+        _am = FindObjectOfType<OnlineActionManager>();
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ public class MultiBoardManager : MonoBehaviour
     /// </summary>
     private void FindBoardPieces()
     {
-        foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             _boardPieces.Add(piece);
         }
@@ -45,20 +45,23 @@ public class MultiBoardManager : MonoBehaviour
     /// <param name="enable">True = Turn on</param>
     public void BoardColliderSwitch(bool enable)
     {
-        foreach(GameObject piece in _boardPieces)
+        foreach (GameObject piece in _boardPieces)
         {
             piece.GetComponent<BoxCollider2D>().enabled = enable;
         }
-    }    
+    }
 
+    /// <summary>
+    /// Disables pawn checks with the board.
+    /// </summary>
     public void DisablePawnBoardInteractions()
     {
-        foreach(GameObject piece in _boardPieces)
+        foreach (GameObject piece in _boardPieces)
         {
-            piece.GetComponent<MultiPieceController>().ShowHideBuildable(false);
-            piece.GetComponent<MultiPieceController>().ShowHideDiggable(false);
-            piece.GetComponent<MultiPieceController>().ShowHideMovable(false);
-            piece.GetComponent<MultiPieceController>().ShowHidePlaceable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideBuildable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideMovable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
             _am.StopPawnActions(_am.CurrentPlayer);
         }
     }
@@ -100,7 +103,6 @@ public class MultiBoardManager : MonoBehaviour
                 _adjacentPieces.Add(piece);
             }
         }
-        //Debug.Log("Found " + i + " pieces " + curShortestDist + " units from " + closestPiece.name + ".");
 
         return _adjacentPieces;
     }

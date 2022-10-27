@@ -28,8 +28,8 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
-  PunLogging: 0
+  DevRegion: us
+  PunLogging: 2
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
@@ -45,6 +45,27 @@ MonoBehaviour:
   - SetPieceState
   - MovePawn
   - PlaceBuilding
+  - ChangeTurn
+  - DisableBoard
+  - ShowOpponentInfo
+  - EnableBoard
+  - EnableStartButton
+  - ChangeOpponentTextOne
+  - ChangeOpponentTextTwo
+  - UpdateCollected
+  - EmptyCollection
+  - UpdateRefined
+  - EndPlayer1
+  - EndPlayer2
+  - StartPlayer1
+  - StartPlayer2
+  - ChangeOpponentText
+  - UpdateScore
+  - UpdateOnlineActionText
+  - IncrementRound
+  - ChangeTurnPhase
+  - ResetTurnPhase
+  - UpdateActiveTextOnline
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1
