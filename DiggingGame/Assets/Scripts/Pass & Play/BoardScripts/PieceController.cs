@@ -151,18 +151,15 @@ public class PieceController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Start of Shovel Code
-            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel"))
+            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
             {
-                if(ObjState == GameState.Two && !_am.ShovelUsed)
+                SetPieceState(3);
+                _am.ShovelUsed = true;
+                if (CurrentPawn != null)
                 {
-                    SetPieceState(3);
-                    _am.ShovelUsed = true;
-                    if (CurrentPawn != null)
-                    {
-                        CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-                    }
-                    _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+                    CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
                 }
+                _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
             }
             //End of Shovel Code
             else
@@ -665,25 +662,25 @@ public class PieceController : MonoBehaviour
         {
             bool spawnPawn = false;
             GameObject thisBuilding = Instantiate(building, _buildingSlot);
-            if(buildingArrayNum == 1)
+            if(buildingArrayNum == 0)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Factory";
             }
-            else if(buildingArrayNum == 2)
+            else if(buildingArrayNum == 1)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Burrow";
             }
+            else if(buildingArrayNum == 2)
+            {
+                thisBuilding.GetComponent<Building>().BuildingType = "Grass Mine";
+            }
             else if(buildingArrayNum == 3)
             {
-                thisBuilding.GetComponent<Building>().BuildingType = "GMine";
+                thisBuilding.GetComponent<Building>().BuildingType = "Dirt Mine";
             }
             else if(buildingArrayNum == 4)
             {
-                thisBuilding.GetComponent<Building>().BuildingType = "DMine";
-            }
-            else if(buildingArrayNum == 5)
-            {
-                thisBuilding.GetComponent<Building>().BuildingType = "SMine";
+                thisBuilding.GetComponent<Building>().BuildingType = "Stone Mine";
             }
             thisBuilding.GetComponent<Building>().SuitOfPiece = pieceSuit;
             thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;

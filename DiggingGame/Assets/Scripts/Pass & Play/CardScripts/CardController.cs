@@ -290,6 +290,7 @@ public class CardController : MonoBehaviour
     public void ToDiscard()
     {
         _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
+
         if (!MadePersistentP1 && !MadePersistentP2)
         {
             if (HeldByPlayer == 1)
@@ -318,25 +319,19 @@ public class CardController : MonoBehaviour
                 _cm.P2OpenHandPositions[HandPosition] = true;
                 _cm.P2Hand.Remove(_cardBody);
             }
+
             HeldByPlayer = 0;
             Selected = false;
             CanBeSelected = false;
             CanBeDiscarded = false;
             CanBeActivated = false;
             _cm.DPile.Add(_cardBody);
+
             _cm.UpdatePileText();
         }
-        else
+        else if(MadePersistentP1 || MadePersistentP2)
         {
-            HeldByPlayer = 0;
-            Selected = false;
-            CanBeSelected = false;
-            CanBeDiscarded = false;
-            CanBeActivated = false;
-            MadePersistentP1 = false;
-            MadePersistentP2 = false;
-            _pcm.DiscardedPersistentCard = true;
-            if(_am.CurrentPlayer == 1)
+            if(MadePersistentP1)
             {
                 _pcm.P1OpenPCardSlots[PHandPosition] = true;
                 _pcm.P1PersistentCards.Remove(_cardBody);
@@ -346,7 +341,17 @@ public class CardController : MonoBehaviour
                 _pcm.P2OpenPCardSlots[PHandPosition] = true;
                 _pcm.P2PersistentCards.Remove(_cardBody);
             }
+
+            HeldByPlayer = 0;
+            Selected = false;
+            CanBeSelected = false;
+            CanBeDiscarded = false;
+            CanBeActivated = false;
+            MadePersistentP1 = false;
+            MadePersistentP2 = false;
+            _pcm.DiscardedPersistentCard = true;
             _cm.DPile.Add(_cardBody);
+
             _cm.UpdatePileText();
         }
 

@@ -2481,11 +2481,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1005441707}
         m_TargetAssemblyTypeName: CardEffects, Assembly-CSharp
         m_MethodName: SelectBuildingToDamage
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: Mine
           m_BoolArgument: 0
@@ -3632,11 +3632,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1005441707}
         m_TargetAssemblyTypeName: CardEffects, Assembly-CSharp
         m_MethodName: SelectBuildingToDamage
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: Burrow
           m_BoolArgument: 0
@@ -8584,6 +8584,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 1900508195860343499, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1900508196178496102, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.4
@@ -8594,7 +8598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900508196178496103, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900508196332972653, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_LocalScale.x
@@ -8606,7 +8610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900508196598425488, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900508196598425489, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_LocalScale.x
@@ -8618,7 +8622,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900508196726424148, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900508196726424149, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_LocalScale.x
@@ -8638,11 +8642,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900508196809442289, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900508197146913112, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900508197146913113, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_LocalScale.x
@@ -8654,7 +8658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900508197153269132, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1900508197153269133, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_LocalScale.x
@@ -8682,7 +8686,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900508197755467913, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7366807054788911576, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_Name
@@ -11280,7 +11284,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1005441707}
         m_TargetAssemblyTypeName: CardEffects, Assembly-CSharp
         m_MethodName: SelectBuildingToDamage
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

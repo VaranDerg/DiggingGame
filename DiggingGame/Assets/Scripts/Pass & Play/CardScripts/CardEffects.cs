@@ -1643,7 +1643,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != newPieceCount)
             {
-                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Stone Pieces onto Bedrock Pieces!");
                 yield return null;
             }
         }
@@ -1651,7 +1651,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != openPieces)
             {
-                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Stone Pieces onto Bedrock Pieces!");
                 yield return null;
             }
         }
@@ -1708,7 +1708,7 @@ public class CardEffects : MonoBehaviour
         _bm.SetActiveCollider("Building");
 
         CurrentDamages = 0;
-        _gcm.UpdateCurrentActionText("Damage " + AllowedDamages + " Building(s)!");
+        _gcm.UpdateCurrentActionText("Damage every adjacent Building!");
         while (CurrentDamages != AllowedDamages)
         {
             yield return null;
@@ -2283,7 +2283,7 @@ public class CardEffects : MonoBehaviour
             }
             else if(_tornadoBuildingToDamage == 2)
             {
-                if (building.GetComponent<Building>().BuildingType == "GMine" || building.GetComponent<Building>().BuildingType == "DMine" || building.GetComponent<Building>().BuildingType == "SMine")
+                if (building.GetComponent<Building>().BuildingType == "Grass Mine" || building.GetComponent<Building>().BuildingType == "Dirt Mine" || building.GetComponent<Building>().BuildingType == "Stone Mine")
                 {
                     building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     buildingCount++;
@@ -2292,6 +2292,8 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.SetActiveCollider("Building");
+
+        _gcm.UpdateCurrentActionText("Damage every Building of that type!");
 
         if (buildingCount >= AllowedDamages)
         {

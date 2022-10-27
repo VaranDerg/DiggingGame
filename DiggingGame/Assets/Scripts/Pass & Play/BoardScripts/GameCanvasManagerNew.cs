@@ -130,7 +130,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
                 if (_am.P1CurrentBuildingPrices[1] == 4)
                 {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
                 }
                 else
                 {
@@ -139,7 +139,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
                 if (_am.P1CurrentBuildingPrices[2] == 4)
                 {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
                 }
                 else
                 {
@@ -159,7 +159,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
                 if (_am.P1CurrentBuildingPrices[1] == 4)
                 {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
                 }
                 else
                 {
@@ -168,7 +168,7 @@ public class GameCanvasManagerNew : MonoBehaviour
                 
                 if (_am.P1CurrentBuildingPrices[2] == 4)
                 {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
                 }
                 else
                 {
@@ -204,7 +204,7 @@ public class GameCanvasManagerNew : MonoBehaviour
                 }
                 if (_am.P2CurrentBuildingPrices[1] == 4)
                 {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
                 }
                 else
                 {
@@ -212,7 +212,7 @@ public class GameCanvasManagerNew : MonoBehaviour
                 }
                 if (_am.P2CurrentBuildingPrices[2] == 4)
                 {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
                 }
                 else
                 {
@@ -231,7 +231,7 @@ public class GameCanvasManagerNew : MonoBehaviour
                 }
                 if (_am.P2CurrentBuildingPrices[1] == 4)
                 {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
                 }
                 else
                 {
@@ -239,7 +239,7 @@ public class GameCanvasManagerNew : MonoBehaviour
                 }
                 if (_am.P2CurrentBuildingPrices[2] == 4)
                 {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
+                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
                 }
                 else
                 {

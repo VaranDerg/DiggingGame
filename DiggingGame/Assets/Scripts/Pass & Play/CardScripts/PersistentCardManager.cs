@@ -70,6 +70,7 @@ public class PersistentCardManager : MonoBehaviour
                     card.transform.position = _p1PCardPositions[i].position;
                     card.GetComponentInChildren<CardController>().MadePersistentP1 = true;
                     card.GetComponentInChildren<CardController>().PHandPosition = i;
+                    FindObjectOfType<CardManager>().P1OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
                     FindObjectOfType<CardManager>().P1Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {
@@ -95,6 +96,7 @@ public class PersistentCardManager : MonoBehaviour
                     card.transform.position = _p2PCardPositions[i].position;
                     card.GetComponentInChildren<CardController>().MadePersistentP2 = true;
                     card.GetComponentInChildren<CardController>().PHandPosition = i;
+                    FindObjectOfType<CardManager>().P2OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
                     FindObjectOfType<CardManager>().P2Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {

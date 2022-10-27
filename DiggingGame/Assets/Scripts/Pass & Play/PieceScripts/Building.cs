@@ -152,7 +152,7 @@ public class Building : MonoBehaviour
 
         if(BuildingHealth <= 0)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s Building has been destroyed!");
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
             if(PlayerOwning == 1)
@@ -214,17 +214,18 @@ public class Building : MonoBehaviour
             _am.ScorePoints(1);
 
             PrepBuilidingDamaging(false);
+            GetComponent<Animator>().enabled = false;
             gameObject.SetActive(false);
         }
         else if(BuildingHealth == 1)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s Building has taken damage!");
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
             GetComponent<SpriteRenderer>().color = _damagedColor;
         }
         else if(BuildingHealth == 2)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s Building has taken no damage!");
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has avoided damage!");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 

@@ -341,6 +341,7 @@ public class ActionManager : MonoBehaviour
         {
             if (P1RefinedPile[3] == 0 || P1Cards == 0)
             {
+                _gcm.Back();
                 _gcm.UpdateCurrentActionText("No Refined Gold or Cards to retrieve with!");
             }
             else
@@ -362,8 +363,9 @@ public class ActionManager : MonoBehaviour
                 _cm.DrawCard("Gold");
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
-                _gcm.UpdateCurrentActionText("Gold retrieved!");
                 _gcm.UpdateTextBothPlayers();
+                _gcm.Back();
+                _gcm.UpdateCurrentActionText("Gold retrieved!");
             }
         }
         else if (player == 2)

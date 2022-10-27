@@ -200,11 +200,11 @@ public class CardManager : MonoBehaviour
 
                     if (randomCard.CompareTag("GoldCard"))
                     {
-                        _am.P1GoldCards++;
+                        _am.P2GoldCards++;
                     }
                     else
                     {
-                        _am.P1Cards++;
+                        _am.P2Cards++;
                     }
                     //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     UpdatePileText();
