@@ -9579,7 +9579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 794e0a7bc991e9140a3df3ab2122672b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pauseScreen: {fileID: 0}
+  _pauseScreen: {fileID: 204402349}
 --- !u!1001 &888466229
 PrefabInstance:
   m_ObjectHideFlags: 0
