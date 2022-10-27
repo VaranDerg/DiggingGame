@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         MainMenu.cs
-// Author :            Sean Forrester, Andrea Swihart-DeCoster
+// Author :            Sean Forrester, Andrea Swihart-DeCoster, Rudy Wolfer
 // Creation Date :     October 26th, 2022
 //
 // Brief Description : This document controls the main menu.
@@ -18,6 +18,17 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject selectMode;     
     [SerializeField] GameObject mainPage;
     [SerializeField] GameObject optionsPage;
+
+    /// <summary>
+    /// Enabled correct parts on startup.
+    /// Rudy W.
+    /// </summary>
+    private void Start()
+    {
+        selectMode.SetActive(false);
+        mainPage.SetActive(true);
+        optionsPage.SetActive(false);
+    }
 
     /// <summary>
     /// Enables the menu to select which game mode to play
@@ -88,9 +99,10 @@ public class MainMenu : MonoBehaviour
     /// 
     /// Author: Andrea SD
     /// </summary>
-    public void ExitOptions()
+    public void Back()
     {
         optionsPage.SetActive(false);
+        selectMode.SetActive(false);
         mainPage.SetActive(true);
     }
 
@@ -111,7 +123,6 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void QuitGame()
     {
-        Debug.Log("QUIT");
         Application.Quit();
     }
 }
