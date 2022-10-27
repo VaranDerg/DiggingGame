@@ -130,7 +130,6 @@ public class CardManager : MonoBehaviour
             {
                 _gcm.UpdateCurrentActionText("Gold deck is empty! Scored 1 Point!");
                 _am.ScorePoints(1);
-                //Debug.Log("No Gold Cards remain!");
                 return;
             }
 
@@ -156,13 +155,20 @@ public class CardManager : MonoBehaviour
                     P1OpenHandPositions[i] = false;
                     if(deck == "Universal")
                     {
-                        _am.P1Cards++;
                         _uDeck.Remove(randomCard);
                     }
                     else
                     {
-                        _am.P1GoldCards++;
                         _gDeck.Remove(randomCard);
+                    }
+
+                    if(randomCard.CompareTag("GoldCard"))
+                    {
+                        _am.P1GoldCards++;
+                    }
+                    else
+                    {
+                        _am.P1Cards++;
                     }
                     //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     UpdatePileText();
@@ -185,13 +191,20 @@ public class CardManager : MonoBehaviour
                     P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
-                        _am.P2Cards++;
                         _uDeck.Remove(randomCard);
                     }
                     else
                     {
-                        _am.P2GoldCards++;
                         _gDeck.Remove(randomCard);
+                    }
+
+                    if (randomCard.CompareTag("GoldCard"))
+                    {
+                        _am.P1GoldCards++;
+                    }
+                    else
+                    {
+                        _am.P1Cards++;
                     }
                     //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     UpdatePileText();

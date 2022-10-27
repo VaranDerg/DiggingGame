@@ -23,7 +23,6 @@ public class CardEffects : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _cardActivatedText;
 
     [Header("Card UI References")]
-    [SerializeField] private GameObject _morningJogUI;
     [SerializeField] private GameObject _thiefUI;
     public GameObject ProtectBuildingUI;
     [SerializeField] private GameObject _grassThiefButton, _dirtThiefButton, _stoneThiefButton, _goldThiefButton;
@@ -121,7 +120,6 @@ public class CardEffects : MonoBehaviour
     /// </summary>
     public void DisableCardEffectUI()
     {
-        _morningJogUI.SetActive(false);
         _thiefUI.SetActive(false);
         ProtectBuildingUI.SetActive(false);
         _grassThiefButton.SetActive(false);
@@ -593,7 +591,7 @@ public class CardEffects : MonoBehaviour
                 openPieces++;
             }
 
-            if(enoughPieces && openPieces >= _am.SupplyPile[0])
+            if(enoughPieces && openPieces >= _maxPiecesToRegen)
             {
                 _piecesToRegen = _maxPiecesToRegen;
             }
@@ -634,7 +632,7 @@ public class CardEffects : MonoBehaviour
                 openPieces++;
             }
 
-            if (enoughPieces && openPieces >= _am.SupplyPile[1])
+            if (enoughPieces && openPieces >= _maxPiecesToRegen)
             {
                 _piecesToRegen = _maxPiecesToRegen;
             }
@@ -675,7 +673,7 @@ public class CardEffects : MonoBehaviour
                 _regenSpotsOnBoard++;
             }
 
-            if (enoughPieces && openPieces >= _am.SupplyPile[2])
+            if (enoughPieces && openPieces >= _maxPiecesToRegen)
             {
                 _piecesToRegen = _maxPiecesToRegen;
             }
@@ -775,7 +773,8 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        if (enoughPieces && openPieces >= _am.SupplyPile[0])
+        PlacedPieces = 0;
+        if (enoughPieces && openPieces >= _flowersPiecesToPlace)
         {
             while (PlacedPieces != _flowersPiecesToPlace)
             {
@@ -795,7 +794,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != openPieces)
             {
-                _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces onto Dirt Pieces!");
                 yield return null;
             }
         }
@@ -866,7 +865,8 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        if (enoughPieces && openPieces >= _am.SupplyPile[0])
+        PlacedPieces = 0;
+        if (enoughPieces && openPieces >= _gardenPiecesToPlace)
         {
             while (PlacedPieces != _gardenPiecesToPlace)
             {
@@ -1362,11 +1362,12 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        if (enoughPieces && openPieces >= _am.SupplyPile[1])
+        PlacedPieces = 0;
+        if (enoughPieces && openPieces >= _fertilizerPiecesToPlace)
         {
             while (PlacedPieces != _fertilizerPiecesToPlace)
             {
-                _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces onto Stone Pieces!");
                 yield return null;
             }
         }
@@ -1374,7 +1375,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != newPieceCount)
             {
-                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces onto Stone Pieces!");
                 yield return null;
             }
         }
@@ -1382,7 +1383,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != openPieces)
             {
-                _gcm.UpdateCurrentActionText("Place " + openPieces + " Dirt Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + openPieces + " Dirt Pieces onto Stone Pieces!");
                 yield return null;
             }
         }
@@ -1629,11 +1630,12 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        if (enoughPieces && openPieces >= _am.SupplyPile[2])
+        PlacedPieces = 0;
+        if (enoughPieces && openPieces >= _compactionPiecesToPlace)
         {
-            while (PlacedPieces != _gardenPiecesToPlace)
+            while (PlacedPieces != _compactionPiecesToPlace)
             {
-                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
                 yield return null;
             }
         }
@@ -1641,7 +1643,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != newPieceCount)
             {
-                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
                 yield return null;
             }
         }
@@ -1649,7 +1651,7 @@ public class CardEffects : MonoBehaviour
         {
             while (PlacedPieces != openPieces)
             {
-                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces adjacent to your Pawns!");
+                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
                 yield return null;
             }
         }
@@ -1706,9 +1708,9 @@ public class CardEffects : MonoBehaviour
         _bm.SetActiveCollider("Building");
 
         CurrentDamages = 0;
+        _gcm.UpdateCurrentActionText("Damage " + AllowedDamages + " Building(s)!");
         while (CurrentDamages != AllowedDamages)
         {
-            _gcm.UpdateCurrentActionText("Damage " + AllowedDamages + " more Building(s)!");
             yield return null;
         }
         CurrentDamages = 0;
@@ -1869,7 +1871,7 @@ public class CardEffects : MonoBehaviour
         {
             foreach(GameObject card in _cm.P1Hand)
             {
-                card.GetComponent<CardController>().ToDiscard();
+                card.GetComponentInChildren<CardController>().ToDiscard();
             }
 
             for(int i = PlannedGambleCardsToDraw; i != 0; i--)
@@ -1881,7 +1883,7 @@ public class CardEffects : MonoBehaviour
         {
             foreach (GameObject card in _cm.P2Hand)
             {
-                card.GetComponent<CardController>().ToDiscard();
+                card.GetComponentInChildren<CardController>().ToDiscard();
             }
 
             for (int i = PlannedGambleCardsToDraw; i != 0; i--)
@@ -2026,7 +2028,7 @@ public class CardEffects : MonoBehaviour
             yield return null;
         }
 
-        _claimedPieces = true;
+        _claimedPieces = false;
         _holyIdolUI.SetActive(false);
 
         _bm.DisableAllBoardInteractions();

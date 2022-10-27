@@ -208,7 +208,7 @@ public class Building : MonoBehaviour
             if (_pcm.CheckForPersistentCard(PlayerOwning, "Retribution"))
             {
                 _pcm.DiscardPersistentCard(PlayerOwning, "Retribution");
-                _pcm.StartCoroutine(_pcm.RetributionStart(PlayerOwning));
+                _pcm.RetributionStart(PlayerOwning, SuitOfPiece);
             }
 
             _am.ScorePoints(1);

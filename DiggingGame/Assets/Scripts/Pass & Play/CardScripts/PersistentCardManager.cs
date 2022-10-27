@@ -252,19 +252,6 @@ public class PersistentCardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// UI Button that lets the player skip movement with Morning Jog.
-    /// </summary>
-    public void SkipMorningJog()
-    {
-        foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
-            piece.GetComponent<PieceController>().StopCoroutine("PawnMovement");
-        }
-        _bm.DisableAllBoardInteractions();
-        _gcm.Back();
-    }
-
-    /// <summary>
     /// Simple yes/no for using a building protection card.
     /// </summary>
     /// <param name="answer">Yes/No</param>
@@ -283,42 +270,70 @@ public class PersistentCardManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Coroutine for Retribtion process.
+    /// Retribution method.
     /// </summary>
-    /// <returns>Default hold time.</returns>
-    public IEnumerator RetributionStart(int retributionPlayer)
+    /// <param name="retributionPlayer">1 or 2</param>
+    /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
+    public void RetributionStart(int retributionPlayer, string suit)
     {
-        int possibleDamages = 0;
-        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        int sentPieces = 0;
+
+        //Note, should affect the opposite player.
+        if(retributionPlayer == 2)
         {
-            if(building.GetComponent<Building>().PlayerOwning == retributionPlayer)
+            if(suit == "Grass")
             {
-                continue;
+                sentPieces += _am.P1CollectedPile[0];
+                sentPieces += _am.P1RefinedPile[0];
+                _am.SupplyPile[0] += sentPieces;
+                _am.P1CollectedPile[0] = 0;
+                _am.P1RefinedPile[0] = 0;
             }
-
-            building.GetComponent<Building>().CanBeDamaged = true;
-            possibleDamages++;
+            else if(suit == "Dirt")
+            {
+                sentPieces += _am.P1CollectedPile[1];
+                sentPieces += _am.P1RefinedPile[1];
+                _am.SupplyPile[1] += sentPieces;
+                _am.P1CollectedPile[1] = 0;
+                _am.P1RefinedPile[1] = 0;
+            }
+            else if(suit == "Stone")
+            {
+                sentPieces += _am.P1CollectedPile[2];
+                sentPieces += _am.P1RefinedPile[2];
+                _am.SupplyPile[2] += sentPieces;
+                _am.P1CollectedPile[2] = 0;
+                _am.P1RefinedPile[2] = 0;
+            }
         }
-
-        _bm.SetActiveCollider("Building");
-
-        if (possibleDamages >= _ce.RetributionDamages)
+        else
         {
-            possibleDamages = _ce.RetributionDamages;
+            if (suit == "Grass")
+            {
+                sentPieces += _am.P2CollectedPile[0];
+                sentPieces += _am.P2RefinedPile[0];
+                _am.SupplyPile[0] += sentPieces;
+                _am.P2CollectedPile[0] = 0;
+                _am.P2RefinedPile[0] = 0;
+            }
+            else if (suit == "Dirt")
+            {
+                sentPieces += _am.P2CollectedPile[1];
+                sentPieces += _am.P2RefinedPile[1];
+                _am.SupplyPile[1] += sentPieces;
+                _am.P2CollectedPile[1] = 0;
+                _am.P2RefinedPile[1] = 0;
+            }
+            else if (suit == "Stone")
+            {
+                sentPieces += _am.P2CollectedPile[2];
+                sentPieces += _am.P2RefinedPile[2];
+                _am.SupplyPile[2] += sentPieces;
+                _am.P2CollectedPile[2] = 0;
+                _am.P2RefinedPile[2] = 0;
+            }
         }
 
-        _gcm.UpdateCurrentActionText("Damage " + (possibleDamages - BuildingsDamaged) + " Buildings!");
-
-        BuildingsDamaged = 0;
-        while(BuildingsDamaged != possibleDamages)
-        {
-            yield return null;
-        }
-        BuildingsDamaged = 0;
-
-        DiscardPersistentCard(retributionPlayer, "Retribution");
-        _bm.SetActiveCollider("Pawn");
-        _bm.DisableAllBoardInteractions();
-        _gcm.ToFinallyPhase();
+        _gcm.UpdateCurrentActionText("Player " + retributionPlayer + " suffered Retribution! " + sentPieces + " of their " + suit + " Pieces were sent to the Supply!");
     }
 }
