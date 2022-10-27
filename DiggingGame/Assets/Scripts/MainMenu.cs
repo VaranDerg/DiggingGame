@@ -3,7 +3,7 @@
 // Author :            Sean Forrester, Andrea Swihart-DeCoster
 // Creation Date :     October 26th, 2022
 //
-// Brief Description : This document controls the main menu
+// Brief Description : This document controls the main menu.
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
