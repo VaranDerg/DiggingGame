@@ -8604,6 +8604,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 1900508196598425488, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1900508196598425489, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.4
@@ -10365,7 +10369,6 @@ MonoBehaviour:
   _stoneColor: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
   _goldColor: {r: 0.8018868, g: 0.593066, b: 0.040850773, a: 1}
   _cardActivatedText: {fileID: 1766094959}
-  _morningJogUI: {fileID: 0}
   _thiefUI: {fileID: 1207144701}
   ProtectBuildingUI: {fileID: 952434522}
   _grassThiefButton: {fileID: 403068280}
