@@ -5,10 +5,37 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+<<<<<<< Updated upstream
   - enabled: 1
     path: Assets/Scenes/menu screen.unity
     guid: cb098de47888a02489dccae897920ee9
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+=======
+  - enabled: 0
+    path: Assets/Scenes/Online/Loading.unity
+    guid: c98f4b2844771fd4899a6690f114e5bf
+  - enabled: 0
+    path: Assets/Scenes/Online/Lobby.unity
+    guid: 2dcd6b0caa1f3eb43b67d2fa4d745ffe
+  - enabled: 0
+    path: Assets/Scenes/Online/MultiplayerTest.unity
+    guid: a5d1790e3d28ee14b9a2dd79014bcfde
+  - enabled: 0
+    path: Assets/Scenes/Other/PrototypeScene.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 0
+    path: Assets/Scenes/Pass & Play/CardScene.unity
+    guid: 0a5b211e1ee578849a8a3301a9f4ede8
+  - enabled: 1
+    path: Assets/Scenes/Pass & Play/PassAndPlayScene.unity
+    guid: 3677421c30784c54e8b286c031b4bf6a
+  - enabled: 0
+    path: Assets/Scenes/Online/ActionsTestMultiplayer.unity
+    guid: f51bdac60ab4cf046824c40dc0f8e741
+  - enabled: 0
+    path: Assets/Scenes/General/MainMenu.unity
+    guid: 2c0fc5c17b65d3f44aa49c28000f1c8b
+>>>>>>> Stashed changes
   m_configObjects: {}
