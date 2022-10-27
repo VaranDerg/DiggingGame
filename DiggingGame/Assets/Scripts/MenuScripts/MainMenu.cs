@@ -14,6 +14,22 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    //Andrea SD
+    [SerializeField] GameObject selectMode;     
+    [SerializeField] GameObject mainPage;
+    [SerializeField] GameObject optionsPage;
+
+    /// <summary>
+    /// Enables the menu to select which game mode to play
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void StartGame()
+    {
+        selectMode.SetActive(true);
+        mainPage.SetActive(false);
+    }
+
     /// <summary>
     /// Loads main menu
     /// 
@@ -33,7 +49,7 @@ public class MainMenu : MonoBehaviour
     public void PlayLocal()
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // Edited: Andrea - removed
-        SceneManager.LoadScene("LocalGame");    // Added - Andrea SD
+        SceneManager.LoadScene("PassAndPlayScene");    // Added - Andrea SD
     }
 
     /// <summary>
@@ -53,7 +69,29 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void Collection()
     {
-        SceneManager.LoadScene("Collection");
+        SceneManager.LoadScene("GalleryScene");
+    }
+
+    /// <summary>
+    /// Loads options page
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void Options()
+    {
+        optionsPage.SetActive(true);
+        mainPage.SetActive(false);
+    }
+
+    /// <summary>
+    /// Returns to main menu page
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void ExitOptions()
+    {
+        optionsPage.SetActive(false);
+        mainPage.SetActive(true);
     }
 
     /// <summary>
@@ -61,9 +99,9 @@ public class MainMenu : MonoBehaviour
     /// 
     /// Author: Andrea SD
     /// </summary>
-    public void Rules()
+    public void HowToPlay()
     {
-        SceneManager.LoadScene("Rules");
+        SceneManager.LoadScene("HowToPlay");
     }
 
     /// <summary>
