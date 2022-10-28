@@ -327,7 +327,7 @@ public class CardManager : MonoBehaviour
     {
         foreach(GameObject card in SelectedCards)
         {
-            card.GetComponentInChildren<CardController>().ToDiscard();
+            StartCoroutine(card.GetComponentInChildren<CardController>().ToDiscard());
         }
 
         SelectedCards.Clear();

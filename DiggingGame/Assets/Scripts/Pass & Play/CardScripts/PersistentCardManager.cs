@@ -68,6 +68,7 @@ public class PersistentCardManager : MonoBehaviour
                 if(P1OpenPCardSlots[i] == true)
                 {
                     card.transform.position = _p1PCardPositions[i].position;
+                    card.GetComponentInChildren<Animator>().Play("CardPersistent");
                     card.GetComponentInChildren<CardController>().MadePersistentP1 = true;
                     card.GetComponentInChildren<CardController>().PHandPosition = i;
                     FindObjectOfType<CardManager>().P1OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
@@ -94,6 +95,7 @@ public class PersistentCardManager : MonoBehaviour
                 if (P2OpenPCardSlots[i] == true)
                 {
                     card.transform.position = _p2PCardPositions[i].position;
+                    card.GetComponentInChildren<Animator>().Play("CardPersistent");
                     card.GetComponentInChildren<CardController>().MadePersistentP2 = true;
                     card.GetComponentInChildren<CardController>().PHandPosition = i;
                     FindObjectOfType<CardManager>().P2OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
@@ -168,7 +170,7 @@ public class PersistentCardManager : MonoBehaviour
             {
                 if(P1PersistentCards[i].name == cardName)
                 {
-                    P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard();
+                    StartCoroutine(P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
                 }
             }
         }
@@ -178,7 +180,7 @@ public class PersistentCardManager : MonoBehaviour
             {
                 if (P2PersistentCards[i].name == cardName)
                 {
-                    P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard();
+                    StartCoroutine(P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
                 }
             }
         }

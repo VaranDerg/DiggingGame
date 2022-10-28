@@ -1847,7 +1847,7 @@ public class CardEffects : MonoBehaviour
         {
             foreach(GameObject card in _cm.P1Hand)
             {
-                card.GetComponentInChildren<CardController>().ToDiscard();
+                StartCoroutine(card.GetComponentInChildren<CardController>().ToDiscard());
             }
 
             for(int i = PlannedGambleCardsToDraw; i != 0; i--)
@@ -1859,7 +1859,7 @@ public class CardEffects : MonoBehaviour
         {
             foreach (GameObject card in _cm.P2Hand)
             {
-                card.GetComponentInChildren<CardController>().ToDiscard();
+                StartCoroutine(card.GetComponentInChildren<CardController>().ToDiscard());
             }
 
             for (int i = PlannedGambleCardsToDraw; i != 0; i--)

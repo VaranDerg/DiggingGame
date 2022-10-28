@@ -8506,6 +8506,7 @@ GameObject:
   - component: {fileID: 826397542}
   - component: {fileID: 826397544}
   - component: {fileID: 826397543}
+  - component: {fileID: 826397545}
   m_Layer: 5
   m_Name: OpponentInfoZone
   m_TagString: Untagged
@@ -8575,6 +8576,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 826397541}
   m_CullTransparentMesh: 1
+--- !u!95 &826397545
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826397541}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c73fd5f02f684cb40b1549256f1ca51d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &842475108
 GameObject:
   m_ObjectHideFlags: 0
@@ -9567,6 +9588,8 @@ MonoBehaviour:
   _factory: {fileID: 854821624}
   _burrow: {fileID: 1717394501}
   _mine: {fileID: 50002691}
+  _oppInfoAnims: {fileID: 826397545}
+  _oppInfoWaitTime: 0.25
 --- !u!114 &888052510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10897,7 +10920,7 @@ MonoBehaviour:
   DugPieces: 0
   _maxPiecesToRegen: 10
   _regenPiecesRequiredToScore: 3
-  BuildingDamageStatusWaitTime: 3
+  BuildingDamageStatusWaitTime: 2
   _overgrowthDamages: 1
   _floodDamages: 1
   _earthquakeDamages: 1
@@ -16524,6 +16547,7 @@ MonoBehaviour:
   TotalBuildings: 3
   ShovelUsed: 0
   MorningJogUsed: 0
+  _scoreTextAnimator: {fileID: 1916065153}
 --- !u!1 &1591079368
 GameObject:
   m_ObjectHideFlags: 0
@@ -18820,7 +18844,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 888052509}
         m_TargetAssemblyTypeName: GameCanvasManagerNew, Assembly-CSharp
-        m_MethodName: OpponentInfoToggle
+        m_MethodName: OpponentInfoToggleWrapper
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20703,6 +20727,7 @@ GameObject:
   - component: {fileID: 1916065150}
   - component: {fileID: 1916065152}
   - component: {fileID: 1916065151}
+  - component: {fileID: 1916065153}
   m_Layer: 5
   m_Name: CurrentPlayerScoreText
   m_TagString: Untagged
@@ -20827,6 +20852,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1916065149}
   m_CullTransparentMesh: 1
+--- !u!95 &1916065153
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916065149}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ce248bdbfe136514c8e09616f5bb1d0a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1929903264
 GameObject:
   m_ObjectHideFlags: 0

@@ -54,6 +54,10 @@ public class GameCanvasManagerNew : MonoBehaviour
     private CardEffects _ce;
     private PersistentCardManager _pcm;
 
+    [Header("Animations")]
+    [SerializeField] private Animator _oppInfoAnims;
+    [SerializeField] private float _oppInfoWaitTime;
+
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
 
@@ -331,17 +335,25 @@ public class GameCanvasManagerNew : MonoBehaviour
         UpdateCurrentActionText("Press Start Turn to begin!");
     }
 
-    public void OpponentInfoToggle()
+    public void OpponentInfoToggleWrapper()
+    {
+        StartCoroutine(OpponentInfoToggle());
+    }
+
+    public IEnumerator OpponentInfoToggle()
     {
         if(_opponentViewShowing)
         {
-            _opponentInfoZone.SetActive(false);
+            _oppInfoAnims.Play("OppInfoHide");
             _showHideOpponentInfoText.text = "Show Opponent Info";
+            yield return new WaitForSeconds(_oppInfoWaitTime);
+            _opponentInfoZone.SetActive(false);
             _opponentViewShowing = false;
         }
         else
         {
             _opponentInfoZone.SetActive(true);
+            _oppInfoAnims.Play("OppInfoShow");
             _showHideOpponentInfoText.text = "Hide Opponent Info";
             _opponentViewShowing = true;
         }

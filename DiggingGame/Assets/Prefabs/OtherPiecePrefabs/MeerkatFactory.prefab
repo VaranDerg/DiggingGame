@@ -110,6 +110,7 @@ MonoBehaviour:
   SuitOfPiece: 
   ActiveBuilding: 0
   DamageProtectionResponse: 0
+  _removalAnimWaitTime: 0.25
 --- !u!95 &-1469044545049766827
 Animator:
   serializedVersion: 4

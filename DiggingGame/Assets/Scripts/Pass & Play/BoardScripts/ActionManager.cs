@@ -59,6 +59,9 @@ public class ActionManager : MonoBehaviour
     [HideInInspector] public bool ShovelUsed;
     [HideInInspector] public bool MorningJogUsed;
 
+    [Header("Animations")]
+    [SerializeField] private Animator _scoreTextAnimator;
+
     [Header("Script References")]
     private BoardManager _bm;
     private CardManager _cm;
@@ -118,6 +121,7 @@ public class ActionManager : MonoBehaviour
         }
 
         _gcm.UpdateTextBothPlayers();
+        _scoreTextAnimator.Play("ScorePoint");
     }
 
     /// <summary>
@@ -372,6 +376,7 @@ public class ActionManager : MonoBehaviour
         {
             if (P2RefinedPile[3] == 0 || P2Cards == 0)
             {
+                _gcm.Back();
                 _gcm.UpdateCurrentActionText("No Refined Gold or Cards to retrieve with!");
             }
             else
@@ -393,6 +398,7 @@ public class ActionManager : MonoBehaviour
                 _cm.DrawCard("Gold");
                 P2RefinedPile[3]--;
                 SupplyPile[3]++;
+                _gcm.Back();
                 _gcm.UpdateCurrentActionText("Gold retrieved!");
                 _gcm.UpdateTextBothPlayers();
             }
@@ -564,7 +570,8 @@ public class ActionManager : MonoBehaviour
     {
         if(player == 1)
         {
-            for(int i = P1BuiltBuildings[2]; i != 0; i--)
+            for(int i = P1BuiltBuildings[2]
+                ; i != 0; i--)
             {
                 if(SupplyPile[0] == 0)
                 {

@@ -27,6 +27,9 @@ public class Building : MonoBehaviour
     [HideInInspector] public bool ActiveBuilding;
     [HideInInspector] public bool DamageProtectionResponse;
 
+    [Header("Animations")]
+    [SerializeField] private float _removalAnimWaitTime;
+
     private List<GameObject> _boardPieces = new List<GameObject>();
     private ActionManager _am;
     private PersistentCardManager _pcm;
@@ -152,9 +155,6 @@ public class Building : MonoBehaviour
 
         if(BuildingHealth <= 0)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
-            yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
-
             if(PlayerOwning == 1)
             {
                 if (BuildingType == "Factory")
@@ -202,6 +202,10 @@ public class Building : MonoBehaviour
                 }
             }
 
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
+            _anims.Play("TempPawnDamage");
+            yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
+
             GetComponentInParent<PieceController>().HasP1Building = false;
             GetComponentInParent<PieceController>().HasP2Building = false;
 
@@ -213,19 +217,23 @@ public class Building : MonoBehaviour
 
             _am.ScorePoints(1);
 
+            _anims.Play("TempPawnRemove");
+            yield return new WaitForSeconds(_removalAnimWaitTime);
             PrepBuilidingDamaging(false);
-            GetComponent<Animator>().enabled = false;
+            _anims.enabled = false;
             gameObject.SetActive(false);
         }
         else if(BuildingHealth == 1)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
-            yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
             GetComponent<SpriteRenderer>().color = _damagedColor;
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
+            _anims.Play("TempPawnDamage");
+            yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if(BuildingHealth == 2)
         {
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has avoided damage!");
+            _anims.Play("TempPawnDamage");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
@@ -250,12 +258,12 @@ public class Building : MonoBehaviour
         //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
         if(_am.CurrentPlayer == 1 && PlayerOwning == 2)
         {
-            _am.P1Score++;
+            _am.ScorePoints(1);
             _gcm.UpdateTextBothPlayers();
         }
         else if(_am.CurrentPlayer == 2 && PlayerOwning == 1)
         {
-            _am.P2Score++;
+            _am.ScorePoints(1);
             _gcm.UpdateTextBothPlayers();
         }
 
