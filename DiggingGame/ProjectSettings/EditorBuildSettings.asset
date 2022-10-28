@@ -9,13 +9,13 @@ EditorBuildSettings:
     path: Assets/Scenes/General/MainMenu.unity
     guid: 2c0fc5c17b65d3f44aa49c28000f1c8b
   - enabled: 1
-    path: Assets/Scenes/Other/MainMenu.unity
+    path: Assets/Scenes/General/MainMenu.unity
     guid: cb098de47888a02489dccae897920ee9
   - enabled: 1
-    path: Assets/Scenes/Other/HowToPlay.unity
+    path: Assets/Scenes/General/HowToPlay.unity
     guid: 4dbc7f3759f424949899815b9c09f5a7
   - enabled: 1
-    path: Assets/Scenes/Other/GalleryScene.unity
+    path: Assets/Scenes/General/GalleryScene.unity
     guid: 02f07595ddb86d04ca1d67ee184ba33b
   - enabled: 1
     path: Assets/Scenes/Pass & Play/PassAndPlayScene.unity
@@ -27,15 +27,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Online/Lobby.unity
     guid: 2dcd6b0caa1f3eb43b67d2fa4d745ffe
   - enabled: 0
-    path: Assets/Scenes/Online/MultiplayerTest.unity
+    path: Assets/Scenes/Old/MultiplayerTest.unity
     guid: a5d1790e3d28ee14b9a2dd79014bcfde
   - enabled: 0
-    path: Assets/Scenes/Other/PrototypeScene.unity
+    path: Assets/Scenes/Old/PrototypeScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
-    path: Assets/Scenes/Pass & Play/CardScene.unity
+    path: Assets/Scenes/Old/CardScene.unity
     guid: 0a5b211e1ee578849a8a3301a9f4ede8
   - enabled: 0
-    path: Assets/Scenes/Online/ActionsTestMultiplayer.unity
+    path: Assets/Scenes/Old/ActionsTestMultiplayer.unity
     guid: f51bdac60ab4cf046824c40dc0f8e741
   m_configObjects: {}
