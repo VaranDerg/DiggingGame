@@ -56,7 +56,6 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public bool UsingWalkway;
     [HideInInspector] public bool IsFlippable;
     [HideInInspector] public bool DiscerningEye;
-    [HideInInspector] public bool MovingForFree;
 
     private void Awake()
     {
@@ -400,18 +399,41 @@ public class PieceController : MonoBehaviour
                 }
 
                 //Start of Morning Jog
-                bool hasMorningJog = _pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog");
-                if(hasMorningJog && !_am.MorningJogUsed)
+                if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog") && !_am.MorningJogUsed)
                 {
-                    if(ObjState == GameState.One || ObjState == GameState.Six)
+                    Debug.Log("Player has Morning Jog!");
+                    if (ObjState == GameState.One || ObjState == GameState.Six)
                     {
-                        MovingForFree = true;
                         _am.MorningJogUsed = true;
+                    }
+                    else
+                    {
+                        if (ObjState == GameState.One || ObjState == GameState.Six)
+                        {
+                            _cm.PrepareCardSelection(1, "Grass", false);
+                        }
+                        else if (ObjState == GameState.Two)
+                        {
+                            _cm.PrepareCardSelection(1, "Dirt", false);
+                        }
+                        else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                        {
+                            _cm.PrepareCardSelection(1, "Stone", false);
+                        }
+                        else if (ObjState == GameState.Four)
+                        {
+                            _cm.PrepareCardSelection(1, "Any", false);
+                        }
+
+                        while (!_cm.CheckCardSelection())
+                        {
+                            yield return null;
+                        }
+                        _cm.PrepareCardSelection(0, "", true);
                     }
                 }
                 //End of Morning Jog
-
-                if (!MovingForFree)
+                else
                 {
                     if (ObjState == GameState.One || ObjState == GameState.Six)
                     {
@@ -443,7 +465,6 @@ public class PieceController : MonoBehaviour
             CurrentPawn.transform.position = gameObject.transform.position;
             CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
             HasPawn = true;
-            MovingForFree = false;
 
             if (_am.CurrentTurnPhase == 1)
             {

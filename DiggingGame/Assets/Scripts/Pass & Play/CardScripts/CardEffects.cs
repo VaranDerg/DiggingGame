@@ -49,7 +49,6 @@ public class CardEffects : MonoBehaviour
     [SerializeField] private int _maxPiecesToRegen;
     [SerializeField] private int _regenPiecesRequiredToScore;
     private int _piecesToRegen;
-    private int _regenSpotsOnBoard;
     private bool _regenSuitChosen;
 
     [Header("Damaging Buildings")]
@@ -59,7 +58,6 @@ public class CardEffects : MonoBehaviour
     [SerializeField] private int _earthquakeDamages;
     [SerializeField] private int _thunderstormDamages;
     [SerializeField] private int _tornadoDamages;
-    public int RetributionDamages;
     private int _damageBuildingDieSides = 4;
     [HideInInspector] public Building SelectedBuilding;
     [HideInInspector] public int AllowedDamages;
@@ -590,19 +588,6 @@ public class CardEffects : MonoBehaviour
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
                 openPieces++;
             }
-
-            if(enoughPieces && openPieces >= _maxPiecesToRegen)
-            {
-                _piecesToRegen = _maxPiecesToRegen;
-            }
-            else if(openPieces >= newPieceCount)
-            {
-                _piecesToRegen = newPieceCount;
-            }
-            else
-            {
-                _piecesToRegen = openPieces;
-            }
         }
         else if(suit == "Dirt")
         {
@@ -631,19 +616,6 @@ public class CardEffects : MonoBehaviour
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
                 openPieces++;
             }
-
-            if (enoughPieces && openPieces >= _maxPiecesToRegen)
-            {
-                _piecesToRegen = _maxPiecesToRegen;
-            }
-            else if (openPieces >= newPieceCount)
-            {
-                _piecesToRegen = newPieceCount;
-            }
-            else
-            {
-                _piecesToRegen = openPieces;
-            }
         }
         else if(suit == "Stone")
         {
@@ -670,21 +642,25 @@ public class CardEffects : MonoBehaviour
                 }
 
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                _regenSpotsOnBoard++;
+                openPieces++;
             }
+        }
 
-            if (enoughPieces && openPieces >= _maxPiecesToRegen)
-            {
-                _piecesToRegen = _maxPiecesToRegen;
-            }
-            else if (openPieces >= newPieceCount)
-            {
-                _piecesToRegen = newPieceCount;
-            }
-            else
-            {
-                _piecesToRegen = openPieces;
-            }
+        if (enoughPieces && openPieces >= _maxPiecesToRegen)
+        {
+            _piecesToRegen = _maxPiecesToRegen;
+        }
+        else if (enoughPieces)
+        {
+            _piecesToRegen = openPieces;
+        }
+        else if (openPieces >= newPieceCount)
+        {
+            _piecesToRegen = newPieceCount;
+        }
+        else
+        {
+            _piecesToRegen = openPieces;
         }
 
         _regenSuitChosen = true;
@@ -1518,7 +1494,7 @@ public class CardEffects : MonoBehaviour
         _bm.SetActiveCollider("Building");
         CurrentDamages = 0;
 
-        if (buildingCount < AllowedDamages)
+        if (buildingCount < _thunderstormDamages)
         {
             AllowedDamages = buildingCount;
         }
@@ -2176,11 +2152,13 @@ public class CardEffects : MonoBehaviour
         }
         _regenerationUI.SetActive(false);
 
+        PlacedPieces = 0;
         while(PlacedPieces != _piecesToRegen)
         {
             _gcm.UpdateCurrentActionText("Regenerate " + (_piecesToRegen - PlacedPieces) + " more Pieces!");
             yield return null;
         }
+        PlacedPieces = 0;
 
         int pointsToScore = 0;
         int curInterval = 0;
@@ -2200,7 +2178,6 @@ public class CardEffects : MonoBehaviour
         PlacedPieces = 0;
         _piecesToRegen = 0;
         _regenSuitChosen = false;
-        _regenSpotsOnBoard = 0;
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();

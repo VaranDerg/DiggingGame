@@ -1999,7 +1999,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &204402350
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10895,7 +10895,7 @@ MonoBehaviour:
   _goldenShovelPiecesToDig: 4
   PlacedPieces: 0
   DugPieces: 0
-  _maxPiecesToRegen: 0
+  _maxPiecesToRegen: 10
   _regenPiecesRequiredToScore: 3
   BuildingDamageStatusWaitTime: 3
   _overgrowthDamages: 1
@@ -10903,7 +10903,6 @@ MonoBehaviour:
   _earthquakeDamages: 1
   _thunderstormDamages: 1
   _tornadoDamages: 1
-  RetributionDamages: 3
   SelectedBuilding: {fileID: 0}
   AllowedDamages: 0
   _allowedRepairs: 3
