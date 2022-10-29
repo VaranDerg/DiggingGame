@@ -10864,6 +10864,7 @@ MonoBehaviour:
   AllowedActivations: 0
   RequiredSuit: 
   RequiredCardAmount: 0
+  _cardShowHideTime: 0.125
 --- !u!4 &1005441706
 Transform:
   m_ObjectHideFlags: 0

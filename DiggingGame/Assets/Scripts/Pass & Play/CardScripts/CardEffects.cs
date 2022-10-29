@@ -1852,7 +1852,7 @@ public class CardEffects : MonoBehaviour
 
             for(int i = PlannedGambleCardsToDraw; i != 0; i--)
             {
-                _cm.DrawCard("Universal");
+                StartCoroutine(_cm.DrawCard("Universal"));
             }
         }
         else
@@ -1864,7 +1864,7 @@ public class CardEffects : MonoBehaviour
 
             for (int i = PlannedGambleCardsToDraw; i != 0; i--)
             {
-                _cm.DrawCard("Universal");
+                StartCoroutine(_cm.DrawCard("Universal"));
             }
         }
 

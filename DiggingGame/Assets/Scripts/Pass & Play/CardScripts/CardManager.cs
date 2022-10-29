@@ -35,6 +35,9 @@ public class CardManager : MonoBehaviour
     [HideInInspector] public string RequiredSuit = "";
     [HideInInspector] public int RequiredCardAmount = 0;
 
+    [Header("Animations")]
+    [SerializeField] private float _cardShowHideTime;
+
     /// <summary>
     /// Assigns partner scripts
     /// </summary>
@@ -112,7 +115,7 @@ public class CardManager : MonoBehaviour
     /// Draws a card.
     /// </summary>
     /// <param name="deck">"Universal" or "Gold"</param>
-    public void DrawCard(string deck)
+    public IEnumerator DrawCard(string deck)
     {
         if(_uDeck.Count == 0)
         {
@@ -130,7 +133,7 @@ public class CardManager : MonoBehaviour
             {
                 _gcm.UpdateCurrentActionText("Gold deck is empty! Scored 1 Point!");
                 _am.ScorePoints(1);
-                return;
+                yield break;
             }
 
             randomCard = _gDeck[Random.Range(0, _gDeck.Count)];
@@ -171,8 +174,11 @@ public class CardManager : MonoBehaviour
                         _am.P1Cards++;
                     }
                     //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+                    randomCard.SetActive(true);
+                    randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
+                    yield return new WaitForSeconds(_cardShowHideTime);
                     UpdatePileText();
-                    return;
+                    yield break;
                 }
             }
         }
@@ -207,8 +213,11 @@ public class CardManager : MonoBehaviour
                         _am.P2Cards++;
                     }
                     //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+                    randomCard.SetActive(true);
+                    randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
+                    yield return new WaitForSeconds(_cardShowHideTime);
                     UpdatePileText();
-                    return;
+                    yield break;
                 }
             }
         }
@@ -385,7 +394,7 @@ public class CardManager : MonoBehaviour
     {
         for (int i = cardsToDraw; i > 0; i--)
         {
-            DrawCard("Universal");
+            StartCoroutine(DrawCard("Universal"));
         }
         //Debug.Log("Drew " + cardsToDraw + " cards!");
     }
@@ -401,15 +410,7 @@ public class CardManager : MonoBehaviour
             {
                 PrepareCardSelection(_am.P1Cards + _am.P1GoldCards - _am.HandLimit, "Any", false);
                 _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
-                while (!CheckCardSelection())
-                {
-                    yield return null;
-                }
-                PrepareCardSelection(0, "", true);
             }
-
-            HideCards(_am.CurrentPlayer);
-            _am.EndTurn(_am.CurrentPlayer);
         }
         else if (player == 2)
         {
@@ -417,16 +418,17 @@ public class CardManager : MonoBehaviour
             {
                 PrepareCardSelection(_am.P2Cards + _am.P2GoldCards - _am.HandLimit, "Any", false);
                 _gcm.UpdateCurrentActionText("Discard " + (_am.P2Cards + _am.P2GoldCards - _am.HandLimit) + " Cards.");
-                while (!CheckCardSelection())
-                {
-                    yield return null;
-                }
-                PrepareCardSelection(0, "", true);
             }
-
-            HideCards(_am.CurrentPlayer);
-            _am.EndTurn(_am.CurrentPlayer);
         }
+
+        while (!CheckCardSelection())
+        {
+            yield return null;
+        }
+        PrepareCardSelection(0, "", true);
+
+        StartCoroutine(HideCards(_am.CurrentPlayer));
+        _am.EndTurn(_am.CurrentPlayer);
     }
 
     /// <summary>
@@ -483,12 +485,14 @@ public class CardManager : MonoBehaviour
     /// Shows cards based on the player.
     /// </summary>
     /// <param name="player">1 or 2</param>
-    public void HideCards(int player)
+    public IEnumerator HideCards(int player)
     {
         if(player == 1)
         {
             foreach (GameObject card in P1Hand)
             {
+                card.GetComponentInChildren<Animator>().Play("CardHide");
+                yield return new WaitForSeconds(_cardShowHideTime);
                 card.SetActive(false);
             }
         }
@@ -496,6 +500,8 @@ public class CardManager : MonoBehaviour
         {
             foreach (GameObject card in P2Hand)
             {
+                card.GetComponentInChildren<Animator>().Play("CardHide");
+                yield return new WaitForSeconds(_cardShowHideTime);
                 card.SetActive(false);
             }
         }
@@ -505,13 +511,15 @@ public class CardManager : MonoBehaviour
     /// Hides cards based on the player.
     /// </summary>
     /// <param name="player">1 or 2</param>
-    public void ShowCards(int player)
+    public IEnumerator ShowCards(int player)
     {
         if(player == 1)
         {
-            foreach(GameObject card in P1Hand)
+            foreach (GameObject card in P1Hand)
             {
                 card.SetActive(true);
+                card.GetComponentInChildren<Animator>().Play("CardDraw");
+                yield return new WaitForSeconds(_cardShowHideTime);
             }
         }
         else
@@ -519,6 +527,8 @@ public class CardManager : MonoBehaviour
             foreach (GameObject card in P2Hand)
             {
                 card.SetActive(true);
+                card.GetComponentInChildren<Animator>().Play("CardDraw");
+                yield return new WaitForSeconds(_cardShowHideTime);
             }
         }
     }

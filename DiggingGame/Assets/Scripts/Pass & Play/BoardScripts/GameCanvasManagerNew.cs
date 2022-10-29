@@ -372,7 +372,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         _am.ActivateMines(_am.CurrentPlayer);
         _am.StartMove(_am.CurrentPlayer);
         _am.CurrentTurnPhase++;
-        _cm.ShowCards(_am.CurrentPlayer);
+        StartCoroutine(_cm.ShowCards(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");

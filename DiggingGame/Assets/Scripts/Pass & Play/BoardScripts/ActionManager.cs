@@ -133,7 +133,7 @@ public class ActionManager : MonoBehaviour
         {
             for (int i = StartingCards; i > 0; i--)
             {
-                _cm.DrawCard("Universal");
+                StartCoroutine(_cm.DrawCard("Universal"));
             }
         }
     }
@@ -364,7 +364,7 @@ public class ActionManager : MonoBehaviour
                 }
                 //End of Geologist code.
 
-                _cm.DrawCard("Gold");
+                StartCoroutine(_cm.DrawCard("Gold"));
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
                 _gcm.UpdateTextBothPlayers();
@@ -395,7 +395,7 @@ public class ActionManager : MonoBehaviour
                 }
                 //End of Geologist code.
 
-                _cm.DrawCard("Gold");
+                StartCoroutine(_cm.DrawCard("Gold"));
                 P2RefinedPile[3]--;
                 SupplyPile[3]++;
                 _gcm.Back();
