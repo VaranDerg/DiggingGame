@@ -1959,7 +1959,7 @@ MonoBehaviour:
   MadePersistentP1: 0
   MadePersistentP2: 0
   _cardAnimator: {fileID: 995823128266682848}
-  _discardAnimWaitTime: 0.5
+  _discardAnimWaitTime: 0.4
 --- !u!1 &8963238438471516894
 GameObject:
   m_ObjectHideFlags: 0
