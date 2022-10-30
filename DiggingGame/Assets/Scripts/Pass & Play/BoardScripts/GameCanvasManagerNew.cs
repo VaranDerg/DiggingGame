@@ -335,11 +335,18 @@ public class GameCanvasManagerNew : MonoBehaviour
         UpdateCurrentActionText("Press Start Turn to begin!");
     }
 
+    /// <summary>
+    /// Wrapper for starting the below Coroutine through a button.
+    /// </summary>
     public void OpponentInfoToggleWrapper()
     {
         StartCoroutine(OpponentInfoToggle());
     }
 
+    /// <summary>
+    /// Shows or hides the Opponent Info.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator OpponentInfoToggle()
     {
         if(_opponentViewShowing)
@@ -505,7 +512,6 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
-
         foreach (PieceController script in FindObjectsOfType<PieceController>())
         {
             script.StopAllCoroutines();
@@ -537,6 +543,9 @@ public class GameCanvasManagerNew : MonoBehaviour
         UpdateTextBothPlayers();
     }
 
+    /// <summary>
+    /// Ends the player's turn.
+    /// </summary>
     public void EndTurn()
     {
         DisableListObjects();

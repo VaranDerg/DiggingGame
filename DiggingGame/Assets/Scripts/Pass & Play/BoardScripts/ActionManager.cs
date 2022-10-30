@@ -61,6 +61,8 @@ public class ActionManager : MonoBehaviour
 
     [Header("Animations")]
     [SerializeField] private Animator _scoreTextAnimator;
+    public float PawnMoveSpeed;
+    public float PawnMoveAnimTime;
 
     [Header("Script References")]
     private BoardManager _bm;

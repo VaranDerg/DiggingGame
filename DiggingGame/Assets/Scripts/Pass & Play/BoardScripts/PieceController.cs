@@ -57,6 +57,15 @@ public class PieceController : MonoBehaviour
     [HideInInspector] public bool IsFlippable;
     [HideInInspector] public bool DiscerningEye;
 
+    [Header("Particle Systems")]
+    [SerializeField] private ParticleSystem _grassPS;
+    [SerializeField] private ParticleSystem _dirtPS;
+    [SerializeField] private ParticleSystem _stonePS;
+    [SerializeField] private ParticleSystem _goldPS;
+
+    [Header("Other")]
+    private bool _pawnIsMoving;
+
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
@@ -91,6 +100,17 @@ public class PieceController : MonoBehaviour
     }
 
     /// <summary>
+    /// For pawn movement.
+    /// </summary>
+    private void FixedUpdate()
+    {
+        if(_pawnIsMoving)
+        {
+            CurrentPawn.transform.position = Vector2.Lerp(CurrentPawn.transform.position, gameObject.transform.position, _am.PawnMoveSpeed * Time.deltaTime);
+        }
+    }
+
+    /// <summary>
     /// This method controls what happens when the interacts with the board.
     /// Author: Andrea SD
     /// Edited: Rudy W. Moved Debug statements into SetObjectState along with sprite change lines, as states may change through 
@@ -118,7 +138,10 @@ public class PieceController : MonoBehaviour
 
         if(UsingWalkway)
         {
-            UseWalkway();
+            if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                StartCoroutine(UseWalkway());
+            }
         }
 
         if (IsMovable && CurrentPawn != null)
@@ -153,6 +176,7 @@ public class PieceController : MonoBehaviour
             if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
             {
                 SetPieceState(3);
+                _dirtPS.Play();
                 _am.ShovelUsed = true;
                 if (CurrentPawn != null)
                 {
@@ -197,18 +221,22 @@ public class PieceController : MonoBehaviour
                 {
                     case GameState.One:
                         SetPieceState(2);
+                        _grassPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
                         break;
                     case GameState.Six:
                         SetPieceState(2);
+                        _grassPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
                         break;
                     case GameState.Two:
                         SetPieceState(3);
+                        _dirtPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                         break;
                     case GameState.Three:
                         SetPieceState(4);
+                        _stonePS.Play();
 
                         if (HasGold)
                         {
@@ -234,20 +262,21 @@ public class PieceController : MonoBehaviour
     /// <summary>
     /// Uses the card walkway.
     /// </summary>
-    private void UseWalkway()
+    private IEnumerator UseWalkway()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
-            CurrentPawn.transform.position = gameObject.transform.position;
-            HasPawn = true;
-            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-            UsingWalkway = false;
+        StartCoroutine(MovePawnTo(CurrentPawn, gameObject, false));
 
-            SetPieceState(3);
-            _am.CollectTile(_am.CurrentPlayer, "Grass", false);
-            _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+        while(_pawnIsMoving)
+        {
+            yield return null;
         }
+
+        UsingWalkway = false;
+        SetPieceState(3);
+        _grassPS.Play();
+        _dirtPS.Play();
+        _am.CollectTile(_am.CurrentPlayer, "Grass", false);
+        _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
     }
 
     /// <summary>
@@ -287,10 +316,15 @@ public class PieceController : MonoBehaviour
             if (HasGold)
             {
                 SetPieceState(5);
+                _goldPS.Play();
                 if (DiscerningEye)
                 {
                     _am.ScorePoints(1);
                 }
+            }
+            else
+            {
+                _stonePS.Play();
             }
 
             ShowHideFlippable(false);
@@ -316,24 +350,29 @@ public class PieceController : MonoBehaviour
             {
                 case GameState.One:
                     SetPieceState(2);
+                    _grassPS.Play();
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     break;
                 case GameState.Six:
                     SetPieceState(2);
+                    _grassPS.Play();
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     break;
                 case GameState.Two:
                     SetPieceState(3);
+                    _dirtPS.Play();
                     _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
                     break;
                 case GameState.Three:
                     SetPieceState(4);
                     if (HasGold)
                     {
+                        _goldPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Gold", false);
                     }
                     else
                     {
+                        _stonePS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     }
                     break;
@@ -367,16 +406,54 @@ public class PieceController : MonoBehaviour
             {
                 case GameState.Two:
                     SetPieceState(6);
+                    _grassPS.Play();
                     _am.PlaceTile("Grass");
                     break;
                 case GameState.Three:
                     SetPieceState(2);
+                    _dirtPS.Play();
                     _am.PlaceTile("Dirt");
                     break;
                 case GameState.Four:
                     SetPieceState(3);
+                    _stonePS.Play();
                     _am.PlaceTile("Stone");
                     break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
+    /// </summary>
+    /// <param name="pawn">CurrentPawn, usually.</param>
+    /// <param name="destinationPiece">This piece, usually.</param>
+    /// <returns></returns>
+    public IEnumerator MovePawnTo(GameObject pawn, GameObject destinationPiece, bool goBack)
+    {
+        //Debug.Log("Moving " + CurrentPawn + " to " + gameObject + ". The destination piece is " + destinationPiece + ".");
+
+        pawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
+        _pawnIsMoving = true;
+
+        //Start anim?
+        yield return new WaitForSeconds(_am.PawnMoveAnimTime);
+        //End anim?
+
+        pawn.transform.position = destinationPiece.transform.position;
+        pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        HasPawn = true;
+        _pawnIsMoving = false;
+
+        if(goBack)
+        {
+            if (_am.CurrentTurnPhase == 1)
+            {
+                _gcm.ToThenPhase();
+            }
+            else if (_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3)
+            {
+                _gcm.Back();
             }
         }
     }
@@ -460,20 +537,7 @@ public class PieceController : MonoBehaviour
                 }
             }
 
-            //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
-            CurrentPawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
-            CurrentPawn.transform.position = gameObject.transform.position;
-            CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
-            HasPawn = true;
-
-            if (_am.CurrentTurnPhase == 1)
-            {
-                _gcm.ToThenPhase();
-            }
-            else if(_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3)
-            {
-                _gcm.Back();
-            }
+            StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
         }
     }
 
@@ -540,7 +604,7 @@ public class PieceController : MonoBehaviour
         }
     }
 
-    private IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
+    public IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
     {
         _sr.color = _waitingColor;
         PieceIsSelected = true;
