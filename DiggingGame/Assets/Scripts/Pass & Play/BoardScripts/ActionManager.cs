@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ActionManager : MonoBehaviour
 {
@@ -50,6 +51,7 @@ public class ActionManager : MonoBehaviour
     public int HandLimit;
     public int CardDraw;
     public int WinningScore;
+    [SerializeField] private GameObject _menuButton;
 
     [Header("Building Values")]
     public int BaseBuildingPrice;
@@ -75,6 +77,7 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        _menuButton.SetActive(false);
         _bm = FindObjectOfType<BoardManager>();
         _cm = FindObjectOfType<CardManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
@@ -644,6 +647,7 @@ public class ActionManager : MonoBehaviour
             if(P1Score >= 15)
             {
                 _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached 15 points!");
+                _menuButton.SetActive(true);
                 return;
             }
 
@@ -657,6 +661,7 @@ public class ActionManager : MonoBehaviour
             if (P2Score >= 15)
             {
                 _gcm.UpdateCurrentActionText("Player 2 wins, as they've reached 15 points!");
+                _menuButton.SetActive(true);
                 return;
             }
 
@@ -670,5 +675,13 @@ public class ActionManager : MonoBehaviour
         //Refresh persistent cards.
         ShovelUsed = false;
         MorningJogUsed = false;
+    }
+
+    /// <summary>
+    /// Loads the Menu
+    /// </summary>
+    public void ToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
