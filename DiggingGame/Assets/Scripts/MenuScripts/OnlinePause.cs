@@ -20,7 +20,11 @@ public class OnlinePause : MonoBehaviourPun
 
     private void Start()
     {
-        _pauseScreen.SetActive(false);
+        // Andrea SD
+        if(SceneManager.GetActiveScene().name.Equals("OnlineScene"))
+        {
+            _pauseScreen.SetActive(false);  
+        }     
     }
 
     public void Pause()
