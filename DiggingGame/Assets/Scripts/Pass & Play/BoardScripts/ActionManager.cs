@@ -668,6 +668,14 @@ public class ActionManager : MonoBehaviour
             CurrentTurnPhase = 0;
             CurrentPlayer = 1;
             CurrentRound++;
+            if(CurrentRound % 2 == 0)
+            {
+                FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Night);
+            }
+            else
+            {
+                FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
+            }
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
         }

@@ -10,79 +10,129 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class WeatherManager : MonoBehaviour
 {
     [SerializeField] private List<WeatherState> _weatherStates = new List<WeatherState>();
 
-    [Header("Other")]
-    public Weather ActiveWeather;
+    [Header("References")]
+    [SerializeField] private Light2D _globalLight;
+    [SerializeField] private Light2D _pointLight;
+    [SerializeField] private Light2D _bonusLight;
+    [SerializeField] private ParticleSystem _ps;
+    [SerializeField] private SpriteRenderer _background;
+
+    [Header("Values")]
+    [SerializeField] private float _weatherChangeSpeed;
+    private int _activeWeatherIndex;
+    private bool _psSwitched = true;
+    [HideInInspector] public WeatherState.Weather CurrentWeatherEnum;
 
     /// <summary>
-    /// Weather enum from 1-10 determining the weather's state.
+    /// Sets the weather to Day.
     /// </summary>
-    public enum Weather
+    private void Start()
     {
-        Day,
-        Night,
-        Rain,
-        Thunderstorm,
-        Flowers,
-        Pollen,
-        Dirty,
-        Tornado,
-        Smoke,
-        Holy
+        SetActiveWeather(WeatherState.Weather.Day);
     }
 
     /// <summary>
     /// Sets the active weather state.
     /// </summary>
-    /// <param name="weatherIndex">1-10 based on the Weather enum in WeatherManager</param>
-    public void SetActiveWeather(int weatherIndex)
+    /// <param name="weatherIndex">0-10 based on the Weather enum in WeatherManager</param>
+    public void SetActiveWeather(WeatherState.Weather ws)
     {
-        switch(weatherIndex)
+        switch(ws)
         {
-            case 1:
-                ActiveWeather = Weather.Day;
+            case WeatherState.Weather.Day:
+                _activeWeatherIndex = 0;
+                CurrentWeatherEnum = WeatherState.Weather.Day;
                 break;
-            case 2:
-                ActiveWeather = Weather.Night;
+            case WeatherState.Weather.Night:
+                _activeWeatherIndex = 1;
+                CurrentWeatherEnum = WeatherState.Weather.Night;
                 break;
-            case 3:
-                ActiveWeather = Weather.Rain;
+            case WeatherState.Weather.Rain:
+                _activeWeatherIndex = 2;
+                CurrentWeatherEnum = WeatherState.Weather.Rain;
                 break;
-            case 4:
-                ActiveWeather = Weather.Thunderstorm;
+            case WeatherState.Weather.Thunderstorm:
+                _activeWeatherIndex = 3;
+                CurrentWeatherEnum = WeatherState.Weather.Thunderstorm;
                 break;
-            case 5:
-                ActiveWeather = Weather.Flowers;
+            case WeatherState.Weather.Flowers:
+                _activeWeatherIndex = 4;
+                CurrentWeatherEnum = WeatherState.Weather.Flowers;
                 break;
-            case 6:
-                ActiveWeather = Weather.Pollen;
+            case WeatherState.Weather.Pollen:
+                _activeWeatherIndex = 5;
+                CurrentWeatherEnum = WeatherState.Weather.Pollen;
                 break;
-            case 7:
-                ActiveWeather = Weather.Dirty;
+            case WeatherState.Weather.Dirty:
+                _activeWeatherIndex = 6;
+                CurrentWeatherEnum = WeatherState.Weather.Dirty;
                 break;
-            case 8:
-                ActiveWeather = Weather.Tornado;
+            case WeatherState.Weather.Tornado:
+                _activeWeatherIndex = 7;
+                CurrentWeatherEnum = WeatherState.Weather.Tornado;
                 break;
-            case 9:
-                ActiveWeather = Weather.Smoke;
+            case WeatherState.Weather.Smoke:
+                _activeWeatherIndex = 8;
+                CurrentWeatherEnum = WeatherState.Weather.Smoke;
                 break;
-            case 10:
-                ActiveWeather = Weather.Holy;
+            case WeatherState.Weather.Holy:
+                _activeWeatherIndex = 9;
+                CurrentWeatherEnum = WeatherState.Weather.Holy;
+                break;
+            case WeatherState.Weather.Clear:
+                _activeWeatherIndex = 10;
+                CurrentWeatherEnum = WeatherState.Weather.Clear;
                 break;
         }
+
+        Debug.Log("Setting active weather to " + _weatherStates[_activeWeatherIndex].Name + "; " + _weatherStates[_activeWeatherIndex].Description + ".");
+        _psSwitched = false;
     }
 
     /// <summary>
-    /// Updates the game's lighting.
+    /// Lerps colors and values to their current weather state based on _activeWeatherIndex.
     /// </summary>
-    /// <param name="pointLightColor">Color of the sun/moon</param>
-    /// <param name="globalLightColor">Color of the world</param>
-    public void UpdateLighting(Color pointLightColor, Color globalLightColor, int pointLightIntensity, int globalLightIntensity)
+    private void FixedUpdate()
     {
+        if(!_weatherStates[_activeWeatherIndex].IsBonusLightState)
+        {
+            _globalLight.color = Color.Lerp(_globalLight.color, _weatherStates[_activeWeatherIndex].GlobalLightColor, _weatherChangeSpeed * Time.deltaTime);
+            _globalLight.intensity = Mathf.Lerp(_globalLight.intensity, _weatherStates[_activeWeatherIndex].GlobalLightIntensity, _weatherChangeSpeed * Time.deltaTime);
+            _pointLight.color = Color.Lerp(_pointLight.color, _weatherStates[_activeWeatherIndex].PointLightColor, _weatherChangeSpeed * Time.deltaTime);
+            _pointLight.intensity = Mathf.Lerp(_pointLight.intensity, _weatherStates[_activeWeatherIndex].PointLightIntensity, _weatherChangeSpeed * Time.deltaTime);
+        }
+        else
+        {
+            _bonusLight.color = Color.Lerp(_bonusLight.color, _weatherStates[_activeWeatherIndex].BonusLightColor, _weatherChangeSpeed * Time.deltaTime);
+            _bonusLight.intensity = Mathf.Lerp(_bonusLight.intensity, _weatherStates[_activeWeatherIndex].BonusLightIntensity, _weatherChangeSpeed * Time.deltaTime);
+        }
 
+        _background.color = Color.Lerp(_background.color, _weatherStates[_activeWeatherIndex].BackgroundColor, _weatherChangeSpeed * Time.deltaTime);
+
+        if(!_psSwitched)
+        {
+            if (_ps != null)
+            {
+                _ps.Stop();
+            }
+
+            if (_weatherStates[_activeWeatherIndex].ActiveParticles != null)
+            {
+                _ps = _weatherStates[_activeWeatherIndex].ActiveParticles;
+            }
+
+            if (_ps != null)
+            {
+                _ps.Play();
+            }
+
+            _psSwitched = true;
+        }
     }
 }
