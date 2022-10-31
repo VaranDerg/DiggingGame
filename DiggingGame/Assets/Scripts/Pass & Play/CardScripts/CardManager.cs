@@ -489,20 +489,20 @@ public class CardManager : MonoBehaviour
     {
         if(player == 1)
         {
-            foreach (GameObject card in P1Hand)
+            for(int i = 0; i < P1Hand.Count; i++)
             {
-                card.GetComponentInChildren<Animator>().Play("CardHide");
+                P1Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
                 yield return new WaitForSeconds(_cardShowHideTime);
-                card.SetActive(false);
+                P1Hand[i].SetActive(false);
             }
         }
         else
         {
-            foreach (GameObject card in P2Hand)
+            for (int i = 0; i < P2Hand.Count; i++)
             {
-                card.GetComponentInChildren<Animator>().Play("CardHide");
+                P2Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
                 yield return new WaitForSeconds(_cardShowHideTime);
-                card.SetActive(false);
+                P2Hand[i].SetActive(false);
             }
         }
     }
@@ -515,19 +515,19 @@ public class CardManager : MonoBehaviour
     {
         if(player == 1)
         {
-            foreach (GameObject card in P1Hand)
+            for(int i = 0; i < P1Hand.Count; i++)
             {
-                card.SetActive(true);
-                card.GetComponentInChildren<Animator>().Play("CardDraw");
+                P1Hand[i].SetActive(true);
+                P1Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
                 yield return new WaitForSeconds(_cardShowHideTime);
             }
         }
         else
         {
-            foreach (GameObject card in P2Hand)
+            for (int i = 0; i < P2Hand.Count; i++)
             {
-                card.SetActive(true);
-                card.GetComponentInChildren<Animator>().Play("CardDraw");
+                P2Hand[i].SetActive(true);
+                P2Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
                 yield return new WaitForSeconds(_cardShowHideTime);
             }
         }
