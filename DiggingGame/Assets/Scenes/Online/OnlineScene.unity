@@ -8335,6 +8335,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1005441706}
   - component: {fileID: 1005441707}
+  - component: {fileID: 1005441709}
   - component: {fileID: 1005441708}
   m_Layer: 0
   m_Name: CardManager
@@ -8404,29 +8405,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1005441704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 055eead38c98f1742baeb57737a40e74, type: 3}
+  m_Script: {fileID: 11500000, guid: fc5901e57a3af6d4f823f677539e3983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _p1PCardPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _p2PCardPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _p1PCardPositions: []
+  _p2PCardPositions: []
   P1PersistentCards: []
   P2PersistentCards: []
   P1OpenPCardSlots: 
@@ -8434,6 +8417,70 @@ MonoBehaviour:
   DiscardedPersistentCard: 0
   DecidedBuildingProtection: 0
   BuildingsDamaged: 0
+--- !u!114 &1005441709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005441704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e8c2496823f4fb418e64816057d557f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activateAnimWaitTime: 0
+  _activateResponseBox: {fileID: 0}
+  _grassColor: {r: 0, g: 0, b: 0, a: 0}
+  _dirtColor: {r: 0, g: 0, b: 0, a: 0}
+  _stoneColor: {r: 0, g: 0, b: 0, a: 0}
+  _goldColor: {r: 0, g: 0, b: 0, a: 0}
+  _cardActivatedText: {fileID: 0}
+  _thiefUI: {fileID: 0}
+  ProtectBuildingUI: {fileID: 0}
+  _grassThiefButton: {fileID: 0}
+  _dirtThiefButton: {fileID: 0}
+  _stoneThiefButton: {fileID: 0}
+  _goldThiefButton: {fileID: 0}
+  _remainingStealsText: {fileID: 0}
+  _holyIdolUI: {fileID: 0}
+  _regenerationUI: {fileID: 0}
+  _tornadoUI: {fileID: 0}
+  _gardenPiecesToPlace: 0
+  _flowersPiecesToPlace: 0
+  _fertilizerPiecesToPlace: 0
+  _compactionPiecesToPlace: 0
+  _lawnmowerPiecesToDig: 0
+  _excavatorPiecesToDig: 0
+  _erosionPiecesToDig: 0
+  _goldenShovelPiecesToDig: 0
+  PlacedPieces: 0
+  DugPieces: 0
+  _maxPiecesToRegen: 0
+  _regenPiecesRequiredToScore: 0
+  BuildingDamageStatusWaitTime: 0
+  _overgrowthDamages: 0
+  _floodDamages: 0
+  _earthquakeDamages: 0
+  _thunderstormDamages: 0
+  _tornadoDamages: 0
+  SelectedBuilding: {fileID: 0}
+  AllowedDamages: 0
+  _allowedRepairs: 0
+  RepairedBuildings: 0
+  CurrentDamages: 0
+  EarthquakePieceSelected: 0
+  PiecesToCollect: 0
+  NewBuildingCost: 0
+  PlannedGambleCardsToDraw: 0
+  MetalDetectorStoneToFlip: 0
+  DiscerningEyeStoneToFlip: 0
+  RemainingFlips: 0
+  ThiefPiecesToTake: 0
+  DirtyThiefPiecesToTake: 0
+  MasterThiefPiecesToTake: 0
+  PiecesToClaim: 0
+  GoldToClaim: 0
 --- !u!1 &1015289853
 GameObject:
   m_ObjectHideFlags: 0
