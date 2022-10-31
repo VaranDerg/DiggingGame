@@ -57,6 +57,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     [Header("Animations")]
     [SerializeField] private Animator _oppInfoAnims;
     [SerializeField] private float _oppInfoWaitTime;
+    private bool _midShowHideAnim;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -340,6 +341,11 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     public void OpponentInfoToggleWrapper()
     {
+        if(_midShowHideAnim)
+        {
+            return;
+        }
+
         StartCoroutine(OpponentInfoToggle());
     }
 
@@ -352,8 +358,12 @@ public class GameCanvasManagerNew : MonoBehaviour
         if(_opponentViewShowing)
         {
             _oppInfoAnims.Play("OppInfoHide");
-            _showHideOpponentInfoText.text = "Show Opponent Info";
+
+            _midShowHideAnim = true;
             yield return new WaitForSeconds(_oppInfoWaitTime);
+            _midShowHideAnim = false;
+
+            _showHideOpponentInfoText.text = "Show Opponent Info";
             _opponentInfoZone.SetActive(false);
             _opponentViewShowing = false;
         }
@@ -361,6 +371,11 @@ public class GameCanvasManagerNew : MonoBehaviour
         {
             _opponentInfoZone.SetActive(true);
             _oppInfoAnims.Play("OppInfoShow");
+
+            _midShowHideAnim = true;
+            yield return new WaitForSeconds(_oppInfoWaitTime);
+            _midShowHideAnim = false;
+
             _showHideOpponentInfoText.text = "Hide Opponent Info";
             _opponentViewShowing = true;
         }

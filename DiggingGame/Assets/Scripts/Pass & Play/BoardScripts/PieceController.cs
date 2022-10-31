@@ -236,14 +236,15 @@ public class PieceController : MonoBehaviour
                         break;
                     case GameState.Three:
                         SetPieceState(4);
-                        _stonePS.Play();
 
                         if (HasGold)
                         {
+                            _goldPS.Play();
                             _am.CollectTile(_am.CurrentPlayer, "Gold", true);
                         }
                         else
                         {
+                            _stonePS.Play();
                             _am.CollectTile(_am.CurrentPlayer, "Stone", true);
                         }
 

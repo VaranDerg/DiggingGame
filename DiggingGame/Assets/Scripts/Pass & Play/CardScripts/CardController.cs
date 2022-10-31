@@ -54,7 +54,6 @@ public class CardController : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator _cardAnimator;
     [SerializeField] private float _discardAnimWaitTime;
-    private bool _beingDiscarded;
 
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
@@ -77,11 +76,6 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if(_beingDiscarded && !MadePersistentP1 && !MadePersistentP2)
-        {
-            transform.position = _selectedPos.position;
-        }
-
         if(MadePersistentP1 || MadePersistentP2)
         {
             transform.position = _defaultPos.position;
@@ -380,9 +374,7 @@ public class CardController : MonoBehaviour
         }
 
         _cardAnimator.Play("CardDiscard");
-        _beingDiscarded = true;
         yield return new WaitForSeconds(_discardAnimWaitTime);
-        _beingDiscarded = false;
         _cardBody.SetActive(false);
     }
 
