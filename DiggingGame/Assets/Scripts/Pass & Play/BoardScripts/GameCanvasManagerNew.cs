@@ -551,7 +551,7 @@ public class GameCanvasManagerNew : MonoBehaviour
             }
             else
             {
-                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations  + " Cards.");
+                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Cards.");
             }
         }
 

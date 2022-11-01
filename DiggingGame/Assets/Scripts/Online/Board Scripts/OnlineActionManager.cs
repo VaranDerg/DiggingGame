@@ -54,15 +54,27 @@ public class OnlineActionManager : MonoBehaviourPun
     public int HandLimit;
     public int CardDraw;
     public int WinningScore;
+    [SerializeField] private GameObject _menuButton;
 
     [Header("Building Values")]
     public int BaseBuildingPrice;
     public int TotalBuildings;
 
+    [Header("Card Effects")]
+    [HideInInspector] public bool ShovelUsed;
+    [HideInInspector] public bool MorningJogUsed;
+
+    [Header("Animations")]
+    [SerializeField] private Animator _scoreTextAnimator;
+    public float PawnMoveSpeed;
+    public float PawnMoveAnimTime;
+
     [Header("Script References")]
     private OnlineBoardManager _bm;
     private OnlineCardManager _cm;
     private OnlineCanvasManager _gcm;
+    private OnlineCardEffects _ce;
+    private OnlinePersistentCardManager _pcm;
 
     /// <summary>
     /// Calls PrepareStartingValues and assigns partner scripts.
@@ -72,12 +84,18 @@ public class OnlineActionManager : MonoBehaviourPun
         _bm = FindObjectOfType<OnlineBoardManager>();
         _cm = FindObjectOfType<OnlineCardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
+        _gcm = FindObjectOfType<OnlineCanvasManager>();
+        _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         PrepareStartingValues();
     }
-
+    
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     private void Start()
     {
         // Board is disbled for player 2 at the start and enabled for player 1
+        // Andrea SD
         DisableBoard();
         photonView.RPC("EnableBoard", RpcTarget.MasterClient);
     }
@@ -116,7 +134,7 @@ public class OnlineActionManager : MonoBehaviourPun
         {
             for (int i = StartingCards; i > 0; i--)
             {
-                _cm.DrawCard("Universal");
+                StartCoroutine(_cm.DrawCard("Universal"));
             }
         }
     }
@@ -586,6 +604,31 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Calls the PunRPC to update of the collected piles for a specific player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="function"> 0 = UpdateCollected, 1 = UpdateRefined </param>
+    /// <param name="player"> 1 or 2</param>
+    /// <param name="material"> Grass, Dirt, Stone, Gold</param>
+    /// <param name="amount"> How much the amount is changing </param>
+    public void CallUpdatePieces(int function, int player, int material, 
+        int amount)
+    {
+        switch(function)
+        {
+            case 0:
+                photonView.RPC("UpdateCollected", RpcTarget.All, player, 
+                    material, amount);
+                break;
+            case 1:
+                photonView.RPC("UpdateRefined", RpcTarget.All, player,
+                    material, amount);
+                break;
+        }
+    }
+
+    /// <summary>
     /// Updates a material in Collected Pieces
     /// 
     /// Author: Andrea SD
@@ -671,13 +714,17 @@ public class OnlineActionManager : MonoBehaviourPun
     [PunRPC]
     public void UpdateScore(int player, int amount)
     {
-        if(player == 1)
+        if (photonView.IsMine)
+        {
+            _scoreTextAnimator.Play("ScorePoint");
+        }
+        if (player == 1)
         {
             P1Score += amount;
         }
         else
         {
             P2Score += amount;
-        }             
+        }            
     }
 }

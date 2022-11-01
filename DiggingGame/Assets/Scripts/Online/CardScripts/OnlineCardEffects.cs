@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         Card.cs
-// Author :            Rudy Wolfer
+// Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 18th, 2022
 //
 // Brief Description : Script to hold every Card Effect.
@@ -11,8 +11,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class OnlineCardEffects : MonoBehaviour
+// Edited - Andrea SD: Modified for online use. Added comments
+public class OnlineCardEffects : MonoBehaviourPun
 {
     [Header("General Values")]
     [SerializeField] private float activateAnimWaitTime;
@@ -94,22 +96,22 @@ public class OnlineCardEffects : MonoBehaviour
     private bool _claimedPieces;
 
     [Header("Other")]
-    private GameCanvasManagerNew _gcm;
-    private CardManager _cm;
-    private BoardManager _bm;
-    private ActionManager _am;
-    private PersistentCardManager _pcm;
+    private OnlineCanvasManager _gcm;
+    private OnlineCardManager _cm;
+    private OnlineBoardManager _bm;
+    private OnlineActionManager _am;
+    private OnlinePersistentCardManager _pcm;
 
     /// <summary>
     /// Assigns partner scripts.
     /// </summary>
     private void Awake()
     {
-        _gcm = FindObjectOfType<GameCanvasManagerNew>();
-        _cm = FindObjectOfType<CardManager>();
-        _bm = FindObjectOfType<BoardManager>();
-        _am = FindObjectOfType<ActionManager>();
-        _pcm = FindObjectOfType<PersistentCardManager>();
+        _gcm = FindObjectOfType<OnlineCanvasManager>();
+        _cm = FindObjectOfType<OnlineCardManager>();
+        _bm = FindObjectOfType<OnlineBoardManager>();
+        _am = FindObjectOfType<OnlineActionManager>();
+        _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         DisableCardEffectUI();
     }
 
@@ -311,6 +313,8 @@ public class OnlineCardEffects : MonoBehaviour
 
     /// <summary>
     /// Steals a Piece from your opponent.
+    /// 
+    /// Edit - Andrea SD: Online use
     /// </summary>
     /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
     public void StealPiece(string suit)
@@ -319,102 +323,102 @@ public class OnlineCardEffects : MonoBehaviour
         {
             if(suit == "Grass")
             {
-                _am.P1CollectedPile[0]++;
+                _am.CallUpdatePieces(0, 1, 0, 1);
                 if(_am.P2CollectedPile[0] != 0)
                 {
-                    _am.P2CollectedPile[0]--;
+                    _am.CallUpdatePieces(0, 2, 0, -1);
                 }
                 else
                 {
-                    _am.P2RefinedPile[0]--;
+                    _am.CallUpdatePieces(1, 2, 0, -1);
                 }
             }
             else if (suit == "Dirt")
             {
-                _am.P1CollectedPile[1]++;
+                _am.CallUpdatePieces(0, 1, 1, 1);
                 if (_am.P2CollectedPile[1] != 0)
                 {
-                    _am.P2CollectedPile[1]--;
+                    _am.CallUpdatePieces(0, 2, 1, -1);
                 }
                 else
                 {
-                    _am.P2RefinedPile[1]--;
+                    _am.CallUpdatePieces(1, 2, 1, -1);
                 }
             }
             else if (suit == "Stone")
             {
-                _am.P1CollectedPile[2]++;
+                _am.CallUpdatePieces(0, 1, 2, 1);
                 if (_am.P2CollectedPile[2] != 0)
                 {
-                    _am.P2CollectedPile[2]--;
+                    _am.CallUpdatePieces(0, 2, 2, -1);
                 }
                 else
                 {
-                    _am.P2RefinedPile[2]--;
+                    _am.CallUpdatePieces(1, 2, 2, -1);
                 }
             }
             else if (suit == "Gold")
             {
-                _am.P1CollectedPile[3]++;
+                _am.CallUpdatePieces(0, 1, 3, 1);
                 if (_am.P2CollectedPile[3] != 0)
                 {
-                    _am.P2CollectedPile[3]--;
+                    _am.CallUpdatePieces(0, 2, 3, -1);
                 }
                 else
                 {
-                    _am.P2RefinedPile[3]--;
+                    _am.CallUpdatePieces(1, 2, 3, -1);
                 }
                 _remainingPiecesToSteal--;
             }
         }
-        else
-        {
-            if (suit == "Grass")
+        else    // If current player is 2...
+        { 
+            if(suit == "Grass")
             {
-                _am.P2CollectedPile[0]++;
-                if (_am.P1CollectedPile[0] != 0)
+                _am.CallUpdatePieces(0, 2, 0, 1);
+                if(_am.P1CollectedPile[0] != 0)
                 {
-                    _am.P1CollectedPile[0]--;
+                    _am.CallUpdatePieces(0, 1, 0, -1);
                 }
                 else
                 {
-                    _am.P1RefinedPile[0]--;
+                    _am.CallUpdatePieces(1, 1, 0, -1);
                 }
             }
             else if (suit == "Dirt")
             {
-                _am.P2CollectedPile[1]++;
+                _am.CallUpdatePieces(0, 2, 1, 1);
                 if (_am.P1CollectedPile[1] != 0)
                 {
-                    _am.P1CollectedPile[1]--;
+                    _am.CallUpdatePieces(0, 1, 1, -1);
                 }
                 else
                 {
-                    _am.P1RefinedPile[1]--;
+                    _am.CallUpdatePieces(1, 1, 1, -1);
                 }
             }
             else if (suit == "Stone")
             {
-                _am.P2CollectedPile[2]++;
+                _am.CallUpdatePieces(0, 2, 2, 1);
                 if (_am.P1CollectedPile[2] != 0)
                 {
-                    _am.P1CollectedPile[2]--;
+                    _am.CallUpdatePieces(0, 1, 2, -1);
                 }
                 else
                 {
-                    _am.P1RefinedPile[2]--;
+                    _am.CallUpdatePieces(1, 1, 2, -1);
                 }
             }
             else if (suit == "Gold")
             {
-                _am.P2CollectedPile[3]++;
+                _am.CallUpdatePieces(0, 2, 3, 1);
                 if (_am.P1CollectedPile[3] != 0)
                 {
-                    _am.P1CollectedPile[3]--;
+                    _am.CallUpdatePieces(0, 1, 3, -1);
                 }
                 else
                 {
-                    _am.P1RefinedPile[3]--;
+                    _am.CallUpdatePieces(1, 1, 3, -1);
                 }
                 _remainingPiecesToSteal--;
             }
