@@ -431,125 +431,70 @@ public class OnlineCardEffects : MonoBehaviourPun
 
     /// <summary>
     /// Claims Pieces with Holy Idol.
+    /// 
+    /// Edited: Andrea SD - modified the supply pile and collection update lines
+    /// for online use
     /// </summary>
     /// <param name="suit">"Grass" "Dirt" "Stone" "Gold" or "Point"</param>
     public void ClaimPiece(string suit)
     {
-        if (_am.CurrentPlayer == 1)
+        if (suit == "Grass")
         {
-            if (suit == "Grass")
+            if (_am.SupplyPile[0] >= PiecesToClaim)
             {
-                if(_am.SupplyPile[0] >= PiecesToClaim)
-                {
-                    _am.P1CollectedPile[0] += PiecesToClaim;
-                    _am.SupplyPile[0] -= PiecesToClaim;
-                }
-                else
-                {
-                    _am.P1CollectedPile[0] += _am.SupplyPile[0];
-                    _am.SupplyPile[0] -= _am.SupplyPile[0];
-                }
+                _am.CallUpdatePieces(0, _am.CurrentPlayer, 0, PiecesToClaim);
+                _am.ModifySupplyPile(0, -PiecesToClaim);
             }
-            else if (suit == "Dirt")
+            else
             {
-                if (_am.SupplyPile[1] >= PiecesToClaim)
-                {
-                    _am.P1CollectedPile[1] += PiecesToClaim;
-                    _am.SupplyPile[1] -= PiecesToClaim;
-                }
-                else
-                {
-                    _am.P1CollectedPile[1] += _am.SupplyPile[1];
-                    _am.SupplyPile[1] -= _am.SupplyPile[1];
-                }
-            }
-            else if (suit == "Stone")
-            {
-                if (_am.SupplyPile[2] >= PiecesToClaim)
-                {
-                    _am.P1CollectedPile[2] += PiecesToClaim;
-                    _am.SupplyPile[2] -= PiecesToClaim;
-                }
-                else
-                {
-                    _am.P1CollectedPile[2] += _am.SupplyPile[2];
-                    _am.SupplyPile[2] -= _am.SupplyPile[2];
-                }
-            }
-            else if (suit == "Gold")
-            {
-                if (_am.SupplyPile[3] >= GoldToClaim)
-                {
-                    _am.P1CollectedPile[3] += GoldToClaim;
-                    _am.SupplyPile[3] -= GoldToClaim;
-                }
-                else
-                {
-                    _am.P1CollectedPile[3] += _am.SupplyPile[3];
-                    _am.SupplyPile[3] -= _am.SupplyPile[3];
-                }
-            }
-            else if(suit == "Point")
-            {
-                _am.CallUpdateScore(_am.CurrentPlayer, 1);
+                _am.CallUpdatePieces(0, _am.CurrentPlayer, 0, _am.SupplyPile[0]);
+                _am.ModifySupplyPile(0, -_am.SupplyPile[0]);
             }
         }
-        else
+        else if (suit == "Dirt")
         {
-            if (suit == "Grass")
+            if (_am.SupplyPile[1] >= PiecesToClaim)
             {
-                if (_am.SupplyPile[0] >= PiecesToClaim)
-                {
-                    _am.P2CollectedPile[0] += PiecesToClaim;
-                    _am.SupplyPile[0] -= PiecesToClaim;
-                }
-                else
-                {
-                    _am.P2CollectedPile[0] += _am.SupplyPile[0];
-                    _am.SupplyPile[0] -= _am.SupplyPile[0];
-                }
+                _am.CallUpdatePieces(0, _am.CurrentPlayer, 1, PiecesToClaim);
+                _am.ModifySupplyPile(1, -PiecesToClaim);
             }
-            else if (suit == "Dirt")
+            else
             {
-                if (_am.SupplyPile[1] >= PiecesToClaim)
-                {
-                    _am.P2CollectedPile[1] += PiecesToClaim;
-                    _am.SupplyPile[1] -= PiecesToClaim;
-                }
-                else
-                {
-                    _am.P2CollectedPile[1] += _am.SupplyPile[1];
-                    _am.SupplyPile[1] -= _am.SupplyPile[1];
-                }
-            }
-            else if (suit == "Stone")
-            {
-                if (_am.SupplyPile[2] >= PiecesToClaim)
-                {
-                    _am.P2CollectedPile[2] += PiecesToClaim;
-                    _am.SupplyPile[2] -= PiecesToClaim;
-                }
-                else
-                {
-                    _am.P2CollectedPile[2] += _am.SupplyPile[2];
-                    _am.SupplyPile[2] -= _am.SupplyPile[2];
-                }
-            }
-            else if (suit == "Gold")
-            {
-                if (_am.SupplyPile[3] >= GoldToClaim)
-                {
-                    _am.P2CollectedPile[3] += GoldToClaim;
-                    _am.SupplyPile[3] -= GoldToClaim;
-                }
-                else
-                {
-                    _am.P2CollectedPile[3] += _am.SupplyPile[3];
-                    _am.SupplyPile[3] -= _am.SupplyPile[3];
-                }
+                _am.CallUpdatePieces(0, _am.CurrentPlayer, 1, _am.SupplyPile[1]);
+                _am.ModifySupplyPile(1, -_am.SupplyPile[1]);
             }
         }
-
+        else if (suit == "Stone")
+        {
+            if (_am.SupplyPile[2] >= PiecesToClaim)
+            {
+                _am.CallUpdatePieces(0, _am.CurrentPlayer, 2, PiecesToClaim);
+                _am.ModifySupplyPile(2, -PiecesToClaim);
+            }
+            else
+            {
+                _am.CallUpdatePieces(0, _am.CurrentPlayer, 2, _am.SupplyPile[2]);
+                _am.ModifySupplyPile(2, -_am.SupplyPile[2]);
+            }
+        }
+        else if (suit == "Gold")
+        {
+            if (_am.SupplyPile[3] >= GoldToClaim)
+            {
+                _am.CallUpdatePieces(0, _am.CurrentPlayer, 3, PiecesToClaim);
+                _am.ModifySupplyPile(3, -PiecesToClaim);
+            }
+            else
+            {
+                _am.CallUpdatePieces(0, _am.CurrentPlayer, 3, _am.SupplyPile[2]);
+                _am.ModifySupplyPile(3, -_am.SupplyPile[3]);
+            }
+        }
+        else if (suit == "Point")
+        {
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
+        }
+        
         _gcm.UpdateTextBothPlayers();
         _claimedPieces = true;
     }

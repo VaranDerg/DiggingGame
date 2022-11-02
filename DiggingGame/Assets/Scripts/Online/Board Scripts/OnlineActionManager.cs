@@ -365,8 +365,8 @@ public class OnlineActionManager : MonoBehaviourPun
                 //End of Geologist code.
 
                 StartCoroutine(_cm.DrawCard("Gold"));
-                P1RefinedPile[3]--;
-                SupplyPile[3]++;
+                CallUpdatePieces(1, 1, 3, -1);  // Andrea SD
+                SupplyPileRPC(3, -1);   // Andrea SD
                 _gcm.UpdateTextBothPlayers();
                 _gcm.Back();
                 _gcm.UpdateCurrentActionText("Gold retrieved!");
@@ -396,8 +396,8 @@ public class OnlineActionManager : MonoBehaviourPun
                 //End of Geologist code.
 
                 StartCoroutine(_cm.DrawCard("Gold"));
-                P2RefinedPile[3]--;
-                SupplyPile[3]++;
+                CallUpdatePieces(1, 2, 3, -1);  // Andrea SD
+                SupplyPileRPC(3, -1);
                 _gcm.Back();
                 _gcm.UpdateCurrentActionText("Gold retrieved!");
                 _gcm.UpdateTextBothPlayers();
@@ -408,6 +408,8 @@ public class OnlineActionManager : MonoBehaviourPun
 
     /// <summary>
     /// Place a tile back onto the board. 
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <param name="type">"Grass" "Dirt" or "Stone"</param>
     public void PlaceTile(string type)
@@ -417,13 +419,48 @@ public class OnlineActionManager : MonoBehaviourPun
         switch (type)
         {
             case "Grass":
-                SupplyPile[0]--;
+                SupplyPileRPC(0, 1);
                 break;
             case "Dirt":
-                SupplyPile[1]--;
+                SupplyPileRPC(1, 1);
                 break;
             case "Stone":
-                SupplyPile[2]--;
+                SupplyPileRPC(2, 1);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC to modify the supply pile across all clients
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="pieceType"></param>
+    /// <param name="amount"></param>
+    public void SupplyPileRPC(int pieceType, int amount)
+    {
+        photonView.RPC("ModifySupplyPile", RpcTarget.All, pieceType, amount);
+    }
+    /// <summary>
+    /// Removes pieces from the supply pile
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="pieceType"> type of piece being removed </param>
+    /// <param name="amount"> amount being removed </param>
+    [PunRPC]
+    public void ModifySupplyPile(int pieceType, int amount)
+    {
+        switch(pieceType)
+        {
+            case 0:
+                SupplyPile[0] -= amount;
+                break;
+            case 1:
+                SupplyPile[1] -= amount;
+                break;
+            case 2:
+                SupplyPile[2] -= amount;
                 break;
         }
     }
@@ -503,6 +540,8 @@ public class OnlineActionManager : MonoBehaviourPun
 
     /// <summary>
     /// Collects pieces from the supply and adds them to the current player's collected pile.
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <param name="amount">Int, number of pieces to collect</param>
     /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
@@ -514,24 +553,27 @@ public class OnlineActionManager : MonoBehaviourPun
             {
                 if (SupplyPile[0] >= amount)
                 {
-                    SupplyPile[0] -= amount;
-                    P1CollectedPile[0] += amount;
+                    // Andrea SD
+                    SupplyPileRPC(0, -amount);
+                    CallUpdatePieces(0, 1, 0, amount);
                 }
             }
             else if (suit == "Dirt")
             {
                 if (SupplyPile[1] >= amount)
                 {
-                    SupplyPile[1] -= amount;
-                    P1CollectedPile[1] += amount;
+                    // Andrea SD
+                    SupplyPileRPC(1, -amount);                   
+                    CallUpdatePieces(0, 1, 1, amount);
                 }
             }
             else if (suit == "Stone")
             {
                 if (SupplyPile[2] >= amount)
                 {
-                    SupplyPile[2] -= amount;
-                    P1CollectedPile[2] += amount;
+                    // Andrea SD
+                    SupplyPileRPC(2, -amount);
+                    CallUpdatePieces(0, 1, 2, amount);
                 }
             }
         }
@@ -541,24 +583,27 @@ public class OnlineActionManager : MonoBehaviourPun
             {
                 if (SupplyPile[0] >= amount)
                 {
-                    SupplyPile[0] -= amount;
-                    P2CollectedPile[0] += amount;
+                    // Andrea SD
+                    SupplyPileRPC(0, -amount);
+                    CallUpdatePieces(0, 2, 0, amount);
                 }
             }
             else if (suit == "Dirt")
             {
                 if (SupplyPile[1] >= amount)
                 {
-                    SupplyPile[1] -= amount;
-                    P2CollectedPile[1] += amount;
+                    // Andrea SD
+                    SupplyPileRPC(1, -amount);
+                    CallUpdatePieces(0, 2, 1, amount);
                 }
             }
             else if (suit == "Stone")
             {
                 if (SupplyPile[2] >= amount)
                 {
-                    SupplyPile[2] -= amount;
-                    P2CollectedPile[2] += amount;
+                    // Andrea SD
+                    SupplyPileRPC(2, -amount);
+                    CallUpdatePieces(0, 2, 2, amount);
                 }
             }
         }
@@ -781,7 +826,8 @@ public class OnlineActionManager : MonoBehaviourPun
     /// </summary>
     /// <param name="function"> 0 = UpdateCollected, 1 = UpdateRefined </param>
     /// <param name="player"> 1 or 2</param>
-    /// <param name="material"> Grass, Dirt, Stone, Gold</param>
+    /// <param name="material"> 0 = Grass, 1 = Dirt, 2 = Stone, 3 = Gold 
+    /// </param>
     /// <param name="amount"> How much the amount is changing </param>
     public void CallUpdatePieces(int function, int player, int material, 
         int amount)
@@ -805,7 +851,8 @@ public class OnlineActionManager : MonoBehaviourPun
     /// Author: Andrea SD
     /// </summary>
     /// <param name="player"> player who's pieces are updated </param>
-    /// <param name="material"> which material is updated </param>
+    /// <param name="material"> 0 = Grass, 1 = Dirt, 2 = Stone, 3 = Gold 
+    /// </param>
     /// <param name="amount"> how much the # pieces changes by </param>
     [PunRPC]
     private void UpdateCollected(int player, int material, int amount)
@@ -827,7 +874,8 @@ public class OnlineActionManager : MonoBehaviourPun
     /// Author: Andrea SD
     /// </summary>
     /// <param name="player"> player who's pieces are updated </param>
-    /// <param name="material"> which material is updated </param>
+    /// <param name="material"> 0 = Grass, 1 = Dirt, 2 = Stone, 3 = Gold 
+    /// </param>
     /// <param name="amount"> how much the # pieces changes by </param>
     [PunRPC]
     private void UpdateRefined(int player, int material, int amount)
@@ -871,6 +919,13 @@ public class OnlineActionManager : MonoBehaviourPun
         }    
     }
 
+    /// <summary>
+    /// Calls the UpdateScore RPC
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> how much the score is changing by </param>
     public void CallUpdateScore(int player, int amount)
     {
         photonView.RPC("UpdateScore", RpcTarget.All, player, amount);
@@ -879,8 +934,8 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <summary>
     /// Updates the players scores across the network
     /// </summary>
-    /// <param name="player"> player who's score is being updated </param>
-    /// <param name="amount"> amount the player's score is being changed by
+    /// <param name="player"> player who's score updating (1 or 2) </param>
+    /// <param name="amount"> amount the player's score is changing by
     /// </param>
     [PunRPC]
     public void UpdateScore(int player, int amount)

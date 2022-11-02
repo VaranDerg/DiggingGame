@@ -6015,14 +6015,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PawnPlayer: 2
-  _p1Color: {r: 1, g: 1, b: 1, a: 0.5882353}
-  _p2Color: {r: 0.60784316, g: 1, b: 0.7882353, a: 0.5882353}
+  _moleSprite: {fileID: 0}
+  _meerkatSprite: {fileID: 0}
   _sr: {fileID: 644656601}
   IsMoving: 0
   IsBuilding: 0
   IsDigging: 0
   IsPlacing: 0
   BuildingToBuild: 
+  MudslideMove: 0
+  IsUsingWalkway: 0
+  TeleportationMove: 0
 --- !u!1 &646606782
 GameObject:
   m_ObjectHideFlags: 0
@@ -6208,6 +6211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 664416780}
   - component: {fileID: 664416781}
+  - component: {fileID: 664416782}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -6281,6 +6285,28 @@ MonoBehaviour:
   - {fileID: 1877150735}
   - {fileID: 365683892}
   - {fileID: 1106413694}
+--- !u!114 &664416782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664416779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 79
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &668292180
 GameObject:
   m_ObjectHideFlags: 0
@@ -8680,6 +8706,7 @@ GameObject:
   - component: {fileID: 826397542}
   - component: {fileID: 826397544}
   - component: {fileID: 826397543}
+  - component: {fileID: 826397545}
   m_Layer: 5
   m_Name: OpponentInfoZone
   m_TagString: Untagged
@@ -8749,6 +8776,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 826397541}
   m_CullTransparentMesh: 1
+--- !u!95 &826397545
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826397541}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c73fd5f02f684cb40b1549256f1ca51d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &837129426
 GameObject:
   m_ObjectHideFlags: 0
@@ -9263,7 +9310,7 @@ MonoBehaviour:
   _finallyZone: {fileID: 333168305}
   _thenActions: {fileID: 646606782}
   _thenBuildMenu: {fileID: 914014194}
-  _thenMDRMenu: {fileID: 1930947847}
+  _backButton: {fileID: 0}
   _endPhaseButton: {fileID: 1152028333}
   _currentPlayerScore: {fileID: 1916065151}
   _currentPlayerCollectedPieces:
@@ -9312,6 +9359,8 @@ MonoBehaviour:
   _factory: {fileID: 854821624}
   _burrow: {fileID: 1717394501}
   _mine: {fileID: 50002691}
+  _oppInfoAnims: {fileID: 826397545}
+  _oppInfoWaitTime: 0.25
 --- !u!114 &888052511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10408,6 +10457,7 @@ MonoBehaviour:
   AllowedActivations: 0
   RequiredSuit: 
   RequiredCardAmount: 0
+  _cardShowHideTime: 0.25
 --- !u!114 &1005441708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11891,14 +11941,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PawnPlayer: 1
-  _p1Color: {r: 1, g: 1, b: 1, a: 0.5882353}
-  _p2Color: {r: 0.60784316, g: 1, b: 0.7882353, a: 0.5882353}
+  _moleSprite: {fileID: 0}
+  _meerkatSprite: {fileID: 0}
   _sr: {fileID: 1137618563}
   IsMoving: 0
   IsBuilding: 0
   IsDigging: 0
   IsPlacing: 0
   BuildingToBuild: 
+  MudslideMove: 0
+  IsUsingWalkway: 0
+  TeleportationMove: 0
 --- !u!1 &1142117767
 GameObject:
   m_ObjectHideFlags: 0
@@ -15560,8 +15613,14 @@ MonoBehaviour:
   HandLimit: 7
   CardDraw: 2
   WinningScore: 15
+  _menuButton: {fileID: 0}
   BaseBuildingPrice: 1
   TotalBuildings: 3
+  ShovelUsed: 0
+  MorningJogUsed: 0
+  _scoreTextAnimator: {fileID: 1916065153}
+  PawnMoveSpeed: 15
+  PawnMoveAnimTime: 0.25
 --- !u!114 &1578918892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19810,6 +19869,7 @@ GameObject:
   - component: {fileID: 1916065150}
   - component: {fileID: 1916065152}
   - component: {fileID: 1916065151}
+  - component: {fileID: 1916065153}
   m_Layer: 5
   m_Name: CurrentPlayerScoreText
   m_TagString: Untagged
@@ -19934,6 +19994,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1916065149}
   m_CullTransparentMesh: 1
+--- !u!95 &1916065153
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916065149}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ce248bdbfe136514c8e09616f5bb1d0a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1929903264
 GameObject:
   m_ObjectHideFlags: 0

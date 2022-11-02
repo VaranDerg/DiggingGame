@@ -417,6 +417,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// Calls every "UpdateText"-type function except the Current Action Text one.
     /// 
     /// Edited: Andrea SD - online use
+    /// Updates the opponents text across the network
     /// </summary>
     public void UpdateTextBothPlayers()
     {
