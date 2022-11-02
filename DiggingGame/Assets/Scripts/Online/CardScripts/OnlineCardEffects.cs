@@ -491,7 +491,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
             else if(suit == "Point")
             {
-                _am.ScorePoints(1);
+                _am.CallUpdateScore(_am.CurrentPlayer, 1);
             }
         }
         else
@@ -781,7 +781,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (enoughPieces)
         {
-            _am.ScorePoints(1);
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
 
         PlacedPieces = 0;
@@ -873,11 +873,11 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if(PlacedPieces > 0 && PlacedPieces < _gardenPiecesToPlace)
         {
-            _am.ScorePoints(1);
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
         else if(PlacedPieces == _gardenPiecesToPlace)
         {
-            _am.ScorePoints(2);
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
 
         PlacedPieces = 0;
@@ -1370,7 +1370,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (enoughPieces)
         {
-            _am.ScorePoints(1);
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
 
         PlacedPieces = 0;
@@ -1638,7 +1638,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (enoughPieces)
         {
-            _am.ScorePoints(1);
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
 
         PlacedPieces = 0;
@@ -2177,7 +2177,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             pointsToScore++;
         }
 
-        _am.ScorePoints(pointsToScore);
+        _am.CallUpdateScore(_am.CurrentPlayer, pointsToScore);
 
         PlacedPieces = 0;
         _piecesToRegen = 0;
@@ -2307,7 +2307,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// </summary>
     public void Transmutation()
     {
-        _am.ScorePoints(1);
+        _am.CallUpdateScore(_am.CurrentPlayer, 1);
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();

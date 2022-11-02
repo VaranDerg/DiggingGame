@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class OnlineActionManager : MonoBehaviourPun
 {
@@ -154,7 +155,7 @@ public class OnlineActionManager : MonoBehaviourPun
             }
         }
 
-        _bm.BoardColliderSwitch(false);
+        _bm.SetActiveCollider("Pawn");
     }
 
     /// <summary>
@@ -163,7 +164,7 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <param name="player">1 or 2</param>
     public void StartBuild(int player, string building)
     {
-        _bm.DisablePawnBoardInteractions();
+        _bm.DisableAllBoardInteractions();
         foreach (MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
         {
             script.StopAllCoroutines();
@@ -180,7 +181,7 @@ public class OnlineActionManager : MonoBehaviourPun
             }
         }
 
-        _bm.BoardColliderSwitch(false);
+        _bm.SetActiveCollider("Pawn");
     }
 
     /// <summary>
@@ -198,7 +199,7 @@ public class OnlineActionManager : MonoBehaviourPun
             }
         }
 
-        _bm.BoardColliderSwitch(false);
+        _bm.SetActiveCollider("Pawn");
     }
 
     /// <summary>
@@ -214,11 +215,12 @@ public class OnlineActionManager : MonoBehaviourPun
                 pawn.GetComponent<OnlinePlayerPawn>().IsMoving = false;
                 pawn.GetComponent<OnlinePlayerPawn>().IsBuilding = false;
                 pawn.GetComponent<OnlinePlayerPawn>().IsDigging = false;
+                pawn.GetComponent<OnlinePlayerPawn>().IsPlacing = false;
                 pawn.GetComponent<Animator>().Play("TempPawnDefault");
             }
         }
 
-        _bm.BoardColliderSwitch(true);
+        _bm.SetActiveCollider("Board");
     }
 
     /// <summary>
@@ -227,7 +229,7 @@ public class OnlineActionManager : MonoBehaviourPun
     /// Author: Andrea SD
     /// </summary>
     /// <param name="type">"Grass" "Dirt" "Stone" or "Gold"</param>
-    public void CollectTile(int player, string type)
+    public void CollectTile(int player, string type, bool goBack)
     {
         if (player == 1)
         {
@@ -236,22 +238,34 @@ public class OnlineActionManager : MonoBehaviourPun
                 case "Grass":
                     photonView.RPC("UpdateCollected", RpcTarget.All, 1, 0, 1);
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Dirt":
                     photonView.RPC("UpdateCollected", RpcTarget.All, 1, 1, 1);
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Stone":
                     photonView.RPC("UpdateCollected", RpcTarget.All, 1, 2, 1);
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Gold":
                     photonView.RPC("UpdateCollected", RpcTarget.All, 1, 3, 1);
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
             }
         }
@@ -262,22 +276,34 @@ public class OnlineActionManager : MonoBehaviourPun
                 case "Grass":
                     photonView.RPC("UpdateCollected", RpcTarget.All, 2, 0, 1);
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Dirt":
                     photonView.RPC("UpdateCollected", RpcTarget.All, 2, 1, 1);
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Stone":
                     photonView.RPC("UpdateCollected", RpcTarget.All, 2, 2, 1);
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
                 case "Gold":
                     photonView.RPC("UpdateCollected", RpcTarget.All, 2, 3, 1);
                     _gcm.UpdateTextBothPlayers();
-                    _gcm.Back();
+                    if (goBack)
+                    {
+                        _gcm.Back();
+                    }
                     break;
             }
         }
@@ -319,6 +345,7 @@ public class OnlineActionManager : MonoBehaviourPun
         {
             if (P1RefinedPile[3] == 0 || P1Cards == 0)
             {
+                _gcm.Back();
                 _gcm.UpdateCurrentActionText("No Refined Gold or Cards to retrieve with!");
             }
             else
@@ -330,15 +357,26 @@ public class OnlineActionManager : MonoBehaviourPun
                 }
                 _cm.PrepareCardSelection(0, "", true);
 
-                _cm.DrawCard("Gold");
+                //Start of Geologist code.
+                if (_pcm.CheckForPersistentCard(CurrentPlayer, "Geologist"))
+                {
+                    CallUpdateScore(CurrentPlayer, 1);
+                }
+                //End of Geologist code.
+
+                StartCoroutine(_cm.DrawCard("Gold"));
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
+                _gcm.UpdateTextBothPlayers();
+                _gcm.Back();
+                _gcm.UpdateCurrentActionText("Gold retrieved!");
             }
         }
         else if (player == 2)
         {
             if (P2RefinedPile[3] == 0 || P2Cards == 0)
             {
+                _gcm.Back();
                 _gcm.UpdateCurrentActionText("No Refined Gold or Cards to retrieve with!");
             }
             else
@@ -350,22 +388,31 @@ public class OnlineActionManager : MonoBehaviourPun
                 }
                 _cm.PrepareCardSelection(0, "", true);
 
-                _cm.DrawCard("Gold");
-                P1RefinedPile[3]--;
+                //Start of Geologist code.
+                if (_pcm.CheckForPersistentCard(CurrentPlayer, "Geologist"))
+                {
+                    CallUpdateScore(CurrentPlayer, 1);
+                }
+                //End of Geologist code.
+
+                StartCoroutine(_cm.DrawCard("Gold"));
+                P2RefinedPile[3]--;
                 SupplyPile[3]++;
+                _gcm.Back();
                 _gcm.UpdateCurrentActionText("Gold retrieved!");
+                _gcm.UpdateTextBothPlayers();
             }
         }
     }
 
 
     /// <summary>
-    /// (WIP) Place a tile back onto the board. 
+    /// Place a tile back onto the board. 
     /// </summary>
     /// <param name="type">"Grass" "Dirt" or "Stone"</param>
-    public void PlaceTile(int player, string type)
+    public void PlaceTile(string type)
     {
-        Debug.Log("Player " + player + " placed a " + type + " tile!");
+        //Debug.Log("Player " + player + " placed a " + type + " tile!");
 
         switch (type)
         {
@@ -455,25 +502,138 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Collects pieces from the supply and adds them to the current player's collected pile.
+    /// </summary>
+    /// <param name="amount">Int, number of pieces to collect</param>
+    /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
+    public void CollectPiecesFromSupply(int amount, string suit)
+    {
+        if (CurrentPlayer == 1)
+        {
+            if (suit == "Grass")
+            {
+                if (SupplyPile[0] >= amount)
+                {
+                    SupplyPile[0] -= amount;
+                    P1CollectedPile[0] += amount;
+                }
+            }
+            else if (suit == "Dirt")
+            {
+                if (SupplyPile[1] >= amount)
+                {
+                    SupplyPile[1] -= amount;
+                    P1CollectedPile[1] += amount;
+                }
+            }
+            else if (suit == "Stone")
+            {
+                if (SupplyPile[2] >= amount)
+                {
+                    SupplyPile[2] -= amount;
+                    P1CollectedPile[2] += amount;
+                }
+            }
+        }
+        else
+        {
+            if (suit == "Grass")
+            {
+                if (SupplyPile[0] >= amount)
+                {
+                    SupplyPile[0] -= amount;
+                    P2CollectedPile[0] += amount;
+                }
+            }
+            else if (suit == "Dirt")
+            {
+                if (SupplyPile[1] >= amount)
+                {
+                    SupplyPile[1] -= amount;
+                    P2CollectedPile[1] += amount;
+                }
+            }
+            else if (suit == "Stone")
+            {
+                if (SupplyPile[2] >= amount)
+                {
+                    SupplyPile[2] -= amount;
+                    P2CollectedPile[2] += amount;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Activates mines and adds tiles. 
     /// </summary>
     public void ActivateMines(int player)
     {
         if (player == 1)
         {
-            P1CollectedPile[0] += P1BuiltBuildings[2];
-            P1CollectedPile[1] += P1BuiltBuildings[3];
-            P1CollectedPile[2] += P1BuiltBuildings[4];
+            for (int i = P1BuiltBuildings[2]
+                ; i != 0; i--)
+            {
+                if (SupplyPile[0] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Grass");
+            }
+            for (int i = P1BuiltBuildings[3]; i != 0; i--)
+            {
+                if (SupplyPile[1] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Dirt");
+            }
+            for (int i = P1BuiltBuildings[4]; i != 0; i--)
+            {
+                if (SupplyPile[2] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Stone");
+            }
         }
         else if (player == 2)
         {
-            P2CollectedPile[0] += P2BuiltBuildings[2];
-            P2CollectedPile[1] += P2BuiltBuildings[3];
-            P2CollectedPile[2] += P2BuiltBuildings[4];
+            for (int i = P2BuiltBuildings[2]; i != 0; i--)
+            {
+                if (SupplyPile[0] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Grass");
+            }
+            for (int i = P2BuiltBuildings[3]; i != 0; i--)
+            {
+                if (SupplyPile[1] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Dirt");
+            }
+            for (int i = P2BuiltBuildings[4]; i != 0; i--)
+            {
+                if (SupplyPile[2] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Stone");
+            }
         }
     }
 
     /// <summary>
+    /// Ends the player's turn
     /// Updates round text values and progresses the game phase
     /// Edit: Andrea SD, modified for online play
     /// </summary>
@@ -486,10 +646,9 @@ public class OnlineActionManager : MonoBehaviourPun
             {
                 _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached 15 points!");
                 _gcm.UpdateOpponentActionText("Player 1 wins, as they've reached 15 points!");    //Andrea SD
+                _menuButton.SetActive(true);
                 return;
             }
-
-            CurrentTurnPhase = 0;
             photonView.RPC("ResetTurnPhase", RpcTarget.All);    // Andrea SD
 
             //_gcm.StartTurnButton.SetActive(true);
@@ -502,6 +661,7 @@ public class OnlineActionManager : MonoBehaviourPun
             {
                 _gcm.UpdateCurrentActionText("Player 2 wins, as they've reached 15 points!");
                 _gcm.UpdateOpponentActionText("Player 2 wins, as they've reached 15 points!");    //Andrea SD
+                _menuButton.SetActive(true);
                 return;
             }
 
@@ -516,6 +676,15 @@ public class OnlineActionManager : MonoBehaviourPun
         //Enables the start button for the other player then disables your own board 
         DisableBoard();
         photonView.RPC("EnableBoard", RpcTarget.Others);
+    }
+
+
+    /// <summary>
+    /// Loads the Menu
+    /// </summary>
+    public void ToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     /// <summary>
@@ -591,8 +760,10 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Enables all interactions by the playyer. This occurs when their turn is
+    /// Enables all interactions by the player. This occurs when their turn is
     /// resumed.
+    /// 
+    /// Author: Andrea SD
     /// </summary>
     [PunRPC]
     private void EnableBoard()

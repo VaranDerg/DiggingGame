@@ -114,7 +114,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// 
     /// Edit: Andrea SD - Modified for online
     /// </summary>
-    private void Start()
+    public void Start()
     {
         DisableListObjects();
 
@@ -138,7 +138,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// <summary>
     /// Disables every object in AllObjects
     /// </summary>
-    private void DisableListObjects()
+    public void DisableListObjects()
     {
         foreach (GameObject obj in _allObjects)
         {
