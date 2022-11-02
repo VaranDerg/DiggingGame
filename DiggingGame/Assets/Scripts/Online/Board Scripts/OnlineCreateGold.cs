@@ -22,6 +22,8 @@ public class OnlineCreateGold : MonoBehaviourPun
     /// </summary>
     private void Awake()
     {
+        // only called on the master client to make sure each client has the 
+        // same board layout
         if(PhotonNetwork.IsMasterClient)
         {
             SetGold(12);
