@@ -831,6 +831,7 @@ public class PieceController : MonoBehaviour
                 GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
                 newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
                 newPawn.transform.SetParent(null);
+                HasPawn = true;
             }
 
             if (_am.CurrentPlayer == 1)
