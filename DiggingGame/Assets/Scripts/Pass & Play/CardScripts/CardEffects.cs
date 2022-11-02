@@ -72,7 +72,7 @@ public class CardEffects : MonoBehaviour
     public int PiecesToCollect;
 
     [Header("Master Builder")]
-    public int NewBuildingCost;
+    public int BuildingReduction;
 
     [Header("Planned Gamble")]
     public int PlannedGambleCardsToDraw;
