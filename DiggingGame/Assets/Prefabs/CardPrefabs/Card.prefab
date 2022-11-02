@@ -235,7 +235,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 47365869f1888694194305875acb24cd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1779,10 +1779,10 @@ MonoBehaviour:
   _dirtColor: {r: 0.5660378, g: 0.32024753, b: 0.17354932, a: 1}
   _stoneColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
   _goldColor: {r: 0.9056604, g: 0.7108367, b: 0, a: 1}
-  _grassIcon: {fileID: 21300000, guid: 97079e0428e1ee24fa27e0208f327fa9, type: 3}
-  _dirtIcon: {fileID: 21300000, guid: be53d9691c73f5048add03a71d9e06af, type: 3}
-  _stoneIcon: {fileID: 21300000, guid: dc0c39391a126624e8e8a7d650c6bfcc, type: 3}
-  _goldIcon: {fileID: 21300000, guid: 7566eea44f1676a49a57d4e12bfd9f71, type: 3}
+  _grassIcon: {fileID: 21300000, guid: 1216357d5d952804e8dbaba4a6be7885, type: 3}
+  _dirtIcon: {fileID: 21300000, guid: 8268fbe2bbcd9d246bd6e9238073c0a5, type: 3}
+  _stoneIcon: {fileID: 21300000, guid: c27104b096c035e45a6698142af31784, type: 3}
+  _goldIcon: {fileID: 21300000, guid: a027e937a26cf484aa61dbaec2175b22, type: 3}
   _nameText: {fileID: 8963238437489295992}
   _descriptionText: {fileID: 8963238437167369524}
   _grassCost: {fileID: 8963238438680342506}
