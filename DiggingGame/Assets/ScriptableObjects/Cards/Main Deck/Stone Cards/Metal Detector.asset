@@ -18,9 +18,9 @@ MonoBehaviour:
   DirtSuit: 0
   StoneSuit: 1
   GoldSuit: 0
-  GrassCost: 0
+  GrassCost: 1
   DirtCost: 0
-  StoneCost: 1
+  StoneCost: 0
   persistent: 0
   disaster: 0
   CardArt: {fileID: -555724726, guid: 36f27149a38efcd41bc8f85b2d5aa138, type: 3}
