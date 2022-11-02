@@ -153,6 +153,19 @@ public class Building : MonoBehaviour
 
         BuildingHealth -= damage;
 
+        if(damage == 2 || BuildingHealth == 0)
+        {
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
+        }
+        else if(damage == 1 && BuildingHealth == 1)
+        {
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
+        }
+        else if(damage == 0)
+        {
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " avoided taking damage!");
+        }
+
         if(BuildingHealth <= 0)
         {
             if(PlayerOwning == 1)
@@ -202,7 +215,6 @@ public class Building : MonoBehaviour
                 }
             }
 
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
             _anims.Play("TempPawnDamage");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
@@ -226,19 +238,17 @@ public class Building : MonoBehaviour
         else if(BuildingHealth == 1)
         {
             GetComponent<SpriteRenderer>().sprite = _damagedSprite;
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
             _anims.Play("TempPawnDamage");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if(BuildingHealth == 2)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has avoided damage!");
             _anims.Play("TempPawnDamage");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
         _bm.SetActiveCollider("Building");
-        _gcm.UpdateCurrentActionText("Damage " + _ce.AllowedDamages + " more Buildings!");
+        _gcm.UpdateCurrentActionText("Damage " + (_ce.AllowedDamages - _ce.CurrentDamages) + " more Buildings!");
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
         PrepBuilidingDamaging(false);

@@ -378,9 +378,9 @@ public class PlayerPawn : MonoBehaviour
             }
             else
             {
-                _gcm.UpdateCurrentActionText("No valid building locations at this pawn.");
                 _bm.DisableAllBoardInteractions();
                 _gcm.Back();
+                _gcm.UpdateCurrentActionText("No valid building locations at this pawn.");
             }
 
             _bm.SetActiveCollider("Board");

@@ -614,37 +614,36 @@ public class PieceController : MonoBehaviour
             pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
         }
 
-        //Master Builder Code
-        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
+        //Master Builder Start
+        int bCostReduction = 0;
+        if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
         {
-            _cm.PrepareCardSelection(_ce.NewBuildingCost, suitOfPiece, false);
+            bCostReduction += _ce.BuildingReduction;
         }
-        else
+        //End Master Builder
+
+        if (_am.CurrentPlayer == 1)
         {
-            if (_am.CurrentPlayer == 1)
+            if (buildingIndex == 0 || buildingIndex == 1)
             {
-                if(buildingIndex == 0 || buildingIndex == 1)
-                {
-                    _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
-                }
-                else
-                {
-                    _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[2], suitOfPiece, false);
-                }
+                _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex] - bCostReduction, suitOfPiece, false);
             }
             else
             {
-                if (buildingIndex == 0 || buildingIndex == 1)
-                {
-                    _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
-                }
-                else
-                {
-                    _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[2], suitOfPiece, false);
-                }
+                _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[2] - bCostReduction, suitOfPiece, false);
             }
         }
-        //End Master Builder Code
+        else
+        {
+            if (buildingIndex == 0 || buildingIndex == 1)
+            {
+                _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex] - bCostReduction, suitOfPiece, false);
+            }
+            else
+            {
+                _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[2] - bCostReduction, suitOfPiece, false);
+            }
+        }
 
         while (!_cm.CheckCardSelection())
         {
@@ -682,13 +681,6 @@ public class PieceController : MonoBehaviour
                 _am.P2BuiltBuildings[buildingIndex]++;
             }
         }
-
-        //Master Builder Code
-        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
-        {
-            _pcm.DiscardPersistentCard(_am.CurrentPlayer, "Master Builder");
-        }
-        //End Master Builder
 
         InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
@@ -839,6 +831,7 @@ public class PieceController : MonoBehaviour
                 GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
                 newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
                 newPawn.transform.SetParent(null);
+                HasPawn = true;
             }
 
             if (_am.CurrentPlayer == 1)

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Master Builder
   m_EditorClassIdentifier: 
   CardName: Master Builder
-  CardDescription: Your next Building costs 1. Discard after resolving.
+  CardDescription: Your Building Costs are reduced by 1.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 1

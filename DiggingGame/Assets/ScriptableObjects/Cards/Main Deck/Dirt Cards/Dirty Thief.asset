@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Dirty Thief
   m_EditorClassIdentifier: 
   CardName: Dirty Thief
-  CardDescription: Take a Gold Piece or 2 Dirt or Stone pieces from your opponent.
+  CardDescription: Take a Gold Piece or 2 Dirt or Stone Pieces from your opponent.
   GrassSuit: 0
   DirtSuit: 1
   StoneSuit: 0
   GoldSuit: 0
-  GrassCost: 0
+  GrassCost: 1
   DirtCost: 1
   StoneCost: 0
   persistent: 0
