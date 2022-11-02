@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df11d85d17f09d64bab968942276d66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damagedColor: {r: 1, g: 0.48584908, b: 0.48584908, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _damagedSprite: {fileID: 21300000, guid: 5deab0b601165d948a8dd372738d81a3, type: 3}
+  _defaultSprite: {fileID: 21300000, guid: 0f92e9322ab41bc4e8a72792f6f2611c, type: 3}
   BuildingHealth: 2
   PlayerOwning: 0
   BuildingType: 

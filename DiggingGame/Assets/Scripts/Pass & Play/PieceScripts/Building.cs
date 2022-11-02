@@ -14,8 +14,8 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
     [Header("Values")]
-    [SerializeField] private Color _damagedColor;
-    [SerializeField] private Color _defaultColor;
+    [SerializeField] private Sprite _damagedSprite;
+    [SerializeField] private Sprite _defaultSprite;
 
     public int BuildingHealth = 2;
     [HideInInspector] public int PlayerOwning = 0;
@@ -225,7 +225,7 @@ public class Building : MonoBehaviour
         }
         else if(BuildingHealth == 1)
         {
-            GetComponent<SpriteRenderer>().color = _damagedColor;
+            GetComponent<SpriteRenderer>().sprite = _damagedSprite;
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
             _anims.Play("TempPawnDamage");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
@@ -251,7 +251,7 @@ public class Building : MonoBehaviour
     public void RepairBuilding()
     {
         BuildingHealth++;
-        GetComponent<SpriteRenderer>().color = _defaultColor;
+        GetComponent<SpriteRenderer>().sprite = _defaultSprite;
         _ce.RepairedBuildings++;
         ActiveBuilding = true;
 

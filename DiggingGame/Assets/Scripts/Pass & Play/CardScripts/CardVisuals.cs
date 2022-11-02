@@ -18,10 +18,10 @@ public class CardVisuals : MonoBehaviour
     [SerializeField] public Card ThisCard;
 
     [Header("General References")]
-    [SerializeField] private Color _grassColor;
-    [SerializeField] private Color _dirtColor;
-    [SerializeField] private Color _stoneColor;
-    [SerializeField] private Color _goldColor;
+    [SerializeField] private Sprite _grassBar;
+    [SerializeField] private Sprite _dirtBar;
+    [SerializeField] private Sprite _stoneBar;
+    [SerializeField] private Sprite _goldBar;
     [SerializeField] private Sprite _grassIcon, _dirtIcon, _stoneIcon, _goldIcon;
 
     [Header("Specific References")]
@@ -42,25 +42,25 @@ public class CardVisuals : MonoBehaviour
         if(ThisCard.GrassSuit)
         {
             _suitIconImage.sprite = _grassIcon;
-            _suitImageColor.color = _grassColor;
+            _suitImageColor.sprite = _grassBar;
             _suitName.text = "Grass";
         }
         else if(ThisCard.DirtSuit)
         {
             _suitIconImage.sprite = _dirtIcon;
-            _suitImageColor.color = _dirtColor;
+            _suitImageColor.sprite = _dirtBar;
             _suitName.text = "Dirt";
         }
         else if(ThisCard.StoneSuit)
         {
             _suitIconImage.sprite = _stoneIcon;
-            _suitImageColor.color = _stoneColor;
+            _suitImageColor.sprite = _stoneBar;
             _suitName.text = "Stone";
         }
         else if(ThisCard.GoldSuit)
         {
             _suitIconImage.sprite = _goldIcon;
-            _suitImageColor.color = _goldColor;
+            _suitImageColor.sprite = _goldBar;
             _suitName.text = "Gold";
         }
         else

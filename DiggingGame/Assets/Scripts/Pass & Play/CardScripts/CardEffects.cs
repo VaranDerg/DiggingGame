@@ -19,7 +19,7 @@ public class CardEffects : MonoBehaviour
 
     [Header("Activation UI References")]
     [SerializeField] private GameObject _activateResponseBox;
-    [SerializeField] private Color _grassColor, _dirtColor, _stoneColor, _goldColor;
+    [SerializeField] private Sprite _grassABar, _dirtABar, _stoneABar, _goldABar;
     [SerializeField] private TextMeshProUGUI _cardActivatedText;
 
     [Header("Card UI References")]
@@ -266,19 +266,19 @@ public class CardEffects : MonoBehaviour
         _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
         if(suit == "Grass")
         {
-            _activateResponseBox.GetComponent<Image>().color = _grassColor;
+            _activateResponseBox.GetComponent<Image>().sprite = _grassABar;
         }
         else if(suit == "Dirt")
         {
-            _activateResponseBox.GetComponent<Image>().color = _dirtColor;
+            _activateResponseBox.GetComponent<Image>().sprite = _dirtABar;
         }
         else if(suit == "Stone")
         {
-            _activateResponseBox.GetComponent<Image>().color = _stoneColor;
+            _activateResponseBox.GetComponent<Image>().sprite = _stoneABar;
         }
         else if(suit == "Gold")
         {
-            _activateResponseBox.GetComponent<Image>().color = _goldColor;
+            _activateResponseBox.GetComponent<Image>().sprite = _goldABar;
         }
 
         if (start)
