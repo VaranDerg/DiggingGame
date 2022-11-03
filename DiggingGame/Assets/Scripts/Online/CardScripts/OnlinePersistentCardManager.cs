@@ -71,10 +71,10 @@ public class OnlinePersistentCardManager : MonoBehaviour
                 {
                     card.transform.position = _p1PCardPositions[i].position;
                     card.GetComponentInChildren<Animator>().Play("CardPersistent");
-                    card.GetComponentInChildren<CardController>().MadePersistentP1 = true;
-                    card.GetComponentInChildren<CardController>().PHandPosition = i;
-                    FindObjectOfType<CardManager>().P1OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
-                    FindObjectOfType<CardManager>().P1Hand.Remove(card);
+                    card.GetComponentInChildren<OnlineCardController>().MadePersistentP1 = true;
+                    card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
+                    FindObjectOfType<OnlineCardManager>().P1OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
+                    FindObjectOfType<OnlineCardManager>().P1Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {
                         _am.P1Cards--;
@@ -98,10 +98,10 @@ public class OnlinePersistentCardManager : MonoBehaviour
                 {
                     card.transform.position = _p2PCardPositions[i].position;
                     card.GetComponentInChildren<Animator>().Play("CardPersistent");
-                    card.GetComponentInChildren<CardController>().MadePersistentP2 = true;
-                    card.GetComponentInChildren<CardController>().PHandPosition = i;
-                    FindObjectOfType<CardManager>().P2OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
-                    FindObjectOfType<CardManager>().P2Hand.Remove(card);
+                    card.GetComponentInChildren<OnlineCardController>().MadePersistentP2 = true;
+                    card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
+                    FindObjectOfType<OnlineCardManager>().P2OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
+                    FindObjectOfType<OnlineCardManager>().P2Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {
                         _am.P2Cards--;
@@ -172,7 +172,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             {
                 if(P1PersistentCards[i].name == cardName)
                 {
-                    StartCoroutine(P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
+                    StartCoroutine(P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().ToDiscard());
                 }
             }
         }
@@ -182,7 +182,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             {
                 if (P2PersistentCards[i].name == cardName)
                 {
-                    StartCoroutine(P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
+                    StartCoroutine(P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().ToDiscard());
                 }
             }
         }
@@ -199,7 +199,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
             foreach (GameObject card in P2PersistentCards)
             {
-                card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                card.GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
                 pCardCount++;
             }
 
@@ -217,7 +217,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
 
             foreach (GameObject card in P2PersistentCards)
             {
-                card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
+                card.GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
             }
 
             DiscardedPersistentCard = false;
@@ -230,7 +230,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
             foreach (GameObject card in P1PersistentCards)
             {
-                card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                card.GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
                 pCardCount++;
             }
 
@@ -248,7 +248,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
 
             foreach (GameObject card in P1PersistentCards)
             {
-                card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
+                card.GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
             }
 
             DiscardedPersistentCard = false;
