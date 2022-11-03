@@ -1,3 +1,11 @@
+/*****************************************************************************
+// File Name :         PersistentCardmanager.cs
+// Author :            Rudy Wolfer
+// Creation Date :     October 20th, 2022
+//
+// Brief Description : A script controlling Persistent Card processes.
+*****************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
