@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5343694222130580691}
   - component: {fileID: 5343694222130580688}
-  - component: {fileID: 1234496109468922311}
   - component: {fileID: 6555884231763938227}
+  - component: {fileID: -1576687373297738235}
   m_Layer: 7
   m_Name: MoleFactory
   m_TagString: Untagged
@@ -86,19 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1234496109468922311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5343694222130580689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df11d85d17f09d64bab968942276d66a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Damaged: 0
 --- !u!114 &6555884231763938227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,3 +108,27 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-1576687373297738235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5343694222130580689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7769766f861db3f4d8ba34ae155ace2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damagedColor: {r: 0, g: 0, b: 0, a: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  BuildingHealth: 2
+  PlayerOwning: 0
+  BuildingType: 
+  CanBeDamaged: 0
+  CanBeRepaired: 0
+  DamageTaken: 0
+  SuitOfPiece: 
+  ActiveBuilding: 0
+  DamageProtectionResponse: 0
+  _removalAnimWaitTime: 0

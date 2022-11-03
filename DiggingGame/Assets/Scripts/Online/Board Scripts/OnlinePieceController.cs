@@ -64,6 +64,8 @@ public class OnlinePieceController : MonoBehaviourPun
     [SerializeField] private ParticleSystem _stonePS;
     [SerializeField] private ParticleSystem _goldPS;
 
+    private GameObject _currentPawn;
+
     [Header("Other")]
     private bool _pawnIsMoving;
 
@@ -524,11 +526,12 @@ public class OnlinePieceController : MonoBehaviourPun
                     _cm.PrepareCardSelection(0, "", true);
                 }
 
-                StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
-                photonView.RPC("MovePawn", RpcTarget.All, gameObject.transform.position.x, gameObject.transform.position.y);    //Andrea SD
+                //StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
+                photonView.RPC("MovePawn", RpcTarget.All);    //Andrea SD
             }
         }
     }
+
 
     /// <summary>
     /// Moves a pawn on the other players screen.
@@ -537,17 +540,9 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <param name="pawn"> pawn that will be moved </param>
     /// <param name="newPosition"> position where pawn will be moved to </param>
     [PunRPC]
-    private void MovePawn(float newX, float newY)
+    private void MovePawn()
     {
-        if(_am.CurrentPlayer  == 1)
-        {
-            GameObject.Find("Player1Pawn").transform.position = new Vector2(newX, newY);
-        }
-        else
-        {
-            GameObject.Find("Player2Pawn").transform.position = new Vector2(newX, newY);
-        }
-        HasPawn = true;
+        StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
     }
 
 
@@ -762,8 +757,8 @@ public class OnlinePieceController : MonoBehaviourPun
 
             // Instantiates building from the Resources folder on the network
             // for all clients
-            GameObject thisBuilding = PhotonNetwork.Instantiate(building.name, _buildingSlot.position, 
-                Quaternion.identity);   //Andrea SD
+            GameObject thisBuilding = PhotonNetwork.Instantiate(building.name,
+                _buildingSlot.position, Quaternion.identity);   //Andrea SD
 
             if (buildingArrayNum == 0)
             {
@@ -853,7 +848,8 @@ public class OnlinePieceController : MonoBehaviourPun
 
             if (spawnPawn)
             {
-                GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
+                Vector3 _buildingPlacement = _buildingSlot.transform.position;   // Andrea SD
+                GameObject newPawn = PhotonNetwork.Instantiate("PlayerPawn", _buildingPlacement, Quaternion.identity);   // Andrea SD
                 newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
                 newPawn.transform.SetParent(null);
             }

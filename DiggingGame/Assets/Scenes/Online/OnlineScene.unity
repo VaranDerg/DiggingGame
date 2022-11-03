@@ -5912,6 +5912,10 @@ PrefabInstance:
       propertyPath: _raycastAdjuster
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3076369197347161877, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
+      propertyPath: sceneViewId
+      value: 81
+      objectReference: {fileID: 0}
     - target: {fileID: 5312618096240013890, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -11853,6 +11857,10 @@ PrefabInstance:
     - target: {fileID: 1102574898821124289, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
       propertyPath: _raycastAdjuster
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3076369197347161877, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
+      propertyPath: sceneViewId
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 5312618096240013890, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
       propertyPath: m_RootOrder

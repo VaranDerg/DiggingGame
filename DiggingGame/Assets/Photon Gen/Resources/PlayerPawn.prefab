@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 5312618096240013891}
   - component: {fileID: 7978415616008661505}
   - component: {fileID: 5976671422692316580}
-  - component: {fileID: 1102574898821124289}
+  - component: {fileID: 8046619931926574901}
+  - component: {fileID: 3076369197347161877}
   m_Layer: 6
   m_Name: PlayerPawn
   m_TagString: Pawn
@@ -133,7 +134,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1102574898821124289
+--- !u!114 &8046619931926574901
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5312618096240013892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ebcd305496815542a51069a0506e506, type: 3}
+  m_Script: {fileID: 11500000, guid: ca0863c4d4e56ff4f835363c27a7e571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PawnPlayer: 1
@@ -154,3 +155,28 @@ MonoBehaviour:
   IsDigging: 0
   IsPlacing: 0
   BuildingToBuild: 
+  MudslideMove: 0
+  IsUsingWalkway: 0
+  TeleportationMove: 0
+--- !u!114 &3076369197347161877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312618096240013892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
