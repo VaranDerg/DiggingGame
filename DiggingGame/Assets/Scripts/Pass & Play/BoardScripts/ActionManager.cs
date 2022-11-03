@@ -690,6 +690,6 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     public void ToMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        FindObjectOfType<SceneLoader>().LoadScene("MainMenu");
     }
 }

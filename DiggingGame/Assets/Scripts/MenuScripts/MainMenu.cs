@@ -48,7 +48,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void LoadMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        FindObjectOfType<SceneLoader>().LoadScene("MainMenu");
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public class MainMenu : MonoBehaviour
     public void PlayLocal()
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // Edited: Andrea - removed
-        SceneManager.LoadScene("PassAndPlayScene");    // Added - Andrea SD
+        FindObjectOfType<SceneLoader>().LoadScene("PnPWeather");    // Added - Andrea SD
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void PlayOnline()
     {
-        SceneManager.LoadScene("Loading");
+        FindObjectOfType<SceneLoader>().LoadScene("Loading");
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void Collection()
     {
-        SceneManager.LoadScene("GalleryScene");
+        FindObjectOfType<SceneLoader>().LoadScene("GalleryScene");
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void HowToPlay()
     {
-        SceneManager.LoadScene("HowToPlay");
+        FindObjectOfType<SceneLoader>().LoadScene("HowToPlay");
     }
 
     /// <summary>

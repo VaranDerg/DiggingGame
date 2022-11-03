@@ -32,7 +32,7 @@ public class HowToPlayTemp : MonoBehaviour
     /// </summary>
     public void BackToMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        FindObjectOfType<SceneLoader>().LoadScene("MainMenu");
     }
 
     /// <summary>

@@ -56,7 +56,6 @@ public class GalleryMenu : MonoBehaviour
 
     public void BackToMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        FindObjectOfType<SceneLoader>().LoadScene("MainMenu");
     }
-
 }
