@@ -187,9 +187,9 @@ public class PersistentCardManager : MonoBehaviour
         {
             int pCardCount = 0;
             _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
-            foreach (GameObject card in P2PersistentCards)
+            for(int i = 0; i < P2PersistentCards.Count; i++)
             {
-                card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
                 pCardCount++;
             }
 
@@ -205,9 +205,9 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
-            foreach (GameObject card in P2PersistentCards)
+            for (int i = 0; i < P2PersistentCards.Count; i++)
             {
-                card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
+                P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
             }
 
             DiscardedPersistentCard = false;
@@ -218,13 +218,13 @@ public class PersistentCardManager : MonoBehaviour
         {
             int pCardCount = 0;
             _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
-            foreach (GameObject card in P1PersistentCards)
+            for (int i = 0; i < P1PersistentCards.Count; i++)
             {
-                card.GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
                 pCardCount++;
             }
 
-            if(pCardCount == 0)
+            if (pCardCount == 0)
             {
                 _bm.DisableAllBoardInteractions();
                 _gcm.Back();
@@ -236,9 +236,9 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
-            foreach (GameObject card in P1PersistentCards)
+            for (int i = 0; i < P1PersistentCards.Count; i++)
             {
-                card.GetComponentInChildren<CardController>().CanBeDiscarded = false;
+                P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
             }
 
             DiscardedPersistentCard = false;

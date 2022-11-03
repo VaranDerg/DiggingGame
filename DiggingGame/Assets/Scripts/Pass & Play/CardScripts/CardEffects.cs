@@ -65,6 +65,8 @@ public class CardEffects : MonoBehaviour
     [HideInInspector] public int RepairedBuildings;
     private int _tornadoBuildingToDamage;
     private bool _tornadoBuildingChosen;
+    [SerializeField] private GameObject _tFactoryButton, _tBurrowButton, _tMineButton;
+    [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine, _meerFactory, _meerBurrow, _meerMine;
     [HideInInspector] public int CurrentDamages;
     [HideInInspector] public bool EarthquakePieceSelected;
 
@@ -1011,6 +1013,30 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Overgrowth()
     {
         _gcm.DisableListObjects();
+
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            if (building.GetComponent<Building>().SuitOfPiece != "Grass")
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Overgrowth!");
+            yield break;
+        }
+
         _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
 
         int buildingCount = 0;
@@ -1085,7 +1111,7 @@ public class CardEffects : MonoBehaviour
 
         if (_am.CurrentPlayer == 1)
         {
-            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2RefinedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
             {
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
                 {
@@ -1112,7 +1138,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1RefinedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
             {
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
                 {
@@ -1215,7 +1241,7 @@ public class CardEffects : MonoBehaviour
 
         if (_am.CurrentPlayer == 1)
         {
-            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2RefinedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
             {
                 if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
                 {
@@ -1242,7 +1268,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1RefinedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
             {
                 if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
                 {
@@ -1442,6 +1468,30 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Flood()
     {
         _gcm.DisableListObjects();
+
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            if(building.GetComponent<Building>().SuitOfPiece == "Stone" || building.GetComponent<Building>().SuitOfPiece == "Gold")
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Flood!");
+            yield break;
+        }
+
         _gcm.UpdateCurrentActionText("Select a building on a Dirt Piece to damage!");
 
         AllowedDamages = _floodDamages;
@@ -1539,6 +1589,24 @@ public class CardEffects : MonoBehaviour
         _gcm.DisableListObjects();
         _gcm.UpdateCurrentActionText("Select a building on a Grass or Dirt Piece to damage!");
 
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if(building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Thunderstorm!");
+            yield break;
+        }
+
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
@@ -1614,7 +1682,7 @@ public class CardEffects : MonoBehaviour
             building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
-        _bm.SetActiveCollider("Pawn");
+        _bm.SetActiveCollider("Board");
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
     }
@@ -1722,6 +1790,25 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Earthquake()
     {
         _gcm.DisableListObjects();
+
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if (building.GetComponent<Building>().SuitOfPiece == "Gold")
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Earthquake!");
+            yield break;
+        }
+
         _gcm.UpdateCurrentActionText("Select a Stone Piece for Earthquake!");
         AllowedDamages = 0;
 
@@ -2100,7 +2187,7 @@ public class CardEffects : MonoBehaviour
 
         if (_am.CurrentPlayer == 1)
         {
-            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2RefinedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[0] + _am.P2RefinedPile[0] != 0)
+            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[0] + _am.P2RefinedPile[0] != 0)
             {
                 if (_am.P2CollectedPile[1] + _am.P2RefinedPile[1] == 0)
                 {
@@ -2127,7 +2214,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1RefinedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[0] + _am.P1RefinedPile[0] != 0)
+            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[0] + _am.P1RefinedPile[0] != 0)
             {
                 if (_am.P1CollectedPile[1] + _am.P1RefinedPile[1] == 0)
                 {
@@ -2231,11 +2318,10 @@ public class CardEffects : MonoBehaviour
             _gcm.UpdateCurrentActionText("Regenerate " + (_piecesToRegen - PlacedPieces) + " more Pieces!");
             yield return null;
         }
-        PlacedPieces = 0;
 
         int pointsToScore = 0;
         int curInterval = 0;
-        for(int i = 0; i != _piecesToRegen; i++)
+        for(int i = 0; i != PlacedPieces; i++)
         {
             if(curInterval != _regenPiecesRequiredToScore)
             {
@@ -2244,7 +2330,10 @@ public class CardEffects : MonoBehaviour
             }
 
             pointsToScore++;
+            curInterval = 0;
         }
+
+        PlacedPieces = 0;
 
         _am.ScorePoints(pointsToScore);
 
@@ -2296,6 +2385,95 @@ public class CardEffects : MonoBehaviour
     public IEnumerator Tornado()
     {
         _gcm.DisableListObjects();
+
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            if (building.GetComponent<Building>().SuitOfPiece == "Gold")
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Tornado!");
+            yield break;
+        }
+
+        _tFactoryButton.SetActive(true);
+        _tBurrowButton.SetActive(true);
+        _tMineButton.SetActive(true);
+
+        if (_am.CurrentPlayer == 1)
+        {
+            _tFactoryButton.GetComponent<Image>().sprite = _meerFactory;
+            _tBurrowButton.GetComponent<Image>().sprite = _meerBurrow;
+            _tMineButton.GetComponent<Image>().sprite = _meerMine;
+        }
+        else
+        {
+            _tFactoryButton.GetComponent<Image>().sprite = _moleFactory;
+            _tBurrowButton.GetComponent<Image>().sprite = _moleBurrow;
+            _tMineButton.GetComponent<Image>().sprite = _moleMine;
+        }
+
+        bool factoriesExist = false;
+        bool burrowsExist = false;
+        bool minesExist = false;
+        foreach(Building building in FindObjectsOfType<Building>())
+        {
+            if (_am.CurrentPlayer == 1)
+            {
+                if(building.BuildingType == "Factory" && building.PlayerOwning == 2)
+                {
+                    factoriesExist = true;
+                }
+                if (building.BuildingType == "Mine" && building.PlayerOwning == 2)
+                {
+                    factoriesExist = true;
+                }
+                if ((building.BuildingType == "Grass Mine" || building.BuildingType == "Dirt Mine" || building.BuildingType == "Stone Mine") && building.PlayerOwning == 2)
+                {
+                    minesExist = true;
+                }
+            }
+            else
+            {
+                if (building.BuildingType == "Factory" && building.PlayerOwning == 1)
+                {
+                    factoriesExist = true;
+                }
+                if (building.BuildingType == "Mine" && building.PlayerOwning == 1)
+                {
+                    factoriesExist = true;
+                }
+                if ((building.BuildingType == "Grass Mine" || building.BuildingType == "Dirt Mine" || building.BuildingType == "Stone Mine") && building.PlayerOwning == 1)
+                {
+                    minesExist = true;
+                }
+            }
+        }
+        if(!factoriesExist)
+        {
+            _tFactoryButton.SetActive(false);
+        }
+        if(!burrowsExist)
+        {
+            _tBurrowButton.SetActive(false);
+        }
+        if (!minesExist)
+        {
+            _tMineButton.SetActive(false);
+        }
 
         _tornadoBuildingChosen = false;
         _tornadoUI.SetActive(true);
@@ -2366,7 +2544,7 @@ public class CardEffects : MonoBehaviour
             building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
-        _bm.SetActiveCollider("Pawn");
+        _bm.SetActiveCollider("Board");
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
     }

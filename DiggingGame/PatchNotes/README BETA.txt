@@ -51,3 +51,4 @@ Bugs:
 - Fixed an issue where Secret Tunnels couldn't be discarded.
 - Thunderstorm no longer softlocks the game if no Buildings are made. 
 - Regeneration now scores the correct amount of points listed on the card.
+- Fixed an issue where players could sometimes damage multiple buildings with one card.

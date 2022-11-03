@@ -556,6 +556,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
+        _bm.SetActiveCollider("Board");
         foreach (PieceController script in FindObjectsOfType<PieceController>())
         {
             script.StopAllCoroutines();

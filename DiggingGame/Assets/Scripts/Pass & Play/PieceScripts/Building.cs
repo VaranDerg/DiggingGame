@@ -29,6 +29,7 @@ public class Building : MonoBehaviour
 
     [Header("Animations")]
     [SerializeField] private float _removalAnimWaitTime;
+    [SerializeField] private GameObject _damagedPS;
 
     private List<GameObject> _boardPieces = new List<GameObject>();
     private ActionManager _am;
@@ -239,6 +240,7 @@ public class Building : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().sprite = _damagedSprite;
             _anims.Play("TempPawnDamage");
+            _damagedPS.SetActive(true);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if(BuildingHealth == 2)
