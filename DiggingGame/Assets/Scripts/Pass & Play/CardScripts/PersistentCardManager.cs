@@ -125,36 +125,28 @@ public class PersistentCardManager : MonoBehaviour
     /// <returns></returns>
     public bool CheckForPersistentCard(int player, string cardName)
     {
-        bool hasCard = false;
         if(player == 1)
         {
-            foreach(GameObject card in P1PersistentCards)
+            for(int i = 0; i < P1PersistentCards.Count; i++)
             {
-                if(card.gameObject.name == cardName)
+                if(P1PersistentCards[i].name == cardName)
                 {
-                    hasCard = true;
-                }
-                else
-                {
-                    hasCard = false;
+                    return true;
                 }
             }
         }
         else if(player == 2)
         {
-            foreach (GameObject card in P2PersistentCards)
+            for (int i = 0; i < P2PersistentCards.Count; i++)
             {
-                if (card.gameObject.name == cardName)
+                if (P2PersistentCards[i].name == cardName)
                 {
-                    hasCard = true;
-                }
-                else
-                {
-                    hasCard = false;
+                    return true;
                 }
             }
         }
-        return hasCard;
+
+        return false;
     }
 
     /// <summary>

@@ -249,6 +249,11 @@ public class PieceController : MonoBehaviour
                         }
 
                         break;
+                    case GameState.Five:
+                        SetPieceState(4);
+                        _goldPS.Play();
+                        _am.CollectTile(_am.CurrentPlayer, "Gold", true);
+                        break;
                 }
 
                 if (CurrentPawn != null)

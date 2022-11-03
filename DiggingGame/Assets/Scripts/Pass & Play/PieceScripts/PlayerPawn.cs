@@ -291,21 +291,15 @@ public class PlayerPawn : MonoBehaviour
                     continue;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
-                {
-                    continue;
-                }
-
                 if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.One && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Six)
                 {
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHideDiggable(true);
                 if (IsUsingWalkway)
                 {
-                    piece.GetComponent<PieceController>().UsingWalkway = true;
                     IsUsingWalkway = false;
+                    piece.GetComponent<PieceController>().ShowHideWalkway(true);
                 }
                 _shownPieces.Add(piece);
             }

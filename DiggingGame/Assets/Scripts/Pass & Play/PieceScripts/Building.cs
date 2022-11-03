@@ -178,15 +178,15 @@ public class Building : MonoBehaviour
                 {
                     _am.P1BuiltBuildings[1]--;
                 }
-                else if (BuildingType == "GMine")
+                else if (BuildingType == "Grass Mine")
                 {
                     _am.P1BuiltBuildings[2]--;
                 }
-                else if (BuildingType == "DMine")
+                else if (BuildingType == "Dirt Mine")
                 {
                     _am.P1BuiltBuildings[3]--;
                 }
-                else if (BuildingType == "SMine")
+                else if (BuildingType == "Stone Mine")
                 {
                     _am.P1BuiltBuildings[4]--;
                 }
@@ -201,15 +201,15 @@ public class Building : MonoBehaviour
                 {
                     _am.P2BuiltBuildings[1]--;
                 }
-                else if (BuildingType == "GMine")
+                else if (BuildingType == "Grass Mine")
                 {
                     _am.P2BuiltBuildings[2]--;
                 }
-                else if (BuildingType == "DMine")
+                else if (BuildingType == "Dirt Mine")
                 {
                     _am.P2BuiltBuildings[3]--;
                 }
-                else if (BuildingType == "SMine")
+                else if (BuildingType == "Stone Mine")
                 {
                     _am.P2BuiltBuildings[4]--;
                 }
