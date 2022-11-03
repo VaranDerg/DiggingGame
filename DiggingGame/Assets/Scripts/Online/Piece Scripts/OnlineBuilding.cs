@@ -9,9 +9,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [System.Serializable]
-public class OnlineBuilding : MonoBehaviour
+public class OnlineBuilding : MonoBehaviourPun
 {
     [Header("Values")]
     [SerializeField] private Color _damagedColor;
@@ -91,6 +92,8 @@ public class OnlineBuilding : MonoBehaviour
 
     /// <summary>
     /// Damages a building. Allows persistent cards to be used to protect a building.
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <param name="damage">The amount of damage (1 or 2, for now)</param>
     public IEnumerator DamageBuiliding(int damage)
@@ -151,59 +154,34 @@ public class OnlineBuilding : MonoBehaviour
         }
         //End Weed Whacker and Dam Code
 
-        BuildingHealth -= damage;
+        CallBuildingHP(-damage);
 
         if(BuildingHealth <= 0)
         {
-            if(PlayerOwning == 1)
+            // Andrea SD
+            if (BuildingType == "Factory")
             {
-                if (BuildingType == "Factory")
-                {
-                    _am.P1BuiltBuildings[0]--;
-                }
-                else if (BuildingType == "Burrow")
-                {
-                    _am.P1BuiltBuildings[1]--;
-                }
-                else if (BuildingType == "GMine")
-                {
-                    _am.P1BuiltBuildings[2]--;
-                }
-                else if (BuildingType == "DMine")
-                {
-                    _am.P1BuiltBuildings[3]--;
-                }
-                else if (BuildingType == "SMine")
-                {
-                    _am.P1BuiltBuildings[4]--;
-                }
+                CallRemoveBuilding(PlayerOwning, 0); 
             }
-            else
+            else if (BuildingType == "Burrow")
             {
-                if (BuildingType == "Factory")
-                {
-                    _am.P2BuiltBuildings[0]--;
-                }
-                else if (BuildingType == "Burrow")
-                {
-                    _am.P2BuiltBuildings[1]--;
-                }
-                else if (BuildingType == "GMine")
-                {
-                    _am.P2BuiltBuildings[2]--;
-                }
-                else if (BuildingType == "DMine")
-                {
-                    _am.P2BuiltBuildings[3]--;
-                }
-                else if (BuildingType == "SMine")
-                {
-                    _am.P2BuiltBuildings[4]--;
-                }
+                CallRemoveBuilding(PlayerOwning, 1);
+            }
+            else if (BuildingType == "GMine")
+            {
+                CallRemoveBuilding(PlayerOwning, 2);
+            }
+            else if (BuildingType == "DMine")
+            {
+                CallRemoveBuilding(PlayerOwning, 3);
+            }
+            else if (BuildingType == "SMine")
+            {
+                CallRemoveBuilding(PlayerOwning, 4);
             }
 
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
-            _anims.Play("TempPawnDamage");
+            CallPlayAnimation("TempPawnDamage");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
             GetComponentInParent<PieceController>().HasP1Building = false;
@@ -217,23 +195,23 @@ public class OnlineBuilding : MonoBehaviour
 
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
 
-            _anims.Play("TempPawnRemove");
+            CallPlayAnimation("TempPawnRemove");
             yield return new WaitForSeconds(_removalAnimWaitTime);
             PrepBuilidingDamaging(false);
-            _anims.enabled = false;
-            gameObject.SetActive(false);
+            CallAnimStatus(false);
+            CallGameObjStatus(false);
         }
         else if(BuildingHealth == 1)
         {
-            GetComponent<SpriteRenderer>().color = _damagedColor;
+            CallChangeSprite("damaged");
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
-            _anims.Play("TempPawnDamage");
+            CallPlayAnimation("TempPawnDamage");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if(BuildingHealth == 2)
         {
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has avoided damage!");
-            _anims.Play("TempPawnDamage");
+            CallPlayAnimation("TempPawnDamage");
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
@@ -246,12 +224,143 @@ public class OnlineBuilding : MonoBehaviour
     }
 
     /// <summary>
+    /// Calls the RPC to destroy a building belonging to player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> which player the building belongs to (1, 2)
+    /// </param>
+    /// <param name="building"> the building bieng destroyed (0 = Factory, 
+    /// 1 = burrow, 2 = GMine, 3 = DMine, 4 = SMine </param>
+    public void CallRemoveBuilding(int player, int building)
+    {
+        photonView.RPC("RemoveBuilding", RpcTarget.All, player, building);
+    }
+
+    /// <summary>
+    /// Destroys a building belonging to player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> which player the building belongs to (1, 2)
+    /// </param>
+    /// <param name="building"> the building bieng destroyed (0 = Factory, 
+    /// 1 = burrow, 2 = GMine, 3 = DMine, 4 = SMine </param>
+    [PunRPC]
+    public void RemoveBuilding(int player, int building)
+    {
+        switch(player)
+        {
+            case 1:
+                _am.P1BuiltBuildings[building]--;
+                break;
+            case 2:
+                _am.P1BuiltBuildings[building]--;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC to play an animation on each client
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="animName"> jname of the animation to play </param>
+    public void CallPlayAnimation(string animName)
+    {
+        photonView.RPC("PlayAnimation", RpcTarget.All, animName);
+    }
+    /// <summary>
+    /// Plays an animation on each client
+    /// </summary>
+    /// <param name="animName"> animation to be player </param>
+    [PunRPC]
+    public void PlayAnimation(string animName)
+    {
+        _anims.Play(animName);
+    }
+
+    /// <summary>
+    /// Calls the RPC that changes the game object status
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="status"> true = active, false = inactive </param>
+    public void CallGameObjStatus(bool status)
+    {
+        photonView.RPC("SetGameObjStatus", RpcTarget.All, status);
+    }    
+    /// <summary>
+    /// Sets the game object to true or false
+    /// </summary>
+    /// <param name="status"> true = active, false = inactive </param>
+    [PunRPC]
+    public void SetGameObjStatus(bool status)
+    {
+        gameObject.SetActive(status);
+    }
+
+    /// <summary>
+    /// Calls the RPC that modifies animation status to true or false
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="status"> true or false (enables or disables the 
+    /// animator </param>
+    public void CallAnimStatus(bool status)
+    {
+        photonView.RPC("SetAnimStatus", RpcTarget.All, status);
+    }
+    /// <summary>
+    /// Sets the animator to true or false across clients
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="status"></param>
+    [PunRPC]
+    public void SetAnimStatus(bool status)
+    {
+        _anims.enabled = status;
+    }
+
+    /// <summary>
+    /// Calls the RPC to modify the sprite
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="effect"> effect the sprite is being modified to </param>
+    public void CallChangeSprite(string effect)
+    {
+        photonView.RPC("ChangeSprite", RpcTarget.All, effect);
+    }
+    /// <summary>
+    /// Modifies the building sprite
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="effect"> effect the sprite is being modified to </param>
+    [PunRPC]
+    public void ChangeSprite(string effect)
+    {
+        switch (effect)
+        {
+            case "damaged":
+                GetComponent<SpriteRenderer>().color = _damagedColor;
+                break;
+            case "default":
+                GetComponent<SpriteRenderer>().color = _defaultColor;
+                break;
+        }
+        
+    }
+
+    /// <summary>
     /// Repairs a building.
     /// </summary>
     public void RepairBuilding()
     {
-        BuildingHealth++;
-        GetComponent<SpriteRenderer>().color = _defaultColor;
+        CallBuildingHP(1);
+        CallChangeSprite("default");
         _ce.RepairedBuildings++;
         ActiveBuilding = true;
 
@@ -269,6 +378,29 @@ public class OnlineBuilding : MonoBehaviour
 
         ActiveBuilding = false;
         PrepBuilidingReapiring(false);
+    }
+
+    /// <summary>
+    /// Calls the RPC that modifies building health across the network
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"> how much the building HP is changed by </param>
+    public void CallBuildingHP(int amount)
+    {
+        photonView.RPC("ModifyBuildingHP", RpcTarget.All, amount);
+    }
+
+    /// <summary>
+    /// Modifies the building health
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"> how much the building HP is changed by </param>
+    [PunRPC]
+    public void ModifyBuildingHP(int amount)
+    {
+        BuildingHealth += amount;
     }
 
     /// <summary>

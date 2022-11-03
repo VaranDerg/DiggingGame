@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+// Edited: Andrea SD - Modified for online use
+
 public class OnlinePersistentCardManager : MonoBehaviour
 {
     [Header("References")]
@@ -24,19 +26,19 @@ public class OnlinePersistentCardManager : MonoBehaviour
     [HideInInspector] public int BuildingsDamaged;
 
     [Header("Partner Scripts")]
-    private ActionManager _am;
-    private BoardManager _bm;
-    private CardManager _cm;
-    private CardEffects _ce;
-    private GameCanvasManagerNew _gcm;
+    private OnlineActionManager _am;
+    private OnlineBoardManager _bm;
+    private OnlineCardManager _cm;
+    private OnlineCardEffects _ce;
+    private OnlineCanvasManager _gcm;
 
     private void Awake()
     {
-        _am = FindObjectOfType<ActionManager>();
-        _bm = FindObjectOfType<BoardManager>();
-        _cm = FindObjectOfType<CardManager>();
-        _ce = FindObjectOfType<CardEffects>();
-        _gcm = FindObjectOfType<GameCanvasManagerNew>();
+        _am = FindObjectOfType<OnlineActionManager>();
+        _bm = FindObjectOfType<OnlineBoardManager>();
+        _cm = FindObjectOfType<OnlineCardManager>();
+        _ce = FindObjectOfType<OnlineCardEffects>();
+        _gcm = FindObjectOfType<OnlineCanvasManager>();
     }
 
     private void PreparePCardSlots()

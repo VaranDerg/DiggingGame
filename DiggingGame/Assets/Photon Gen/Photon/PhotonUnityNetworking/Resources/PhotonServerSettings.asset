@@ -69,6 +69,11 @@ MonoBehaviour:
   - ModifySupplyPile
   - SetGoldOnline
   - SetCurrentPawn
+  - PlayAnimation
+  - RemoveBuilding
+  - SetAnimStatus
+  - SetGameObjStatus
+  - ModifyBuildingHP
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
