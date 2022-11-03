@@ -22,9 +22,9 @@ public class ActionManager : MonoBehaviour
     [HideInInspector] public int[] P2RefinedPile = new int[4];
     //Array for supply. Grass, Dirt, Stone, Gold.
     [HideInInspector] public int[] SupplyPile = new int[4];
-    //Arrays for players' build buildings. Factory, Burrow, Grass Mine, Dirt Mine, Stone Mine. 
-    [HideInInspector] public int[] P1BuiltBuildings = new int[5];
-    [HideInInspector] public int[] P2BuiltBuildings = new int[5];
+    //Arrays for players' build buildings. Factory, Burrow, Grass Mine, Dirt Mine, Stone Mine, Gold Mine. 
+    [HideInInspector] public int[] P1BuiltBuildings = new int[6];
+    [HideInInspector] public int[] P2BuiltBuildings = new int[6];
     //Variables for each players' cards. 
     [HideInInspector] public int P1Cards = 0, P2Cards = 0;
     [HideInInspector] public int P1GoldCards = 0, P2GoldCards = 0;
@@ -55,6 +55,7 @@ public class ActionManager : MonoBehaviour
 
     [Header("Building Values")]
     public int BaseBuildingPrice;
+    public int BuildingPriceGoldRaise;
     public int TotalBuildings;
 
     [Header("Card Effects")]
@@ -538,6 +539,14 @@ public class ActionManager : MonoBehaviour
                     P1CollectedPile[2] += amount;
                 }
             }
+            else if(suit == "Gold")
+            {
+                if (SupplyPile[3] >= amount)
+                {
+                    SupplyPile[3] -= amount;
+                    P1CollectedPile[3] += amount;
+                }
+            }
         }
         else
         {
@@ -563,6 +572,14 @@ public class ActionManager : MonoBehaviour
                 {
                     SupplyPile[2] -= amount;
                     P2CollectedPile[2] += amount;
+                }
+            }
+            else if (suit == "Gold")
+            {
+                if (SupplyPile[3] >= amount)
+                {
+                    SupplyPile[3] -= amount;
+                    P1CollectedPile[3] += amount;
                 }
             }
         }
@@ -603,6 +620,15 @@ public class ActionManager : MonoBehaviour
 
                 CollectPiecesFromSupply(1, "Stone");
             }
+            for (int i = P1BuiltBuildings[5]; i != 0; i--)
+            {
+                if (SupplyPile[3] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Gold");
+            }
         }
         else if(player == 2)
         {
@@ -632,6 +658,15 @@ public class ActionManager : MonoBehaviour
                 }
 
                 CollectPiecesFromSupply(1, "Stone");
+            }
+            for (int i = P2BuiltBuildings[5]; i != 0; i--)
+            {
+                if (SupplyPile[3] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Gold");
             }
         }
     }

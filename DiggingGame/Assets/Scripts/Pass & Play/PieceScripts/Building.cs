@@ -191,6 +191,10 @@ public class Building : MonoBehaviour
                 {
                     _am.P1BuiltBuildings[4]--;
                 }
+                else if(BuildingType == "Gold Mine")
+                {
+                    _am.P1BuiltBuildings[5]--;
+                }
             }
             else
             {
@@ -213,6 +217,10 @@ public class Building : MonoBehaviour
                 else if (BuildingType == "Stone Mine")
                 {
                     _am.P2BuiltBuildings[4]--;
+                }
+                else if (BuildingType == "Gold Mine")
+                {
+                    _am.P1BuiltBuildings[5]--;
                 }
             }
 

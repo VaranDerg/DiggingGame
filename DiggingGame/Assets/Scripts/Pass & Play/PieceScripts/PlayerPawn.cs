@@ -343,7 +343,7 @@ public class PlayerPawn : MonoBehaviour
                     dontHighlight = true;
                 }
 
-                if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
+                if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
                 {
                     dontHighlight = true;
                 }

@@ -567,7 +567,11 @@ public class PieceController : MonoBehaviour
             {
                 pieceSuit = "Stone";
             }
-            else if (ObjState == GameState.Four || ObjState == GameState.Five)
+            else if(ObjState == GameState.Five)
+            {
+                pieceSuit = "Gold";
+            }
+            else if (ObjState == GameState.Four)
             {
                 Debug.LogWarning("Cannot place building on this piece, yet it was able to be selected?");
             }
@@ -594,6 +598,10 @@ public class PieceController : MonoBehaviour
                 else if(pieceSuit == "Stone")
                 {
                     buildingIndex = 4;
+                }
+                else if(pieceSuit == "Gold")
+                {
+                    buildingIndex = 5;
                 }
             }
 
@@ -626,6 +634,11 @@ public class PieceController : MonoBehaviour
             bCostReduction += _ce.BuildingReduction;
         }
         //End Master Builder
+
+        if(suitOfPiece == "Gold")
+        {
+            bCostReduction -= _am.BuildingPriceGoldRaise;
+        }
 
         if (_am.CurrentPlayer == 1)
         {
@@ -764,6 +777,10 @@ public class PieceController : MonoBehaviour
             else if(buildingArrayNum == 4)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Stone Mine";
+            }
+            else if(buildingArrayNum == 5)
+            {
+                thisBuilding.GetComponent<Building>().BuildingType = "Gold Mine";
             }
             thisBuilding.GetComponent<Building>().SuitOfPiece = pieceSuit;
             thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;

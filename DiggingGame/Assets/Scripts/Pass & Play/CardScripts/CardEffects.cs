@@ -546,6 +546,10 @@ public class CardEffects : MonoBehaviour
                     _am.SupplyPile[3] -= _am.SupplyPile[3];
                 }
             }
+            else if (suit == "Point")
+            {
+                _am.ScorePoints(1);
+            }
         }
 
         _gcm.UpdateTextBothPlayers();
@@ -1815,6 +1819,11 @@ public class CardEffects : MonoBehaviour
         int pieceCount = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
+            {
+                continue;
+            }
+
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
             {
                 if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
