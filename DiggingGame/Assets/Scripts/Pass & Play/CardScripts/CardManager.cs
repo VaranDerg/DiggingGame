@@ -106,9 +106,9 @@ public class CardManager : MonoBehaviour
     /// </summary>
     public void UpdatePileText()
     {
-        _uDeckSizeText.text = "Deck (" + _uDeck.Count + ")";
-        _gDeckSizeText.text = "Gold Deck (" + _gDeck.Count + ")";
-        _dPileSizeText.text = "Discard (" + DPile.Count + ")";
+        _uDeckSizeText.text = _uDeck.Count.ToString();
+        _gDeckSizeText.text = _gDeck.Count.ToString();
+        _dPileSizeText.text = DPile.Count.ToString();
     }
 
     /// <summary>

@@ -54,6 +54,7 @@ public class CardController : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator _cardAnimator;
     [SerializeField] private float _discardAnimWaitTime;
+    private bool _gettingDiscarded;
 
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
@@ -76,7 +77,12 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if(MadePersistentP1 || MadePersistentP2)
+        if (_gettingDiscarded)
+        {
+            return;
+        }
+
+        if (MadePersistentP1 || MadePersistentP2)
         {
             transform.position = _defaultPos.position;
             return;
@@ -99,6 +105,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseEnter()
     {
+        if(_gettingDiscarded)
+        {
+            return;
+        }
+
         if(CanBeDiscarded)
         {
             _cardBackground.GetComponent<Image>().color = _cardDiscardColor;
@@ -117,15 +128,20 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
-        if (CanBeDiscarded)
-        {
-            _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
-        }
-
         if (_currentlyMaximized)
         {
             Destroy(_maximizedCard);
             _currentlyMaximized = false;
+        }
+
+        if (_gettingDiscarded)
+        {
+            return;
+        }
+
+        if (CanBeDiscarded)
+        {
+            _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
         }
 
         if (MadePersistentP1 || MadePersistentP2)
@@ -142,6 +158,11 @@ public class CardController : MonoBehaviour
     private void OnMouseOver()
     {
         MaximizeCard(_cardVisualToMaximize);
+
+        if(_gettingDiscarded)
+        {
+            return;
+        }
 
         if (CanBeDiscarded)
         {
@@ -374,7 +395,9 @@ public class CardController : MonoBehaviour
         }
 
         _cardAnimator.Play("CardDiscard");
+        _gettingDiscarded = true;
         yield return new WaitForSeconds(_discardAnimWaitTime);
+        _gettingDiscarded = false;
         _cardBody.SetActive(false);
     }
 

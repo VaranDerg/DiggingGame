@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Golden Shovel
   m_EditorClassIdentifier: 
   CardName: Golden Shovel
-  CardDescription: Remove each adjacent Piece.
+  CardDescription: Remove 4 adjacent Pieces of any suit.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0

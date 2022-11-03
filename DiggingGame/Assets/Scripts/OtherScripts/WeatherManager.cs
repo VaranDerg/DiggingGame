@@ -91,7 +91,7 @@ public class WeatherManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log("Setting active weather to " + _weatherStates[_activeWeatherIndex].Name + "; " + _weatherStates[_activeWeatherIndex].Description + ".");
+        //Debug.Log("Setting active weather to " + _weatherStates[_activeWeatherIndex].Name + "; " + _weatherStates[_activeWeatherIndex].Description + ".");
         _psSwitched = false;
     }
 

@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -44,8 +45,14 @@ public class GameCanvasManagerNew : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _opponentGoldCardText;
     [SerializeField] private TextMeshProUGUI[] _opponentPieces = new TextMeshProUGUI[4];
 
+    [Header("Text and Object References, Building View")]
+    [SerializeField] private GameObject _buildingInfoZone;
+    [SerializeField] private TextMeshProUGUI _showHideBuildingInfoText;
+    [SerializeField] private TextMeshProUGUI _factoryInfoText, _burrowInfoText, _mineInfoText;
+
     [Header("Other References")]
-    public bool _opponentViewShowing = false;
+    private bool _opponentViewShowing = false;
+    private bool _buildingViewShowing = false;
     [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine, _meerkatFactory, _meerkatBurrow, _meerkatMine;
     [SerializeField] private Image _factory, _burrow, _mine;
     private ActionManager _am;
@@ -56,8 +63,10 @@ public class GameCanvasManagerNew : MonoBehaviour
 
     [Header("Animations")]
     [SerializeField] private Animator _oppInfoAnims;
-    [SerializeField] private float _oppInfoWaitTime;
-    private bool _midShowHideAnim;
+    [SerializeField] private Animator _buildingInfoAnims;
+    [SerializeField] private float _infoAnimWaitTime;
+    private bool _midOppShowHideAnim;
+    private bool _midBuildShowHideAnim;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -243,6 +252,33 @@ public class GameCanvasManagerNew : MonoBehaviour
     }
 
     /// <summary>
+    /// Updates the Building Info text.
+    /// </summary>
+    private void UpdateBuildingText()
+    {
+        //Master Builder Start
+        int bCostReduction = 0;
+        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
+        {
+            bCostReduction += _ce.BuildingReduction;
+        }
+        //End Master Builder
+
+        if (_am.CurrentPlayer == 1)
+        {
+            _factoryInfoText.text = "Factories" + Environment.NewLine + "(Cards+)" + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[0] + bCostReduction);
+            _burrowInfoText.text = "Burrows" + Environment.NewLine + "(Activations+)" + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[1] + bCostReduction);
+            _mineInfoText.text = "Mines" + Environment.NewLine + "(Pieces+)" + Environment.NewLine + Environment.NewLine + (_am.P1BuiltBuildings[2] + _am.P1BuiltBuildings[3] + _am.P1BuiltBuildings[4]) + " Built" + Environment.NewLine + _am.P1RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[2] + bCostReduction);
+        }
+        else
+        {
+            _factoryInfoText.text = "Factories" + Environment.NewLine + "(Cards+)" + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[0] + " Built" + _am.P2RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[0] + bCostReduction);
+            _burrowInfoText.text = "Burrows" + Environment.NewLine + "(Activations+)" + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[1] + " Built" + _am.P2RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[1] + bCostReduction);
+            _mineInfoText.text = "Mines" + Environment.NewLine + "(Pieces+)" + Environment.NewLine + Environment.NewLine + (_am.P2BuiltBuildings[2] + _am.P2BuiltBuildings[3] + _am.P2BuiltBuildings[4]) + " Built" + _am.P2RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[2] + bCostReduction);
+        }
+    }
+
+    /// <summary>
     /// Updates the Current Action text.
     /// </summary>
     /// <param name="updatedText">New text to show</param>
@@ -258,6 +294,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         UpdateCurrentPlayerText(_am.CurrentPlayer);
         UpdateAlwaysActiveText();
+        UpdateBuildingText();
         if (_am.CurrentPlayer == 1)
         {
             UpdateOpponentText(2);
@@ -277,6 +314,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
         StartTurnButton.SetActive(true);
         _opponentInfoZone.SetActive(false);
+        _buildingInfoZone.SetActive(false);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Press Start Turn to begin!");
@@ -287,7 +325,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     public void OpponentInfoToggleWrapper()
     {
-        if(_midShowHideAnim)
+        if(_midOppShowHideAnim)
         {
             return;
         }
@@ -305,9 +343,9 @@ public class GameCanvasManagerNew : MonoBehaviour
         {
             _oppInfoAnims.Play("OppInfoHide");
 
-            _midShowHideAnim = true;
-            yield return new WaitForSeconds(_oppInfoWaitTime);
-            _midShowHideAnim = false;
+            _midOppShowHideAnim = true;
+            yield return new WaitForSeconds(_infoAnimWaitTime);
+            _midOppShowHideAnim = false;
 
             _showHideOpponentInfoText.text = "Show Opponent Info";
             _opponentInfoZone.SetActive(false);
@@ -318,12 +356,57 @@ public class GameCanvasManagerNew : MonoBehaviour
             _opponentInfoZone.SetActive(true);
             _oppInfoAnims.Play("OppInfoShow");
 
-            _midShowHideAnim = true;
-            yield return new WaitForSeconds(_oppInfoWaitTime);
-            _midShowHideAnim = false;
+            _midOppShowHideAnim = true;
+            yield return new WaitForSeconds(_infoAnimWaitTime);
+            _midOppShowHideAnim = false;
 
             _showHideOpponentInfoText.text = "Hide Opponent Info";
             _opponentViewShowing = true;
+        }
+    }
+
+    /// <summary>
+    /// Wrapper for starting the below Coroutine through a button.
+    /// </summary>
+    public void BuildingInfoToggleWrapper()
+    {
+        if (_midBuildShowHideAnim)
+        {
+            return;
+        }
+
+        StartCoroutine(BuildingInfoToggle());
+    }
+
+    /// <summary>
+    /// Shows or hides the Building Info.
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator BuildingInfoToggle()
+    {
+        if (_buildingViewShowing)
+        {
+            _buildingInfoAnims.Play("OppInfoHide");
+
+            _midBuildShowHideAnim = true;
+            yield return new WaitForSeconds(_infoAnimWaitTime);
+            _midBuildShowHideAnim = false;
+
+            _showHideBuildingInfoText.text = "Show Building Info";
+            _buildingInfoZone.SetActive(false);
+            _buildingViewShowing = false;
+        }
+        else
+        {
+            _buildingInfoZone.SetActive(true);
+            _buildingInfoAnims.Play("OppInfoShow");
+
+            _midBuildShowHideAnim = true;
+            yield return new WaitForSeconds(_infoAnimWaitTime);
+            _midBuildShowHideAnim = false;
+
+            _showHideBuildingInfoText.text = "Hide Building Info";
+            _buildingViewShowing = true;
         }
     }
 
@@ -343,7 +426,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         StartCoroutine(_cm.ShowCards(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
-        UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
+        UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto, or select Skip Move.");
     }
 
     /// <summary>
