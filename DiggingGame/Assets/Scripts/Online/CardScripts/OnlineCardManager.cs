@@ -10,8 +10,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Photon.Pun;
+using Unity.VisualScripting;
 
-public class OnlineCardManager : MonoBehaviour
+public class OnlineCardManager : MonoBehaviourPun
 {
     //Edit: Andrea SD - Added online functionality
 
@@ -40,6 +42,8 @@ public class OnlineCardManager : MonoBehaviour
     [Header("Animations")]
     [SerializeField] private float _cardShowHideTime;
 
+    private int _deckPos;   // Position of a card in the deck. ASD
+
     /// <summary>
     /// Assigns partner scripts
     /// </summary>
@@ -51,7 +55,21 @@ public class OnlineCardManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Calls the RPC AddCards() which adds cards in the scene to their 
+    /// respective decks.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void CallAddCards()
+    {
+        photonView.RPC("AddCards", RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    /// <summary>
     /// Adds cards in the scene to their respective decks.
+    /// 
+    /// Edited: Andrea SD - Turned into RPC
     /// </summary>
     private void AddCards()
     {
@@ -98,7 +116,11 @@ public class OnlineCardManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        AddCards();
+        // Called by master client only
+        if(PhotonNetwork.IsMasterClient)    // Andrea SD
+        {
+            AddCards();
+        }  
         PrepareOpenHandSlots();
         UpdatePileText();
     }
@@ -115,13 +137,15 @@ public class OnlineCardManager : MonoBehaviour
 
     /// <summary>
     /// Draws a card.
+    /// 
+    /// Edited: Andrea SD - modified for online use
     /// </summary>
     /// <param name="deck">"Universal" or "Gold"</param>
     public IEnumerator DrawCard(string deck)
     {
         if (_uDeck.Count == 0)
         {
-            ShuffleDiscardPile();
+            CallShuffleDiscard();
         }
 
         GameObject randomCard = null;
@@ -160,11 +184,13 @@ public class OnlineCardManager : MonoBehaviour
                     P1OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
-                        _uDeck.Remove(randomCard);
+                        _deckPos = _uDeck.IndexOf(randomCard);
+                        CallRemoveCard("Universal", _deckPos);
                     }
                     else
                     {
-                        _gDeck.Remove(randomCard);
+                        _deckPos = _gDeck.IndexOf(randomCard);
+                        CallRemoveCard("Gold", _deckPos);
                     }
 
                     if (randomCard.CompareTag("GoldCard"))
@@ -199,11 +225,13 @@ public class OnlineCardManager : MonoBehaviour
                     P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
-                        _uDeck.Remove(randomCard);
+                        _deckPos = _uDeck.IndexOf(randomCard);
+                        CallRemoveCard("Universal", _deckPos);  // ASD
                     }
                     else
                     {
-                        _gDeck.Remove(randomCard);
+                        _deckPos = _gDeck.IndexOf(randomCard);
+                        CallRemoveCard("Gold", _deckPos);   // ASD
                     }
 
                     if (randomCard.CompareTag("GoldCard"))
@@ -224,6 +252,40 @@ public class OnlineCardManager : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Calls the RemoveCard RPC which removes the card at deckPos from deck
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
+    /// <param name="deckPos"> Position of the card in the deck </param>
+    private void CallRemoveCard(string deck, int deckPos)
+    {
+        photonView.RPC("RemoveCard", RpcTarget.All, deck, deckPos);
+    }
+
+    /// <summary>
+    /// Removes the card at deckPos from deck
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
+    /// <param name="deckPos"> Position of the card in the deck </param>
+    [PunRPC]
+    public void RemoveCard(string deck, int deckPos)
+    {
+        switch(deck)
+        {
+            case "Universal":
+                _uDeck.RemoveAt(deckPos);
+                break;
+            default:
+                _gDeck.RemoveAt(deckPos);
+                break;
+        }
+    }
+
 
     /// <summary>
     /// Prepares selection value for checks related to spending cards.
@@ -357,10 +419,24 @@ public class OnlineCardManager : MonoBehaviour
 
         SelectedCards.Clear();
     }
+   
+    /// <summary>
+    /// Calls the ShuffleDiscardPile RPC which shuffles the discard pile back
+    /// into the main deck.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void CallShuffleDiscard()
+    {
+        photonView.RPC("ShuffleDiscardPile", RpcTarget.All);
+    }
 
     /// <summary>
     /// Shuffles the discard pile back into the main deck.
+    /// 
+    /// Edited: Andrea SD - Turned into an RPC for online use
     /// </summary>
+    [PunRPC]
     public void ShuffleDiscardPile()
     {
         if(DPile.Count >= 1)

@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         CardManager.cs
-// Author :            Rudy Wolfer
+// Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 10th, 2022
 //
 // Brief Description : Script managing card/mouse interactivity and Activation.
@@ -10,8 +10,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class OnlineCardController : MonoBehaviour
+// Edited: Andrea SD - Edited for online use
+public class OnlineCardController : MonoBehaviourPun
 {
     [Header("References")]
     [SerializeField] private Transform _mouseOverPos;
@@ -315,8 +317,7 @@ public class OnlineCardController : MonoBehaviour
                 {
                     _am.P1GoldCards--;
                 }
-                _cm.P1OpenHandPositions[HandPosition] = true;
-                _cm.P1Hand.Remove(_cardBody);
+                CallPersistentRemoval(1);   // Andrea SD
             }
             else if (HeldByPlayer == 2)
             {
@@ -328,8 +329,7 @@ public class OnlineCardController : MonoBehaviour
                 {
                     _am.P2GoldCards--;
                 }
-                _cm.P2OpenHandPositions[HandPosition] = true;
-                _cm.P2Hand.Remove(_cardBody);
+                CallPersistentRemoval(2);   // Andrea SD
             }
 
             HeldByPlayer = 0;
@@ -337,7 +337,8 @@ public class OnlineCardController : MonoBehaviour
             CanBeSelected = false;
             CanBeDiscarded = false;
             CanBeActivated = false;
-            _cm.DPile.Add(_cardBody);
+
+            CallDiscardRPC();
 
             _cm.UpdatePileText();
         }
@@ -345,13 +346,11 @@ public class OnlineCardController : MonoBehaviour
         {
             if (MadePersistentP1)
             {
-                _pcm.P1OpenPCardSlots[PHandPosition] = true;
-                _pcm.P1PersistentCards.Remove(_cardBody);
+                CallPersistentRemoval(1);
             }
             else
             {
-                _pcm.P2OpenPCardSlots[PHandPosition] = true;
-                _pcm.P2PersistentCards.Remove(_cardBody);
+                CallPersistentRemoval(2);
             }
 
             HeldByPlayer = 0;
@@ -362,7 +361,7 @@ public class OnlineCardController : MonoBehaviour
             MadePersistentP1 = false;
             MadePersistentP2 = false;
             _pcm.DiscardedPersistentCard = true;
-            _cm.DPile.Add(_cardBody);
+            CallDiscardRPC();
 
             _cm.UpdatePileText();
         }
@@ -376,6 +375,61 @@ public class OnlineCardController : MonoBehaviour
         _cardAnimator.Play("CardDiscard");
         yield return new WaitForSeconds(_discardAnimWaitTime);
         _cardBody.SetActive(false);
+    }
+
+    /// <summary>
+    /// Calls the AddToDiscarded RPC across all clients. This adds the card to
+    /// the discard pile.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void CallDiscardRPC()
+    {
+        photonView.RPC("AddToDiscarded", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Adds the card to the discard pile
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void AddToDiscarded()
+    {
+        _cm.DPile.Add(_cardBody);
+    }
+
+    /// <summary>
+    /// Calls the RemoveFromPersistent RPC which removes a card from the
+    /// persistent card area and list.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player who owns the card (1 or 2) </param>
+    private void CallPersistentRemoval(int player)
+    {
+        photonView.RPC("RemoveFromPersistent", RpcTarget.All, player);
+    }
+    /// <summary>
+    /// Removes a card from the persistent card area and list
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player who owns the card (1 or 2) </param>
+    [PunRPC]
+    public void RemoveFromPersistent(int player)
+    {
+        switch (player)
+        {
+            case 1:
+                _pcm.P1OpenPCardSlots[PHandPosition] = true;
+                _pcm.P1PersistentCards.Remove(_cardBody);
+                break;
+            case 2:
+                _pcm.P2OpenPCardSlots[PHandPosition] = true;
+                _pcm.P2PersistentCards.Remove(_cardBody);
+                break;
+        }     
     }
 
     /// <summary>
