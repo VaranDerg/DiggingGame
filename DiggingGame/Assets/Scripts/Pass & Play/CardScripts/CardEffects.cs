@@ -1971,21 +1971,25 @@ public class CardEffects : MonoBehaviour
     {
         if(_am.CurrentPlayer == 1)
         {
-            for(int i = 0; i < _cm.P1Hand.Count; i++)
+            int cardsToDiscard = _cm.P1Hand.Count;
+
+            for (int i = 0; i < cardsToDiscard; i++)
             {
-                StartCoroutine(_cm.P1Hand[i].GetComponentInChildren<CardController>().ToDiscard());
+                StartCoroutine(_cm.P1Hand[0].GetComponentInChildren<CardController>().ToDiscard());
             }
 
-            for(int i = PlannedGambleCardsToDraw; i != 0; i--)
+            for (int i = PlannedGambleCardsToDraw; i != 0; i--)
             {
                 StartCoroutine(_cm.DrawCard("Universal"));
             }
         }
         else
         {
-            for (int i = 0; i < _cm.P2Hand.Count; i++)
+            int cardsToDiscard = _cm.P2Hand.Count;
+
+            for (int i = 0; i < cardsToDiscard; i++)
             {
-                StartCoroutine(_cm.P2Hand[i].GetComponentInChildren<CardController>().ToDiscard());
+                StartCoroutine(_cm.P2Hand[0].GetComponentInChildren<CardController>().ToDiscard());
             }
 
             for (int i = PlannedGambleCardsToDraw; i != 0; i--)

@@ -173,6 +173,7 @@ public class Building : MonoBehaviour
         }
 
         int damage = _ce.CalculateBuildingDamage(Random.Range(1, _ce.DamageDieSides + 1));
+        _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
 
         BuildingHealth -= damage;
 

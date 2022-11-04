@@ -228,7 +228,7 @@ public class PersistentCardManager : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
-                P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                P1PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
                 pCardCount++;
             }
 
@@ -246,7 +246,7 @@ public class PersistentCardManager : MonoBehaviour
 
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
-                P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
+                P1PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
             }
 
             DiscardedPersistentCard = false;

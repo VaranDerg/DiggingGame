@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damagedSprite: {fileID: 21300000, guid: dd59c161cee62da469e25ff9ef335f0c, type: 3}
   _defaultSprite: {fileID: 21300000, guid: 382e125cc0ba9804b83073d73b7f76f8, type: 3}
-  _showDiceFaceTimes: 50
+  _showDiceFaceTimes: 35
   BuildingHealth: 2
   PlayerOwning: 0
   BuildingType: 
