@@ -58,7 +58,7 @@ public class CardEffects : MonoBehaviour
     [SerializeField] private int _earthquakeDamages;
     [SerializeField] private int _thunderstormDamages;
     [SerializeField] private int _tornadoDamages;
-    private int _damageBuildingDieSides = 4;
+    public int DamageDieSides = 4;
     [HideInInspector] public Building SelectedBuilding;
     [HideInInspector] public int AllowedDamages;
     [SerializeField] private int _allowedRepairs;
@@ -709,17 +709,17 @@ public class CardEffects : MonoBehaviour
     /// <summary>
     /// Damages a building based on a dice roll.
     /// </summary>
+    /// <param name="diceRoll"> 1-4 </param>
     /// <returns>A number from 0 to 2</returns>
-    public int CalculateBuildingDamage()
+    public int CalculateBuildingDamage(int diceRoll)
     {
-        int sideOfDie = Random.Range(0, _damageBuildingDieSides + 1);
         int damageToTake;
 
-        if(sideOfDie != 0 && sideOfDie != _damageBuildingDieSides)
+        if(diceRoll != 0 && diceRoll != DamageDieSides)
         {
             damageToTake = 1;
         }
-        else if(sideOfDie == _damageBuildingDieSides)
+        else if(diceRoll == DamageDieSides)
         {
             damageToTake = 2;
         }

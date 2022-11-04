@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 [System.Serializable]
 public class Building : MonoBehaviour
@@ -16,6 +17,7 @@ public class Building : MonoBehaviour
     [Header("Values")]
     [SerializeField] private Sprite _damagedSprite;
     [SerializeField] private Sprite _defaultSprite;
+    [SerializeField] private int _showDiceFaceTimes = 30;
 
     public int BuildingHealth = 2;
     [HideInInspector] public int PlayerOwning = 0;
@@ -30,6 +32,7 @@ public class Building : MonoBehaviour
     [Header("Animations")]
     [SerializeField] private float _removalAnimWaitTime;
     [SerializeField] private GameObject _damagedPS;
+    private GameObject _damageDice;
 
     private List<GameObject> _boardPieces = new List<GameObject>();
     private ActionManager _am;
@@ -57,6 +60,7 @@ public class Building : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        _damageDice = GameObject.FindGameObjectWithTag("Damage Dice");
         FindBoardPieces();
     }
 
@@ -77,7 +81,7 @@ public class Building : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
-                StartCoroutine(DamageBuiliding(_ce.CalculateBuildingDamage()));
+                StartCoroutine(DamageBuiliding());
             }
         }
 
@@ -94,7 +98,7 @@ public class Building : MonoBehaviour
     /// Damages a building. Allows persistent cards to be used to protect a building.
     /// </summary>
     /// <param name="damage">The amount of damage (1 or 2, for now)</param>
-    public IEnumerator DamageBuiliding(int damage)
+    public IEnumerator DamageBuiliding()
     {
         bool hasCard = false;
         ActiveBuilding = true;
@@ -151,6 +155,24 @@ public class Building : MonoBehaviour
             ActiveBuilding = false;
         }
         //End Weed Whacker and Dam Code
+
+        _damageDice.GetComponent<Animator>().Play("DiceEnter");
+        int num = 0;
+        for (int i = 0; i <= _showDiceFaceTimes; i++)
+        {
+            if(num == _ce.DamageDieSides)
+            {
+                num = 1;
+            }
+            else
+            {
+                num++;
+            }
+            _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        int damage = _ce.CalculateBuildingDamage(Random.Range(1, _ce.DamageDieSides + 1));
 
         BuildingHealth -= damage;
 
@@ -257,10 +279,19 @@ public class Building : MonoBehaviour
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
-        _bm.SetActiveCollider("Building");
-        _gcm.UpdateCurrentActionText("Damage " + (_ce.AllowedDamages - _ce.CurrentDamages) + " more Buildings!");
+        _damageDice.GetComponent<Animator>().Play("DiceExit");
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
+        if (_ce.CurrentDamages == _ce.AllowedDamages)
+        {
+            _bm.SetActiveCollider("Board");
+            _gcm.UpdateCurrentActionText("Damaging complete!");
+        }
+        else
+        {
+            _bm.SetActiveCollider("Building");
+            _gcm.UpdateCurrentActionText("Damage " + (_ce.AllowedDamages - _ce.CurrentDamages) + " more Buildings!");
+        }
         PrepBuilidingDamaging(false);
         ActiveBuilding = false;
     }

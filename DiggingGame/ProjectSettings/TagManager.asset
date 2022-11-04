@@ -11,6 +11,7 @@ TagManager:
   - Pawn
   - GoldCard
   - Building
+  - Damage Dice
   layers:
   - Default
   - TransparentFX

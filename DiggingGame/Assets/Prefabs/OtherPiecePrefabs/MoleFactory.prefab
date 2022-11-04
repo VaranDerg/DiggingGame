@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damagedSprite: {fileID: 21300000, guid: c44f93469180f3444b9ac6bf2f6fe759, type: 3}
   _defaultSprite: {fileID: 21300000, guid: 3b2963ee12fc79745ba56d71a032dac8, type: 3}
+  _showDiceFaceTimes: 50
   BuildingHealth: 2
   PlayerOwning: 0
   BuildingType: 
@@ -113,6 +114,7 @@ MonoBehaviour:
   ActiveBuilding: 0
   DamageProtectionResponse: 0
   _removalAnimWaitTime: 0.25
+  _damagedPS: {fileID: 428465216444540805}
 --- !u!95 &-5383208771006440271
 Animator:
   serializedVersion: 4
@@ -294,6 +296,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46b6bd99dcd0d1746b5dc1142e0cd82f, type: 3}
+--- !u!1 &428465216444540805 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5355069875398092458, guid: 46b6bd99dcd0d1746b5dc1142e0cd82f, type: 3}
+  m_PrefabInstance: {fileID: 5738484732114895151}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &428465216444540808 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5355069875398092455, guid: 46b6bd99dcd0d1746b5dc1142e0cd82f, type: 3}
