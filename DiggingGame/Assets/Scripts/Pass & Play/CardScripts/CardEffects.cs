@@ -569,11 +569,6 @@ public class CardEffects : MonoBehaviour
         int newPieceCount = 0;
         int openPieces = 0;
 
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
-            piece.GetComponent<PieceController>().CheckedByPawn = false;
-        }
-
         if (suit == "Grass")
         {
             if (_am.SupplyPile[0] >= _maxPiecesToRegen)
@@ -598,12 +593,11 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                if(piece.GetComponent<PieceController>().CheckedByPawn == false)
+                if (!piece.GetComponent<PieceController>().IsPlaceable)
                 {
-                    piece.GetComponent<PieceController>().CheckedByPawn = true;
                     openPieces++;
                 }
+                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
         else if(suit == "Dirt")
@@ -630,12 +624,11 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                if (piece.GetComponent<PieceController>().CheckedByPawn == false)
+                if (!piece.GetComponent<PieceController>().IsPlaceable)
                 {
-                    piece.GetComponent<PieceController>().CheckedByPawn = true;
                     openPieces++;
                 }
+                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
         else if(suit == "Stone")
@@ -662,18 +655,12 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
-                if (piece.GetComponent<PieceController>().CheckedByPawn == false)
+                if (!piece.GetComponent<PieceController>().IsPlaceable)
                 {
-                    piece.GetComponent<PieceController>().CheckedByPawn = true;
                     openPieces++;
                 }
+                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
-        }
-
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
-            piece.GetComponent<PieceController>().CheckedByPawn = false;
         }
 
         if (enoughPieces && openPieces >= _maxPiecesToRegen)
@@ -755,11 +742,6 @@ public class CardEffects : MonoBehaviour
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            piece.GetComponent<PieceController>().CheckedByPawn = false;
-        }
-
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
             if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -767,17 +749,12 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                if (!piece.GetComponent<PieceController>().IsPlaceable)
                 {
                     openPieces++;
                 }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
-        }
-
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
-            piece.GetComponent<PieceController>().CheckedByPawn = false;
         }
 
         if (openPieces == 0)
@@ -1191,13 +1168,12 @@ public class CardEffects : MonoBehaviour
         {
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
-                pawn.GetComponent<PlayerPawn>().IsDigging = false;
                 pawn.GetComponent<PlayerPawn>().IsUsingWalkway = true;
                 pawn.GetComponent<Animator>().Play("TempPawnBlink");
             }
         }
 
-        _gcm.UpdateCurrentActionText("Select a Pawn to Dig and Move with Walkway!");
+        _gcm.UpdateCurrentActionText("Select a Pawn for Walkway!");
         _bm.SetActiveCollider("Pawn");
     }
 
@@ -1394,11 +1370,6 @@ public class CardEffects : MonoBehaviour
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            piece.GetComponent<PieceController>().CheckedByPawn = false;
-        }
-
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -1406,18 +1377,12 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                if (!piece.GetComponent<PieceController>().IsPlaceable)
                 {
-                    piece.GetComponent<PieceController>().CheckedByPawn = true;
                     openPieces++;
                 }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
-        }
-
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
-            piece.GetComponent<PieceController>().CheckedByPawn = false;
         }
 
         if (openPieces == 0)
@@ -1717,11 +1682,6 @@ public class CardEffects : MonoBehaviour
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            piece.GetComponent<PieceController>().CheckedByPawn = false;
-        }
-
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -1729,17 +1689,12 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                if (!piece.GetComponent<PieceController>().IsPlaceable)
                 {
                     openPieces++;
                 }
                 piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
-        }
-
-        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
-        {
-            piece.GetComponent<PieceController>().CheckedByPawn = false;
         }
 
         if (openPieces == 0)

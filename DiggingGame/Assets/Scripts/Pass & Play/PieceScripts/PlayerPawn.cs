@@ -254,20 +254,7 @@ public class PlayerPawn : MonoBehaviour
                     continue;
                 }
 
-                if(IsUsingWalkway)
-                {
-                    if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.One && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Six)
-                    {
-                        continue;
-                    }
-                }
-
                 piece.GetComponent<PieceController>().ShowHideDiggable(true);
-                if(IsUsingWalkway)
-                {
-                    piece.GetComponent<PieceController>().UsingWalkway = true;
-                    IsUsingWalkway = false;
-                }
                 _shownPieces.Add(piece);
             }
 
@@ -309,11 +296,7 @@ public class PlayerPawn : MonoBehaviour
                     continue;
                 }
 
-                if (IsUsingWalkway)
-                {
-                    IsUsingWalkway = false;
-                    piece.GetComponent<PieceController>().ShowHideWalkway(true);
-                }
+                piece.GetComponent<PieceController>().ShowHideWalkway(true);
                 _shownPieces.Add(piece);
             }
 
