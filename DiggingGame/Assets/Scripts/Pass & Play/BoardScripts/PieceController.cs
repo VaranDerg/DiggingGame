@@ -26,15 +26,13 @@ public class PieceController : MonoBehaviour
     [SerializeField] private Sprite _flowerSprite;
     [SerializeField] private GameObject _playerPawn;
     private SpriteRenderer _sr;
+    [SerializeField] private SpriteRenderer _borderSr;
 
     [Header("Building References")]
     [SerializeField] private Transform _buildingSlot;
     [SerializeField] private GameObject _mFactory, _mBurrow, _mMine, _meeFactory, _meeBurrow, _meeMine;
 
     [Header("Tile Values/Information")]
-    [SerializeField] private Color _defaultColor;
-    [SerializeField] private Color _selectedColor;
-    [SerializeField] private Color _waitingColor;
     [HideInInspector] public bool IsMovable = false, IsDiggable = false, IsPlaceable = false, IsBuildable = false;
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasP1Building, HasP2Building;
@@ -69,6 +67,12 @@ public class PieceController : MonoBehaviour
     [Header("Other")]
     private bool _pawnIsMoving;
 
+    [Header("Animations")]
+    [SerializeField] private Animator _borderAnims;
+    [SerializeField] private Color _defaultColor;
+    [SerializeField] private Color _selectedColor;
+    [SerializeField] private Color _waitingColor;
+
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
@@ -99,7 +103,8 @@ public class PieceController : MonoBehaviour
     private void Start()
     {
         SetPieceState(1);
-        _sr.color = _defaultColor;
+        _borderSr.color = _defaultColor;
+        _borderAnims.Play("PieceBorderIdle");
     }
 
     /// <summary>
@@ -190,7 +195,8 @@ public class PieceController : MonoBehaviour
             //End of Shovel Code
             else
             {
-                _sr.color = _waitingColor;
+                _borderSr.color = _waitingColor;
+                _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
                 foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
                 {
@@ -477,7 +483,8 @@ public class PieceController : MonoBehaviour
             //For the game's initial free move. The player has to spend cards unless this is true.
             if(_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
             {
-                _sr.color = _waitingColor;
+                _borderSr.color = _waitingColor;
+                _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
                 foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
                 {
@@ -623,7 +630,8 @@ public class PieceController : MonoBehaviour
 
     public IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
     {
-        _sr.color = _waitingColor;
+        _borderSr.color = _waitingColor;
+        _borderAnims.Play("PieceBorderWaiting");
         PieceIsSelected = true;
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
@@ -928,13 +936,15 @@ public class PieceController : MonoBehaviour
     {
         if(show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsMovable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             IsMovable = false;
             PieceIsSelected = false;
             CheckedByPawn = false;
@@ -948,13 +958,15 @@ public class PieceController : MonoBehaviour
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsBuildable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             IsBuildable = false;
             PieceIsSelected = false;
             CheckedByPawn = false;
@@ -968,13 +980,15 @@ public class PieceController : MonoBehaviour
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsDiggable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             PieceIsSelected = false;
             IsDiggable = false;
             CheckedByPawn = false;
@@ -988,13 +1002,15 @@ public class PieceController : MonoBehaviour
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsPlaceable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             PieceIsSelected = false;
             IsPlaceable = false;
             CheckedByPawn = false;
@@ -1009,13 +1025,15 @@ public class PieceController : MonoBehaviour
     {
         if(show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsEarthquakeable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             PieceIsSelected = false;
             IsEarthquakeable = false;
             CheckedByPawn = false;
@@ -1030,13 +1048,15 @@ public class PieceController : MonoBehaviour
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsFlippable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             PieceIsSelected = false;
             IsFlippable = false;
             CheckedByPawn = false;
@@ -1052,13 +1072,15 @@ public class PieceController : MonoBehaviour
     {
         if(show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             UsingWalkway = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             UsingWalkway = false;
             PieceIsSelected = false;
             CheckedByPawn = false;

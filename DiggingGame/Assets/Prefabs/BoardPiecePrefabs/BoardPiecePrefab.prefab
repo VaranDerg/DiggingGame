@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6674403830174954099}
   - component: {fileID: 5651979733519898489}
+  - component: {fileID: 6509131802572971576}
   m_Layer: 8
   m_Name: PieceBorder
   m_TagString: Untagged
@@ -84,6 +85,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &6509131802572971576
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244540690931105190}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e687efedd4b6af749923e49c11311e20, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4847777960994457941
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,6 +217,7 @@ MonoBehaviour:
   _goldSprite: {fileID: 21300000, guid: 7566eea44f1676a49a57d4e12bfd9f71, type: 3}
   _flowerSprite: {fileID: 21300000, guid: bcca3f52f5a4b9c499961920f54c2ab7, type: 3}
   _playerPawn: {fileID: 5312618096240013892, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
+  _borderSr: {fileID: 5651979733519898489}
   _buildingSlot: {fileID: 6184250846653110890}
   _mFactory: {fileID: 4251760763736238801, guid: 37b05d21554c1a247b0cabf54254d7e6, type: 3}
   _mBurrow: {fileID: 2097167223220628436, guid: a047394ed136f104fb8e0300e1b84376, type: 3}
@@ -203,9 +225,6 @@ MonoBehaviour:
   _meeFactory: {fileID: 9207313477705262962, guid: 87554228a34d4e14993087c6aad2effd, type: 3}
   _meeBurrow: {fileID: 6185052297031433510, guid: 78a7a23353ae393498ca92c24bbd11dc, type: 3}
   _meeMine: {fileID: 1986726487383918477, guid: 096edc259821044499d8e0f5a6c9322e, type: 3}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _selectedColor: {r: 1, g: 0.495283, b: 0.495283, a: 1}
-  _waitingColor: {r: 0.09620416, g: 1, b: 0, a: 1}
   IsMovable: 0
   IsDiggable: 0
   IsPlaceable: 0
@@ -228,6 +247,10 @@ MonoBehaviour:
   _stonePS: {fileID: 3639707638000620803}
   _goldPS: {fileID: 7585945378631204075}
   _goldLight: {fileID: 407676615361429896}
+  _borderAnims: {fileID: 6509131802572971576}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0.5882353}
+  _selectedColor: {r: 0, g: 0.41639185, b: 1, a: 0.5882353}
+  _waitingColor: {r: 1, g: 0, b: 0.047002792, a: 0.5882353}
 --- !u!61 &4333397845963253455
 BoxCollider2D:
   m_ObjectHideFlags: 0
