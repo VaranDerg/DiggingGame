@@ -579,7 +579,7 @@ public class ActionManager : MonoBehaviour
                 if (SupplyPile[3] >= amount)
                 {
                     SupplyPile[3] -= amount;
-                    P1CollectedPile[3] += amount;
+                    P2CollectedPile[3] += amount;
                 }
             }
         }

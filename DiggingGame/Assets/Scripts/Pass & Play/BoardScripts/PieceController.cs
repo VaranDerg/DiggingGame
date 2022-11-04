@@ -63,6 +63,9 @@ public class PieceController : MonoBehaviour
     [SerializeField] private ParticleSystem _stonePS;
     [SerializeField] private ParticleSystem _goldPS;
 
+    [Header("Lights")]
+    [SerializeField] private GameObject _goldLight;
+
     [Header("Other")]
     private bool _pawnIsMoving;
 
@@ -885,26 +888,32 @@ public class PieceController : MonoBehaviour
         {
             case 1:
                 gameObject.GetComponent<SpriteRenderer>().sprite = _grassSprite;
+                _goldLight.SetActive(false);
                 ObjState = GameState.One;
                 break;
             case 2:
                 gameObject.GetComponent<SpriteRenderer>().sprite = _dirtSprite;
+                _goldLight.SetActive(false);
                 ObjState = GameState.Two;
                 break;
             case 3:
                 gameObject.GetComponent<SpriteRenderer>().sprite = _stoneSprite;
+                _goldLight.SetActive(false);
                 ObjState = GameState.Three;
                 break;
             case 4:
                 gameObject.GetComponent<SpriteRenderer>().sprite = _bedrockSprite;
+                _goldLight.SetActive(false);
                 ObjState = GameState.Four;
                 break;
             case 5:
                 gameObject.GetComponent<SpriteRenderer>().sprite = _goldSprite;
+                _goldLight.SetActive(true);
                 ObjState = GameState.Five;
                 break;
             case 6:
                 gameObject.GetComponent<SpriteRenderer>().sprite = _flowerSprite;
+                _goldLight.SetActive(false);
                 ObjState = GameState.Six;
                 break;
             default:

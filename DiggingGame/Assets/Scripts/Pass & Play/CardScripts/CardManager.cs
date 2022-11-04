@@ -271,7 +271,14 @@ public class CardManager : MonoBehaviour
 
         RequiredSuit = suit;
         RequiredCardAmount = cardAmount;
-        _gcm.UpdateCurrentActionText("Select " + RequiredCardAmount + " " + RequiredSuit + " suited Cards!");
+        if(RequiredSuit == "Gold")
+        {
+            _gcm.UpdateCurrentActionText("Select " + RequiredCardAmount + " Stone suited Cards!");
+        }
+        else
+        {
+            _gcm.UpdateCurrentActionText("Select " + RequiredCardAmount + " " + RequiredSuit + " suited Cards!");
+        }
     }
 
     /// <summary>
@@ -294,7 +301,7 @@ public class CardManager : MonoBehaviour
                 {
                     selectedCardValue += 2;
                 }
-                else if (card.GetComponentInChildren<CardVisuals>().ThisCard.StoneSuit && RequiredSuit == "Stone")
+                else if (card.GetComponentInChildren<CardVisuals>().ThisCard.StoneSuit && (RequiredSuit == "Stone" || RequiredSuit == "Gold"))
                 {
                     selectedCardValue += 2;
                 }

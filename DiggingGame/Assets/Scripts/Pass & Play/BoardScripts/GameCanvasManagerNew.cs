@@ -49,6 +49,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     [SerializeField] private GameObject _buildingInfoZone;
     [SerializeField] private TextMeshProUGUI _showHideBuildingInfoText;
     [SerializeField] private TextMeshProUGUI _factoryInfoText, _burrowInfoText, _mineInfoText;
+    [SerializeField] private Image _bothFactoryImage, _bothBurrowImage, _bothMineImage;
 
     [Header("Other References")]
     private bool _opponentViewShowing = false;
@@ -256,6 +257,19 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     private void UpdateBuildingText()
     {
+        if(_am.CurrentPlayer == 1)
+        {
+            _bothFactoryImage.sprite = _moleFactory;
+            _bothBurrowImage.sprite = _moleBurrow;
+            _bothMineImage.sprite = _moleMine;
+        }
+        else
+        {
+            _bothFactoryImage.sprite = _meerkatFactory;
+            _bothBurrowImage.sprite = _meerkatBurrow;
+            _bothMineImage.sprite = _meerkatMine;
+        }
+
         //Master Builder Start
         int bCostReduction = 0;
         if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
@@ -266,15 +280,15 @@ public class GameCanvasManagerNew : MonoBehaviour
 
         if (_am.CurrentPlayer == 1)
         {
-            _factoryInfoText.text = "Factories" + Environment.NewLine + "(Cards+)" + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[0] + bCostReduction);
-            _burrowInfoText.text = "Burrows" + Environment.NewLine + "(Activations+)" + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[1] + bCostReduction);
-            _mineInfoText.text = "Mines" + Environment.NewLine + "(Pieces+)" + Environment.NewLine + Environment.NewLine + (_am.P1BuiltBuildings[2] + _am.P1BuiltBuildings[3] + _am.P1BuiltBuildings[4]) + " Built" + Environment.NewLine + _am.P1RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[2] + bCostReduction);
+            _factoryInfoText.text = "Factories" + Environment.NewLine + "Card Draw: "+ (_am.CardDraw + _am.P1BuiltBuildings[0])  + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[0] + bCostReduction);
+            _burrowInfoText.text = "Burrows" + Environment.NewLine + "Activations: " + (_am.CardActivations + _am.P1BuiltBuildings[1])  + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[1] + bCostReduction);
+            _mineInfoText.text = "Mines" + Environment.NewLine + "Supply Pieces" + Environment.NewLine + Environment.NewLine + (_am.P1BuiltBuildings[2] + _am.P1BuiltBuildings[3] + _am.P1BuiltBuildings[4] + _am.P1BuiltBuildings[5]) + " Built" + Environment.NewLine + _am.P1RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[2] + bCostReduction);
         }
         else
         {
-            _factoryInfoText.text = "Factories" + Environment.NewLine + "(Cards+)" + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[0] + " Built" + _am.P2RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[0] + bCostReduction);
-            _burrowInfoText.text = "Burrows" + Environment.NewLine + "(Activations+)" + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[1] + " Built" + _am.P2RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[1] + bCostReduction);
-            _mineInfoText.text = "Mines" + Environment.NewLine + "(Pieces+)" + Environment.NewLine + Environment.NewLine + (_am.P2BuiltBuildings[2] + _am.P2BuiltBuildings[3] + _am.P2BuiltBuildings[4]) + " Built" + _am.P2RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[2] + bCostReduction);
+            _factoryInfoText.text = "Factories" + Environment.NewLine + "Card Draw: " + (_am.CardDraw + _am.P2BuiltBuildings[0]) + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P2RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[0] + bCostReduction);
+            _burrowInfoText.text = "Burrows" + Environment.NewLine + "Activations: " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P2RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[1] + bCostReduction);
+            _mineInfoText.text = "Mines" + Environment.NewLine + "Supply Pieces" + Environment.NewLine + Environment.NewLine + (_am.P2BuiltBuildings[2] + _am.P2BuiltBuildings[3] + _am.P2BuiltBuildings[4] + _am.P2BuiltBuildings[5]) + " Built" + Environment.NewLine + _am.P2RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[2] + bCostReduction);
         }
     }
 
