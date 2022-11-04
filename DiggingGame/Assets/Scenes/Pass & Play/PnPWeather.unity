@@ -4336,6 +4336,7 @@ GameObject:
   - component: {fileID: 395034316}
   - component: {fileID: 395034315}
   - component: {fileID: 395034317}
+  - component: {fileID: 395034318}
   m_Layer: 5
   m_Name: ActivationNotice
   m_TagString: Untagged
@@ -4357,11 +4358,11 @@ RectTransform:
   m_Children:
   - {fileID: 1766094958}
   m_Father: {fileID: 888052508}
-  m_RootOrder: 2
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 75}
   m_SizeDelta: {x: 36, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &395034315
@@ -4377,7 +4378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4422,6 +4423,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!225 &395034318
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395034313}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &399753870
 GameObject:
   m_ObjectHideFlags: 0
@@ -12239,7 +12252,7 @@ RectTransform:
   - {fileID: 158999613}
   - {fileID: 333168306}
   m_Father: {fileID: 888052508}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -15474,12 +15487,12 @@ RectTransform:
   m_Children:
   - {fileID: 826397542}
   - {fileID: 1673136629}
-  - {fileID: 395034314}
   - {fileID: 683804527}
   - {fileID: 1729456011}
+  - {fileID: 2073467614}
   - {fileID: 592274053}
   - {fileID: 293181779}
-  - {fileID: 2073467614}
+  - {fileID: 395034314}
   - {fileID: 1409865470}
   - {fileID: 204402350}
   m_Father: {fileID: 0}
@@ -15552,6 +15565,9 @@ MonoBehaviour:
   _factoryInfoText: {fileID: 745998068}
   _burrowInfoText: {fileID: 1657237650}
   _mineInfoText: {fileID: 544205877}
+  _bothFactoryImage: {fileID: 1775904068}
+  _bothBurrowImage: {fileID: 1056227585}
+  _bothMineImage: {fileID: 747694559}
   _moleFactory: {fileID: 21300000, guid: c44f93469180f3444b9ac6bf2f6fe759, type: 3}
   _moleBurrow: {fileID: 21300000, guid: dd59c161cee62da469e25ff9ef335f0c, type: 3}
   _moleMine: {fileID: 21300000, guid: dd145c0285b438440ad3f1ae1c069783, type: 3}
@@ -25534,7 +25550,7 @@ RectTransform:
   - {fileID: 1236887128}
   - {fileID: 1617239734}
   m_Father: {fileID: 888052508}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -26093,8 +26109,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 0
-  m_fontColor: {r: 0, g: 0, b: 0, a: 0}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -26111,8 +26127,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 2.5
-  m_fontSizeBase: 2.5
+  m_fontSize: 2
+  m_fontSizeBase: 2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -28601,7 +28617,7 @@ RectTransform:
   m_Children:
   - {fileID: 1591079369}
   m_Father: {fileID: 888052508}
-  m_RootOrder: 7
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}

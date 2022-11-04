@@ -107,6 +107,7 @@ public class CardEffects : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        _activateResponseBox.SetActive(false);
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         _cm = FindObjectOfType<CardManager>();
         _bm = FindObjectOfType<BoardManager>();
@@ -137,6 +138,7 @@ public class CardEffects : MonoBehaviour
     /// <param name="effectName">Name of the effect, matches coroutine. Capitalize each letter, spaces between words.</param>
     public IEnumerator ActivateCardEffect(string suit, string effectName, GameObject pCardObject)
     {
+        _activateResponseBox.SetActive(true);
         ShowActivationText(suit, effectName, true);
 
         yield return new WaitForSeconds(activateAnimWaitTime);
