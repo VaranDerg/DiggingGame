@@ -23,6 +23,7 @@ public class CardVisuals : MonoBehaviour
     [SerializeField] private Sprite _stoneBar;
     [SerializeField] private Sprite _goldBar;
     [SerializeField] private Sprite _grassIcon, _dirtIcon, _stoneIcon, _goldIcon;
+    [SerializeField] private Sprite _persistentIcon, _disasterIcon, _environmentIcon;
 
     [Header("Specific References")]
     [SerializeField] private TextMeshProUGUI _nameText;
@@ -32,6 +33,7 @@ public class CardVisuals : MonoBehaviour
     [SerializeField] private Image _cardImage;
     [SerializeField] private Image _suitIconImage;
     [SerializeField] private Image _suitImageColor;
+    [SerializeField] private Image _cardTypeImage;
     [SerializeField] private TextMeshProUGUI _suitName;
 
     /// <summary>
@@ -77,47 +79,26 @@ public class CardVisuals : MonoBehaviour
         _nameText.text = ThisCard.CardName;
         _descriptionText.text = ThisCard.CardDescription;
 
-        //Set a card's cost to 10 or higher to make its cost "X"
-        if(ThisCard.GrassCost >= 10)
-        {
-            _grassCost.text = "X";
-        }
-        else
-        {
-            _grassCost.text = ThisCard.GrassCost.ToString();
-        }
-
-        if (ThisCard.DirtCost >= 10)
-        {
-            _dirtCost.text = "X";
-        }
-        else
-        {
-            _dirtCost.text = ThisCard.DirtCost.ToString();
-        }
-
-        if (ThisCard.StoneCost >= 10)
-        {
-            _stoneCost.text = "X";
-        }
-        else
-        {
-            _stoneCost.text = ThisCard.StoneCost.ToString();
-        }
+        _grassCost.text = ThisCard.GrassCost.ToString();
+        _dirtCost.text = ThisCard.DirtCost.ToString();
+        _stoneCost.text = ThisCard.StoneCost.ToString();
 
         _cardImage.sprite = ThisCard.CardArt;
 
         if(ThisCard.persistent)
         {
             _specialCardText.text = "P";
+            _cardTypeImage.sprite = _persistentIcon;
         }
         else if(ThisCard.disaster)
         {
             _specialCardText.text = "D";
+            _cardTypeImage.sprite = _disasterIcon;
         }
         else
         {
-            _specialCardText.text = "";
+            _specialCardText.text = "E";
+            _cardTypeImage.sprite = _environmentIcon;
         }
     }
 

@@ -220,7 +220,14 @@ public class ActionManager : MonoBehaviour
                 pawn.GetComponent<PlayerPawn>().IsBuilding = false;
                 pawn.GetComponent<PlayerPawn>().IsDigging = false;
                 pawn.GetComponent<PlayerPawn>().IsPlacing = false;
-                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                if(pawn.GetComponent<PlayerPawn>().PawnPlayer == 1)
+                {
+                    pawn.GetComponent<Animator>().Play("Mole Idle");
+                }
+                else
+                {
+                    pawn.GetComponent<Animator>().Play("Meerkat Idle");
+                }
             }
         }
 

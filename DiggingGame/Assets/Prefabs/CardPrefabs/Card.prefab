@@ -94,7 +94,6 @@ RectTransform:
   m_Children:
   - {fileID: 8963238438692123201}
   - {fileID: 8963238438125540269}
-  - {fileID: 8963238438471516895}
   - {fileID: 7220107063196262633}
   - {fileID: 8963238438780534084}
   - {fileID: 8963238438627141463}
@@ -188,7 +187,7 @@ GameObject:
   - component: {fileID: 837492842213393521}
   - component: {fileID: 4851879031203315765}
   m_Layer: 0
-  m_Name: TypeIcon
+  m_Name: TypeZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -205,9 +204,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8963238438471516895}
   m_Father: {fileID: 8935652307307917726}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -284,7 +284,7 @@ RectTransform:
   - {fileID: 8963238437167369527}
   - {fileID: 8963238438969432893}
   m_Father: {fileID: 8935652307307917726}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1411,6 +1411,9 @@ MonoBehaviour:
   _dirtIcon: {fileID: 21300000, guid: 8268fbe2bbcd9d246bd6e9238073c0a5, type: 3}
   _stoneIcon: {fileID: 21300000, guid: c27104b096c035e45a6698142af31784, type: 3}
   _goldIcon: {fileID: 21300000, guid: a027e937a26cf484aa61dbaec2175b22, type: 3}
+  _persistentIcon: {fileID: 21300000, guid: 411be287427be044f8d0a9597ed42e7a, type: 3}
+  _disasterIcon: {fileID: 21300000, guid: 15d5ffe864241eb4b8ba09ea5d949cc8, type: 3}
+  _environmentIcon: {fileID: 21300000, guid: a7bb0e5578e95984aa9b19247eaaeffb, type: 3}
   _nameText: {fileID: 8963238437489295992}
   _descriptionText: {fileID: 8963238437167369524}
   _grassCost: {fileID: 8963238438680342506}
@@ -1420,6 +1423,7 @@ MonoBehaviour:
   _cardImage: {fileID: 8963238438692123230}
   _suitIconImage: {fileID: 8963238438780534085}
   _suitImageColor: {fileID: 8963238438627141460}
+  _cardTypeImage: {fileID: 4851879031203315765}
   _suitName: {fileID: 8963238437136702874}
 --- !u!222 &3631623721383416508
 CanvasRenderer:
@@ -1555,7 +1559,7 @@ GameObject:
   - component: {fileID: 8963238438471516893}
   - component: {fileID: 8963238438471516892}
   m_Layer: 0
-  m_Name: PorDText
+  m_Name: PDEText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1573,8 +1577,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8935652307307917726}
-  m_RootOrder: 2
+  m_Father: {fileID: 7220107063196262633}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -1609,7 +1613,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: I
+  m_text: E
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1636,8 +1640,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5.5
-  m_fontSizeBase: 5.5
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1710,7 +1714,7 @@ RectTransform:
   m_Children:
   - {fileID: 8963238437136702877}
   m_Father: {fileID: 8935652307307917726}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -1997,7 +2001,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8935652307307917726}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}

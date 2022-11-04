@@ -13,13 +13,11 @@ using UnityEngine;
 public class PlayerPawn : MonoBehaviour
 {
     [Header("References/Values")]
-    //1 or 2
     [Range(1, 2)] public int PawnPlayer;
     [SerializeField] private Sprite _moleSprite;
     [SerializeField] private Sprite _meerkatSprite;
 
     [Header("Other")]
-    //The (up to) 4 Board Pieces surrounding a player. NSEW.
     private List<GameObject> _shownPieces = new List<GameObject>();
     private List<GameObject> _boardPieces = new List<GameObject>();
     private BoardManager _bm;
@@ -27,7 +25,6 @@ public class PlayerPawn : MonoBehaviour
     private PersistentCardManager _pcm;
     private GameCanvasManagerNew _gcm;
     private Animator _anims;
-    private CardEffects _ce;
     [SerializeField] private SpriteRenderer _sr;
 
     [Header("Pawn Status for Other Scripts")]
@@ -60,11 +57,13 @@ public class PlayerPawn : MonoBehaviour
         {
             _sr.sprite = _moleSprite;
             PawnPlayer = 1;
+            _anims.Play("Mole Idle");
         }
         else
         {
             _sr.sprite = _meerkatSprite;
             PawnPlayer = 2;
+            _anims.Play("Meerkat Idle");
         }
     }
 
@@ -77,8 +76,15 @@ public class PlayerPawn : MonoBehaviour
         _am = FindObjectOfType<ActionManager>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         _pcm = FindObjectOfType<PersistentCardManager>();
-        _ce = FindObjectOfType<CardEffects>();
         _anims = GetComponent<Animator>();
+        if (PawnPlayer == 1)
+        {
+            _anims.Play("Mole Idle");
+        }
+        else
+        {
+            _anims.Play("Meerkat Idle");
+        }
     }
 
     /// <summary>
@@ -132,7 +138,14 @@ public class PlayerPawn : MonoBehaviour
         {
             if(pawn != gameObject)
             {
-                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                if (pawn.GetComponent<PlayerPawn>().PawnPlayer == 1)
+                {
+                    pawn.GetComponent<Animator>().Play("Mole Idle");
+                }
+                else
+                {
+                    pawn.GetComponent<Animator>().Play("Meerkat Idle");
+                }
             }
         }
     }
@@ -412,7 +425,14 @@ public class PlayerPawn : MonoBehaviour
                     continue;
                 }
 
-                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                if (pawn.GetComponent<PlayerPawn>().PawnPlayer == 1)
+                {
+                    pawn.GetComponent<Animator>().Play("Mole Idle");
+                }
+                else
+                {
+                    pawn.GetComponent<Animator>().Play("Meerkat Idle");
+                }
                 pawn.GetComponent<PlayerPawn>().MudslideMove = false;
             }
 
@@ -475,7 +495,14 @@ public class PlayerPawn : MonoBehaviour
         IsUsingWalkway = false;
         MudslideMove = false;
         BuildingToBuild = "";
-        _anims.Play("TempPawnDefault");
+        if (PawnPlayer == 1)
+        {
+            _anims.Play("Mole Idle");
+        }
+        else
+        {
+            _anims.Play("Meerkat Idle");
+        }
         _shownPieces.Clear();
     }
 
