@@ -30,10 +30,21 @@ public class Building : MonoBehaviour
     [HideInInspector] public bool DamageProtectionResponse;
 
     [Header("Animations")]
+    [SerializeField] private string _animFirstPartName;
+    [SerializeField] private string _animSecondPartName;
+    [SerializeField] private string _buildingSpawnName;
+    [SerializeField] private string _buildingHideName;
+    [SerializeField] private string _buildingClickName;
+    [SerializeField] private string _buildingWaitingName;
+    [SerializeField] private string _buildingDamagedName;
+    [SerializeField] private float _minAnimWaitTime, _maxAnimWaitTime;
     [SerializeField] private float _removalAnimWaitTime;
     [SerializeField] private GameObject _damagedPS;
     private GameObject _damageDice;
+    private int _nextAnim = 0;
+    private Coroutine _currentAnimCoroutine;
 
+    [Header("Partner Scripts & Values")]
     private List<GameObject> _boardPieces = new List<GameObject>();
     private ActionManager _am;
     private PersistentCardManager _pcm;
@@ -62,6 +73,34 @@ public class Building : MonoBehaviour
     {
         _damageDice = GameObject.FindGameObjectWithTag("Damage Dice");
         FindBoardPieces();
+        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+    }
+
+    /// <summary>
+    /// Plays idle animations in random intervals.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator BuildingAnimations()
+    {
+        if(_nextAnim == 0)
+        {
+            _anims.Play(_buildingSpawnName);
+            _nextAnim++;
+        }
+        else if(_nextAnim == 1)
+        {
+            _anims.Play(_animFirstPartName);
+            _nextAnim++;
+        }
+        else if(_nextAnim == 2)
+        {
+            _anims.Play(_animSecondPartName);
+            _nextAnim = 1;
+        }
+
+        yield return new WaitForSeconds(Random.Range(_minAnimWaitTime, _maxAnimWaitTime));
+
+        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
     }
 
     /// <summary>
@@ -157,6 +196,7 @@ public class Building : MonoBehaviour
         //End Weed Whacker and Dam Code
 
         _damageDice.GetComponent<Animator>().Play("DiceEnter");
+        _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
         int num = 0;
         for (int i = 0; i <= _showDiceFaceTimes; i++)
         {
@@ -172,8 +212,9 @@ public class Building : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
-        int damage = _ce.CalculateBuildingDamage(Random.Range(1, _ce.DamageDieSides + 1));
-        _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
+        int damageDiceVisual = Random.Range(1, _ce.DamageDieSides + 1);
+        int damage = _ce.CalculateBuildingDamage(damageDiceVisual);
+        _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = damageDiceVisual.ToString();
 
         BuildingHealth -= damage;
 
@@ -181,7 +222,7 @@ public class Building : MonoBehaviour
         {
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
         }
-        else if(damage == 1 && BuildingHealth == 1)
+        else if(damage == 1 && BuildingHealth == 2)
         {
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
         }
@@ -247,7 +288,7 @@ public class Building : MonoBehaviour
                 }
             }
 
-            _anims.Play("TempPawnDamage");
+            _anims.Play(_buildingClickName);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
             GetComponentInParent<PieceController>().HasP1Building = false;
@@ -261,7 +302,7 @@ public class Building : MonoBehaviour
 
             _am.ScorePoints(1);
 
-            _anims.Play("TempPawnRemove");
+            _anims.Play(_buildingHideName);
             yield return new WaitForSeconds(_removalAnimWaitTime);
             PrepBuilidingDamaging(false);
             _anims.enabled = false;
@@ -269,14 +310,16 @@ public class Building : MonoBehaviour
         }
         else if(BuildingHealth == 1)
         {
+            StopCoroutine(_currentAnimCoroutine);
+            _anims.Play(_buildingDamagedName);
             GetComponent<SpriteRenderer>().sprite = _damagedSprite;
-            _anims.Play("TempPawnDamage");
+            _anims.Play(_buildingClickName);
             _damagedPS.SetActive(true);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if(BuildingHealth == 2)
         {
-            _anims.Play("TempPawnDamage");
+            _anims.Play(_buildingClickName);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
@@ -303,7 +346,7 @@ public class Building : MonoBehaviour
     public void RepairBuilding()
     {
         BuildingHealth++;
-        GetComponent<SpriteRenderer>().sprite = _defaultSprite;
+        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
         _ce.RepairedBuildings++;
         ActiveBuilding = true;
 
@@ -329,15 +372,24 @@ public class Building : MonoBehaviour
     /// <param name="show">True = Blink</param>
     public void PrepBuilidingDamaging(bool show)
     {
+        StopCoroutine(_currentAnimCoroutine);
+
         if(show)
         {
             CanBeDamaged = true;
-            GetComponent<Animator>().Play("TempPawnBlink");
+            _anims.Play(_buildingWaitingName);
         }
         else
         {
             CanBeDamaged = false;
-            GetComponent<Animator>().Play("TempPawnDefault");
+            if(BuildingHealth > 1)
+            {
+                _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+            }
+            else
+            {
+                _anims.Play(_buildingDamagedName);
+            }
         }
     }
 
@@ -347,15 +399,24 @@ public class Building : MonoBehaviour
     /// <param name="show">True = Blink</param>
     public void PrepBuilidingReapiring(bool show)
     {
+        StopCoroutine(_currentAnimCoroutine);
+
         if (show)
         {
             CanBeRepaired = true;
-            GetComponent<Animator>().Play("TempPawnBlink");
+            _anims.Play(_buildingWaitingName);
         }
         else
         {
             CanBeRepaired = false;
-            GetComponent<Animator>().Play("TempPawnDefault");
+            if (BuildingHealth > 1)
+            {
+                _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+            }
+            else
+            {
+                _anims.Play(_buildingDamagedName);
+            }
         }
     }
 }

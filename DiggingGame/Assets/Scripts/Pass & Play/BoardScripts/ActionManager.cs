@@ -155,7 +155,7 @@ public class ActionManager : MonoBehaviour
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
             {
                 pawn.GetComponent<PlayerPawn>().IsMoving = true;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
             }
         }
 
@@ -169,7 +169,11 @@ public class ActionManager : MonoBehaviour
     public void StartBuild(int player, string building)
     {
         _bm.DisableAllBoardInteractions();
-        foreach (MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
+        foreach (ActionManager script in FindObjectsOfType<ActionManager>())
+        {
+            script.StopAllCoroutines();
+        }
+        foreach (PieceController script in FindObjectsOfType<PieceController>())
         {
             script.StopAllCoroutines();
         }
@@ -181,7 +185,7 @@ public class ActionManager : MonoBehaviour
             {
                 pawn.GetComponent<PlayerPawn>().IsBuilding = true;
                 pawn.GetComponent<PlayerPawn>().BuildingToBuild = building;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
             }
         }
 
@@ -199,7 +203,7 @@ public class ActionManager : MonoBehaviour
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
             {
                 pawn.GetComponent<PlayerPawn>().IsDigging = true;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
             }
         }
 
@@ -220,14 +224,7 @@ public class ActionManager : MonoBehaviour
                 pawn.GetComponent<PlayerPawn>().IsBuilding = false;
                 pawn.GetComponent<PlayerPawn>().IsDigging = false;
                 pawn.GetComponent<PlayerPawn>().IsPlacing = false;
-                if(pawn.GetComponent<PlayerPawn>().PawnPlayer == 1)
-                {
-                    pawn.GetComponent<Animator>().Play("Mole Idle");
-                }
-                else
-                {
-                    pawn.GetComponent<Animator>().Play("Meerkat Idle");
-                }
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
             }
         }
 

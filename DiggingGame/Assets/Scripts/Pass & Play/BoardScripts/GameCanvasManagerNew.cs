@@ -127,7 +127,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
         if (curPlayer == 1)
         {
-            _currentPlayerScore.text = "Score: " + _am.P1Score;
+            _currentPlayerScore.text = "Score: " + _am.P1Score + "/" + _am.WinningScore;
             _currentPlayerCollectedPieces[0].text = "x" + _am.P1CollectedPile[0];
             _currentPlayerCollectedPieces[1].text = "x" + _am.P1CollectedPile[1];
             _currentPlayerCollectedPieces[2].text = "x" + _am.P1CollectedPile[2];
@@ -169,7 +169,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         }
         else
         {
-            _currentPlayerScore.text = "Score: " + _am.P2Score;
+            _currentPlayerScore.text = "Score: " + _am.P2Score + "/" + _am.WinningScore;
             _currentPlayerCollectedPieces[0].text = "x" + _am.P2CollectedPile[0];
             _currentPlayerCollectedPieces[1].text = "x" + _am.P2CollectedPile[1];
             _currentPlayerCollectedPieces[2].text = "x" + _am.P2CollectedPile[2];
@@ -572,6 +572,10 @@ public class GameCanvasManagerNew : MonoBehaviour
         _bm.DisableAllBoardInteractions();
         _bm.SetActiveCollider("Board");
         foreach (PieceController script in FindObjectsOfType<PieceController>())
+        {
+            script.StopAllCoroutines();
+        }
+        foreach (ActionManager script in FindObjectsOfType<ActionManager>())
         {
             script.StopAllCoroutines();
         }

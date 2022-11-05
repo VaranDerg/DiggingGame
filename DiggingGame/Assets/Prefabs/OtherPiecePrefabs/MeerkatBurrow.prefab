@@ -112,6 +112,15 @@ MonoBehaviour:
   SuitOfPiece: 
   ActiveBuilding: 0
   DamageProtectionResponse: 0
+  _animFirstPartName: MeerkatBurrowFirstPart
+  _animSecondPartName: MeerkatBurrowSecondPart
+  _buildingSpawnName: MeerkatBurrowSpawn
+  _buildingHideName: MeerkatBurrowHide
+  _buildingClickName: MeerkatBurrowClick
+  _buildingWaitingName: MeerkatBurrowWaiting
+  _buildingDamagedName: MeerkatBurrowDamaged
+  _minAnimWaitTime: 2.5
+  _maxAnimWaitTime: 7.5
   _removalAnimWaitTime: 0.25
   _damagedPS: {fileID: 764480258823619220}
 --- !u!95 &-8783323881214589062

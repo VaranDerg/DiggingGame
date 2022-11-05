@@ -24,8 +24,8 @@ public class PieceController : MonoBehaviour
     [SerializeField] private Sprite _bedrockSprite;
     [SerializeField] private Sprite _goldSprite;
     [SerializeField] private Sprite _flowerSprite;
-    [SerializeField] private GameObject _playerPawn;
-    private SpriteRenderer _sr;
+    [SerializeField] private GameObject _molePawn;
+    [SerializeField] private GameObject _meerkatPawn;
     [SerializeField] private SpriteRenderer _borderSr;
 
     [Header("Building References")]
@@ -75,7 +75,6 @@ public class PieceController : MonoBehaviour
 
     private void Awake()
     {
-        _sr = GetComponent<SpriteRenderer>();
         _bm = FindObjectOfType<BoardManager>();
         _am = FindObjectOfType<ActionManager>();
         _cm = FindObjectOfType<CardManager>();
@@ -861,10 +860,20 @@ public class PieceController : MonoBehaviour
 
             if (spawnPawn)
             {
-                GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
-                newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
-                newPawn.transform.SetParent(null);
-                HasPawn = true;
+                if(_am.CurrentPlayer == 1)
+                {
+                    GameObject newPawn = Instantiate(_molePawn, _buildingSlot);
+                    newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
+                    newPawn.transform.SetParent(null);
+                    HasPawn = true;
+                }
+                else
+                {
+                    GameObject newPawn = Instantiate(_meerkatPawn, _buildingSlot);
+                    newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
+                    newPawn.transform.SetParent(null);
+                    HasPawn = true;
+                }
             }
 
             if (_am.CurrentPlayer == 1)

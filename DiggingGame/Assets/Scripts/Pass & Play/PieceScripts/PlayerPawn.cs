@@ -14,8 +14,6 @@ public class PlayerPawn : MonoBehaviour
 {
     [Header("References/Values")]
     [Range(1, 2)] public int PawnPlayer;
-    [SerializeField] private Sprite _moleSprite;
-    [SerializeField] private Sprite _meerkatSprite;
 
     [Header("Other")]
     private List<GameObject> _shownPieces = new List<GameObject>();
@@ -36,6 +34,10 @@ public class PlayerPawn : MonoBehaviour
     [HideInInspector] public bool IsUsingWalkway;
     [HideInInspector] public bool TeleportationMove;
 
+    [Header("Animations")]
+    public string WaitingAnimName;
+    public string IdleAnimName;
+
     /// <summary>
     /// Adds every board piece to a list.
     /// </summary>
@@ -55,15 +57,11 @@ public class PlayerPawn : MonoBehaviour
     {
         if (player == 1)
         {
-            _sr.sprite = _moleSprite;
             PawnPlayer = 1;
-            _anims.Play("Mole Idle");
         }
         else
         {
-            _sr.sprite = _meerkatSprite;
             PawnPlayer = 2;
-            _anims.Play("Meerkat Idle");
         }
     }
 
@@ -77,14 +75,6 @@ public class PlayerPawn : MonoBehaviour
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
         _pcm = FindObjectOfType<PersistentCardManager>();
         _anims = GetComponent<Animator>();
-        if (PawnPlayer == 1)
-        {
-            _anims.Play("Mole Idle");
-        }
-        else
-        {
-            _anims.Play("Meerkat Idle");
-        }
     }
 
     /// <summary>
@@ -138,14 +128,7 @@ public class PlayerPawn : MonoBehaviour
         {
             if(pawn != gameObject)
             {
-                if (pawn.GetComponent<PlayerPawn>().PawnPlayer == 1)
-                {
-                    pawn.GetComponent<Animator>().Play("Mole Idle");
-                }
-                else
-                {
-                    pawn.GetComponent<Animator>().Play("Meerkat Idle");
-                }
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
             }
         }
     }
@@ -408,14 +391,7 @@ public class PlayerPawn : MonoBehaviour
                     continue;
                 }
 
-                if (pawn.GetComponent<PlayerPawn>().PawnPlayer == 1)
-                {
-                    pawn.GetComponent<Animator>().Play("Mole Idle");
-                }
-                else
-                {
-                    pawn.GetComponent<Animator>().Play("Meerkat Idle");
-                }
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
                 pawn.GetComponent<PlayerPawn>().MudslideMove = false;
             }
 
@@ -478,14 +454,7 @@ public class PlayerPawn : MonoBehaviour
         IsUsingWalkway = false;
         MudslideMove = false;
         BuildingToBuild = "";
-        if (PawnPlayer == 1)
-        {
-            _anims.Play("Mole Idle");
-        }
-        else
-        {
-            _anims.Play("Meerkat Idle");
-        }
+        _anims.Play(IdleAnimName);
         _shownPieces.Clear();
     }
 

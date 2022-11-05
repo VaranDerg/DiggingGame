@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df11d85d17f09d64bab968942276d66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damagedSprite: {fileID: 21300000, guid: dd145c0285b438440ad3f1ae1c069783, type: 3}
-  _defaultSprite: {fileID: 21300000, guid: fbaa4a17bdd1a4248bfa5c8ab46af12f, type: 3}
+  _damagedSprite: {fileID: 21300000, guid: fbaa4a17bdd1a4248bfa5c8ab46af12f, type: 3}
+  _defaultSprite: {fileID: 21300000, guid: dd145c0285b438440ad3f1ae1c069783, type: 3}
   _showDiceFaceTimes: 35
   BuildingHealth: 2
   PlayerOwning: 0
@@ -112,6 +112,15 @@ MonoBehaviour:
   SuitOfPiece: 
   ActiveBuilding: 0
   DamageProtectionResponse: 0
+  _animFirstPartName: MoleMineFirstPart
+  _animSecondPartName: MoleMineSecondPart
+  _buildingSpawnName: MoleMineSpawn
+  _buildingHideName: MoleMineHide
+  _buildingClickName: MoleMineClick
+  _buildingWaitingName: MoleMineWaiting
+  _buildingDamagedName: MoleMineDamaged
+  _minAnimWaitTime: 2.5
+  _maxAnimWaitTime: 7.5
   _removalAnimWaitTime: 0.25
   _damagedPS: {fileID: 4931649204132848725}
 --- !u!95 &5585383644915614067

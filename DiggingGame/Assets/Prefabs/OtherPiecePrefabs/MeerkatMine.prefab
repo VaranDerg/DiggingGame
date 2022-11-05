@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df11d85d17f09d64bab968942276d66a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damagedSprite: {fileID: 21300000, guid: 1ce6897d6aeefa545bb5b604cdf69455, type: 3}
-  _defaultSprite: {fileID: 21300000, guid: e3af3451be6ac5e40b99f0258266d609, type: 3}
+  _damagedSprite: {fileID: 21300000, guid: e3af3451be6ac5e40b99f0258266d609, type: 3}
+  _defaultSprite: {fileID: 21300000, guid: 1ce6897d6aeefa545bb5b604cdf69455, type: 3}
   _showDiceFaceTimes: 35
   BuildingHealth: 2
   PlayerOwning: 0
@@ -112,6 +112,15 @@ MonoBehaviour:
   SuitOfPiece: 
   ActiveBuilding: 0
   DamageProtectionResponse: 0
+  _animFirstPartName: MeerkatMineFirstPart
+  _animSecondPartName: MeerkatMineSecondPart
+  _buildingSpawnName: MeerkatMineSpawn
+  _buildingHideName: MeerkatMineHide
+  _buildingClickName: MeerkatMineClick
+  _buildingWaitingName: MeerkatMineWaiting
+  _buildingDamagedName: MeerkatMineDamaged
+  _minAnimWaitTime: 2.5
+  _maxAnimWaitTime: 7.5
   _removalAnimWaitTime: 0.25
   _damagedPS: {fileID: 5142126279802892986}
 --- !u!95 &1324255309604461180

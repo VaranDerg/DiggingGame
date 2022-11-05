@@ -700,19 +700,19 @@ public class CardEffects : MonoBehaviour
     /// <returns>A number from 0 to 2</returns>
     public int CalculateBuildingDamage(int diceRoll)
     {
-        int damageToTake;
+        int damageToTake = 0;
 
-        if(diceRoll != 0 && diceRoll != DamageDieSides)
+        if(diceRoll == 1)
+        {
+            damageToTake = 0;
+        }
+        else if(diceRoll == 2 || diceRoll == 3)
         {
             damageToTake = 1;
         }
-        else if(diceRoll == DamageDieSides)
+        else if(diceRoll == 4)
         {
             damageToTake = 2;
-        }
-        else
-        {
-            damageToTake = 0;
         }
 
         return damageToTake;
@@ -1169,7 +1169,7 @@ public class CardEffects : MonoBehaviour
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
                 pawn.GetComponent<PlayerPawn>().IsUsingWalkway = true;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
             }
         }
 
@@ -1516,7 +1516,7 @@ public class CardEffects : MonoBehaviour
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             pawn.GetComponent<PlayerPawn>().MudslideMove = true;
-            pawn.GetComponent<Animator>().Play("TempPawnBlink");
+            pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
         }
 
         _bm.SetActiveCollider("Pawn");
@@ -2339,7 +2339,7 @@ public class CardEffects : MonoBehaviour
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
                 pawn.GetComponent<PlayerPawn>().IsMoving = true;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
                 pawn.GetComponent<PlayerPawn>().TeleportationMove = true;
             }
         }
