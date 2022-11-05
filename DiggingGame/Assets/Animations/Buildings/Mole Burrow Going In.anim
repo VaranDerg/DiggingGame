@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Meerkat Mine Going Out
+  m_Name: Mole Burrow Going In
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,23 +20,21 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 92e8fede18a347b478405fca9be29c6c, type: 3}
+      value: {fileID: 21300000, guid: 0c144a3904b55924b81a150a4f8500e1, type: 3}
     - time: 0.11111111
-      value: {fileID: 21300000, guid: 84c7f1c88eab87949bb6abdfbdc68a10, type: 3}
+      value: {fileID: 21300000, guid: f360f19258148ab44bd488085ae9c498, type: 3}
     - time: 0.22222222
-      value: {fileID: 21300000, guid: 6ec515f58267de54e8520424b4ef3e4c, type: 3}
+      value: {fileID: 21300000, guid: 731adb8a174709f4f8696de6efb95732, type: 3}
     - time: 0.33333334
-      value: {fileID: 21300000, guid: fc9936632981c5548b6e31c2c6f3fb8a, type: 3}
+      value: {fileID: 21300000, guid: d6724628a99bb844b99d818e1b843476, type: 3}
     - time: 0.44444445
-      value: {fileID: 21300000, guid: faf3282d70f9232428ea767479b6102b, type: 3}
+      value: {fileID: 21300000, guid: 40c06ac77ab39224e942e225786867f4, type: 3}
     - time: 0.5555556
-      value: {fileID: 21300000, guid: 3ea12fa8b2da7ea48bdfe14856bbecbd, type: 3}
+      value: {fileID: 21300000, guid: c8b46ef07050c134a9034712ddec9779, type: 3}
     - time: 0.6666667
-      value: {fileID: 21300000, guid: 74393d8bba51eb04b95aa37d07438688, type: 3}
+      value: {fileID: 21300000, guid: 92bfff19794c6704ca34f2ef61b0bcf4, type: 3}
     - time: 0.7777778
-      value: {fileID: 21300000, guid: a6f84a5ef4176c0448797ee176bf5e26, type: 3}
-    - time: 0.8888889
-      value: {fileID: 21300000, guid: e0afafed245c43342b6920b71be20959, type: 3}
+      value: {fileID: 21300000, guid: 961872dbbcbba004a92d7234a41d7699, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -56,21 +54,20 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 92e8fede18a347b478405fca9be29c6c, type: 3}
-    - {fileID: 21300000, guid: 84c7f1c88eab87949bb6abdfbdc68a10, type: 3}
-    - {fileID: 21300000, guid: 6ec515f58267de54e8520424b4ef3e4c, type: 3}
-    - {fileID: 21300000, guid: fc9936632981c5548b6e31c2c6f3fb8a, type: 3}
-    - {fileID: 21300000, guid: faf3282d70f9232428ea767479b6102b, type: 3}
-    - {fileID: 21300000, guid: 3ea12fa8b2da7ea48bdfe14856bbecbd, type: 3}
-    - {fileID: 21300000, guid: 74393d8bba51eb04b95aa37d07438688, type: 3}
-    - {fileID: 21300000, guid: a6f84a5ef4176c0448797ee176bf5e26, type: 3}
-    - {fileID: 21300000, guid: e0afafed245c43342b6920b71be20959, type: 3}
+    - {fileID: 21300000, guid: 0c144a3904b55924b81a150a4f8500e1, type: 3}
+    - {fileID: 21300000, guid: f360f19258148ab44bd488085ae9c498, type: 3}
+    - {fileID: 21300000, guid: 731adb8a174709f4f8696de6efb95732, type: 3}
+    - {fileID: 21300000, guid: d6724628a99bb844b99d818e1b843476, type: 3}
+    - {fileID: 21300000, guid: 40c06ac77ab39224e942e225786867f4, type: 3}
+    - {fileID: 21300000, guid: c8b46ef07050c134a9034712ddec9779, type: 3}
+    - {fileID: 21300000, guid: 92bfff19794c6704ca34f2ef61b0bcf4, type: 3}
+    - {fileID: 21300000, guid: 961872dbbcbba004a92d7234a41d7699, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1
+    m_StopTime: 0.8888889
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
