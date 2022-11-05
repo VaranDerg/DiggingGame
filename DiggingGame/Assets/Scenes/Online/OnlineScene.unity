@@ -11926,40 +11926,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5312618096240013890, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
   m_PrefabInstance: {fileID: 1137618560}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1137618562 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5312618096240013892, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
-  m_PrefabInstance: {fileID: 1137618560}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &1137618563 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 5312618096240013891, guid: eed8245ccc18cf6429df5df1f735c381, type: 3}
-  m_PrefabInstance: {fileID: 1137618560}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1137618564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1137618562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca0863c4d4e56ff4f835363c27a7e571, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PawnPlayer: 1
-  _moleSprite: {fileID: 0}
-  _meerkatSprite: {fileID: 0}
-  _sr: {fileID: 1137618563}
-  IsMoving: 0
-  IsBuilding: 0
-  IsDigging: 0
-  IsPlacing: 0
-  BuildingToBuild: 
-  MudslideMove: 0
-  IsUsingWalkway: 0
-  TeleportationMove: 0
 --- !u!1 &1142117767
 GameObject:
   m_ObjectHideFlags: 0

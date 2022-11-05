@@ -14,6 +14,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UnityEditor;
+using UnityEngine.Apple;
 
 public class OnlinePieceController : MonoBehaviourPun
 {
@@ -68,6 +69,9 @@ public class OnlinePieceController : MonoBehaviourPun
 
     [Header("Other")]
     private bool _pawnIsMoving;
+
+    private int _currentPawnID;
+    private int _pieceID;
 
     private void Awake()
     {
@@ -184,7 +188,7 @@ public class OnlinePieceController : MonoBehaviourPun
                 _am.ShovelUsed = true;
                 if (CurrentPawn != null)
                 {
-                    CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+                    CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
                 }
                 _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
             }
@@ -252,7 +256,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
                 if (CurrentPawn != null)
                 {
-                    CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+                    CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
                 }
                 _gcm.Back();
             }
@@ -261,10 +265,15 @@ public class OnlinePieceController : MonoBehaviourPun
 
     /// <summary>
     /// Uses the card walkway.
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     private IEnumerator UseWalkway()
     {
-        StartCoroutine(MovePawnTo(CurrentPawn, gameObject, false));
+        // Andrea SD
+        _currentPawnID = CurrentPawn.GetPhotonView().ViewID;
+        _pieceID = gameObject.GetPhotonView().ViewID;
+        CallMovePawn(_currentPawnID, _pieceID);
 
         while (_pawnIsMoving)
         {
@@ -299,7 +308,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
-                piece.GetComponent<PieceController>().ShowHideEarthquake(false);
+                piece.GetComponent<OnlinePieceController>().ShowHideEarthquake(false);
             }
         }
     }
@@ -424,19 +433,22 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <param name="pawn">CurrentPawn, usually.</param>
     /// <param name="destinationPiece">This piece, usually.</param>
     /// <returns></returns>
-    public IEnumerator MovePawnTo(GameObject pawn, GameObject destinationPiece, bool goBack)
+    public IEnumerator MovePawnTo(int pawnID, int pieceID, bool goBack)
     {
         //Debug.Log("Moving " + CurrentPawn + " to " + gameObject + ". The destination piece is " + destinationPiece + ".");
 
-        pawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
+        GameObject pawn = PhotonView.Find(_currentPawnID).gameObject;
+        GameObject destinationPiece = PhotonView.Find(_pieceID).gameObject;
+
+        pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
         _pawnIsMoving = true;
 
         //Start anim?
         yield return new WaitForSeconds(_am.PawnMoveAnimTime);
         //End anim?
-
+        
         pawn.transform.position = destinationPiece.transform.position;
-        pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         HasPawn = true;
         _pawnIsMoving = false;
 
@@ -526,25 +538,41 @@ public class OnlinePieceController : MonoBehaviourPun
                     _cm.PrepareCardSelection(0, "", true);
                 }
 
+                _currentPawnID = CurrentPawn.GetPhotonView().ViewID;
+                _pieceID = gameObject.GetPhotonView().ViewID;
+
                 //StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
-                photonView.RPC("MovePawn", RpcTarget.All);    //Andrea SD
+                CallMovePawn(_currentPawnID, _pieceID);    //Andrea SD
             }
         }
     }
 
+    /// <summary>
+    /// Calls the MovePawn RPC which moves a pawn on the other players screen.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="objectID"> Network ID of the moving pawn </param>
+    /// <param name="destinationID"> Network ID of the pawn destination 
+    /// </param>
+    public void CallMovePawn(int objectID, int destinationID)
+    {
+        photonView.RPC("MovePawn", RpcTarget.All, objectID, destinationID);
+    }
 
     /// <summary>
     /// Moves a pawn on the other players screen.
+    /// 
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="pawn"> pawn that will be moved </param>
-    /// <param name="newPosition"> position where pawn will be moved to </param>
+    /// <param name="objectID"> Network ID of the moving pawn </param>
+    /// <param name="destinationID"> Network ID of the pawn destination 
+    /// </param>
     [PunRPC]
-    private void MovePawn()
+    public void MovePawn(int objectID, int destinationID)
     {
-        StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
+        StartCoroutine(MovePawnTo(objectID, destinationID, true));
     }
-
 
     /// <summary>
     /// Method controlling Building placement and removal.
@@ -572,15 +600,15 @@ public class OnlinePieceController : MonoBehaviourPun
             }
 
             int buildingIndex = 0;
-            if (CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Factory")
+            if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Factory")
             {
                 buildingIndex = 0;
             }
-            else if (CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Burrow")
+            else if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Burrow")
             {
                 buildingIndex = 1;
             }
-            else if (CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild == "Mine")
+            else if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Mine")
             {
                 if (pieceSuit == "Grass")
                 {
@@ -596,10 +624,10 @@ public class OnlinePieceController : MonoBehaviourPun
                 }
             }
 
-            bool areThereRemainingBuildings = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild);
+            bool areThereRemainingBuildings = _am.EnoughBuildingsRemaining(_am.CurrentPlayer, CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild);
             if (areThereRemainingBuildings)
             {
-                StartCoroutine(BuildingCardSelection(CurrentPawn.GetComponent<PlayerPawn>().BuildingToBuild, buildingIndex, pieceSuit));
+                StartCoroutine(BuildingCardSelection(CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild, buildingIndex, pieceSuit));
             }
             else
             {
@@ -616,7 +644,7 @@ public class OnlinePieceController : MonoBehaviourPun
         PieceIsSelected = true;
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            pawn.GetComponent<PlayerPawn>().HideNonSelectedTiles();
+            pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
         }
 
         //Master Builder Code
@@ -697,7 +725,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
         InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
-        CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
         _gcm.UpdateCurrentActionText("Built " + buildingName + ".");
     }
@@ -849,7 +877,7 @@ public class OnlinePieceController : MonoBehaviourPun
             if (spawnPawn)
             {
                 Vector3 _buildingPlacement = _buildingSlot.transform.position;   // Andrea SD
-                GameObject newPawn = PhotonNetwork.Instantiate("PlayerPawn", _buildingPlacement, Quaternion.identity);   // Andrea SD
+                GameObject newPawn = PhotonNetwork.Instantiate("OnlinePlayerPawn", _buildingPlacement, Quaternion.identity);   // Andrea SD
                 newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
                 newPawn.transform.SetParent(null);
             }

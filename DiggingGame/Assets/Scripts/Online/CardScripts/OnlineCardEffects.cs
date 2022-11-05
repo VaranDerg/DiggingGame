@@ -524,17 +524,17 @@ public class OnlineCardEffects : MonoBehaviourPun
 
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
-                if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if(piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                if(piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
                 {
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
                 openPieces++;
             }
         }
@@ -552,17 +552,17 @@ public class OnlineCardEffects : MonoBehaviourPun
 
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
-                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three)
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Three)
                 {
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
                 openPieces++;
             }
         }
@@ -580,17 +580,17 @@ public class OnlineCardEffects : MonoBehaviourPun
 
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
-                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Four)
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Four)
                 {
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
                 openPieces++;
             }
         }
@@ -674,18 +674,18 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
+            if(piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Two)
             {
-                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                 {
                     openPieces++;
                 }
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
             }
         }
 
@@ -762,21 +762,21 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
                     {
                         continue;
                     }
 
-                    if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                    if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                     {
                         continue;
                     }
 
-                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                     {
                         openPieces++;
                     }
-                    piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                    piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
                 }
             }
         }
@@ -847,22 +847,22 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.One && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Six)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.One && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Six)
                     {
                         continue;
                     }
 
-                    if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                    if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                     {
                         continue;
                     }
 
-                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                     {
                         openPieces++;
                     }
-                    piece.GetComponent<PieceController>().FromActivatedCard = true;
-                    piece.GetComponent<PieceController>().ShowHideDiggable(true);
+                    piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
+                    piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                 }
             }
         }
@@ -1196,22 +1196,22 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
                     {
                         continue;
                     }
 
-                    if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                    if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                     {
                         continue;
                     }
 
-                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                     {
                         openPieces++;
                     }
-                    piece.GetComponent<PieceController>().FromActivatedCard = true;
-                    piece.GetComponent<PieceController>().ShowHideDiggable(true);
+                    piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
+                    piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                 }
             }
         }
@@ -1263,18 +1263,18 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
             {
-                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                 {
                     openPieces++;
                 }
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
             }
         }
 
@@ -1531,18 +1531,18 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
             {
-                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                 {
                     openPieces++;
                 }
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
             }
         }
 
@@ -1604,14 +1604,14 @@ public class OnlineCardEffects : MonoBehaviourPun
         int pieceCount = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
             {
-                if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                 {
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHideEarthquake(true);
+                piece.GetComponent<OnlinePieceController>().ShowHideEarthquake(true);
                 pieceCount++;
             }
         }
@@ -1666,22 +1666,22 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Five)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Three && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Five)
                     {
                         continue;
                     }
 
-                    if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                    if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                     {
                         continue;
                     }
 
-                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                     {
                         openPieces++;
                     }
-                    piece.GetComponent<PieceController>().FromActivatedCard = true;
-                    piece.GetComponent<PieceController>().ShowHideDiggable(true);
+                    piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
+                    piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                 }
             }
         }
@@ -1744,15 +1744,15 @@ public class OnlineCardEffects : MonoBehaviourPun
         int stoneOnBoard = 0;
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if(piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
             {
-                if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if(piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
                 stoneOnBoard++;
-                piece.GetComponent<PieceController>().ShowHideFlippable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHideFlippable(true);
             }
         }
 
@@ -1780,7 +1780,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            piece.GetComponent<PieceController>().ShowHideFlippable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideFlippable(false);
         }
 
         _bm.DisableAllBoardInteractions();
@@ -1832,16 +1832,16 @@ public class OnlineCardEffects : MonoBehaviourPun
         int stoneOnBoard = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
             {
-                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
                 stoneOnBoard++;
-                piece.GetComponent<PieceController>().ShowHideFlippable(true);
-                piece.GetComponent<PieceController>().DiscerningEye = true;
+                piece.GetComponent<OnlinePieceController>().ShowHideFlippable(true);
+                piece.GetComponent<OnlinePieceController>().DiscerningEye = true;
             }
         }
 
@@ -1869,8 +1869,8 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            piece.GetComponent<PieceController>().ShowHideFlippable(false);
-            piece.GetComponent<PieceController>().DiscerningEye = false;
+            piece.GetComponent<OnlinePieceController>().ShowHideFlippable(false);
+            piece.GetComponent<OnlinePieceController>().DiscerningEye = false;
         }
 
         _bm.DisableAllBoardInteractions();
@@ -1894,22 +1894,22 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
                     {
                         continue;
                     }
 
-                    if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                    if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                     {
                         continue;
                     }
 
-                    if (!piece.GetComponent<PieceController>().CheckedByPawn)
+                    if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                     {
                         openPieces++;
                     }
-                    piece.GetComponent<PieceController>().FromActivatedCard = true;
-                    piece.GetComponent<PieceController>().ShowHideDiggable(true);
+                    piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
+                    piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                 }
             }
         }
