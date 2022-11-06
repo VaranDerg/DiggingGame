@@ -27,7 +27,6 @@ public class Building : MonoBehaviour
     [HideInInspector] public int DamageTaken;
     [HideInInspector] public string SuitOfPiece;
     [HideInInspector] public bool ActiveBuilding;
-    [HideInInspector] public bool DamageProtectionResponse;
 
     [Header("Animations")]
     [SerializeField] private string _animFirstPartName;
@@ -121,8 +120,12 @@ public class Building : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
-                StartCoroutine(DamageBuiliding());
+                _pcm.CurrentBuildingDamageProcess = StartCoroutine(DamageBuiliding());
             }
+        }
+        else if(CanBeDamaged && ActiveBuilding)
+        {
+            Debug.LogWarning("This is the Invincible Mine bug! Building is still somwhow active.");
         }
 
         if(CanBeRepaired && !ActiveBuilding)
@@ -144,58 +147,6 @@ public class Building : MonoBehaviour
         ActiveBuilding = true;
         _bm.SetActiveCollider("Board");
 
-        //Weed Whacker and Dam Code
-        if (SuitOfPiece == "Grass")
-        {
-            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker");
-        }
-        else if (SuitOfPiece == "Dirt")
-        {
-            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Dam");
-        }
-
-        if (hasCard)
-        {
-            _ce.ProtectBuildingUI.SetActive(true);
-
-            if(PlayerOwning == 1)
-            {
-                _gcm.UpdateCurrentActionText("Player 1, protect your building?");
-            }
-            else
-            {
-                _gcm.UpdateCurrentActionText("Player 2, protect your building?");
-            }
-
-            while(!_pcm.DecidedBuildingProtection)
-            {
-                yield return null;
-            }
-
-            _ce.ProtectBuildingUI.SetActive(false);
-
-            _pcm.DecidedBuildingProtection = false;
-
-            if(DamageProtectionResponse == true)
-            {
-                if (SuitOfPiece == "Grass")
-                {
-                    _pcm.DiscardPersistentCard(PlayerOwning, "Weed Whacker");
-                }
-                else if (SuitOfPiece == "Dirt")
-                {
-                    _pcm.DiscardPersistentCard(PlayerOwning, "Dam");
-                }
-                _ce.CurrentDamages++;
-                _pcm.BuildingsDamaged++;
-                _bm.SetActiveCollider("Building");
-                yield break;
-            }
-
-            ActiveBuilding = false;
-        }
-        //End Weed Whacker and Dam Code
-
         _damageDice.GetComponent<Animator>().Play("DiceEnter");
         _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
         int num = 0;
@@ -214,6 +165,31 @@ public class Building : MonoBehaviour
         }
 
         int damageDiceVisual = Random.Range(1, _ce.DamageDieSides + 1);
+
+        //Weed Whacker & Dam
+        if (SuitOfPiece == "Grass")
+        {
+            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker");
+        }
+        else if (SuitOfPiece == "Dirt")
+        {
+            hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Dam");
+        }
+
+        if (hasCard)
+        {
+            damageDiceVisual = 1;
+            if(SuitOfPiece == "Grass")
+            {
+                _pcm.DiscardPersistentCard(PlayerOwning, "Weed Whacker");
+            }
+            else if(SuitOfPiece == "Dirt")
+            {
+                _pcm.DiscardPersistentCard(PlayerOwning, "Dam");
+            }
+        }
+        //End Weed Whacker & Dam
+
         int damage = _ce.CalculateBuildingDamage(damageDiceVisual);
         _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = damageDiceVisual.ToString();
 

@@ -27,6 +27,7 @@ public class PersistentCardManager : MonoBehaviour
     [Header("Other")]
     [HideInInspector] public bool DiscardedPersistentCard;
     [HideInInspector] public bool DecidedBuildingProtection;
+    [HideInInspector] public Coroutine CurrentBuildingDamageProcess;
 
     [Header("Retribution")]
     [HideInInspector] public int BuildingsDamaged;
@@ -252,24 +253,6 @@ public class PersistentCardManager : MonoBehaviour
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
             _gcm.Back();
-        }
-    }
-
-    /// <summary>
-    /// Simple yes/no for using a building protection card.
-    /// </summary>
-    /// <param name="answer">Yes/No</param>
-    /// <returns></returns>
-    public void ProtectBuilding(bool answer)
-    {
-        DecidedBuildingProtection = true;
-
-        foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
-        {
-            if(building.GetComponent<Building>().ActiveBuilding)
-            {
-                building.GetComponent<Building>().DamageProtectionResponse = answer;
-            }
         }
     }
 

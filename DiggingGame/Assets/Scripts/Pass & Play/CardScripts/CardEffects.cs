@@ -583,6 +583,11 @@ public class CardEffects : MonoBehaviour
 
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
+                piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+            }
+
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            {
                 if(piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     continue;
@@ -740,6 +745,11 @@ public class CardEffects : MonoBehaviour
             enoughPieces = false;
         }
 
+        foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+        }
+
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
@@ -794,7 +804,7 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        if (enoughPieces)
+        if (PlacedPieces == _flowersPiecesToPlace)
         {
             _am.ScorePoints(1);
         }
@@ -1370,6 +1380,11 @@ public class CardEffects : MonoBehaviour
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
+            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -1422,7 +1437,7 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        if (enoughPieces)
+        if (PlacedPieces == _fertilizerPiecesToPlace)
         {
             _am.ScorePoints(1);
         }
@@ -1682,6 +1697,11 @@ public class CardEffects : MonoBehaviour
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
+            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
             if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -1734,7 +1754,7 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        if (enoughPieces)
+        if (PlacedPieces == _compactionPiecesToPlace)
         {
             _am.ScorePoints(1);
         }
@@ -2407,9 +2427,9 @@ public class CardEffects : MonoBehaviour
                 {
                     factoriesExist = true;
                 }
-                if (building.BuildingType == "Mine" && building.PlayerOwning == 2)
+                if (building.BuildingType == "Burrow" && building.PlayerOwning == 2)
                 {
-                    factoriesExist = true;
+                    burrowsExist = true;
                 }
                 if ((building.BuildingType == "Grass Mine" || building.BuildingType == "Dirt Mine" || building.BuildingType == "Stone Mine") && building.PlayerOwning == 2)
                 {
@@ -2422,9 +2442,9 @@ public class CardEffects : MonoBehaviour
                 {
                     factoriesExist = true;
                 }
-                if (building.BuildingType == "Mine" && building.PlayerOwning == 1)
+                if (building.BuildingType == "Burrow" && building.PlayerOwning == 1)
                 {
-                    factoriesExist = true;
+                    burrowsExist = true;
                 }
                 if ((building.BuildingType == "Grass Mine" || building.BuildingType == "Dirt Mine" || building.BuildingType == "Stone Mine") && building.PlayerOwning == 1)
                 {
@@ -2432,6 +2452,7 @@ public class CardEffects : MonoBehaviour
                 }
             }
         }
+
         if(!factoriesExist)
         {
             _tFactoryButton.SetActive(false);

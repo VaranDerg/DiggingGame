@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Weed Whacker
   m_EditorClassIdentifier: 
   CardName: Weed Whacker
-  CardDescription: 'Discard this card to prevent a Building on a Grass Piece from
-    taking damage. '
+  CardDescription: 'The next time a Building of yours on Grass is chosen to be damaged,
+    discard this Card and treat the dice roll as a 1. '
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0

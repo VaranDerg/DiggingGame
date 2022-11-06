@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Discerning Eye
   m_EditorClassIdentifier: 
   CardName: Discerning Eye
-  CardDescription: 'Flip 4 unrevealed Stone Pieces. For every Gold Piece revealed,
-    score 1 point. '
+  CardDescription: 'Flip 4 Stone Pieces. For every Gold Piece revealed, score 1 point. '
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0

@@ -12070,7 +12070,7 @@ MonoBehaviour:
   _floodDamages: 1
   _earthquakeDamages: 1
   _thunderstormDamages: 1
-  _tornadoDamages: 1
+  _tornadoDamages: 3
   DamageDieSides: 4
   SelectedBuilding: {fileID: 0}
   AllowedDamages: 0
