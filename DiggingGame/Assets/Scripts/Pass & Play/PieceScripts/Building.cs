@@ -39,7 +39,8 @@ public class Building : MonoBehaviour
     [SerializeField] private string _buildingDamagedWaitingName;
     [SerializeField] private float _minAnimWaitTime, _maxAnimWaitTime;
     [SerializeField] private float _removalAnimWaitTime;
-    [SerializeField] private GameObject _damagedPS;
+    [SerializeField] private GameObject _damageSmokePS;
+    [SerializeField] private GameObject _damageClickPS;
     private GameObject _damageDice;
     private int _nextAnim = 0;
     private Coroutine _currentAnimCoroutine;
@@ -265,7 +266,7 @@ public class Building : MonoBehaviour
                 }
             }
 
-            //_anims.Play(_buildingClickName);
+            _damageClickPS.GetComponent<ParticleSystem>().Play();
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
             GetComponentInParent<PieceController>().HasP1Building = false;
@@ -291,7 +292,7 @@ public class Building : MonoBehaviour
             _anims.Play(_buildingDamagedName);
             GetComponent<SpriteRenderer>().sprite = _damagedSprite;
             //_anims.Play(_buildingClickName);
-            _damagedPS.SetActive(true);
+            _damageSmokePS.SetActive(true);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if(BuildingHealth == 2)
@@ -323,8 +324,10 @@ public class Building : MonoBehaviour
     public void RepairBuilding()
     {
         BuildingHealth++;
+        _damageClickPS.GetComponent<ParticleSystem>().Play();
         _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
         _ce.RepairedBuildings++;
+        _damageSmokePS.SetActive(false);
         ActiveBuilding = true;
 
         //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.

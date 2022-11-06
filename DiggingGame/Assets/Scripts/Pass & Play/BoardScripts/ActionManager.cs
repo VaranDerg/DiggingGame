@@ -685,8 +685,10 @@ public class ActionManager : MonoBehaviour
         {
             if(P1Score >= WinningScore)
             {
-                _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached " + WinningScore + " points!");
-                _menuButton.SetActive(true);
+                FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
+
+                //_gcm.UpdateCurrentActionText("Player 1 wins, as they've reached " + WinningScore + " points!");
+                //_menuButton.SetActive(true);
                 return;
             }
 
@@ -699,8 +701,10 @@ public class ActionManager : MonoBehaviour
         {
             if (P2Score >= WinningScore)
             {
-                _gcm.UpdateCurrentActionText("Player 2 wins, as they've reached " + WinningScore + " points!");
-                _menuButton.SetActive(true);
+                FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
+
+                //_gcm.UpdateCurrentActionText("Player 2 wins, as they've reached " + WinningScore + " points!");
+                //_menuButton.SetActive(true);
                 return;
             }
 
