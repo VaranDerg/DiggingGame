@@ -49,5 +49,5 @@ public class WeatherState
     public float BonusLightIntensity;
 
     [Header("Particle Systems")]
-    public ParticleSystem ActiveParticles;
+    public GameObject ActiveParticles;
 }

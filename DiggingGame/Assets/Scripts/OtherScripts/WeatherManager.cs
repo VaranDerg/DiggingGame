@@ -20,7 +20,6 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private Light2D _globalLight;
     [SerializeField] private Light2D _pointLight;
     [SerializeField] private Light2D _bonusLight;
-    [SerializeField] private ParticleSystem _ps;
     [SerializeField] private SpriteRenderer _background;
 
     [Header("Values")]
@@ -28,6 +27,8 @@ public class WeatherManager : MonoBehaviour
     private int _activeWeatherIndex;
     private bool _psSwitched = true;
     [HideInInspector] public WeatherState.Weather CurrentWeatherEnum;
+
+    private GameObject _currentPS;
 
     /// <summary>
     /// Sets the weather to Day.
@@ -43,7 +44,9 @@ public class WeatherManager : MonoBehaviour
     /// <param name="weatherIndex">0-10 based on the Weather enum in WeatherManager</param>
     public void SetActiveWeather(WeatherState.Weather ws)
     {
-        switch(ws)
+        _psSwitched = false;
+
+        switch (ws)
         {
             case WeatherState.Weather.Day:
                 _activeWeatherIndex = 0;
@@ -92,7 +95,6 @@ public class WeatherManager : MonoBehaviour
         }
 
         //Debug.Log("Setting active weather to " + _weatherStates[_activeWeatherIndex].Name + "; " + _weatherStates[_activeWeatherIndex].Description + ".");
-        _psSwitched = false;
     }
 
     /// <summary>
@@ -117,19 +119,20 @@ public class WeatherManager : MonoBehaviour
 
         if(!_psSwitched)
         {
-            if (_ps != null)
+            if (_currentPS != null && _weatherStates[_activeWeatherIndex].ActiveParticles != null)
             {
-                _ps.Stop();
+                _currentPS.GetComponent<ParticleSystem>().Stop();
+                Destroy(_currentPS.gameObject, 5f);
             }
 
             if (_weatherStates[_activeWeatherIndex].ActiveParticles != null)
             {
-                _ps = _weatherStates[_activeWeatherIndex].ActiveParticles;
+                _currentPS = Instantiate(_weatherStates[_activeWeatherIndex].ActiveParticles);
             }
 
-            if (_ps != null)
+            if (_currentPS != null)
             {
-                _ps.Play();
+                _currentPS.GetComponent<ParticleSystem>().Play();
             }
 
             _psSwitched = true;

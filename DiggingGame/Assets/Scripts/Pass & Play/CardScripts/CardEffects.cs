@@ -2291,7 +2291,7 @@ public class CardEffects : MonoBehaviour
 
         int pointsToScore = 0;
         int curInterval = 0;
-        for(int i = 0; i != PlacedPieces; i++)
+        for(int i = 0; i <= PlacedPieces; i++)
         {
             if(curInterval != _regenPiecesRequiredToScore)
             {

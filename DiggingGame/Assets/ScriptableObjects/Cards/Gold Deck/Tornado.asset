@@ -25,3 +25,4 @@ MonoBehaviour:
   persistent: 0
   disaster: 1
   CardArt: {fileID: -16575598, guid: 15f1311710243094384dbf8b1f6cc1b9, type: 3}
+  ChangeWeatherTo: 7
