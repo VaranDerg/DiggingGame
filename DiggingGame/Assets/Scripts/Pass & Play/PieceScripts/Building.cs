@@ -37,6 +37,7 @@ public class Building : MonoBehaviour
     [SerializeField] private string _buildingClickName;
     [SerializeField] private string _buildingWaitingName;
     [SerializeField] private string _buildingDamagedName;
+    [SerializeField] private string _buildingDamagedWaitingName;
     [SerializeField] private float _minAnimWaitTime, _maxAnimWaitTime;
     [SerializeField] private float _removalAnimWaitTime;
     [SerializeField] private GameObject _damagedPS;
@@ -218,15 +219,15 @@ public class Building : MonoBehaviour
 
         BuildingHealth -= damage;
 
-        if(damage == 2 || BuildingHealth == 0)
+        if(damageDiceVisual == 4)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken massive damage!");
         }
-        else if(damage == 1 && BuildingHealth == 2)
+        else if(damageDiceVisual == 3 || damageDiceVisual == 2)
         {
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
         }
-        else if(damage == 0)
+        else if(damageDiceVisual == 1)
         {
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " avoided taking damage!");
         }
@@ -288,7 +289,7 @@ public class Building : MonoBehaviour
                 }
             }
 
-            _anims.Play(_buildingClickName);
+            //_anims.Play(_buildingClickName);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
             GetComponentInParent<PieceController>().HasP1Building = false;
@@ -313,13 +314,13 @@ public class Building : MonoBehaviour
             StopCoroutine(_currentAnimCoroutine);
             _anims.Play(_buildingDamagedName);
             GetComponent<SpriteRenderer>().sprite = _damagedSprite;
-            _anims.Play(_buildingClickName);
+            //_anims.Play(_buildingClickName);
             _damagedPS.SetActive(true);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if(BuildingHealth == 2)
         {
-            _anims.Play(_buildingClickName);
+            //_anims.Play(_buildingClickName);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
@@ -377,7 +378,14 @@ public class Building : MonoBehaviour
         if(show)
         {
             CanBeDamaged = true;
-            _anims.Play(_buildingWaitingName);
+            if(BuildingHealth == 1)
+            {
+                _anims.Play(_buildingDamagedWaitingName);
+            }
+            else
+            {
+                _anims.Play(_buildingWaitingName);
+            }
         }
         else
         {
@@ -404,7 +412,14 @@ public class Building : MonoBehaviour
         if (show)
         {
             CanBeRepaired = true;
-            _anims.Play(_buildingWaitingName);
+            if(BuildingHealth == 1)
+            {
+                _anims.Play(_buildingDamagedWaitingName);
+            }
+            else
+            {
+                _anims.Play(_buildingWaitingName);
+            }
         }
         else
         {

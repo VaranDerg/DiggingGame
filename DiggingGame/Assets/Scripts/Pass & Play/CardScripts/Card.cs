@@ -29,4 +29,6 @@ public class Card : ScriptableObject
     public bool disaster;
 
     public Sprite CardArt;
+
+    public WeatherState.Weather ChangeWeatherTo;
 }

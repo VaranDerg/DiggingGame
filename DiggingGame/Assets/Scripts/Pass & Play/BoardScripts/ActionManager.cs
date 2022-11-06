@@ -683,9 +683,9 @@ public class ActionManager : MonoBehaviour
     {
         if(player == 1)
         {
-            if(P1Score >= 15)
+            if(P1Score >= WinningScore)
             {
-                _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached 15 points!");
+                _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached " + WinningScore + " points!");
                 _menuButton.SetActive(true);
                 return;
             }
@@ -697,9 +697,9 @@ public class ActionManager : MonoBehaviour
         }
         else
         {
-            if (P2Score >= 15)
+            if (P2Score >= WinningScore)
             {
-                _gcm.UpdateCurrentActionText("Player 2 wins, as they've reached 15 points!");
+                _gcm.UpdateCurrentActionText("Player 2 wins, as they've reached " + WinningScore + " points!");
                 _menuButton.SetActive(true);
                 return;
             }
