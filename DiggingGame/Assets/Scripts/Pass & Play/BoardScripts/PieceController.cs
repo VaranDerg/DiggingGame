@@ -310,6 +310,11 @@ public class PieceController : MonoBehaviour
 
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
             {
+                if(piece.GetComponent<PieceController>().ObjState == GameState.Five)
+                {
+                    continue;
+                }
+
                 if(piece.GetComponentInChildren<Building>())
                 {
                     piece.GetComponentInChildren<Building>().PrepBuilidingDamaging(true);

@@ -2497,6 +2497,8 @@ public class CardEffects : MonoBehaviour
             maxRepairs = _allowedRepairs;
         }
 
+        RepairedBuildings = 0;
+
         while(maxRepairs != RepairedBuildings)
         {
             _gcm.UpdateCurrentActionText("Repair " + (maxRepairs - RepairedBuildings) + " more Buildings!");
