@@ -42,6 +42,19 @@ Balance:
 	~ Weed Whacker & Dam now both happen immediately once a Building matching their type is selected to be damaged. This is
 	to allow the cards cycle back into the deck quicker instead of sitting in a player's hand all game. Additionally, the 
 	card now simply forces a roll of 1 to increase simplicity.
+- Fertilizer (1 Grass 1 Dirt -> 2 Dirt)
+	~ Fertilizer, in comparison to Flowers and Compaction, was somewhat difficult to use at most points of the game due to
+	the Dirt Supply being fairly empty. Making it similar to other placement cards by making its cost equivalent to its
+	placement suit should allow players to use it more often.
+- Gold Cards
+   ~ Golden Shovel (1 Grass 1 Dirt -> 1 Dirt 1 Stone)
+   ~ Regeneration (3 Grass -> 2 Grass 1 Dirt 1 Stone)
+   ~ Tornado (3 Grass 1 Dirt -> 3 Grass 1 Stone)
+   ~ Transmutation (1 Stone -> 2 Stone)
+   ~ Holy Idol (2 Grass 1 Stone -> 1 Grass 1 Dirt 1 Stone)
+	~ Certain games of Subterranean tend to have an influx of Gold Cards with a drought of Stone Pieces in the Supply. These
+	changes were put in place to encourage more Stone being sent to the Supply, give Stone Mines a further use for late game
+	rounds, and allow placing Stone to be a more viable choice. 
 
 Bugs: 
 - Fixed an issue where Garden and Flowers wouldn't allow players to place Pieces on the board and softlock the game.

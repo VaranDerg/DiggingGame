@@ -85,39 +85,30 @@ public class StatManager : MonoBehaviour
             {
                 case "Score":
                     s_P1FinalScore += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1FinalScore - amount) + " to " + s_P1FinalScore + ".");
                     break;
                 case "Building":
                     s_P1BuildingTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1BuildingTotal - amount) + " to " + s_P1BuildingTotal + ".");
                     break;
                 case "Activation":
                     s_P1ActivationTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1ActivationTotal - amount) + " to " + s_P1ActivationTotal + ".");
                     break;
                 case "Destroy":
                     s_P1DestroyTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1DestroyTotal - amount) + " to " + s_P1DestroyTotal + ".");
                     break;
                 case "Steal":
                     s_P1StealTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1StealTotal - amount) + " to " + s_P1StealTotal + ".");
                     break;
                 case "Place":
                     s_P1PlaceTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1PlaceTotal - amount) + " to " + s_P1PlaceTotal + ".");
                     break;
                 case "Retrieve":
                     s_P1RetrieveTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1RetrieveTotal - amount) + " to " + s_P1RetrieveTotal + ".");
                     break;
                 case "Dig":
                     s_P1DigTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1DigTotal - amount) + " to " + s_P1DigTotal + ".");
                     break;
                 case "Card":
                     s_P1CardSpendTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P1CardSpendTotal - amount) + " to " + s_P1CardSpendTotal + ".");
                     break;
             }
         }
@@ -127,39 +118,30 @@ public class StatManager : MonoBehaviour
             {
                 case "Score":
                     s_P2FinalScore += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2FinalScore - amount) + " to " + s_P2FinalScore + ".");
                     break;
                 case "Building":
                     s_P2BuildingTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2BuildingTotal - amount) + " to " + s_P2BuildingTotal + ".");
                     break;
                 case "Activation":
                     s_P2ActivationTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2ActivationTotal - amount) + " to " + s_P2ActivationTotal + ".");
                     break;
                 case "Destroy":
                     s_P2DestroyTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2DestroyTotal - amount) + " to " + s_P2DestroyTotal + ".");
                     break;
                 case "Steal":
                     s_P2StealTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2StealTotal - amount) + " to " + s_P2StealTotal + ".");
                     break;
                 case "Place":
                     s_P2PlaceTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2PlaceTotal - amount) + " to " + s_P2PlaceTotal + ".");
                     break;
                 case "Retrieve":
                     s_P2RetrieveTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2RetrieveTotal - amount) + " to " + s_P2RetrieveTotal + ".");
                     break;
                 case "Dig":
                     s_P2DigTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2DigTotal - amount) + " to " + s_P2DigTotal + ".");
                     break;
                 case "Card":
                     s_P2CardSpendTotal += amount;
-                    Debug.Log("Player " + player + "'s " + statName + " gone from " + (s_P2CardSpendTotal - amount) + " to " + s_P2CardSpendTotal + ".");
                     break;
             }
         }

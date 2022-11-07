@@ -55,6 +55,15 @@ public class ResultsDisplay : MonoBehaviour
             "Pieces Dug: " + StatManager.s_P2DigTotal + Environment.NewLine +
             "Gold Retrieved: " + StatManager.s_P2RetrieveTotal + Environment.NewLine +
             Environment.NewLine + "Final Score: " + StatManager.s_P2FinalScore;
+
+        if(StatManager.s_P1FinalScore >= 18)
+        {
+            _winText.text = "Player 1 Wins!";
+        }
+        else
+        {
+            _winText.text = "Player 2 Wins!";
+        }
     }
 
     /// <summary>

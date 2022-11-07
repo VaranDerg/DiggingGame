@@ -14,20 +14,31 @@ using TMPro;
 [System.Serializable]
 public class Building : MonoBehaviour
 {
-    [Header("Values")]
+    //Sprites and Dice Face values.
+    [Header("References")]
     [SerializeField] private Sprite _damagedSprite;
     [SerializeField] private Sprite _defaultSprite;
     [SerializeField] private int _showDiceFaceTimes = 30;
 
+    //Information regarding the Building.
+    [Header("Values")]
+    //Its health.
     public int BuildingHealth = 2;
+    //Which player built it
     [HideInInspector] public int PlayerOwning = 0;
+    //Its name (Factory, Grass Mine, Burrow, Etc)
     [HideInInspector] public string BuildingType = "";
+    //States
     [HideInInspector] public bool CanBeDamaged;
     [HideInInspector] public bool CanBeRepaired;
+    //How much damage the building will lose
     [HideInInspector] public int DamageTaken;
+    //What suit its on
     [HideInInspector] public string SuitOfPiece;
+    //Whether or not its participating in active selection
     [HideInInspector] public bool ActiveBuilding;
 
+    //Buncha stuff for all of Caelie's wonderful animations
     [Header("Animations")]
     [SerializeField] private string _animFirstPartName;
     [SerializeField] private string _animSecondPartName;
@@ -115,6 +126,9 @@ public class Building : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// For building interaction.
+    /// </summary>
     private void OnMouseOver()
     {
         if(CanBeDamaged && !ActiveBuilding)
@@ -126,6 +140,7 @@ public class Building : MonoBehaviour
         }
         else if(CanBeDamaged && ActiveBuilding)
         {
+            //This part is for my little investigator brain. You can ingnore it.
             Debug.LogWarning("This is the Invincible Mine bug! Building is still somwhow active.");
         }
 
@@ -144,13 +159,16 @@ public class Building : MonoBehaviour
     /// <param name="damage">The amount of damage (1 or 2, for now)</param>
     public IEnumerator DamageBuiliding()
     {
+        //Sets colliders
         bool hasCard = false;
         ActiveBuilding = true;
         _bm.SetActiveCollider("Board");
 
+        //Starts rolling the dice.
         _damageDice.GetComponent<Animator>().Play("DiceEnter");
         _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
         int num = 0;
+        //Shows a face (1, 2, 3, 4) up to the variable's count.
         for (int i = 0; i <= _showDiceFaceTimes; i++)
         {
             if(num == _ce.DamageDieSides)
@@ -164,7 +182,8 @@ public class Building : MonoBehaviour
             _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
             yield return new WaitForSeconds(0.05f);
         }
-
+        
+        //The real result is separate from the visual
         int damageDiceVisual = Random.Range(1, _ce.DamageDieSides + 1);
 
         //Weed Whacker & Dam
@@ -177,6 +196,7 @@ public class Building : MonoBehaviour
             hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Dam");
         }
 
+        //Forces a roll of 1 if the defensive card is in play.
         if (hasCard)
         {
             damageDiceVisual = 1;
@@ -191,11 +211,13 @@ public class Building : MonoBehaviour
         }
         //End Weed Whacker & Dam
 
+        //Calculates the damage, sets it to the dice, and subtracts that damage from the Building's health.
         int damage = _ce.CalculateBuildingDamage(damageDiceVisual);
         _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = damageDiceVisual.ToString();
 
         BuildingHealth -= damage;
 
+        //The text updates based on this given damage.
         if(damageDiceVisual == 4)
         {
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken massive damage!");
@@ -209,8 +231,13 @@ public class Building : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " avoided taking damage!");
         }
 
-        if(BuildingHealth <= 0)
+        //Fun!
+        _damageClickPS.GetComponent<ParticleSystem>().Play();
+
+        //Destroyed
+        if (BuildingHealth <= 0)
         {
+            //Removes the building from ActionManager's count
             if(PlayerOwning == 1)
             {
                 if (BuildingType == "Factory")
@@ -268,12 +295,14 @@ public class Building : MonoBehaviour
 
             StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Destroy", 1);
 
-            _damageClickPS.GetComponent<ParticleSystem>().Play();
+            //Lets the players sob for a bit
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
+            //Resets the Piece
             GetComponentInParent<PieceController>().HasP1Building = false;
             GetComponentInParent<PieceController>().HasP2Building = false;
 
+            //Calls retribution here if need so
             if (_pcm.CheckForPersistentCard(PlayerOwning, "Retribution"))
             {
                 _pcm.DiscardPersistentCard(PlayerOwning, "Retribution");
@@ -282,6 +311,7 @@ public class Building : MonoBehaviour
 
             _am.ScorePoints(1);
 
+            //Hides the building and disables it
             _anims.Play(_buildingHideName);
             yield return new WaitForSeconds(_removalAnimWaitTime);
             PrepBuilidingDamaging(false);
@@ -290,19 +320,20 @@ public class Building : MonoBehaviour
         }
         else if(BuildingHealth == 1)
         {
+            //Updates visuals.
             StopCoroutine(_currentAnimCoroutine);
             _anims.Play(_buildingDamagedName);
             GetComponent<SpriteRenderer>().sprite = _damagedSprite;
-            //_anims.Play(_buildingClickName);
             _damageSmokePS.SetActive(true);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if(BuildingHealth == 2)
         {
-            //_anims.Play(_buildingClickName);
+            //Yippee!
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
+        //Additional damages are generally only for Tornado or Earthquake.
         _damageDice.GetComponent<Animator>().Play("DiceExit");
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
@@ -325,6 +356,7 @@ public class Building : MonoBehaviour
     /// </summary>
     public void RepairBuilding()
     {
+        //Clicking a building Repairs it.
         BuildingHealth++;
         _damageClickPS.GetComponent<ParticleSystem>().Play();
         _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
@@ -332,7 +364,6 @@ public class Building : MonoBehaviour
         _damageSmokePS.SetActive(false);
         ActiveBuilding = true;
 
-        //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
         if(_am.CurrentPlayer == 1 && PlayerOwning == 2)
         {
             _am.ScorePoints(1);

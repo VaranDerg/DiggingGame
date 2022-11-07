@@ -14,16 +14,19 @@ using UnityEngine.UI;
 
 public class PersistentCardManager : MonoBehaviour
 {
+    //Persistent card positions, on the left of the screen.
     [Header("References")]
     [SerializeField] private List<Transform> _p1PCardPositions = new List<Transform>();
     [SerializeField] private List<Transform> _p2PCardPositions = new List<Transform>();
 
+    //Lists holding players' persistent cards and bools to see if slots are visually open.
     [Header("Card Stuff")]
     [HideInInspector] public List<GameObject> P1PersistentCards = new List<GameObject>();
     [HideInInspector] public List<GameObject> P2PersistentCards = new List<GameObject>();
     [HideInInspector] public bool[] P1OpenPCardSlots;
     [HideInInspector] public bool[] P2OpenPCardSlots;
 
+    //Functional variables for specific code points.
     [Header("Other")]
     [HideInInspector] public bool DiscardedPersistentCard;
     [HideInInspector] public bool DecidedBuildingProtection;
@@ -39,6 +42,9 @@ public class PersistentCardManager : MonoBehaviour
     private CardEffects _ce;
     private GameCanvasManagerNew _gcm;
 
+    /// <summary>
+    /// Assigns Partner scripts.
+    /// </summary>
     private void Awake()
     {
         _am = FindObjectOfType<ActionManager>();
@@ -48,6 +54,9 @@ public class PersistentCardManager : MonoBehaviour
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
     }
 
+    /// <summary>
+    /// Marks every persistent card slot as open.
+    /// </summary>
     private void PreparePCardSlots()
     {
         P1OpenPCardSlots = new bool[_p1PCardPositions.Count];
@@ -63,25 +72,38 @@ public class PersistentCardManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calls the Method.
+    /// </summary>
     private void Start()
     {
         PreparePCardSlots();
     }
 
+    /// <summary>
+    /// Makes a card persistent. This is very similar to how a Card is drawn and added to one's hand.
+    /// </summary>
+    /// <param name="card"></param>
     public void MakeCardPersistent(GameObject card)
     {
         if(_am.CurrentPlayer == 1)
         {
+            //Iterates through every open card slot.
             for(int i = 0; i < P1OpenPCardSlots.Length; i++)
             {
                 if(P1OpenPCardSlots[i] == true)
                 {
+                    //Moves it there.
                     card.transform.position = _p1PCardPositions[i].position;
+                    //Plays an Animation.
                     card.GetComponentInChildren<Animator>().Play("CardPersistent");
+                    //Says the Card is persistent and gives its current HandPosition.
                     card.GetComponentInChildren<CardController>().MadePersistentP1 = true;
                     card.GetComponentInChildren<CardController>().PHandPosition = i;
+                    //Removes it from the Hand.
                     FindObjectOfType<CardManager>().P1OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
                     FindObjectOfType<CardManager>().P1Hand.Remove(card);
+                    //Lowers count.
                     if (card.CompareTag("Card"))
                     {
                         _am.P1Cards--;
@@ -90,6 +112,7 @@ public class PersistentCardManager : MonoBehaviour
                     {
                         _am.P1GoldCards--;
                     }
+                    //Adds to newest list.
                     P1PersistentCards.Add(card);
                     P1OpenPCardSlots[i] = false;
                     //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
@@ -97,6 +120,7 @@ public class PersistentCardManager : MonoBehaviour
                 }
             }
         }
+        //Same for player 2.
         else
         {
             for (int i = 0; i < P2OpenPCardSlots.Length; i++)
@@ -134,6 +158,8 @@ public class PersistentCardManager : MonoBehaviour
     /// <returns></returns>
     public bool CheckForPersistentCard(int player, string cardName)
     {
+        //Checks to see if a Player has a persistent card of the provided name. The name is very case sensitive. True if yes, false if no.
+
         if(player == 1)
         {
             for(int i = 0; i < P1PersistentCards.Count; i++)
@@ -165,6 +191,7 @@ public class PersistentCardManager : MonoBehaviour
     /// <param name="cardName">Name of the card, like "Card Name"</param>
     public void DiscardPersistentCard(int player, string cardName)
     {
+        //A wrapper to discard a persistent card of that given name.
         if (player == 1)
         {
             for(int i = 0; i < P1PersistentCards.Count; i++)
@@ -192,8 +219,10 @@ public class PersistentCardManager : MonoBehaviour
     /// </summary>
     public IEnumerator PersistentCardDiscardProcess()
     {
+        //This is for use with Flood. It sets Cards into a discardable state. 
         if (_am.CurrentPlayer == 1)
         {
+            //Puts every card into that state.
             int pCardCount = 0;
             _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
             for(int i = 0; i < P2PersistentCards.Count; i++)
@@ -202,6 +231,7 @@ public class PersistentCardManager : MonoBehaviour
                 pCardCount++;
             }
 
+            //Stops if no cards.
             if (pCardCount == 0)
             {
                 _bm.DisableAllBoardInteractions();
@@ -209,11 +239,13 @@ public class PersistentCardManager : MonoBehaviour
                 yield break;
             }
 
+            //Waits until selected.
             while (!DiscardedPersistentCard)
             {
                 yield return null;
             }
 
+            //Returns every other card to its original state.
             for (int i = 0; i < P2PersistentCards.Count; i++)
             {
                 P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
@@ -223,6 +255,7 @@ public class PersistentCardManager : MonoBehaviour
             _bm.DisableAllBoardInteractions();
             _gcm.Back();
         }
+        //Identical for player 2.
         else
         {
             int pCardCount = 0;
@@ -263,6 +296,7 @@ public class PersistentCardManager : MonoBehaviour
     /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
     public void RetributionStart(int retributionPlayer, string suit)
     {
+        //Sends every piece a player has to the supply, based on the Retribution card.
         int sentPieces = 0;
 
         //Note, should affect the opposite player.
