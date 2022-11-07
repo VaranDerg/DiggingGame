@@ -120,10 +120,12 @@ public class ActionManager : MonoBehaviour
         if(CurrentPlayer == 1)
         {
             P1Score += amount;
+            StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Score", amount);
         }
         else
         {
             P2Score += amount;
+            StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Score", amount);
         }
 
         _gcm.UpdateTextBothPlayers();
@@ -374,6 +376,8 @@ public class ActionManager : MonoBehaviour
                 }
                 //End of Geologist code.
 
+                StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
+
                 StartCoroutine(_cm.DrawCard("Gold"));
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
@@ -404,6 +408,8 @@ public class ActionManager : MonoBehaviour
                     ScorePoints(1);
                 }
                 //End of Geologist code.
+
+                StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
 
                 StartCoroutine(_cm.DrawCard("Gold"));
                 P2RefinedPile[3]--;
@@ -711,6 +717,7 @@ public class ActionManager : MonoBehaviour
             CurrentTurnPhase = 0;
             CurrentPlayer = 1;
             CurrentRound++;
+            StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Round", 1);
             if(CurrentRound % 2 == 0)
             {
                 FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Night);

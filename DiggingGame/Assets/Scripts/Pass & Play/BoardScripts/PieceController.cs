@@ -190,6 +190,9 @@ public class PieceController : MonoBehaviour
                 {
                     CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
                 }
+
+                StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Dig", 1);
+
                 _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
             }
             //End of Shovel Code
@@ -225,6 +228,8 @@ public class PieceController : MonoBehaviour
                     yield return null;
                 }
                 _cm.PrepareCardSelection(0, "", true);
+
+                StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Dig", 1);
 
                 switch (ObjState)
                 {
@@ -769,6 +774,7 @@ public class PieceController : MonoBehaviour
         {
             bool spawnPawn = false;
             GameObject thisBuilding = Instantiate(building, _buildingSlot);
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Building", 1);
             if(buildingArrayNum == 0)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Factory";

@@ -424,6 +424,7 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Steal", 1);
         _remainingPiecesToSteal--;
         _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
         _gcm.UpdateTextBothPlayers();
@@ -685,6 +686,8 @@ public class CardEffects : MonoBehaviour
             _piecesToRegen = openPieces;
         }
 
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", _piecesToRegen);
+
         _regenSuitChosen = true;
     }
 
@@ -804,6 +807,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
+
         if (PlacedPieces == _flowersPiecesToPlace)
         {
             _am.ScorePoints(1);
@@ -909,7 +914,9 @@ public class CardEffects : MonoBehaviour
             }
         }
 
-        if(PlacedPieces > 0 && PlacedPieces < _gardenPiecesToPlace)
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
+
+        if (PlacedPieces > 0 && PlacedPieces < _gardenPiecesToPlace)
         {
             _am.ScorePoints(1);
         }
@@ -1437,6 +1444,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
+
         if (PlacedPieces == _fertilizerPiecesToPlace)
         {
             _am.ScorePoints(1);
@@ -1753,6 +1762,8 @@ public class CardEffects : MonoBehaviour
                 yield return null;
             }
         }
+
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
 
         if (PlacedPieces == _compactionPiecesToPlace)
         {

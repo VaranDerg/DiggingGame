@@ -231,6 +231,8 @@ public class CardController : MonoBehaviour
         {
             if(_am.P1RefinedPile[0] >= grassCost && _am.P1RefinedPile[1] >= dirtCost && _am.P1RefinedPile[2] >= stoneCost)
             {
+                StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
+
                 _am.P1RefinedPile[0] -= grassCost;
                 _am.P1RefinedPile[1] -= dirtCost;
                 _am.P1RefinedPile[2] -= stoneCost;
@@ -277,6 +279,8 @@ public class CardController : MonoBehaviour
         {
             if (_am.P2RefinedPile[0] >= grassCost && _am.P2RefinedPile[1] >= dirtCost && _am.P2RefinedPile[2] >= stoneCost)
             {
+                StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
+
                 _am.P2RefinedPile[0] -= grassCost;
                 _am.P2RefinedPile[1] -= dirtCost;
                 _am.P2RefinedPile[2] -= stoneCost;
@@ -357,6 +361,7 @@ public class CardController : MonoBehaviour
                 _cm.P2Hand.Remove(_cardBody);
             }
 
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
             HeldByPlayer = 0;
             Selected = false;
             CanBeSelected = false;
@@ -379,6 +384,7 @@ public class CardController : MonoBehaviour
                 _pcm.P2PersistentCards.Remove(_cardBody);
             }
 
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
             HeldByPlayer = 0;
             Selected = false;
             CanBeSelected = false;

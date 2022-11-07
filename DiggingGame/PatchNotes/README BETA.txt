@@ -1,12 +1,15 @@
 ~ ADDITIONS
-UI: 
 - Building Info
 	~ This tab gives you information on your Buildings, their Cost, and purpose. Treat it as a quick guide to remember
 	what your Buildings do. 
+- Weather
+	~ Cards now change the in-game Weather in different ways. Additionally, every round, it'll shift from Day to Night
+	and visa-versa.
 
 ~ CHANGES
 Mechanics:
-- You can now Build on Gold Pieces. Buildings on Gold are indestructable. Mines will collect Gold Pieces from the Supply.
+	- You can now Build on Gold Pieces. Buildings on Gold are indestructable but cost 1 additional card. Mines will 
+	collect Gold Pieces from the Supply.
 
 Balance:
 - Thief (1 Grass -> 2 Grass); Dirty Thief (1 Dirt -> 2 Dirt); Master Thief (1 Grass 1 Dirt -> 1 Grass 1 Dirt 1 Stone, Steal
@@ -32,6 +35,13 @@ Balance:
 	~ Planned Gamble is exactly that, a gamble. And spending stone on a card that could rarely give you benefit isn't 
 	something that's too readily done. This change should make Planned Gamble still not overly easy to play, but would give
 	it a dynamic purpose in the game and control deck cycling more.
+- Dam (1 Dirt 1 Stone -> 2 Dirt)
+	~ Protecting a building on Dirt is already fairly niche, making Dam's stone cost fairly unjustified. This should allow
+	the card to be easier to play.
+- Weed Whacker & Dam (Rework: Discard Immediately, Dice = 1)
+	~ Weed Whacker & Dam now both happen immediately once a Building matching their type is selected to be damaged. This is
+	to allow the cards cycle back into the deck quicker instead of sitting in a player's hand all game. Additionally, the 
+	card now simply forces a roll of 1 to increase simplicity.
 
 Bugs: 
 - Fixed an issue where Garden and Flowers wouldn't allow players to place Pieces on the board and softlock the game.

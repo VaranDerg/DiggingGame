@@ -266,6 +266,8 @@ public class Building : MonoBehaviour
                 }
             }
 
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Destroy", 1);
+
             _damageClickPS.GetComponent<ParticleSystem>().Play();
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 

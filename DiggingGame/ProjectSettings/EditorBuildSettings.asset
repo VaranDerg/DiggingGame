@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Online/OnlineScene.unity
     guid: 5e394fc2f4ade8843a10d529c17045c5
+  - enabled: 1
+    path: Assets/Scenes/Pass & Play/ResultsScreen.unity
+    guid: 5dea8878e3015ae42b920953b236618d
   - enabled: 0
     path: Assets/Scenes/Old/PassAndPlayScene.unity
     guid: 3677421c30784c54e8b286c031b4bf6a
