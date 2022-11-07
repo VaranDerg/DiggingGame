@@ -26,7 +26,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     [SerializeField] private GameObject _finallyZone;
     [SerializeField] private GameObject _thenActions;
     [SerializeField] private GameObject _thenBuildMenu;
-    [SerializeField] private GameObject _backButton;
+    [SerializeField] private GameObject _thenMDRMenu;
     [SerializeField] private GameObject _endPhaseButton;
     [SerializeField] private TextMeshProUGUI _currentPlayerScore;
     [SerializeField] private TextMeshProUGUI[] _currentPlayerCollectedPieces = new TextMeshProUGUI[4];
@@ -50,19 +50,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     [Header("Other References")]
     public bool _opponentViewShowing = false;
-    [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine,
-        _meerkatFactory, _meerkatBurrow, _meerkatMine;  // ASD
+    [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine, _meerkatFactory, _meerkatBurrow, _meerkatMine;
     [SerializeField] private Image _factory, _burrow, _mine;
     private OnlineActionManager _am;
     private OnlineBoardManager _bm;
     private OnlineCardManager _cm;
-    private OnlineCardEffects _ce;
-    private OnlinePersistentCardManager _pcm;
-
-    [Header("Animations")]
-    [SerializeField] Animator _oppInfoAnims;
-    [SerializeField] float _oppInfoWaitTime;
-    private bool _midShowHideAnim;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -78,7 +70,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _allObjects.Add(_finallyZone);
         _allObjects.Add(_thenActions);
         _allObjects.Add(_thenBuildMenu);
-        _allObjects.Add(_backButton);
+        _allObjects.Add(_thenMDRMenu);
         _allObjects.Add(_endPhaseButton);
     }
 
@@ -90,8 +82,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _am = FindObjectOfType<OnlineActionManager>();
         _bm = FindObjectOfType<OnlineBoardManager>();
         _cm = FindObjectOfType<OnlineCardManager>();
-        _ce = FindObjectOfType<OnlineCardEffects>();
-        _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         AddObjectsToList();
 
         // Author: Andrea SD
@@ -114,7 +104,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// 
     /// Edit: Andrea SD - Modified for online
     /// </summary>
-    public void Start()
+    private void Start()
     {
         DisableListObjects();
 
@@ -138,7 +128,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// <summary>
     /// Disables every object in AllObjects
     /// </summary>
-    public void DisableListObjects()
+    private void DisableListObjects()
     {
         foreach (GameObject obj in _allObjects)
         {
@@ -168,69 +158,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _currentPlayerRemainingBuildings[0].text = _am.P1RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
-
-            //Master Builder + Sold Out Code 
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
-            {
-                if (_am.P1CurrentBuildingPrices[0] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
-                }
-
-                if (_am.P1CurrentBuildingPrices[1] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
-                }
-
-                if (_am.P1CurrentBuildingPrices[2] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
-                }
-            }
-            else
-            {
-                if (_am.P1CurrentBuildingPrices[0] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
-                }
-
-                if (_am.P1CurrentBuildingPrices[1] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
-                }
-
-                if (_am.P1CurrentBuildingPrices[2] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
-                }
-            }
-            //End Master Builder + Sold Out Code
+            _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
+            _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
+            _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
         }
-        else    // Player 2
+        else
         {
             _currentPlayerScore.text = "Score: " + _am.P2Score;
             _currentPlayerCollectedPieces[0].text = "x" + _am.P2CollectedPile[0];
@@ -244,62 +176,9 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _currentPlayerRemainingBuildings[0].text = _am.P2RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
-            //Master Builder + Sold Out Code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
-            {
-                if (_am.P2CurrentBuildingPrices[0] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
-                }
-                if (_am.P2CurrentBuildingPrices[1] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
-                }
-                if (_am.P2CurrentBuildingPrices[2] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
-                }
-            }
-            else
-            {
-                if (_am.P2CurrentBuildingPrices[0] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
-                }
-                if (_am.P2CurrentBuildingPrices[1] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
-                }
-                if (_am.P2CurrentBuildingPrices[2] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
-                }
-            }
-            //End Master Builder + Sold Out Code
+            _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
+            _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
+            _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
         }
     }
 
@@ -316,39 +195,23 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _supplyPieces[3].text = "x" + _am.SupplyPile[3];
     }
 
-    /*    /// <summary>
-        /// Updates the Opponent View text.
-        /// Edit: Andrea SD - Modified for online use. 
-        /// Edit 2: Andrea SD - Commented out since it is no longer used
-        /// </summary>
-        /// <param name="curOpponent">1 or 2</param>
-        private void UpdateOpponentText(int curOpponent)
+/*    /// <summary>
+    /// Updates the Opponent View text.
+    /// Edit: Andrea SD - Modified for online use. 
+    /// Edit 2: Andrea SD - Commented out since it is no longer used
+    /// </summary>
+    /// <param name="curOpponent">1 or 2</param>
+    private void UpdateOpponentText(int curOpponent)
+    {
+        if (curOpponent == 1)
         {
-            if (curOpponent == 1)
-            {
-                photonView.RPC("ChangeOpponentTextOne", RpcTarget.All);     //Andrea SD
-            }
-            else
-            {          
-                photonView.RPC("ChangeOpponentTextTwo", RpcTarget.All);     //Aea SD
-            }
-        }*/
-    /*    /// <summary>
-        /// Changes the opponent text on player one's screen with player two's vals
-        /// Author: Andrea SD
-        /// </summary>
-        [PunRPC]
-        public void ChangeOpponentTextTwo()
-        {
-            _opponentScoreText.text = "Score: " + _am.P2Score;
-            _opponentCardText.text = "Cards: " + _am.P2Cards;
-            _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
-
-            _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
-            _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
-            _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
-            _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
-        }*/
+            photonView.RPC("ChangeOpponentTextOne", RpcTarget.All);     //Andrea SD
+        }
+        else
+        {          
+            photonView.RPC("ChangeOpponentTextTwo", RpcTarget.All);     //Aea SD
+        }
+    }*/
 
     /// <summary>
     /// Changes the opponent text on player two's screen with player one's vals
@@ -380,6 +243,23 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _opponentPieces[3].text = "Gold: " + (_am.P1CollectedPile[3] + _am.P1RefinedPile[3]);
         }
     }
+
+/*    /// <summary>
+    /// Changes the opponent text on player one's screen with player two's vals
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void ChangeOpponentTextTwo()
+    {
+        _opponentScoreText.text = "Score: " + _am.P2Score;
+        _opponentCardText.text = "Cards: " + _am.P2Cards;
+        _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
+
+        _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
+        _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
+        _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
+        _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
+    }*/
 
     /// <summary>
     /// Updates the Current Action text.
@@ -417,7 +297,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// Calls every "UpdateText"-type function except the Current Action Text one.
     /// 
     /// Edited: Andrea SD - online use
-    /// Updates the opponents text across the network
     /// </summary>
     public void UpdateTextBothPlayers()
     {
@@ -447,48 +326,17 @@ public class OnlineCanvasManager : MonoBehaviourPun
         UpdateAlwaysActiveText();
     }
 
-    /// <summary>
-    /// Wrapper for starting the below Coroutine through a button.
-    /// </summary>
-    public void OpponentInfoToggleWrapper()
+    public void OpponentInfoToggle()
     {
-        if (_midShowHideAnim)
+        if(_opponentViewShowing)
         {
-            return;
-        }
-
-        StartCoroutine(OpponentInfoToggle());
-    }
-
-    /// <summary>
-    /// Shows or hides the Opponent Info.
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator OpponentInfoToggle()
-    {
-        if (_opponentViewShowing)
-        {
-            _oppInfoAnims.Play("OppInfoHide");
-
-            _midShowHideAnim = true;
-            yield return new WaitForSeconds(_oppInfoWaitTime);
-            _midShowHideAnim = false;
-
-            _showHideOpponentInfoText.text = "Show Opponent Info";
             _opponentInfoZone.SetActive(false);
+            _showHideOpponentInfoText.text = "Show Opponent Info";
             _opponentViewShowing = false;
         }
         else
         {
-            _opponentInfoZone.SetActive(true);
-            _oppInfoAnims.Play("OppInfoShow");
-
-            _midShowHideAnim = true;
-            yield return new WaitForSeconds(_oppInfoWaitTime);
-            _midShowHideAnim = false;
-
-            _showHideOpponentInfoText.text = "Hide Opponent Info";
-            _opponentViewShowing = true;
+            ShowOpponentInfo();
         }
     }
 
@@ -498,11 +346,9 @@ public class OnlineCanvasManager : MonoBehaviourPun
     [PunRPC]
     public void ShowOpponentInfo()
     {
-        /*_opponentInfoZone.SetActive(true);
+        _opponentInfoZone.SetActive(true);
         _showHideOpponentInfoText.text = "Hide Opponent Info";
-        _opponentViewShowing = true;*/
-
-        OpponentInfoToggleWrapper();
+        _opponentViewShowing = true;
     }
 
     /// <summary>
@@ -532,7 +378,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _am.ActivateMines(_am.CurrentPlayer);
         _am.StartMove(_am.CurrentPlayer);
         photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
-        StartCoroutine(_cm.ShowCards(_am.CurrentPlayer));
+        _cm.ShowCards(_am.CurrentPlayer);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
@@ -548,7 +394,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         UpdateOpponentActionText(_am.CurrentPlayer + " is contemplating their next action...");     // Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
         photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
 
         _thenZone.SetActive(true);
@@ -568,11 +414,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is moving...");      // Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
 
         _am.StartMove(_am.CurrentPlayer);
         _thenZone.SetActive(true);
-        _backButton.SetActive(true);
+        _thenMDRMenu.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to Move, then a Piece to move onto.");
@@ -587,11 +433,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is digging...");     // Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
 
         _am.StartDig(_am.CurrentPlayer);
         _thenZone.SetActive(true);
-        _backButton.SetActive(true);
+        _thenMDRMenu.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to Dig with, then a Piece to Dig.");
@@ -606,11 +452,10 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is building...");
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
 
         _thenZone.SetActive(true);
         _thenBuildMenu.SetActive(true);
-        _backButton.SetActive(true);
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Building to Build.");
@@ -621,10 +466,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void Retrieve()
     {
-        DisableListObjects();
-        _thenZone.SetActive(true);
-        _backButton.SetActive(true);
-
         StartCoroutine(_am.UseGold(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
@@ -636,11 +477,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// <param name="buildingName">"Factory" "Burrow" or "Mine</param>
     public void Build(string buildingName)
     {
-        DisableListObjects();
-        _bm.DisableAllBoardInteractions();
-
-        _thenZone.SetActive(true);
-        _backButton.SetActive(true);
+        _bm.DisablePawnBoardInteractions();
         _am.StartBuild(_am.CurrentPlayer, buildingName);
 
         UpdateTextBothPlayers();
@@ -655,7 +492,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of playing a card...");  //Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
+        _bm.DisablePawnBoardInteractions();
         photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
 
         _finallyZone.SetActive(true);
@@ -664,12 +501,12 @@ public class OnlineCanvasManager : MonoBehaviourPun
         if (_am.CurrentPlayer == 1)
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + " Card(s).");
-            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1], true);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P1BuiltBuildings[1]);
         }
         else
         {
             UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + " Card(s).");
-            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1], true);
+            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations + _am.P2BuiltBuildings[1]);
         }
     }
 
@@ -680,9 +517,9 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of their next action...");
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
-        
-        foreach(PieceController script in FindObjectsOfType<PieceController>())
+        _bm.DisablePawnBoardInteractions();
+        //I HATE THIS PART OF CODE. If a workaround appears I wanna change it ASAP.
+        foreach(MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
         {
             script.StopAllCoroutines();
         }
@@ -698,17 +535,20 @@ public class OnlineCanvasManager : MonoBehaviourPun
         else if(_am.CurrentTurnPhase == 3)
         {
             _finallyZone.SetActive(true);
-            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations, false);
-            
-                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Cards.");
+            if (_am.CurrentPlayer == 1)
+            {
+                UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + " Cards.");
+            }
+            else
+            {
+                UpdateCurrentActionText("Activate up to " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + " Cards.");
+            }
         }
 
         UpdateTextBothPlayers();
     }
 
     /// <summary>
-    /// Ends the player's turn.
-    /// 
     /// Edit: Andrea SD: Modified for online play
     /// </summary>
     public void EndTurn()

@@ -11,14 +11,8 @@ GameObject:
   - component: {fileID: 5312618096240013890}
   - component: {fileID: 5312618096240013891}
   - component: {fileID: 7978415616008661505}
-<<<<<<<< HEAD:DiggingGame/Assets/Prefabs/OtherPiecePrefabs/MolePawn.prefab
   - component: {fileID: 1102574898821124289}
   - component: {fileID: 7528710836182157295}
-========
-  - component: {fileID: 5976671422692316580}
-  - component: {fileID: 8046619931926574901}
-  - component: {fileID: 3076369197347161877}
->>>>>>>> origin/Online-Cards:DiggingGame/Assets/Photon Gen/Resources/PlayerPawn.prefab
   m_Layer: 6
   m_Name: MolePawn
   m_TagString: Pawn
@@ -120,31 +114,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
-<<<<<<<< HEAD:DiggingGame/Assets/Prefabs/OtherPiecePrefabs/MolePawn.prefab
 --- !u!114 &1102574898821124289
-========
---- !u!95 &5976671422692316580
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5312618096240013892}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c5937c83155b1af4293ca052ee625270, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8046619931926574901
->>>>>>>> origin/Online-Cards:DiggingGame/Assets/Photon Gen/Resources/PlayerPawn.prefab
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,7 +123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5312618096240013892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca0863c4d4e56ff4f835363c27a7e571, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ebcd305496815542a51069a0506e506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PawnPlayer: 1
@@ -166,23 +136,17 @@ MonoBehaviour:
   MudslideMove: 0
   IsUsingWalkway: 0
   TeleportationMove: 0
-<<<<<<<< HEAD:DiggingGame/Assets/Prefabs/OtherPiecePrefabs/MolePawn.prefab
   WaitingAnimName: MoleWaiting
   IdleAnimName: MoleIdle
 --- !u!95 &7528710836182157295
 Animator:
   serializedVersion: 4
-========
---- !u!114 &3076369197347161877
-MonoBehaviour:
->>>>>>>> origin/Online-Cards:DiggingGame/Assets/Photon Gen/Resources/PlayerPawn.prefab
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5312618096240013892}
   m_Enabled: 1
-<<<<<<<< HEAD:DiggingGame/Assets/Prefabs/OtherPiecePrefabs/MolePawn.prefab
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 86e5cfdc66df6484891a5da78531178d, type: 2}
   m_CullingMode: 0
@@ -256,19 +220,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7284859818604713262, guid: f86890b1155e1f54daac8f358b550cc7, type: 3}
   m_PrefabInstance: {fileID: 1672789614597343000}
   m_PrefabAsset: {fileID: 0}
-========
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
->>>>>>>> origin/Online-Cards:DiggingGame/Assets/Photon Gen/Resources/PlayerPawn.prefab

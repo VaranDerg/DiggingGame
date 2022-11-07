@@ -1,9 +1,10 @@
 /*****************************************************************************
-// File Name :         OnlinePieceController.cs
+// File Name :         BoardController.cs
 // Author :            Andrea Swihart-DeCoster & Rudy W.
 // Creation Date :     October 3rd, 2022
 //
-// Brief Description : This document controls the players pieces.
+// Brief Description : This document controls the players interactions with the
+                       game board.
 *****************************************************************************/
 
 using System.Collections;
@@ -14,7 +15,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UnityEditor;
-using UnityEngine.Apple;
 
 public class OnlinePieceController : MonoBehaviourPun
 {
@@ -47,31 +47,7 @@ public class OnlinePieceController : MonoBehaviourPun
     private OnlineActionManager _am;
     private OnlineCardManager _cm;
     private OnlineCanvasManager _gcm;
-    private OnlinePersistentCardManager _pcm;
-    private OnlineCardEffects _ce;
     [HideInInspector] public bool HasGold;    //true if the piece reveals gold when flipped
-    [HideInInspector] public bool CheckedByPawn;
-
-    [Header("Card Activation Stuff")]
-    [HideInInspector] public bool FromActivatedCard = false;
-    [HideInInspector] public bool IsEarthquakeable;
-    [HideInInspector] public bool UsingWalkway;
-    [HideInInspector] public bool IsFlippable;
-    [HideInInspector] public bool DiscerningEye;
-
-    [Header("Particle Systems")]
-    [SerializeField] private ParticleSystem _grassPS;
-    [SerializeField] private ParticleSystem _dirtPS;
-    [SerializeField] private ParticleSystem _stonePS;
-    [SerializeField] private ParticleSystem _goldPS;
-
-    private GameObject _currentPawn;
-
-    [Header("Other")]
-    private bool _pawnIsMoving;
-
-    private int _currentPawnID;
-    private int _pieceID;
 
     private void Awake()
     {
@@ -80,8 +56,6 @@ public class OnlinePieceController : MonoBehaviourPun
         _am = FindObjectOfType<OnlineActionManager>();
         _cm = FindObjectOfType<OnlineCardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
-        _ce = FindObjectOfType<OnlineCardEffects>();
-        _pcm = FindObjectOfType<OnlinePersistentCardManager>();
     }
 
     /// <summary>
@@ -94,9 +68,8 @@ public class OnlinePieceController : MonoBehaviourPun
         One,
         Two,
         Three,
-        Four,
-        Five,
-        Six
+        Four
+       // Five
     }
 
     // Start is called before the first frame update
@@ -104,17 +77,6 @@ public class OnlinePieceController : MonoBehaviourPun
     {     
         SetPieceState(1);
         _sr.color = _defaultColor;
-    }
-
-    /// <summary>
-    /// For pawn movement.
-    /// </summary>
-    private void FixedUpdate()
-    {
-        if (_pawnIsMoving)
-        {
-            CurrentPawn.transform.position = Vector2.Lerp(CurrentPawn.transform.position, gameObject.transform.position, _am.PawnMoveSpeed * Time.deltaTime);
-        }
     }
 
     /// <summary>
@@ -133,22 +95,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
         if (IsDiggable)
         {
-            if (FromActivatedCard)
-            {
-                ActivatedPieceRemoval();
-            }
-            else
-            {
-                StartCoroutine(PieceRemoval());
-            }
-        }
-
-        if (UsingWalkway)
-        {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                StartCoroutine(UseWalkway());
-            }
+            StartCoroutine(PieceRemoval());
         }
 
         if (IsMovable && CurrentPawn != null)
@@ -160,16 +107,6 @@ public class OnlinePieceController : MonoBehaviourPun
         {
             StartBuildingPlacement();
         }
-
-        if (IsEarthquakeable)
-        {
-            UseEarthquake();
-        }
-
-        if (IsFlippable)
-        {
-            FlipPiece();
-        }
     }
 
     /// <summary>
@@ -180,214 +117,62 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            //Start of Shovel Code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
+            _sr.color = _waitingColor;
+            PieceIsSelected = true;
+            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
             {
-                SetPieceState(3);
-                _dirtPS.Play();
-                _am.ShovelUsed = true;
-                if (CurrentPawn != null)
-                {
-                    CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
-                }
-                _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
-            }
-            //End of Shovel Code
-
-            else
-            {
-                _sr.color = _waitingColor;
-                PieceIsSelected = true;
-                foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
-                {
-                    pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
-                }
-
-                if (ObjState == GameState.One || ObjState == GameState.Six)
-                {
-                    _cm.PrepareCardSelection(1, "Grass", false);
-                }
-                else if (ObjState == GameState.Two)
-                {
-                    _cm.PrepareCardSelection(1, "Dirt", false);
-                }
-                else if (ObjState == GameState.Three || ObjState == GameState.Five)
-                {
-                    _cm.PrepareCardSelection(1, "Stone", false);
-                }
-                else if (ObjState == GameState.Four)
-                {
-                    _cm.PrepareCardSelection(1, "Any", false);
-                }
-
-                while (!_cm.CheckCardSelection())
-                {
-                    yield return null;
-                }
-                _cm.PrepareCardSelection(0, "", true);
-
-                switch (ObjState)
-                {
-                    case GameState.One:
-                        photonView.RPC("SetPieceState", RpcTarget.All, 2);
-                        _grassPS.Play();
-                        _am.CollectTile(_am.CurrentPlayer, "Grass", true);
-                        break;
-                    case GameState.Two:
-                        photonView.RPC("SetPieceState", RpcTarget.All, 3);
-                        _dirtPS.Play();
-                        _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
-                        break;
-                    case GameState.Three:
-                        if (HasGold)
-                        {
-                            _goldPS.Play();
-                            _am.CollectTile(_am.CurrentPlayer, "Gold", true);
-                        }
-                        else
-                        {
-                            _stonePS.Play();
-                            _am.CollectTile(_am.CurrentPlayer, "Stone", true);
-                            photonView.RPC("SetPieceState", RpcTarget.All, 4);
-                        }
-
-                        break;
-                }
-
-                if (CurrentPawn != null)
-                {
-                    CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
-                }
-                _gcm.Back();
-            }
-        }
-    }
-
-    /// <summary>
-    /// Uses the card walkway.
-    /// 
-    /// Edited: Andrea SD - Modified for online use
-    /// </summary>
-    private IEnumerator UseWalkway()
-    {
-        // Andrea SD
-        _currentPawnID = CurrentPawn.GetPhotonView().ViewID;
-        _pieceID = gameObject.GetPhotonView().ViewID;
-        CallMovePawn(_currentPawnID, _pieceID);
-
-        while (_pawnIsMoving)
-        {
-            yield return null;
-        }
-
-        UsingWalkway = false;
-        SetPieceState(3);
-        _grassPS.Play();
-        _dirtPS.Play();
-        _am.CollectTile(_am.CurrentPlayer, "Grass", false);
-        _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
-    }
-
-    /// <summary>
-    /// Uses the card Earthquake.
-    /// </summary>
-    private void UseEarthquake()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            _ce.EarthquakePieceSelected = true;
-
-            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
-            {
-                if (piece.GetComponentInChildren<Building>())
-                {
-                    piece.GetComponentInChildren<Building>().PrepBuilidingDamaging(true);
-                    _ce.AllowedDamages++;
-                }
+                pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
             }
 
-            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            if (ObjState == GameState.One)
             {
-                piece.GetComponent<OnlinePieceController>().ShowHideEarthquake(false);
+                _cm.PrepareCardSelection(1, "Grass", false);
             }
-        }
-    }
-
-    /// <summary>
-    /// Flips a stone piece to see if it has gold or not.
-    /// </summary>
-    private void FlipPiece()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            _ce.RemainingFlips--;
-
-            if (HasGold)
+            else if (ObjState == GameState.Two)
             {
-                SetPieceState(5);
-                _goldPS.Play();
-                if (DiscerningEye)
-                {
-                    _am.CallUpdateScore(_am.CurrentPlayer, 1);
-                }
+                _cm.PrepareCardSelection(1, "Dirt", false);
             }
-            else
+            else if (ObjState == GameState.Three)
             {
-                _stonePS.Play();
+                _cm.PrepareCardSelection(1, "Stone", false);
+            }
+            else if (ObjState == GameState.Four)
+            {
+                _cm.PrepareCardSelection(1, "Any", false);
             }
 
-            ShowHideFlippable(false);
-        }
-    }
-
-    /// <summary>
-    /// Method for digging tiles through effects instead of cards. 
-    /// </summary>
-    private void ActivatedPieceRemoval()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            if (ObjState == GameState.Four)
+            while (!_cm.CheckCardSelection())
             {
-                return;
+                yield return null;
             }
+            _cm.PrepareCardSelection(0, "", true);
 
-            ShowHideDiggable(false);
-            FindObjectOfType<CardEffects>().DugPieces++;
+            CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
+            _gcm.Back();
 
             switch (ObjState)
             {
                 case GameState.One:
-                    SetPieceState(2);
-                    _grassPS.Play();
-                    _am.CollectTile(_am.CurrentPlayer, "Grass", false);
-                    break;
-                case GameState.Six:
-                    SetPieceState(2);
-                    _grassPS.Play();
-                    _am.CollectTile(_am.CurrentPlayer, "Grass", false);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 2);
+                    _am.CollectTile(_am.CurrentPlayer, "Grass");
                     break;
                 case GameState.Two:
-                    SetPieceState(3);
-                    _dirtPS.Play();
-                    _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
+                    photonView.RPC("SetPieceState", RpcTarget.All, 3);
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt");
                     break;
                 case GameState.Three:
-                    SetPieceState(4);
                     if (HasGold)
                     {
-                        _goldPS.Play();
-                        _am.CollectTile(_am.CurrentPlayer, "Gold", false);
+                        _am.CollectTile(_am.CurrentPlayer, "Gold");
                     }
                     else
                     {
-                        _stonePS.Play();
-                        _am.CollectTile(_am.CurrentPlayer, "Stone", false);
+                        _am.CollectTile(_am.CurrentPlayer, "Stone");
+                        photonView.RPC("SetPieceState", RpcTarget.All, 4);
                     }
+
                     break;
             }
-
-            FromActivatedCard = false;
         }
     }
 
@@ -410,57 +195,16 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 case GameState.Two:
                     photonView.RPC("SetPieceState", RpcTarget.All, 1);
-                    _grassPS.Play();
-                    _am.PlaceTile("Grass");
+                    _am.PlaceTile(_am.CurrentPlayer, "Grass");
                     break;
                 case GameState.Three:
                     photonView.RPC("SetPieceState", RpcTarget.All, 2);
-                    _dirtPS.Play();
-                    _am.PlaceTile("Dirt");
+                    _am.PlaceTile(_am.CurrentPlayer, "Dirt");
                     break;
                 case GameState.Four:
                     photonView.RPC("SetPieceState", RpcTarget.All, 3);
-                    _stonePS.Play();
-                    _am.PlaceTile("Stone");
+                    _am.PlaceTile(_am.CurrentPlayer, "Stone");
                     break;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
-    /// </summary>
-    /// <param name="pawn">CurrentPawn, usually.</param>
-    /// <param name="destinationPiece">This piece, usually.</param>
-    /// <returns></returns>
-    public IEnumerator MovePawnTo(int pawnID, int pieceID, bool goBack)
-    {
-        //Debug.Log("Moving " + CurrentPawn + " to " + gameObject + ". The destination piece is " + destinationPiece + ".");
-
-        GameObject pawn = PhotonView.Find(_currentPawnID).gameObject;
-        GameObject destinationPiece = PhotonView.Find(_pieceID).gameObject;
-
-        pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
-        _pawnIsMoving = true;
-
-        //Start anim?
-        yield return new WaitForSeconds(_am.PawnMoveAnimTime);
-        //End anim?
-        
-        pawn.transform.position = destinationPiece.transform.position;
-        pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
-        HasPawn = true;
-        _pawnIsMoving = false;
-
-        if (goBack)
-        {
-            if (_am.CurrentTurnPhase == 1)
-            {
-                _gcm.ToThenPhase();
-            }
-            else if (_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3)
-            {
-                _gcm.Back();
             }
         }
     }
@@ -474,115 +218,89 @@ public class OnlinePieceController : MonoBehaviourPun
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //For the game's initial free move. The player has to spend cards unless this is true.
-            if (_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
+            if (_am.CurrentTurnPhase != 1)
             {
-                //Start of Morning Jog
-                if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog") && !_am.MorningJogUsed)
+                _sr.color = _waitingColor;
+                PieceIsSelected = true;
+                foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
                 {
-                    Debug.Log("Player has Morning Jog!");
-                    if (ObjState == GameState.One || ObjState == GameState.Six)
-                    {
-                        _am.MorningJogUsed = true;
-                    }
-                    else
-                    {
-                        if (ObjState == GameState.One || ObjState == GameState.Six)
-                        {
-                            _cm.PrepareCardSelection(1, "Grass", false);
-                        }
-                        else if (ObjState == GameState.Two)
-                        {
-                            _cm.PrepareCardSelection(1, "Dirt", false);
-                        }
-                        else if (ObjState == GameState.Three || ObjState == GameState.Five)
-                        {
-                            _cm.PrepareCardSelection(1, "Stone", false);
-                        }
-                        else if (ObjState == GameState.Four)
-                        {
-                            _cm.PrepareCardSelection(1, "Any", false);
-                        }
-
-                        while (!_cm.CheckCardSelection())
-                        {
-                            yield return null;
-                        }
-                        _cm.PrepareCardSelection(0, "", true);
-                    }
-                }
-                //End of Morning Jog
-
-                else
-                {
-                    if (ObjState == GameState.One || ObjState == GameState.Six)
-                    {
-                        _cm.PrepareCardSelection(1, "Grass", false);
-                    }
-                    else if (ObjState == GameState.Two)
-                    {
-                        _cm.PrepareCardSelection(1, "Dirt", false);
-                    }
-                    else if (ObjState == GameState.Three || ObjState == GameState.Five)
-                    {
-                        _cm.PrepareCardSelection(1, "Stone", false);
-                    }
-                    else if (ObjState == GameState.Four)
-                    {
-                        _cm.PrepareCardSelection(1, "Any", false);
-                    }
-
-                    while (!_cm.CheckCardSelection())
-                    {
-                        yield return null;
-                    }
-                    _cm.PrepareCardSelection(0, "", true);
+                    pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
                 }
 
-                _currentPawnID = CurrentPawn.GetPhotonView().ViewID;
-                _pieceID = gameObject.GetPhotonView().ViewID;
+                if (ObjState == GameState.One)
+                {
+                    _cm.PrepareCardSelection(1, "Grass", false);
+                }
+                else if (ObjState == GameState.Two)
+                {
+                    _cm.PrepareCardSelection(1, "Dirt", false);
+                }
+                else if (ObjState == GameState.Three)
+                {
+                    _cm.PrepareCardSelection(1, "Stone", false);
+                }
+                else if (ObjState == GameState.Four)
+                {
+                    _cm.PrepareCardSelection(1, "Any", false);
+                }
 
-                //StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
-                CallMovePawn(_currentPawnID, _pieceID);    //Andrea SD
+                while (!_cm.CheckCardSelection())
+                {
+                    yield return null;
+                }
+                _cm.PrepareCardSelection(0, "", true);
+            }
+
+            //Marks piece as having a pawn and moves the pawn. Also unmarks the previous piece.
+            CurrentPawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
+
+            photonView.RPC("MovePawn", RpcTarget.All, gameObject.transform.position.x, gameObject.transform.position.y);    //Andrea SD
+
+            HasPawn = true;
+            CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
+
+            if (_am.CurrentTurnPhase == 1)
+            {
+                _gcm.ToThenPhase();
+            }
+            else if (_am.CurrentTurnPhase == 2)
+            {
+                _gcm.Back();
             }
         }
     }
 
     /// <summary>
-    /// Calls the MovePawn RPC which moves a pawn on the other players screen.
-    /// 
+    /// Moves a pawn on the other players screen.
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="objectID"> Network ID of the moving pawn </param>
-    /// <param name="destinationID"> Network ID of the pawn destination 
-    /// </param>
-    public void CallMovePawn(int objectID, int destinationID)
+    /// <param name="pawn"> pawn that will be moved </param>
+    /// <param name="newPosition"> position where pawn will be moved to </param>
+    [PunRPC]
+    private void MovePawn(float newX, float newY)
     {
-        photonView.RPC("MovePawn", RpcTarget.All, objectID, destinationID);
+        if(_am.CurrentPlayer  == 1)
+        {
+            GameObject.Find("Player1Pawn").transform.position = new Vector2(newX, newY);
+        }
+        else
+        {
+            GameObject.Find("Player2Pawn").transform.position = new Vector2(newX, newY);
+        }
+        HasPawn = true;
     }
 
-    /// <summary>
-    /// Moves a pawn on the other players screen.
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="objectID"> Network ID of the moving pawn </param>
-    /// <param name="destinationID"> Network ID of the pawn destination 
-    /// </param>
-    [PunRPC]
-    public void MovePawn(int objectID, int destinationID)
-    {
-        StartCoroutine(MovePawnTo(objectID, destinationID, true));
-    }
 
     /// <summary>
     /// Method controlling Building placement and removal.
+    /// Edited: Andrea SD - modified conditionals to no longer account for gold
     /// </summary>
     private void StartBuildingPlacement()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             string pieceSuit = "";
-            if (ObjState == GameState.One || ObjState == GameState.Six)
+            if (ObjState == GameState.One)
             {
                 pieceSuit = "Grass";
             }
@@ -594,7 +312,7 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 pieceSuit = "Stone";
             }
-            else if (ObjState == GameState.Four || ObjState == GameState.Five)
+            else if (ObjState == GameState.Four)
             {
                 Debug.LogWarning("Cannot place building on this piece, yet it was able to be selected?");
             }
@@ -629,16 +347,11 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 StartCoroutine(BuildingCardSelection(CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild, buildingIndex, pieceSuit));
             }
-            else
-            {
-                _gcm.Back();
-                _gcm.UpdateCurrentActionText("You've built all of those buildings!");
-            }
         }
     }
 
 
-    public IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
+    private IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
     {
         _sr.color = _waitingColor;
         PieceIsSelected = true;
@@ -647,37 +360,14 @@ public class OnlinePieceController : MonoBehaviourPun
             pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
         }
 
-        //Master Builder Code
-        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
+        if (_am.CurrentPlayer == 1)
         {
-            _cm.PrepareCardSelection(_ce.NewBuildingCost, suitOfPiece, false);
+            _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
         }
         else
         {
-            if (_am.CurrentPlayer == 1)
-            {
-                if (buildingIndex == 0 || buildingIndex == 1)
-                {
-                    _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
-                }
-                else
-                {
-                    _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[2], suitOfPiece, false);
-                }
-            }
-            else
-            {
-                if (buildingIndex == 0 || buildingIndex == 1)
-                {
-                    _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
-                }
-                else
-                {
-                    _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[2], suitOfPiece, false);
-                }
-            }
+            _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
         }
-        //End Master Builder Code
 
         while (!_cm.CheckCardSelection())
         {
@@ -687,43 +377,18 @@ public class OnlinePieceController : MonoBehaviourPun
 
         if (_am.CurrentPlayer == 1)
         {
-            if (buildingIndex == 0 || buildingIndex == 1)
-            {
-                _am.P1CurrentBuildingPrices[buildingIndex]++;
-                _am.P1RemainingBuildings[buildingIndex]--;
-                _am.P1BuiltBuildings[buildingIndex]++;
-            }
-            else
-            {
-                _am.P1CurrentBuildingPrices[2]++;
-                _am.P1RemainingBuildings[2]--;
-                _am.P1BuiltBuildings[buildingIndex]++;
-            }
+            _am.P1CurrentBuildingPrices[buildingIndex]++;
+            _am.P1RemainingBuildings[buildingIndex]--;
+            _am.P1BuiltBuildings[buildingIndex]++;
         }
         else
         {
-            if (buildingIndex == 0 || buildingIndex == 1)
-            {
-                _am.P2CurrentBuildingPrices[buildingIndex]++;
-                _am.P2RemainingBuildings[buildingIndex]--;
-                _am.P2BuiltBuildings[buildingIndex]++;
-            }
-            else
-            {
-                _am.P2CurrentBuildingPrices[2]++;
-                _am.P2RemainingBuildings[2]--;
-                _am.P2BuiltBuildings[buildingIndex]++;
-            }
+            _am.P2CurrentBuildingPrices[buildingIndex]++;
+            _am.P2RemainingBuildings[buildingIndex]--;
+            _am.P2BuiltBuildings[buildingIndex]++;
         }
 
-        //Master Builder Code
-        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
-        {
-            _pcm.DiscardPersistentCard(_am.CurrentPlayer, "Master Builder");
-        }
-        //End Master Builder
-
-        InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
+        InstantitateBuildingAndPawn(buildingName);
 
         CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
@@ -732,11 +397,9 @@ public class OnlinePieceController : MonoBehaviourPun
 
     /// <summary>
     /// Places a building. Returns false and removes it if it's adjacent to another building. Also will spawn another Pawn if 3rd building is placed.
-    /// 
-    /// Edited: Andrea SD - modified for online useS
     /// </summary>
     /// <param name="building">"Factory" "Burrow" or "Mine"</param>
-    private bool InstantitateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
+    private bool InstantitateBuildingAndPawn(string buildingName)
     {
         GameObject building = null;
         if (_am.CurrentPlayer == 1)
@@ -782,44 +445,12 @@ public class OnlinePieceController : MonoBehaviourPun
         if (canPlaceOnTile)
         {
             bool spawnPawn = false;
+            //Instantiate(building, _buildingSlot);
 
             // Instantiates building from the Resources folder on the network
             // for all clients
-            GameObject thisBuilding = PhotonNetwork.Instantiate(building.name,
-                _buildingSlot.position, Quaternion.identity);   //Andrea SD
-
-            if (buildingArrayNum == 0)
-            {
-                thisBuilding.GetComponent<Building>().BuildingType = "Factory";
-            }
-            else if (buildingArrayNum == 1)
-            {
-                thisBuilding.GetComponent<Building>().BuildingType = "Burrow";
-            }
-            else if (buildingArrayNum == 2)
-            {
-                thisBuilding.GetComponent<Building>().BuildingType = "Grass Mine";
-            }
-            else if (buildingArrayNum == 3)
-            {
-                thisBuilding.GetComponent<Building>().BuildingType = "Dirt Mine";
-            }
-            else if (buildingArrayNum == 4)
-            {
-                thisBuilding.GetComponent<Building>().BuildingType = "Stone Mine";
-            }
-            thisBuilding.GetComponent<Building>().SuitOfPiece = pieceSuit;
-            thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;
-
-            //Planned Profit Code Start
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Planned Profit"))
-            {
-                _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Grass");
-                _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Dirt");
-                _am.CollectPiecesFromSupply(_ce.PiecesToCollect, "Stone");
-                _pcm.DiscardPersistentCard(_am.CurrentPlayer, "Planned Profit");
-            }
-            //Planned Profit Code End
+            PhotonNetwork.Instantiate(building.name, _buildingSlot.position, 
+                Quaternion.identity);   //Andrea SD
 
             if (_am.CurrentPlayer == 1)
             {
@@ -876,8 +507,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             if (spawnPawn)
             {
-                Vector3 _buildingPlacement = _buildingSlot.transform.position;   // Andrea SD
-                GameObject newPawn = PhotonNetwork.Instantiate("OnlinePlayerPawn", _buildingPlacement, Quaternion.identity);   // Andrea SD
+                GameObject newPawn = Instantiate(_playerPawn, _buildingSlot);
                 newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
                 newPawn.transform.SetParent(null);
             }
@@ -895,17 +525,11 @@ public class OnlinePieceController : MonoBehaviourPun
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Cannot place " + building.name + " adjacent to another building.");
+            Debug.Log("Cannot place " + building.name + " adjacent to another building.");
             return false;
         }
     }
 
-    /// <summary>
-    /// Changes the sprite of a piece
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="newSprite"></param>
     public void ChangeSprite(String newSprite)
     {
         _sr.sprite = Resources.Load<Sprite>(newSprite);
@@ -920,14 +544,13 @@ public class OnlinePieceController : MonoBehaviourPun
         {
             _sr.color = _selectedColor;
             IsMovable = true;
-            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             IsMovable = false;
             PieceIsSelected = false;
-            CheckedByPawn = false;
+            CurrentPawn = null;
         }
     }
 
@@ -940,14 +563,13 @@ public class OnlinePieceController : MonoBehaviourPun
         {
             _sr.color = _selectedColor;
             IsBuildable = true;
-            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             IsBuildable = false;
             PieceIsSelected = false;
-            CheckedByPawn = false;
+            CurrentPawn = null;
         }
     }
 
@@ -960,14 +582,12 @@ public class OnlinePieceController : MonoBehaviourPun
         {
             _sr.color = _selectedColor;
             IsDiggable = true;
-            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             PieceIsSelected = false;
             IsDiggable = false;
-            CheckedByPawn = false;
         }
     }
 
@@ -980,78 +600,12 @@ public class OnlinePieceController : MonoBehaviourPun
         {
             _sr.color = _selectedColor;
             IsPlaceable = true;
-            CheckedByPawn = true;
         }
         else
         {
             _sr.color = _defaultColor;
             PieceIsSelected = false;
             IsPlaceable = false;
-            CheckedByPawn = false;
-        }
-    }
-
-    /// <summary>
-    /// Updates tiles for earthquake.
-    /// </summary>
-    /// <param name="show">Show or Hide</param>
-    public void ShowHideEarthquake(bool show)
-    {
-        if (show)
-        {
-            _sr.color = _selectedColor;
-            IsEarthquakeable = true;
-            CheckedByPawn = true;
-        }
-        else
-        {
-            _sr.color = _defaultColor;
-            PieceIsSelected = false;
-            IsEarthquakeable = false;
-            CheckedByPawn = false;
-        }
-    }
-
-    /// <summary>
-    /// Updates tiles for flipping.
-    /// </summary>
-    /// <param name="show">Show or Hide</param>
-    public void ShowHideFlippable(bool show)
-    {
-        if (show)
-        {
-            _sr.color = _selectedColor;
-            IsFlippable = true;
-            CheckedByPawn = true;
-        }
-        else
-        {
-            _sr.color = _defaultColor;
-            PieceIsSelected = false;
-            IsFlippable = false;
-            CheckedByPawn = false;
-            DiscerningEye = false;
-        }
-    }
-
-    /// <summary>
-    /// Updates tiles for walkway.
-    /// </summary>
-    /// <param name="show">Show or Hide</param>
-    public void ShowHideWalkway(bool show)
-    {
-        if (show)
-        {
-            _sr.color = _selectedColor;
-            UsingWalkway = true;
-            CheckedByPawn = true;
-        }
-        else
-        {
-            _sr.color = _defaultColor;
-            UsingWalkway = false;
-            PieceIsSelected = false;
-            CheckedByPawn = false;
         }
     }
 

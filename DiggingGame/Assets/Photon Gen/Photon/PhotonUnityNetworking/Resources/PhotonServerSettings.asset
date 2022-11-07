@@ -66,19 +66,6 @@ MonoBehaviour:
   - ChangeTurnPhase
   - ResetTurnPhase
   - UpdateActiveTextOnline
-  - ModifySupplyPile
-  - SetGoldOnline
-  - SetCurrentPawn
-  - PlayAnimation
-  - RemoveBuilding
-  - SetAnimStatus
-  - SetGameObjStatus
-  - ModifyBuildingHP
-  - AddToDiscarded
-  - RemoveFromPersistent
-  - RemoveCard
-  - ShuffleDiscardPile
-  - AddCards
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

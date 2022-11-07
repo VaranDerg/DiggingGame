@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9207313477705262960}
   - component: {fileID: 9207313477705262963}
+  - component: {fileID: 2652515648219929188}
   - component: {fileID: 6447519148186334584}
-  - component: {fileID: -8356024874604764090}
   m_Layer: 7
   m_Name: MeerkatFactory
   m_TagString: Untagged
@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -86,6 +86,30 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2652515648219929188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9207313477705262962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df11d85d17f09d64bab968942276d66a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damagedColor: {r: 0, g: 0, b: 0, a: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  BuildingHealth: 2
+  PlayerOwning: 0
+  BuildingType: 
+  CanBeDamaged: 0
+  CanBeRepaired: 0
+  DamageTaken: 0
+  SuitOfPiece: 
+  ActiveBuilding: 0
+  DamageProtectionResponse: 0
+  _removalAnimWaitTime: 0
 --- !u!114 &6447519148186334584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,27 +132,3 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-8356024874604764090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9207313477705262962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7769766f861db3f4d8ba34ae155ace2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _damagedColor: {r: 0, g: 0, b: 0, a: 0}
-  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  BuildingHealth: 2
-  PlayerOwning: 0
-  BuildingType: 
-  CanBeDamaged: 0
-  CanBeRepaired: 0
-  DamageTaken: 0
-  SuitOfPiece: 
-  ActiveBuilding: 0
-  DamageProtectionResponse: 0
-  _removalAnimWaitTime: 0
