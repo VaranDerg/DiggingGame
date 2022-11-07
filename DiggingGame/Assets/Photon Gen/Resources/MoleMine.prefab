@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6326613560200021428}
   - component: {fileID: 6326613560200021429}
-  - component: {fileID: 6810129823665460694}
   - component: {fileID: 1357967848699946107}
+  - component: {fileID: 1491214476975752919}
   m_Layer: 7
   m_Name: MoleMine
   m_TagString: Untagged
@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -86,30 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6810129823665460694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6326613560200021386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df11d85d17f09d64bab968942276d66a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _damagedColor: {r: 0, g: 0, b: 0, a: 0}
-  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  BuildingHealth: 2
-  PlayerOwning: 0
-  BuildingType: 
-  CanBeDamaged: 0
-  CanBeRepaired: 0
-  DamageTaken: 0
-  SuitOfPiece: 
-  ActiveBuilding: 0
-  DamageProtectionResponse: 0
-  _removalAnimWaitTime: 0
 --- !u!114 &1357967848699946107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,3 +108,27 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1491214476975752919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6326613560200021386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7769766f861db3f4d8ba34ae155ace2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damagedColor: {r: 0, g: 0, b: 0, a: 0}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  BuildingHealth: 2
+  PlayerOwning: 0
+  BuildingType: 
+  CanBeDamaged: 0
+  CanBeRepaired: 0
+  DamageTaken: 0
+  SuitOfPiece: 
+  ActiveBuilding: 0
+  DamageProtectionResponse: 0
+  _removalAnimWaitTime: 0
