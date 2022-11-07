@@ -270,7 +270,8 @@ public class OnlinePersistentCardManager : MonoBehaviour
         {
             if(building.GetComponent<Building>().ActiveBuilding)
             {
-                building.GetComponent<Building>().DamageProtectionResponse = answer;
+                //I commented this out since the DamageProtectionResponse is no longer used. Defensive cards occur automatically.
+                //building.GetComponent<Building>().DamageProtectionResponse = answer;
             }
         }
     }
