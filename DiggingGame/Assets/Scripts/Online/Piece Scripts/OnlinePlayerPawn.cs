@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         PlayerPawn.cs
-// Author :            Rudy Wolfer, Andrea SD
+// Author :            Rudy Wolfer
 // Creation Date :     October 6th, 2022
 //
 // Brief Description : Script that controls Players' Pawn pieces.
@@ -9,17 +9,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class OnlinePlayerPawn : MonoBehaviour
+public class OnlinePlayerPawn : MonoBehaviourPun
 {
-
-    //Edit: Andrea SD - Added online functionality
-
     [Header("References/Values")]
     //1 or 2
     [Range(1, 2)] public int PawnPlayer;
-    [SerializeField] private Color _p1Color;
-    [SerializeField] private Color _p2Color;
+    [SerializeField] private Sprite _moleSprite;
+    [SerializeField] private Sprite _meerkatSprite;
 
     [Header("Other")]
     //The (up to) 4 Board Pieces surrounding a player. NSEW.
@@ -27,13 +25,20 @@ public class OnlinePlayerPawn : MonoBehaviour
     private List<GameObject> _boardPieces = new List<GameObject>();
     private OnlineBoardManager _bm;
     private OnlineActionManager _am;
+    private OnlinePersistentCardManager _pcm;
     private OnlineCanvasManager _gcm;
     private Animator _anims;
+    private OnlineCardEffects _ce;
     [SerializeField] private SpriteRenderer _sr;
 
     [Header("Pawn Status for Other Scripts")]
     [HideInInspector] public bool IsMoving = false, IsBuilding = false, IsDigging = false, IsPlacing;
     [HideInInspector] public string BuildingToBuild = "";
+
+    [Header("Card Effect Things")]
+    [HideInInspector] public bool MudslideMove;
+    [HideInInspector] public bool IsUsingWalkway;
+    [HideInInspector] public bool TeleportationMove;
 
     /// <summary>
     /// Adds every board piece to a list.
@@ -54,12 +59,12 @@ public class OnlinePlayerPawn : MonoBehaviour
     {
         if (player == 1)
         {
-            _sr.color = _p1Color;
+            _sr.sprite = _moleSprite;
             PawnPlayer = 1;
         }
         else
         {
-            _sr.color = _p2Color;
+            _sr.sprite = _meerkatSprite;
             PawnPlayer = 2;
         }
     }
@@ -72,6 +77,8 @@ public class OnlinePlayerPawn : MonoBehaviour
         _bm = FindObjectOfType<OnlineBoardManager>();
         _am = FindObjectOfType<OnlineActionManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
+        _pcm = FindObjectOfType<OnlinePersistentCardManager>();
+        _ce = FindObjectOfType<OnlineCardEffects>();
         _anims = GetComponent<Animator>();
     }
 
@@ -90,7 +97,15 @@ public class OnlinePlayerPawn : MonoBehaviour
     {
         if (IsMoving)
         {
-            PreparePawnMovement();
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                PreparePawnMovement();
+            }
+        }
+
+        if (IsUsingWalkway)
+        {
+            PrepareWalkway();
         }
 
         if (IsBuilding)
@@ -102,35 +117,108 @@ public class OnlinePlayerPawn : MonoBehaviour
         {
             PreparePawnDigging();
         }
+
+        if (MudslideMove)
+        {
+            PrepareMudslide();
+        }
     }
 
     /// <summary>
-    /// Preps pawn for moving.
+    /// Stops animations on other pawns. 
+    /// </summary>
+    public void DeselectOtherPawns()
+    {
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if (pawn != gameObject)
+            {
+                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Preps pawn for moving. Only selects Grass Pieces if moving with morning jog.
     /// </summary>
     private void PreparePawnMovement()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            DeselectOtherPawns();
+
+            if (TeleportationMove)
             {
-                if (piece.GetComponent<OnlinePieceController>().HasPawn)
+                foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
                 {
-                    continue;
+                    if (piece.GetComponent<OnlinePieceController>().HasPawn)
+                    {
+                        continue;
+                    }
+
+                    piece.GetComponent<OnlinePieceController>().ShowHideMovable(true);
+                    _shownPieces.Add(piece);
                 }
 
-                piece.GetComponent<OnlinePieceController>().ShowHideMovable(true);
-                _shownPieces.Add(piece);
-            }
-
-            if (_shownPieces.Count > 0)
-            {
-                foreach (GameObject piece in _shownPieces)
+                if (_shownPieces.Count > 0)
                 {
-                    piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
+                    foreach (GameObject piece in _shownPieces)
+                    {
+                        piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
+                    }
+                }
+
+                TeleportationMove = false;
+            }
+            else
+            {
+                //Start of Secret Tunnels code
+                if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Secret Tunnels"))
+                {
+                    foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+                    {
+                        if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
+                        {
+                            continue;
+                        }
+
+                        if (piece.GetComponent<OnlinePieceController>().HasPawn)
+                        {
+                            continue;
+                        }
+
+                        piece.GetComponent<OnlinePieceController>().ShowHideMovable(true);
+                        _shownPieces.Add(piece);
+                    }
+                }
+                //End of Secret Tunnels code
+
+                foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+                {
+                    if (_shownPieces.Contains(piece))
+                    {
+                        continue;
+                    }
+
+                    if (piece.GetComponent<OnlinePieceController>().HasPawn)
+                    {
+                        continue;
+                    }
+
+                    piece.GetComponent<OnlinePieceController>().ShowHideMovable(true);
+                    _shownPieces.Add(piece);
+                }
+
+                if (_shownPieces.Count > 0)
+                {
+                    foreach (GameObject piece in _shownPieces)
+                    {
+                        piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
+                    }
                 }
             }
 
-            _bm.BoardColliderSwitch(true);
+            _bm.SetActiveCollider("Board");
         }
     }
 
@@ -141,6 +229,7 @@ public class OnlinePlayerPawn : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
                 if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
@@ -153,8 +242,20 @@ public class OnlinePlayerPawn : MonoBehaviour
                     continue;
                 }
 
+                if (IsUsingWalkway)
+                {
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.One && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Six)
+                    {
+                        continue;
+                    }
+                }
+
                 piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
-                piece.GetComponent<OnlinePieceController>().IsDiggable = true;
+                if (IsUsingWalkway)
+                {
+                    piece.GetComponent<OnlinePieceController>().UsingWalkway = true;
+                    IsUsingWalkway = false;
+                }
                 _shownPieces.Add(piece);
             }
 
@@ -168,11 +269,63 @@ public class OnlinePlayerPawn : MonoBehaviour
             else
             {
                 _gcm.UpdateCurrentActionText("No valid digging locations at this pawn.");
-                _bm.DisablePawnBoardInteractions();
+                _bm.DisableAllBoardInteractions();
                 _gcm.Back();
             }
 
-            _bm.BoardColliderSwitch(true);
+            _bm.SetActiveCollider("Board");
+        }
+    }
+
+    /// <summary>
+    /// Movement method for Walkway.
+    /// </summary>
+    private void PrepareWalkway()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            DeselectOtherPawns();
+            foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
+            {
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
+                {
+                    continue;
+                }
+
+                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
+                {
+                    continue;
+                }
+
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.One && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Six)
+                {
+                    continue;
+                }
+
+                piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
+                if (IsUsingWalkway)
+                {
+                    piece.GetComponent<OnlinePieceController>().UsingWalkway = true;
+                    IsUsingWalkway = false;
+                }
+                _shownPieces.Add(piece);
+            }
+
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
+                }
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText("No valid Walkway locations at this pawn.");
+                _bm.DisableAllBoardInteractions();
+                _gcm.Back();
+            }
+
+            _bm.SetActiveCollider("Board");
         }
     }
 
@@ -183,6 +336,7 @@ public class OnlinePlayerPawn : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
                 bool dontHighlight = false;
@@ -196,7 +350,7 @@ public class OnlinePlayerPawn : MonoBehaviour
                     dontHighlight = true;
                 }
 
-                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
+                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four || piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Five)
                 {
                     dontHighlight = true;
                 }
@@ -226,11 +380,59 @@ public class OnlinePlayerPawn : MonoBehaviour
             else
             {
                 _gcm.UpdateCurrentActionText("No valid building locations at this pawn.");
-                _bm.DisablePawnBoardInteractions();
+                _bm.DisableAllBoardInteractions();
                 _gcm.Back();
             }
 
-            _bm.BoardColliderSwitch(true);
+            _bm.SetActiveCollider("Board");
+        }
+    }
+
+    /// <summary>
+    /// Preps pawn for moving with the card Mudslide.
+    /// </summary>
+    private void PrepareMudslide()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            DeselectOtherPawns();
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            {
+                if (piece.GetComponent<OnlinePieceController>().HasPawn)
+                {
+                    continue;
+                }
+
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
+                {
+                    continue;
+                }
+
+                piece.GetComponent<OnlinePieceController>().ShowHideMovable(true);
+                _shownPieces.Add(piece);
+            }
+
+            foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+            {
+                if (pawn == this)
+                {
+                    continue;
+                }
+
+                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                pawn.GetComponent<PlayerPawn>().MudslideMove = false;
+            }
+
+            if (_shownPieces.Count > 0)
+            {
+                foreach (GameObject piece in _shownPieces)
+                {
+                    piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
+                }
+            }
+
+            MudslideMove = false;
+            _bm.SetActiveCollider("Board");
         }
     }
 
@@ -277,6 +479,8 @@ public class OnlinePlayerPawn : MonoBehaviour
         IsBuilding = false;
         IsDigging = false;
         IsPlacing = false;
+        IsUsingWalkway = false;
+        MudslideMove = false;
         BuildingToBuild = "";
         _anims.Play("TempPawnDefault");
         _shownPieces.Clear();

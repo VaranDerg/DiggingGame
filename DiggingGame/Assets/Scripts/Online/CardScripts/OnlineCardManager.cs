@@ -10,8 +10,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Photon.Pun;
+using Unity.VisualScripting;
 
-public class OnlineCardManager : MonoBehaviour
+public class OnlineCardManager : MonoBehaviourPun
 {
     //Edit: Andrea SD - Added online functionality
 
@@ -37,6 +39,11 @@ public class OnlineCardManager : MonoBehaviour
     [HideInInspector] public string RequiredSuit = "";
     [HideInInspector] public int RequiredCardAmount = 0;
 
+    [Header("Animations")]
+    [SerializeField] private float _cardShowHideTime;
+
+    private int _deckPos;   // Position of a card in the deck. ASD
+
     /// <summary>
     /// Assigns partner scripts
     /// </summary>
@@ -48,7 +55,21 @@ public class OnlineCardManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Calls the RPC AddCards() which adds cards in the scene to their 
+    /// respective decks.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void CallAddCards()
+    {
+        photonView.RPC("AddCards", RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    /// <summary>
     /// Adds cards in the scene to their respective decks.
+    /// 
+    /// Edited: Andrea SD - Turned into RPC
     /// </summary>
     private void AddCards()
     {
@@ -66,7 +87,7 @@ public class OnlineCardManager : MonoBehaviour
             gCard.SetActive(false);
             gCardAmount++;
         }
-        Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
+        //Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
     }
 
     /// <summary>
@@ -87,7 +108,7 @@ public class OnlineCardManager : MonoBehaviour
             P2OpenHandPositions[i] = true;
         }
 
-        Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
+        //Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
     }
 
     /// <summary>
@@ -95,7 +116,11 @@ public class OnlineCardManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        AddCards();
+        // Called by master client only
+        if(PhotonNetwork.IsMasterClient)    // Andrea SD
+        {
+            AddCards();
+        }  
         PrepareOpenHandSlots();
         UpdatePileText();
     }
@@ -112,26 +137,29 @@ public class OnlineCardManager : MonoBehaviour
 
     /// <summary>
     /// Draws a card.
+    /// 
+    /// Edited: Andrea SD - modified for online use
     /// </summary>
     /// <param name="deck">"Universal" or "Gold"</param>
-    public void DrawCard(string deck)
+    public IEnumerator DrawCard(string deck)
     {
-        if(_uDeck.Count == 0)
+        if (_uDeck.Count == 0)
         {
-            ShuffleDiscardPile();
+            CallShuffleDiscard();
         }
 
         GameObject randomCard = null;
-        if(deck == "Universal")
+        if (deck == "Universal")
         {
             randomCard = _uDeck[Random.Range(0, _uDeck.Count)];
         }
-        else if(deck == "Gold")
+        else if (deck == "Gold")
         {
-            if(_gDeck.Count == 0)
+            if (_gDeck.Count == 0)
             {
-                Debug.Log("No Gold Cards remain!");
-                return;
+                _gcm.UpdateCurrentActionText("Gold deck is empty! Scored 1 Point!");
+                _am.CallUpdateScore(_am.CurrentPlayer, 1);
+                yield break;
             }
 
             randomCard = _gDeck[Random.Range(0, _gDeck.Count)];
@@ -141,36 +169,48 @@ public class OnlineCardManager : MonoBehaviour
             Debug.LogWarning("Incorrect deck parameter provided: " + deck);
         }
 
-        if(_am.CurrentPlayer == 1)
+        if (_am.CurrentPlayer == 1)
         {
-            for(int i = 0; i < P1OpenHandPositions.Length; i++)
+            for (int i = 0; i < P1OpenHandPositions.Length; i++)
             {
-                if(P1OpenHandPositions[i] == true)
+                if (P1OpenHandPositions[i] == true)
                 {
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
-                    randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
-                    randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
-                    randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
+                    randomCard.GetComponentInChildren<CardController>().HandPosition = i;
+                    randomCard.GetComponentInChildren<CardController>().HeldByPlayer = _am.CurrentPlayer;
+                    randomCard.GetComponentInChildren<CardController>().NextPos = randomCard.transform.position;
                     P1Hand.Add(randomCard);
                     P1OpenHandPositions[i] = false;
-                    if(deck == "Universal")
+                    if (deck == "Universal")
                     {
-                        _am.P1Cards++;
-                        _uDeck.Remove(randomCard);
+                        _deckPos = _uDeck.IndexOf(randomCard);
+                        CallRemoveCard("Universal", _deckPos);
                     }
                     else
                     {
-                        _am.P1GoldCards++;
-                        _gDeck.Remove(randomCard);
+                        _deckPos = _gDeck.IndexOf(randomCard);
+                        CallRemoveCard("Gold", _deckPos);
                     }
-                    Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+
+                    if (randomCard.CompareTag("GoldCard"))
+                    {
+                        _am.P1GoldCards++;
+                    }
+                    else
+                    {
+                        _am.P1Cards++;
+                    }
+                    //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+                    randomCard.SetActive(true);
+                    randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
+                    yield return new WaitForSeconds(_cardShowHideTime);
                     UpdatePileText();
-                    return;
+                    yield break;
                 }
             }
         }
-        else if(_am.CurrentPlayer == 2)
+        else if (_am.CurrentPlayer == 2)
         {
             for (int i = 0; i < P2OpenHandPositions.Length; i++)
             {
@@ -178,28 +218,74 @@ public class OnlineCardManager : MonoBehaviour
                 {
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
-                    randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
-                    randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
-                    randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
+                    randomCard.GetComponentInChildren<CardController>().HandPosition = i;
+                    randomCard.GetComponentInChildren<CardController>().HeldByPlayer = _am.CurrentPlayer;
+                    randomCard.GetComponentInChildren<CardController>().NextPos = randomCard.transform.position;
                     P2Hand.Add(randomCard);
                     P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
-                        _am.P2Cards++;
-                        _uDeck.Remove(randomCard);
+                        _deckPos = _uDeck.IndexOf(randomCard);
+                        CallRemoveCard("Universal", _deckPos);  // ASD
                     }
                     else
                     {
-                        _am.P2GoldCards++;
-                        _gDeck.Remove(randomCard);
+                        _deckPos = _gDeck.IndexOf(randomCard);
+                        CallRemoveCard("Gold", _deckPos);   // ASD
                     }
-                    Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+
+                    if (randomCard.CompareTag("GoldCard"))
+                    {
+                        _am.P2GoldCards++;
+                    }
+                    else
+                    {
+                        _am.P2Cards++;
+                    }
+                    //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
+                    randomCard.SetActive(true);
+                    randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
+                    yield return new WaitForSeconds(_cardShowHideTime);
                     UpdatePileText();
-                    return;
+                    yield break;
                 }
             }
         }
     }
+
+    /// <summary>
+    /// Calls the RemoveCard RPC which removes the card at deckPos from deck
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
+    /// <param name="deckPos"> Position of the card in the deck </param>
+    private void CallRemoveCard(string deck, int deckPos)
+    {
+        photonView.RPC("RemoveCard", RpcTarget.All, deck, deckPos);
+    }
+
+    /// <summary>
+    /// Removes the card at deckPos from deck
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
+    /// <param name="deckPos"> Position of the card in the deck </param>
+    [PunRPC]
+    public void RemoveCard(string deck, int deckPos)
+    {
+        switch(deck)
+        {
+            case "Universal":
+                _uDeck.RemoveAt(deckPos);
+                break;
+            default:
+                _gDeck.RemoveAt(deckPos);
+                break;
+        }
+    }
+
 
     /// <summary>
     /// Prepares selection value for checks related to spending cards.
@@ -209,7 +295,7 @@ public class OnlineCardManager : MonoBehaviour
     /// <param name="remove">Mark true to set all variables to their defaults.</param>
     public void PrepareCardSelection(int cardAmount, string suit, bool remove)
     {
-        if(remove)
+        if (remove)
         {
             RequiredCardAmount = 0;
             RequiredSuit = "";
@@ -218,32 +304,32 @@ public class OnlineCardManager : MonoBehaviour
             {
                 foreach (GameObject card in P1Hand)
                 {
-                    card.GetComponentInChildren<OnlineCardController>().CanBeSelected = false;
+                    card.GetComponentInChildren<CardController>().CanBeSelected = false;
                 }
             }
             else
             {
                 foreach (GameObject card in P2Hand)
                 {
-                    card.GetComponentInChildren<OnlineCardController>().CanBeSelected = false;
+                    card.GetComponentInChildren<CardController>().CanBeSelected = false;
                 }
             }
 
             return;
         }
 
-        if(_am.CurrentPlayer == 1)
+        if (_am.CurrentPlayer == 1)
         {
             foreach (GameObject card in P1Hand)
             {
-                card.GetComponentInChildren<OnlineCardController>().CanBeSelected = true;
+                card.GetComponentInChildren<CardController>().CanBeSelected = true;
             }
         }
         else
         {
             foreach (GameObject card in P2Hand)
             {
-                card.GetComponentInChildren<OnlineCardController>().CanBeSelected = true;
+                card.GetComponentInChildren<CardController>().CanBeSelected = true;
             }
         }
 
@@ -260,23 +346,23 @@ public class OnlineCardManager : MonoBehaviour
         int requiredCardValue = RequiredCardAmount * 2;
         int selectedCardValue = 0;
 
-        foreach(GameObject card in SelectedCards)
+        foreach (GameObject card in SelectedCards)
         {
-            if(card.GetComponentInChildren<OnlineCardController>().Selected)
+            if (card.GetComponentInChildren<CardController>().Selected)
             {
-                if (card.GetComponentInChildren<OnlineCardVisuals>().ThisCard.GrassSuit && RequiredSuit == "Grass")
+                if (card.GetComponentInChildren<CardVisuals>().ThisCard.GrassSuit && RequiredSuit == "Grass")
                 {
                     selectedCardValue += 2;
                 }
-                else if (card.GetComponentInChildren<OnlineCardVisuals>().ThisCard.DirtSuit && RequiredSuit == "Dirt")
+                else if (card.GetComponentInChildren<CardVisuals>().ThisCard.DirtSuit && RequiredSuit == "Dirt")
                 {
                     selectedCardValue += 2;
                 }
-                else if (card.GetComponentInChildren<OnlineCardVisuals>().ThisCard.StoneSuit && RequiredSuit == "Stone")
+                else if (card.GetComponentInChildren<CardVisuals>().ThisCard.StoneSuit && RequiredSuit == "Stone")
                 {
                     selectedCardValue += 2;
                 }
-                else if (card.GetComponentInChildren<OnlineCardVisuals>().ThisCard.GoldSuit)
+                else if (card.GetComponentInChildren<CardVisuals>().ThisCard.GoldSuit)
                 {
                     selectedCardValue += 2;
                 }
@@ -291,13 +377,13 @@ public class OnlineCardManager : MonoBehaviour
             }
         }
 
-        if(selectedCardValue == requiredCardValue)
+        if (selectedCardValue == requiredCardValue)
         {
-            Debug.Log("Adequate cards provided!");
+            //Debug.Log("Adequate cards provided!");
             SpendSelectedCards();
             return true;
         }
-        else if(selectedCardValue > requiredCardValue)
+        else if (selectedCardValue > requiredCardValue)
         {
             return false;
         }
@@ -333,10 +419,24 @@ public class OnlineCardManager : MonoBehaviour
 
         SelectedCards.Clear();
     }
+   
+    /// <summary>
+    /// Calls the ShuffleDiscardPile RPC which shuffles the discard pile back
+    /// into the main deck.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void CallShuffleDiscard()
+    {
+        photonView.RPC("ShuffleDiscardPile", RpcTarget.All);
+    }
 
     /// <summary>
     /// Shuffles the discard pile back into the main deck.
+    /// 
+    /// Edited: Andrea SD - Turned into an RPC for online use
     /// </summary>
+    [PunRPC]
     public void ShuffleDiscardPile()
     {
         if(DPile.Count >= 1)
@@ -357,7 +457,7 @@ public class OnlineCardManager : MonoBehaviour
                 }
             }
 
-            Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
+            //Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
 
             DPile.Clear();
             UpdatePileText();
@@ -372,9 +472,9 @@ public class OnlineCardManager : MonoBehaviour
     {
         for (int i = cardsToDraw; i > 0; i--)
         {
-            DrawCard("Universal");
+            StartCoroutine(DrawCard("Universal"));
         }
-        Debug.Log("Drew " + cardsToDraw + " cards!");
+        //Debug.Log("Drew " + cardsToDraw + " cards!");
     }
 
     /// <summary>
@@ -386,36 +486,27 @@ public class OnlineCardManager : MonoBehaviour
         {
             if (_am.P1Cards + _am.P1GoldCards > _am.HandLimit)
             {
-                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
-
                 PrepareCardSelection(_am.P1Cards + _am.P1GoldCards - _am.HandLimit, "Any", false);
-                while (!CheckCardSelection())
-                {
-                    yield return null;
-                }
-                PrepareCardSelection(0, "", true);
+                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
             }
-
-           // HideCards(_am.CurrentPlayer);
-            //_am.EndTurn(_am.CurrentPlayer);   // Andrea SD - commented out
         }
         else if (player == 2)
         {
             if (_am.P2Cards + _am.P2GoldCards > _am.HandLimit)
             {
-                _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
-
                 PrepareCardSelection(_am.P2Cards + _am.P2GoldCards - _am.HandLimit, "Any", false);
-                while (!CheckCardSelection())
-                {
-                    yield return null;
-                }
-                PrepareCardSelection(0, "", true);
+                _gcm.UpdateCurrentActionText("Discard " + (_am.P2Cards + _am.P2GoldCards - _am.HandLimit) + " Cards.");
             }
-
-           // HideCards(_am.CurrentPlayer);
-            //_am.EndTurn(_am.CurrentPlayer);   // Andrea SD - commented out
         }
+
+        while (!CheckCardSelection())
+        {
+            yield return null;
+        }
+        PrepareCardSelection(0, "", true);
+
+        StartCoroutine(HideCards(_am.CurrentPlayer));
+        _am.EndTurn(_am.CurrentPlayer);
     }
 
     /// <summary>
@@ -423,22 +514,25 @@ public class OnlineCardManager : MonoBehaviour
     /// </summary>
     /// <param name="player">1 or 2</param>
     /// <param name="maxActivateAmount">Default amount + Burrows</param>
-    public void PrepareCardActivating(int player, int maxActivateAmount)
+    public void PrepareCardActivating(int player, int maxActivateAmount, bool activatePhaseJustStarted)
     {
-        AllowedActivations = maxActivateAmount;
+        if (activatePhaseJustStarted)
+        {
+            AllowedActivations = maxActivateAmount;
+        }
 
         if (player == 1)
         {
             foreach (GameObject card in P1Hand)
             {
-                card.GetComponentInChildren<OnlineCardController>().CanBeActivated = true;
+                card.GetComponentInChildren<CardController>().CanBeActivated = true;
             }
         }
         else
         {
             foreach (GameObject card in P2Hand)
             {
-                card.GetComponentInChildren<OnlineCardController>().CanBeActivated = true;
+                card.GetComponentInChildren<CardController>().CanBeActivated = true;
             }
         }
     }
@@ -453,14 +547,14 @@ public class OnlineCardManager : MonoBehaviour
         {
             foreach (GameObject card in P1Hand)
             {
-                card.GetComponentInChildren<OnlineCardController>().CanBeActivated = false;
+                card.GetComponentInChildren<CardController>().CanBeActivated = false;
             }
         }
         else
         {
-            foreach (GameObject card in P1Hand)
+            foreach (GameObject card in P2Hand)
             {
-                card.GetComponentInChildren<OnlineCardController>().CanBeActivated = false;
+                card.GetComponentInChildren<CardController>().CanBeActivated = false;
             }
         }
     }
@@ -469,20 +563,24 @@ public class OnlineCardManager : MonoBehaviour
     /// Shows cards based on the player.
     /// </summary>
     /// <param name="player">1 or 2</param>
-    public void HideCards(int player)
+    public IEnumerator HideCards(int player)
     {
-        if(player == 1)
+        if (player == 1)
         {
-            foreach (GameObject card in P1Hand)
+            for (int i = 0; i < P1Hand.Count; i++)
             {
-                card.SetActive(false);
+                P1Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
+                yield return new WaitForSeconds(_cardShowHideTime);
+                P1Hand[i].SetActive(false);
             }
         }
         else
         {
-            foreach (GameObject card in P2Hand)
+            for (int i = 0; i < P2Hand.Count; i++)
             {
-                card.SetActive(false);
+                P2Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
+                yield return new WaitForSeconds(_cardShowHideTime);
+                P2Hand[i].SetActive(false);
             }
         }
     }
@@ -491,20 +589,24 @@ public class OnlineCardManager : MonoBehaviour
     /// Hides cards based on the player.
     /// </summary>
     /// <param name="player">1 or 2</param>
-    public void ShowCards(int player)
+    public IEnumerator ShowCards(int player)
     {
-        if(player == 1)
+        if (player == 1)
         {
-            foreach(GameObject card in P1Hand)
+            for (int i = 0; i < P1Hand.Count; i++)
             {
-                card.SetActive(true);
+                P1Hand[i].SetActive(true);
+                P1Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
+                yield return new WaitForSeconds(_cardShowHideTime);
             }
         }
         else
         {
-            foreach (GameObject card in P2Hand)
+            for (int i = 0; i < P2Hand.Count; i++)
             {
-                card.SetActive(true);
+                P2Hand[i].SetActive(true);
+                P2Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
+                yield return new WaitForSeconds(_cardShowHideTime);
             }
         }
     }
