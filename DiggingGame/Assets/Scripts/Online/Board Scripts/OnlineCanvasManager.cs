@@ -415,7 +415,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void UpdateTextBothPlayers()
     {
-        UpdateCurrentPlayerText(/*_am.CurrentPlayer*/);
+        UpdateCurrentPlayerText();
         photonView.RPC("UpdateActiveTextOnline", RpcTarget.All);
 
         /*if (_am.CurrentPlayer == 1)

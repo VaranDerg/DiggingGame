@@ -8,6 +8,7 @@
 *****************************************************************************/
 
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -151,7 +152,7 @@ public class OnlineActionManager : MonoBehaviourPun
             if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
             {
                 pawn.GetComponent<OnlinePlayerPawn>().IsMoving = true;
-                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().WaitingAnimName);
             }
         }
 
@@ -199,7 +200,7 @@ public class OnlineActionManager : MonoBehaviourPun
             if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
             {
                 pawn.GetComponent<OnlinePlayerPawn>().IsDigging = true;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().WaitingAnimName);
             }
         }
 
@@ -765,7 +766,7 @@ public class OnlineActionManager : MonoBehaviourPun
 
         //Refresh persistent cards.
         ShovelUsed = false;
-        MorningJogUsed = false;
+        MorningJogUsed = false; 
     }
 
 

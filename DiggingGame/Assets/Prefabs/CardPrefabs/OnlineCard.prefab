@@ -1806,6 +1806,7 @@ GameObject:
   - component: {fileID: 8963238438343006309}
   - component: {fileID: 3051362430415254490}
   - component: {fileID: 4560273780584508775}
+  - component: {fileID: 7992142433570010059}
   m_Layer: 0
   m_Name: CardScript
   m_TagString: Untagged
@@ -1924,14 +1925,22 @@ MonoBehaviour:
   _defaultPos: {fileID: 7925999958643142583}
   _cardVisualToMaximize: {fileID: 8963238438185584236}
   _cardBody: {fileID: 8963238437072702106}
+  _cardBackground: {fileID: 0}
   _cardSlideSpeed: 7.5
+  _cardDiscardColor: {r: 0, g: 0, b: 0, a: 0}
+  _cardDefaultColor: {r: 0, g: 0, b: 0, a: 0}
   HandPosition: 0
+  PHandPosition: 0
   HeldByPlayer: 0
   NextPos: {x: 0, y: 0, z: 0}
   CanBeSelected: 0
   CanBeDiscarded: 0
   CanBeActivated: 0
   Selected: 0
+  MadePersistentP1: 0
+  MadePersistentP2: 0
+  _cardAnimator: {fileID: 0}
+  _discardAnimWaitTime: 0
 --- !u!114 &4560273780584508775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1954,6 +1963,26 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!95 &7992142433570010059
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8963238438343006310}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: de42ccce0311a0146bc8f3b03c323495, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8963238438471516894
 GameObject:
   m_ObjectHideFlags: 0
