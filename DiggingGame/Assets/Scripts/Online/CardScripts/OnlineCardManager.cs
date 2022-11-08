@@ -177,9 +177,9 @@ public class OnlineCardManager : MonoBehaviourPun
                 {
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
-                    randomCard.GetComponentInChildren<CardController>().HandPosition = i;
-                    randomCard.GetComponentInChildren<CardController>().HeldByPlayer = _am.CurrentPlayer;
-                    randomCard.GetComponentInChildren<CardController>().NextPos = randomCard.transform.position;
+                    randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
+                    randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
+                    randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
                     P1Hand.Add(randomCard);
                     P1OpenHandPositions[i] = false;
                     if (deck == "Universal")
