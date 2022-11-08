@@ -9331,7 +9331,14 @@ MonoBehaviour:
   - {fileID: 1034060801}
   - {fileID: 1491287116}
   - {fileID: 1015289855}
-  _opponentViewShowing: 0
+  _buildingInfoZone: {fileID: 0}
+  _showHideBuildingInfoText: {fileID: 0}
+  _factoryInfoText: {fileID: 0}
+  _burrowInfoText: {fileID: 0}
+  _mineInfoText: {fileID: 0}
+  _bothFactoryImage: {fileID: 0}
+  _bothBurrowImage: {fileID: 0}
+  _bothMineImage: {fileID: 0}
   _moleFactory: {fileID: 21300000, guid: c44f93469180f3444b9ac6bf2f6fe759, type: 3}
   _moleBurrow: {fileID: 21300000, guid: dd59c161cee62da469e25ff9ef335f0c, type: 3}
   _moleMine: {fileID: 21300000, guid: dd145c0285b438440ad3f1ae1c069783, type: 3}
@@ -9342,7 +9349,8 @@ MonoBehaviour:
   _burrow: {fileID: 1717394501}
   _mine: {fileID: 50002691}
   _oppInfoAnims: {fileID: 826397545}
-  _oppInfoWaitTime: 0.25
+  _buildingInfoAnims: {fileID: 0}
+  _infoAnimWaitTime: 0
 --- !u!114 &888052511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9702,6 +9710,88 @@ Transform:
   m_Father: {fileID: 1831804216}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &942937824 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1773380379898020653, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1037039226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &942937825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1773380379906410548, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1037039226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &942937826 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1773380380135268586, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1037039226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &942937827 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1773380378878461103, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1037039226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &942937828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1773380379823508958, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1037039226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &942937829 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1773380378727256441, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1037039226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &942937830 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1773380379892246303, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1037039226}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &942937831 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1773380378712795167, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1037039226}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &944104383
 GameObject:
   m_ObjectHideFlags: 0
@@ -10556,10 +10646,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activateAnimWaitTime: 2
   _activateResponseBox: {fileID: 1702431506}
-  _grassColor: {r: 0.27450982, g: 0.49019608, b: 0.23921569, a: 1}
-  _dirtColor: {r: 0.41568628, g: 0.25882354, b: 0.14509805, a: 1}
-  _stoneColor: {r: 0.32941177, g: 0.32941177, b: 0.32941177, a: 1}
-  _goldColor: {r: 0.8, g: 0.5921569, b: 0.039215688, a: 1}
+  _grassABar: {fileID: 0}
+  _dirtABar: {fileID: 0}
+  _stoneABar: {fileID: 0}
+  _goldABar: {fileID: 0}
   _cardActivatedText: {fileID: 1821359536}
   _thiefUI: {fileID: 929669490}
   ProtectBuildingUI: {fileID: 1758303715}
@@ -10589,14 +10679,24 @@ MonoBehaviour:
   _earthquakeDamages: 1
   _thunderstormDamages: 1
   _tornadoDamages: 3
+  DamageDieSides: 4
   SelectedBuilding: {fileID: 0}
   AllowedDamages: 0
   _allowedRepairs: 3
   RepairedBuildings: 0
+  _tFactoryButton: {fileID: 0}
+  _tBurrowButton: {fileID: 0}
+  _tMineButton: {fileID: 0}
+  _moleFactory: {fileID: 0}
+  _moleBurrow: {fileID: 0}
+  _moleMine: {fileID: 0}
+  _meerFactory: {fileID: 0}
+  _meerBurrow: {fileID: 0}
+  _meerMine: {fileID: 0}
   CurrentDamages: 0
   EarthquakePieceSelected: 0
   PiecesToCollect: 1
-  NewBuildingCost: 1
+  BuildingReduction: 0
   PlannedGambleCardsToDraw: 3
   MetalDetectorStoneToFlip: 4
   DiscerningEyeStoneToFlip: 4
@@ -11693,7 +11793,14 @@ MonoBehaviour:
   - {fileID: 1284328820}
   - {fileID: 1284328819}
   - {fileID: 1284328818}
-  _opponentViewShowing: 0
+  _buildingInfoZone: {fileID: 942937831}
+  _showHideBuildingInfoText: {fileID: 942937824}
+  _factoryInfoText: {fileID: 942937830}
+  _burrowInfoText: {fileID: 942937829}
+  _mineInfoText: {fileID: 942937828}
+  _bothFactoryImage: {fileID: 942937827}
+  _bothBurrowImage: {fileID: 942937826}
+  _bothMineImage: {fileID: 942937825}
   _moleFactory: {fileID: 21300000, guid: c44f93469180f3444b9ac6bf2f6fe759, type: 3}
   _moleBurrow: {fileID: 21300000, guid: dd59c161cee62da469e25ff9ef335f0c, type: 3}
   _moleMine: {fileID: 21300000, guid: dd145c0285b438440ad3f1ae1c069783, type: 3}
@@ -11704,7 +11811,8 @@ MonoBehaviour:
   _burrow: {fileID: 1284328816}
   _mine: {fileID: 1284328815}
   _oppInfoAnims: {fileID: 1284328814}
-  _oppInfoWaitTime: 0.25
+  _buildingInfoAnims: {fileID: 0}
+  _infoAnimWaitTime: 0
 --- !u!114 &1037039230 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1773380378812407574, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
@@ -16487,6 +16595,7 @@ MonoBehaviour:
   WinningScore: 18
   _menuButton: {fileID: 861217911}
   BaseBuildingPrice: 1
+  BuildingPriceGoldRaise: 0
   TotalBuildings: 3
   ShovelUsed: 0
   MorningJogUsed: 0
