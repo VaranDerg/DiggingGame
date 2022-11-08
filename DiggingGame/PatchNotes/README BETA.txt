@@ -28,7 +28,7 @@ Balance:
 - Earthquake (1 Dirt 2 Stone -> 1 Grass 1 Dirt 1 Stone)
 	~ Earthquake is a very powerful card, yet tends to get underutilized due to its 2 Stone cost, leaving most buildings on
 	Stone untouched for the entire game. This new cost should reflect its thematic purpose and make it more common in games.
-- Metal Detector (1 Stone -> 1 Grass)
+- Metal Detector (1 Stone -> 1 Dirt); Deck Presence (1 -> 2)
 	~ Metal Detector had a very expensive cost for a possibly detrimental effect. With updated changes to Gold Pieces on the
 	board, Metal Detector should become a commonly played card that leads to interesting strategies between players. 
 - Planned Gamble (1 Stone -> 1 Dirt)
@@ -46,15 +46,22 @@ Balance:
 	~ Fertilizer, in comparison to Flowers and Compaction, was somewhat difficult to use at most points of the game due to
 	the Dirt Supply being fairly empty. Making it similar to other placement cards by making its cost equivalent to its
 	placement suit should allow players to use it more often.
+- Erosion (1 Grass 1 Dirt -> 1 Stone)
+	~ Updated Erosion's cost to keep it more in line with Lawnmower and Excavator. 
+- Compaction (Deck Presence 2 -> 1)
+	~ Compaction now only has a single copy of itself in the Universal Deck. Being a card with somewhat niche use until
+	later in rounds, its common appearance wasn't justified. 
 - Gold Cards
    ~ Golden Shovel (1 Grass 1 Dirt -> 1 Dirt 1 Stone)
    ~ Regeneration (3 Grass -> 2 Grass 1 Dirt 1 Stone)
    ~ Tornado (3 Grass 1 Dirt -> 3 Grass 1 Stone)
-   ~ Transmutation (1 Stone -> 2 Stone)
+   ~ Transmutation (1 Stone -> 1 Dirt 1 Stone)
    ~ Holy Idol (2 Grass 1 Stone -> 1 Grass 1 Dirt 1 Stone)
+   ~ Discerning Eye (1 Stone -> 2 Stone)
 	~ Certain games of Subterranean tend to have an influx of Gold Cards with a drought of Stone Pieces in the Supply. These
 	changes were put in place to encourage more Stone being sent to the Supply, give Stone Mines a further use for late game
-	rounds, and allow placing Stone to be a more viable choice. 
+	rounds, and allow placing Stone to be a more viable choice. Gold Card Effects should be a mid to late game tool, and their
+	higher cost should encourage using them for other uses more often.
 
 Bugs: 
 - Fixed an issue where Garden and Flowers wouldn't allow players to place Pieces on the board and softlock the game.
