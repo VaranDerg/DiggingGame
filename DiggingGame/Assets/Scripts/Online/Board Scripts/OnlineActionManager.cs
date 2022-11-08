@@ -27,8 +27,8 @@ public class OnlineActionManager : MonoBehaviourPun
     //Array for supply. Grass, Dirt, Stone, Gold.
     [HideInInspector] public int[] SupplyPile = new int[4];
     //Arrays for players' build buildings. Factory, Burrow, Grass Mine, Dirt Mine, Stone Mine. 
-    [HideInInspector] public int[] P1BuiltBuildings = new int[5];
-    [HideInInspector] public int[] P2BuiltBuildings = new int[5];
+    [HideInInspector] public int[] P1BuiltBuildings = new int[6];
+    [HideInInspector] public int[] P2BuiltBuildings = new int[6];
     //Variables for each players' cards. 
     [HideInInspector] public int P1Cards = 0, P2Cards = 0;
     [HideInInspector] public int P1GoldCards = 0, P2GoldCards = 0;
@@ -59,6 +59,7 @@ public class OnlineActionManager : MonoBehaviourPun
 
     [Header("Building Values")]
     public int BaseBuildingPrice;
+    public int BuildingPriceGoldRaise;
     public int TotalBuildings;
 
     [Header("Card Effects")]
@@ -74,7 +75,6 @@ public class OnlineActionManager : MonoBehaviourPun
     private OnlineBoardManager _bm;
     private OnlineCardManager _cm;
     private OnlineCanvasManager _gcm;
-    private OnlineCardEffects _ce;
     private OnlinePersistentCardManager _pcm;
 
     /// <summary>
@@ -82,9 +82,9 @@ public class OnlineActionManager : MonoBehaviourPun
     /// </summary>
     private void Awake()
     {
+        _menuButton.SetActive(false);
         _bm = FindObjectOfType<OnlineBoardManager>();
         _cm = FindObjectOfType<OnlineCardManager>();
-        _gcm = FindObjectOfType<OnlineCanvasManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         PrepareStartingValues();
@@ -151,7 +151,7 @@ public class OnlineActionManager : MonoBehaviourPun
             if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
             {
                 pawn.GetComponent<OnlinePlayerPawn>().IsMoving = true;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
             }
         }
 
@@ -165,7 +165,11 @@ public class OnlineActionManager : MonoBehaviourPun
     public void StartBuild(int player, string building)
     {
         _bm.DisableAllBoardInteractions();
-        foreach (MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
+        foreach (OnlineActionManager script in FindObjectsOfType<OnlineActionManager>())
+        {
+            script.StopAllCoroutines();
+        }
+        foreach (OnlinePieceController script in FindObjectsOfType<OnlinePieceController>())
         {
             script.StopAllCoroutines();
         }
@@ -177,7 +181,7 @@ public class OnlineActionManager : MonoBehaviourPun
             {
                 pawn.GetComponent<OnlinePlayerPawn>().IsBuilding = true;
                 pawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild = building;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().WaitingAnimName);
             }
         }
 
@@ -216,7 +220,7 @@ public class OnlineActionManager : MonoBehaviourPun
                 pawn.GetComponent<OnlinePlayerPawn>().IsBuilding = false;
                 pawn.GetComponent<OnlinePlayerPawn>().IsDigging = false;
                 pawn.GetComponent<OnlinePlayerPawn>().IsPlacing = false;
-                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
             }
         }
 
@@ -395,6 +399,8 @@ public class OnlineActionManager : MonoBehaviourPun
                 }
                 //End of Geologist code.
 
+                StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
+
                 StartCoroutine(_cm.DrawCard("Gold"));
                 CallUpdatePieces(1, 2, 3, -1);  // Andrea SD
                 SupplyPileRPC(3, -1);
@@ -441,6 +447,7 @@ public class OnlineActionManager : MonoBehaviourPun
     {
         photonView.RPC("ModifySupplyPile", RpcTarget.All, pieceType, amount);
     }
+
     /// <summary>
     /// Removes pieces from the supply pile
     /// 
@@ -471,70 +478,72 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <param name="type">"Factory" "Burrow" or "Mine"</param>
     public bool EnoughBuildingsRemaining(int player, string type)
     {
-        if (player == 1)
         {
-            switch (type)
+            if (player == 1)
             {
-                case "Factory":
-                    if (P1RemainingBuildings[0] == 0)
-                    {
-                        _gcm.UpdateCurrentActionText("All Factories have been built!");
+                switch (type)
+                {
+                    case "Factory":
+                        if (P1RemainingBuildings[0] == 0)
+                        {
+                            _gcm.UpdateCurrentActionText("All Factories have been built!");
+                            return false;
+                        }
+                        return true;
+                    case "Burrow":
+                        if (P1RemainingBuildings[1] == 0)
+                        {
+                            _gcm.UpdateCurrentActionText("All Burrows have been built!");
+                            return false;
+                        }
+                        return true;
+                    case "Mine":
+                        if (P1RemainingBuildings[2] == 0)
+                        {
+                            _gcm.UpdateCurrentActionText("All Mines have been built!");
+                            return false;
+                        }
+                        return true;
+                    default:
+                        Debug.LogWarning("Incorrect building provided: " + type);
                         return false;
-                    }
-                    return true;
-                case "Burrow":
-                    if (P1RemainingBuildings[1] == 0)
-                    {
-                        _gcm.UpdateCurrentActionText("All Burrows have been built!");
-                        return false;
-                    }
-                    return true;
-                case "Mine":
-                    if (P1RemainingBuildings[2] == 0)
-                    {
-                        _gcm.UpdateCurrentActionText("All Mines have been built!");
-                        return false;
-                    }
-                    return true;
-                default:
-                    Debug.LogWarning("Incorrect building provided: " + type);
-                    return false;
+                }
             }
-        }
-        else if (player == 2)
-        {
-            switch (type)
+            else if (player == 2)
             {
-                case "Factory":
-                    if (P2RemainingBuildings[0] == 0)
-                    {
-                        _gcm.UpdateCurrentActionText("All Factories have been built!");
+                switch (type)
+                {
+                    case "Factory":
+                        if (P2RemainingBuildings[0] == 0)
+                        {
+                            _gcm.UpdateCurrentActionText("All Factories have been built!");
+                            return false;
+                        }
+                        return true;
+                    case "Burrow":
+                        if (P2RemainingBuildings[1] == 0)
+                        {
+                            _gcm.UpdateCurrentActionText("All Burrows have been built!");
+                            return false;
+                        }
+                        return true;
+                    case "Mine":
+                        if (P2RemainingBuildings[2] == 0)
+                        {
+                            _gcm.UpdateCurrentActionText("All Mines have been built!");
+                            return false;
+                        }
+                        return true;
+                    default:
+                        Debug.LogWarning("Incorrect building provided: " + type);
                         return false;
-                    }
-                    return true;
-                case "Burrow":
-                    if (P2RemainingBuildings[1] == 0)
-                    {
-                        _gcm.UpdateCurrentActionText("All Burrows have been built!");
-                        return false;
-                    }
-                    return true;
-                case "Mine":
-                    if (P2RemainingBuildings[2] == 0)
-                    {
-                        _gcm.UpdateCurrentActionText("All Mines have been built!");
-                        return false;
-                    }
-                    return true;
-                default:
-                    Debug.LogWarning("Incorrect building provided: " + type);
-                    return false;
+                }
             }
-        }
-        else
-        {
-            Debug.LogWarning("Player " + player + " is not valid.");
-            return false;
+            else
+            {
+                Debug.LogWarning("Player " + player + " is not valid.");
+                return false;
+            }
         }
     }
 
@@ -674,6 +683,15 @@ public class OnlineActionManager : MonoBehaviourPun
 
                 CollectPiecesFromSupply(1, "Stone");
             }
+            for (int i = P2BuiltBuildings[5]; i != 0; i--)
+            {
+                if (SupplyPile[3] == 0)
+                {
+                    continue;
+                }
+
+                CollectPiecesFromSupply(1, "Gold");
+            }
         }
     }
 
@@ -687,11 +705,17 @@ public class OnlineActionManager : MonoBehaviourPun
     {
         if (player == 1)
         {
-            if (P1Score >= 15)
+            if (P1Score >= WinningScore)
             {
-                _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached 15 points!");
-                _gcm.UpdateOpponentActionText("Player 1 wins, as they've reached 15 points!");    //Andrea SD
-                _menuButton.SetActive(true);
+                /* _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached 15 points!");
+                 _gcm.UpdateOpponentActionText("Player 1 wins, as they've reached 15 points!");    //Andrea SD
+                 _menuButton.SetActive(true);
+                 return;*/
+
+                FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
+
+                //_gcm.UpdateCurrentActionText("Player 1 wins, as they've reached " + WinningScore + " points!");
+                //_menuButton.SetActive(true);
                 return;
             }
             photonView.RPC("ResetTurnPhase", RpcTarget.All);    // Andrea SD
@@ -702,11 +726,17 @@ public class OnlineActionManager : MonoBehaviourPun
         }
         else
         {
-            if (P2Score >= 15)
+            if (P2Score >= WinningScore)
             {
-                _gcm.UpdateCurrentActionText("Player 2 wins, as they've reached 15 points!");
+                /*_gcm.UpdateCurrentActionText("Player 2 wins, as they've reached 15 points!");
                 _gcm.UpdateOpponentActionText("Player 2 wins, as they've reached 15 points!");    //Andrea SD
                 _menuButton.SetActive(true);
+                return;*/
+
+                FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
+
+                //_gcm.UpdateCurrentActionText("Player 2 wins, as they've reached " + WinningScore + " points!");
+                //_menuButton.SetActive(true);
                 return;
             }
 
@@ -716,11 +746,26 @@ public class OnlineActionManager : MonoBehaviourPun
             //_gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
             _gcm.UpdateCurrentActionText("Player 1 is starting their turn.");
             photonView.RPC("ChangeTurn", RpcTarget.All, 1);     // Andrea SD
+
+            StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Round", 1);
         }
 
         //Enables the start button for the other player then disables your own board 
         DisableBoard();
         photonView.RPC("EnableBoard", RpcTarget.Others);
+
+        if (CurrentRound % 2 == 0)
+        {
+            FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Night);
+        }
+        else
+        {
+            FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
+        }
+
+        //Refresh persistent cards.
+        ShovelUsed = false;
+        MorningJogUsed = false;
     }
 
 

@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -48,10 +49,16 @@ public class OnlineCanvasManager : MonoBehaviourPun
     [SerializeField] private TextMeshProUGUI _opponentGoldCardText;
     [SerializeField] private TextMeshProUGUI[] _opponentPieces = new TextMeshProUGUI[4];
 
+    [Header("Text and Object References, Building View")]
+    [SerializeField] private GameObject _buildingInfoZone;
+    [SerializeField] private TextMeshProUGUI _showHideBuildingInfoText;
+    [SerializeField] private TextMeshProUGUI _factoryInfoText, _burrowInfoText, _mineInfoText;
+    [SerializeField] private Image _bothFactoryImage, _bothBurrowImage, _bothMineImage;
+
     [Header("Other References")]
-    public bool _opponentViewShowing = false;
-    [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine,
-        _meerkatFactory, _meerkatBurrow, _meerkatMine;  // ASD
+    private bool _opponentViewShowing = false;
+    private bool _buildingViewShowing = false;
+    [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine, _meerkatFactory, _meerkatBurrow, _meerkatMine;
     [SerializeField] private Image _factory, _burrow, _mine;
     private OnlineActionManager _am;
     private OnlineBoardManager _bm;
@@ -60,9 +67,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
     private OnlinePersistentCardManager _pcm;
 
     [Header("Animations")]
-    [SerializeField] Animator _oppInfoAnims;
-    [SerializeField] float _oppInfoWaitTime;
-    private bool _midShowHideAnim;
+    [SerializeField] private Animator _oppInfoAnims;
+    [SerializeField] private Animator _buildingInfoAnims;
+    [SerializeField] private float _infoAnimWaitTime;
+    private bool _midOppShowHideAnim;
+    private bool _midBuildShowHideAnim;
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
@@ -154,9 +163,17 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// <param name="curPlayer">1 or 2</param>
     private void UpdateCurrentPlayerText()
     {
+        //Master Builder Start
+        int bCostReduction = 0;
+        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
+        {
+            bCostReduction += _ce.BuildingReduction;
+        }
+        //End Master Builder
+
         if (PhotonNetwork.IsMasterClient)   /*curPlayer == 1*/ //Edited: Andrea SD
         {
-            _currentPlayerScore.text = "Score: " + _am.P1Score;
+            _currentPlayerScore.text = "Score: " + _am.P1Score + "/" + _am.WinningScore;
             _currentPlayerCollectedPieces[0].text = "x" + _am.P1CollectedPile[0];
             _currentPlayerCollectedPieces[1].text = "x" + _am.P1CollectedPile[1];
             _currentPlayerCollectedPieces[2].text = "x" + _am.P1CollectedPile[2];
@@ -169,70 +186,36 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
 
-            //Master Builder + Sold Out Code 
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
+            if (_am.P1RemainingBuildings[0] == 0)
             {
-                if (_am.P1CurrentBuildingPrices[0] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
-                }
-
-                if (_am.P1CurrentBuildingPrices[1] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
-                }
-
-                if (_am.P1CurrentBuildingPrices[2] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
-                }
+                _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
             }
             else
             {
-                if (_am.P1CurrentBuildingPrices[0] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P1CurrentBuildingPrices[0];
-                }
-
-                if (_am.P1CurrentBuildingPrices[1] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P1CurrentBuildingPrices[1];
-                }
-
-                if (_am.P1CurrentBuildingPrices[2] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P1CurrentBuildingPrices[2];
-                }
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + (_am.P1CurrentBuildingPrices[0] - bCostReduction);
             }
-            //End Master Builder + Sold Out Code
+
+            if (_am.P1RemainingBuildings[1] == 0)
+            {
+                _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
+            }
+            else
+            {
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + (_am.P1CurrentBuildingPrices[1] - bCostReduction);
+            }
+
+            if (_am.P1RemainingBuildings[2] == 0)
+            {
+                _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
+            }
+            else
+            {
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + (_am.P1CurrentBuildingPrices[2] - bCostReduction);
+            }
         }
         else    // Player 2
         {
-            _currentPlayerScore.text = "Score: " + _am.P2Score;
+            _currentPlayerScore.text = "Score: " + _am.P2Score + "/" + _am.WinningScore;
             _currentPlayerCollectedPieces[0].text = "x" + _am.P2CollectedPile[0];
             _currentPlayerCollectedPieces[1].text = "x" + _am.P2CollectedPile[1];
             _currentPlayerCollectedPieces[2].text = "x" + _am.P2CollectedPile[2];
@@ -244,62 +227,33 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _currentPlayerRemainingBuildings[0].text = _am.P2RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
-            //Master Builder + Sold Out Code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
+
+            if (_am.P2RemainingBuildings[0] == 0)
             {
-                if (_am.P2CurrentBuildingPrices[0] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _ce.NewBuildingCost;
-                }
-                if (_am.P2CurrentBuildingPrices[1] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _ce.NewBuildingCost;
-                }
-                if (_am.P2CurrentBuildingPrices[2] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _ce.NewBuildingCost;
-                }
+                _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
             }
             else
             {
-                if (_am.P2CurrentBuildingPrices[0] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[0].text = "Cost " + _am.P2CurrentBuildingPrices[0];
-                }
-                if (_am.P2CurrentBuildingPrices[1] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[1].text = "Cost " + _am.P2CurrentBuildingPrices[1];
-                }
-                if (_am.P2CurrentBuildingPrices[2] == 4)
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
-                }
-                else
-                {
-                    _currentPlayerRemainingBuildingCost[2].text = "Cost " + _am.P2CurrentBuildingPrices[2];
-                }
+                _currentPlayerRemainingBuildingCost[0].text = "Cost " + (_am.P2CurrentBuildingPrices[0] - bCostReduction);
             }
-            //End Master Builder + Sold Out Code
+
+            if (_am.P2RemainingBuildings[1] == 0)
+            {
+                _currentPlayerRemainingBuildingCost[1].text = "Sold Out!";
+            }
+            else
+            {
+                _currentPlayerRemainingBuildingCost[1].text = "Cost " + (_am.P2CurrentBuildingPrices[1] - bCostReduction);
+            }
+
+            if (_am.P2RemainingBuildings[2] == 0)
+            {
+                _currentPlayerRemainingBuildingCost[2].text = "Sold Out!";
+            }
+            else
+            {
+                _currentPlayerRemainingBuildingCost[2].text = "Cost " + (_am.P2CurrentBuildingPrices[2] - bCostReduction);
+            }
         }
     }
 
@@ -382,6 +336,46 @@ public class OnlineCanvasManager : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Updates the Building Info text.
+    /// </summary>
+    private void UpdateBuildingText()
+    {
+        if (_am.CurrentPlayer == 1)
+        {
+            _bothFactoryImage.sprite = _moleFactory;
+            _bothBurrowImage.sprite = _moleBurrow;
+            _bothMineImage.sprite = _moleMine;
+        }
+        else
+        {
+            _bothFactoryImage.sprite = _meerkatFactory;
+            _bothBurrowImage.sprite = _meerkatBurrow;
+            _bothMineImage.sprite = _meerkatMine;
+        }
+
+        //Master Builder Start
+        int bCostReduction = 0;
+        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
+        {
+            bCostReduction += _ce.BuildingReduction;
+        }
+        //End Master Builder
+
+        if (_am.CurrentPlayer == 1)
+        {
+            _factoryInfoText.text = "Factories" + Environment.NewLine + "Card Draw: " + (_am.CardDraw + _am.P1BuiltBuildings[0]) + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[0] - bCostReduction);
+            _burrowInfoText.text = "Burrows" + Environment.NewLine + "Activations: " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[1] - bCostReduction);
+            _mineInfoText.text = "Mines" + Environment.NewLine + "Supply Pieces" + Environment.NewLine + Environment.NewLine + (_am.P1BuiltBuildings[2] + _am.P1BuiltBuildings[3] + _am.P1BuiltBuildings[4] + _am.P1BuiltBuildings[5]) + " Built" + Environment.NewLine + _am.P1RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[2] - bCostReduction);
+        }
+        else
+        {
+            _factoryInfoText.text = "Factories" + Environment.NewLine + "Card Draw: " + (_am.CardDraw + _am.P2BuiltBuildings[0]) + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P2RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[0] - bCostReduction);
+            _burrowInfoText.text = "Burrows" + Environment.NewLine + "Activations: " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P2RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[1] - bCostReduction);
+            _mineInfoText.text = "Mines" + Environment.NewLine + "Supply Pieces" + Environment.NewLine + Environment.NewLine + (_am.P2BuiltBuildings[2] + _am.P2BuiltBuildings[3] + _am.P2BuiltBuildings[4] + _am.P2BuiltBuildings[5]) + " Built" + Environment.NewLine + _am.P2RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[2] - bCostReduction);
+        }
+    }
+
+    /// <summary>
     /// Updates the Current Action text.
     /// </summary>
     /// <param name="updatedText">New text to show</param>
@@ -452,7 +446,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void OpponentInfoToggleWrapper()
     {
-        if (_midShowHideAnim)
+        if (_midOppShowHideAnim)
         {
             return;
         }
@@ -470,9 +464,9 @@ public class OnlineCanvasManager : MonoBehaviourPun
         {
             _oppInfoAnims.Play("OppInfoHide");
 
-            _midShowHideAnim = true;
-            yield return new WaitForSeconds(_oppInfoWaitTime);
-            _midShowHideAnim = false;
+            _midOppShowHideAnim = true;
+            yield return new WaitForSeconds(_infoAnimWaitTime);
+            _midOppShowHideAnim = false;
 
             _showHideOpponentInfoText.text = "Show Opponent Info";
             _opponentInfoZone.SetActive(false);
@@ -483,9 +477,9 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _opponentInfoZone.SetActive(true);
             _oppInfoAnims.Play("OppInfoShow");
 
-            _midShowHideAnim = true;
-            yield return new WaitForSeconds(_oppInfoWaitTime);
-            _midShowHideAnim = false;
+            _midOppShowHideAnim = true;
+            yield return new WaitForSeconds(_infoAnimWaitTime);
+            _midOppShowHideAnim = false;
 
             _showHideOpponentInfoText.text = "Hide Opponent Info";
             _opponentViewShowing = true;
@@ -503,6 +497,51 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _opponentViewShowing = true;*/
 
         OpponentInfoToggleWrapper();
+    }
+
+    /// <summary>
+    /// Wrapper for starting the below Coroutine through a button.
+    /// </summary>
+    public void BuildingInfoToggleWrapper()
+    {
+        if (_midBuildShowHideAnim)
+        {
+            return;
+        }
+
+        StartCoroutine(BuildingInfoToggle());
+    }
+
+    /// <summary>
+    /// Shows or hides the Building Info.
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator BuildingInfoToggle()
+    {
+        if (_buildingViewShowing)
+        {
+            _buildingInfoAnims.Play("OppInfoHide");
+
+            _midBuildShowHideAnim = true;
+            yield return new WaitForSeconds(_infoAnimWaitTime);
+            _midBuildShowHideAnim = false;
+
+            _showHideBuildingInfoText.text = "Show Building Info";
+            _buildingInfoZone.SetActive(false);
+            _buildingViewShowing = false;
+        }
+        else
+        {
+            _buildingInfoZone.SetActive(true);
+            _buildingInfoAnims.Play("OppInfoShow");
+
+            _midBuildShowHideAnim = true;
+            yield return new WaitForSeconds(_infoAnimWaitTime);
+            _midBuildShowHideAnim = false;
+
+            _showHideBuildingInfoText.text = "Hide Building Info";
+            _buildingViewShowing = true;
+        }
     }
 
     /// <summary>
@@ -643,6 +682,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _backButton.SetActive(true);
         _am.StartBuild(_am.CurrentPlayer, buildingName);
 
+        UpdateCurrentActionText("Select a Pawn, then Piece for your " + buildingName + ".");
         UpdateTextBothPlayers();
     }
 
@@ -681,8 +721,13 @@ public class OnlineCanvasManager : MonoBehaviourPun
         UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of their next action...");
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
-        
-        foreach(PieceController script in FindObjectsOfType<PieceController>())
+        _bm.SetActiveCollider("Board");
+
+        foreach (OnlinePieceController script in FindObjectsOfType<OnlinePieceController>())
+        {
+            script.StopAllCoroutines();
+        }
+        foreach (OnlineActionManager script in FindObjectsOfType<OnlineActionManager>())
         {
             script.StopAllCoroutines();
         }
@@ -691,6 +736,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
         if (_am.CurrentTurnPhase == 2)
         {
+            UpdateCurrentActionText("Select an Action.");
             _thenZone.SetActive(true);
             _thenActions.SetActive(true);
             _endPhaseButton.SetActive(true);
@@ -699,8 +745,15 @@ public class OnlineCanvasManager : MonoBehaviourPun
         {
             _finallyZone.SetActive(true);
             _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations, false);
-            
-                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Cards.");
+
+            if (_am.CurrentPlayer == 1)
+            {
+                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Card(s).");
+            }
+            else
+            {
+                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Card(s).");
+            }
         }
 
         UpdateTextBothPlayers();
@@ -721,11 +774,17 @@ public class OnlineCanvasManager : MonoBehaviourPun
         {
             _cm.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
             StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
+            _factory.sprite = _meerkatFactory;
+            _burrow.sprite = _meerkatBurrow;
+            _mine.sprite = _meerkatMine;
         }
         else
         {
             _cm.DrawAlottedCards(_am.CardDraw + _am.P2BuiltBuildings[0]);
             StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
+            _factory.sprite = _moleFactory;
+            _burrow.sprite = _moleBurrow;
+            _mine.sprite = _moleMine;
         }
 
         _am.EndTurn(_am.CurrentPlayer);     //Andrea SD

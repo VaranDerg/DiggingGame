@@ -16,14 +16,23 @@ using Photon.Pun;
 // Edited - Andrea SD: Modified for online use. Added comments
 public class OnlineCardEffects : MonoBehaviourPun
 {
+    /// <summary>
+    /// Variables, these control animation times.
+    /// </summary>
     [Header("General Values")]
     [SerializeField] private float activateAnimWaitTime;
 
+    /// <summary>
+    /// Variables, these are references for the bars that appear once cards are activated.
+    /// </summary>
     [Header("Activation UI References")]
     [SerializeField] private GameObject _activateResponseBox;
-    [SerializeField] private Color _grassColor, _dirtColor, _stoneColor, _goldColor;
+    [SerializeField] private Sprite _grassABar, _dirtABar, _stoneABar, _goldABar;
     [SerializeField] private TextMeshProUGUI _cardActivatedText;
 
+    /// <summary>
+    /// Variables, these are references to UI Elements used for specific cards. Check the "Cards" dropdown in the P&PWeather Canvas.
+    /// </summary>
     [Header("Card UI References")]
     [SerializeField] private GameObject _thiefUI;
     public GameObject ProtectBuildingUI;
@@ -33,18 +42,27 @@ public class OnlineCardEffects : MonoBehaviourPun
     [SerializeField] private GameObject _regenerationUI;
     [SerializeField] private GameObject _tornadoUI;
 
+    /// <summary>
+    /// These are numerical values that for cards the place pieces.
+    /// </summary>
     [Header("Placement Effects")]
     [SerializeField] private int _gardenPiecesToPlace;
     [SerializeField] private int _flowersPiecesToPlace;
     [SerializeField] private int _fertilizerPiecesToPlace;
     [SerializeField] private int _compactionPiecesToPlace;
 
+    /// <summary>
+    /// These are numerical values for cards that dig pieces. 
+    /// </summary>
     [Header("Digging Effects")]
     [SerializeField] private int _lawnmowerPiecesToDig;
     [SerializeField] private int _excavatorPiecesToDig;
     [SerializeField] private int _erosionPiecesToDig;
     [SerializeField] private int _goldenShovelPiecesToDig;
 
+    /// <summary>
+    /// These are numerical values for cards that regenerate or place pieces.
+    /// </summary>
     [Header("Placing & Regeneration")]
     [HideInInspector] public int PlacedPieces = 0;
     [HideInInspector] public int DugPieces = 0;
@@ -53,6 +71,9 @@ public class OnlineCardEffects : MonoBehaviourPun
     private int _piecesToRegen;
     private bool _regenSuitChosen;
 
+    /// <summary>
+    /// These are a LOT of variables related to damaging buildings. Related to animations, referencing other scripts, and so on. Variables will make more sense in Methods.
+    /// </summary>
     [Header("Damaging Buildings")]
     public float BuildingDamageStatusWaitTime;
     [SerializeField] private int _overgrowthDamages;
@@ -60,41 +81,58 @@ public class OnlineCardEffects : MonoBehaviourPun
     [SerializeField] private int _earthquakeDamages;
     [SerializeField] private int _thunderstormDamages;
     [SerializeField] private int _tornadoDamages;
-    private int _damageBuildingDieSides = 4;
+    public int DamageDieSides = 4;
     [HideInInspector] public Building SelectedBuilding;
     [HideInInspector] public int AllowedDamages;
     [SerializeField] private int _allowedRepairs;
     [HideInInspector] public int RepairedBuildings;
     private int _tornadoBuildingToDamage;
     private bool _tornadoBuildingChosen;
+    [SerializeField] private GameObject _tFactoryButton, _tBurrowButton, _tMineButton;
+    [SerializeField] private Sprite _moleFactory, _moleBurrow, _moleMine, _meerFactory, _meerBurrow, _meerMine;
     [HideInInspector] public int CurrentDamages;
     [HideInInspector] public bool EarthquakePieceSelected;
 
+    /// <summary>
+    /// Specific Card Variables
+    /// </summary>
     [Header("Planned Profit")]
     public int PiecesToCollect;
 
     [Header("Master Builder")]
-    public int NewBuildingCost;
+    public int BuildingReduction;
 
     [Header("Planned Gamble")]
     public int PlannedGambleCardsToDraw;
 
+    /// <summary>
+    /// Variables for cards that flip stone.
+    /// </summary>
     [Header("Stone Flipping")]
     public int MetalDetectorStoneToFlip;
     public int DiscerningEyeStoneToFlip;
     [HideInInspector] public int RemainingFlips;
 
+    /// <summary>
+    /// Variables for Thief cards.
+    /// </summary>
     [Header("Thief Cards")]
     public int ThiefPiecesToTake;
     public int DirtyThiefPiecesToTake;
     public int MasterThiefPiecesToTake;
     private int _remainingPiecesToSteal;
 
+    /// <summary>
+    /// Variables for Holy Idol
+    /// </summary>
     [Header("Holy Idol")]
     public int PiecesToClaim;
     public int GoldToClaim;
     private bool _claimedPieces;
 
+    /// <summary>
+    /// Partner Scripts
+    /// </summary>
     [Header("Other")]
     private OnlineCanvasManager _gcm;
     private OnlineCardManager _cm;
@@ -107,6 +145,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// </summary>
     private void Awake()
     {
+        _activateResponseBox.SetActive(false);
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _cm = FindObjectOfType<OnlineCardManager>();
         _bm = FindObjectOfType<OnlineBoardManager>();
@@ -137,6 +176,8 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <param name="effectName">Name of the effect, matches coroutine. Capitalize each letter, spaces between words.</param>
     public IEnumerator ActivateCardEffect(string suit, string effectName, GameObject pCardObject)
     {
+        //Enables the Activated response box and calls ShowActivationText.
+        _activateResponseBox.SetActive(true);
         ShowActivationText(suit, effectName, true);
 
         yield return new WaitForSeconds(activateAnimWaitTime);
@@ -264,23 +305,24 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
     private void ShowActivationText(string suit, string effectName, bool start)
     {
+        // Shows the correct UI Sprite and updates the Text correctly.
         _gcm.UpdateCurrentActionText("Activated Card!");
         _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
-        if(suit == "Grass")
+        if (suit == "Grass")
         {
-            _activateResponseBox.GetComponent<Image>().color = _grassColor;
+            _activateResponseBox.GetComponent<Image>().sprite = _grassABar;
         }
-        else if(suit == "Dirt")
+        else if (suit == "Dirt")
         {
-            _activateResponseBox.GetComponent<Image>().color = _dirtColor;
+            _activateResponseBox.GetComponent<Image>().sprite = _dirtABar;
         }
-        else if(suit == "Stone")
+        else if (suit == "Stone")
         {
-            _activateResponseBox.GetComponent<Image>().color = _stoneColor;
+            _activateResponseBox.GetComponent<Image>().sprite = _stoneABar;
         }
-        else if(suit == "Gold")
+        else if (suit == "Gold")
         {
-            _activateResponseBox.GetComponent<Image>().color = _goldColor;
+            _activateResponseBox.GetComponent<Image>().sprite = _goldABar;
         }
 
         if (start)
@@ -424,6 +466,9 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        //StatManager is a statistic storing Class. 
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Steal", 1);
+        //Updates variables. These are used to track how many more pieces a player can steal.
         _remainingPiecesToSteal--;
         _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
         _gcm.UpdateTextBothPlayers();
@@ -506,39 +551,57 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns></returns>
     public void RegeneratePieces(string suit)
     {
+        //This is called through Regeneration's Coroutine and works with it. This code is sectioned off here for it to finish first. 
+
+        //Variables needed to calculate the card's effect. 
         bool enoughPieces = false;
-        int newPieceCount = 0;
+        int piecesInSupply = 0;
         int openPieces = 0;
 
+        //Suit will control which piece is used. This is chosen through a UI button.
         if (suit == "Grass")
         {
+            //EnoughPieces is true if the SupplyPile is larger than the given variable.
             if (_am.SupplyPile[0] >= _maxPiecesToRegen)
             {
                 enoughPieces = true;
             }
             else
             {
-                newPieceCount = _am.SupplyPile[0];
+                //piecesInSupply stores the SupplyPile count of the given piece.
+                piecesInSupply = _am.SupplyPile[0];
                 enoughPieces = false;
+            }
+
+            //Resets Piece status just in case.
+            foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+            {
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
             }
 
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
-                if(piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
+                //Does not highlight pieces with Pawns or Buildings
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if(piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
+                //Does not highlight if the Piece isn't Dirt
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
                 {
                     continue;
                 }
 
+                //openPieces raised by 1 if the piece isn't already highlighted.
+                if (!piece.GetComponent<OnlinePieceController>().IsPlaceable)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
-                openPieces++;
             }
         }
-        else if(suit == "Dirt")
+        else if (suit == "Dirt")
         {
             if (_am.SupplyPile[1] >= _maxPiecesToRegen)
             {
@@ -546,7 +609,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
             else
             {
-                newPieceCount = _am.SupplyPile[1];
+                piecesInSupply = _am.SupplyPile[1];
                 enoughPieces = false;
             }
 
@@ -562,11 +625,14 @@ public class OnlineCardEffects : MonoBehaviourPun
                     continue;
                 }
 
+                if (!piece.GetComponent<OnlinePieceController>().IsPlaceable)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
-                openPieces++;
             }
         }
-        else if(suit == "Stone")
+        else if (suit == "Stone")
         {
             if (_am.SupplyPile[2] >= _maxPiecesToRegen)
             {
@@ -574,7 +640,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
             else
             {
-                newPieceCount = _am.SupplyPile[2];
+                piecesInSupply = _am.SupplyPile[2];
                 enoughPieces = false;
             }
 
@@ -590,27 +656,37 @@ public class OnlineCardEffects : MonoBehaviourPun
                     continue;
                 }
 
+                if (!piece.GetComponent<OnlinePieceController>().IsPlaceable)
+                {
+                    openPieces++;
+                }
                 piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
-                openPieces++;
             }
         }
 
+        //If the supply has enough pieces and the board has enough spots, place every piece possible.
         if (enoughPieces && openPieces >= _maxPiecesToRegen)
         {
             _piecesToRegen = _maxPiecesToRegen;
         }
+        //If the supply has enough pieces, place a piece onto every open piece
         else if (enoughPieces)
         {
             _piecesToRegen = openPieces;
         }
-        else if (openPieces >= newPieceCount)
+        //If the supply doesn't have enough pieces but there's more open pieces than currently open pieces, place every supply piece possible.
+        else if (openPieces >= piecesInSupply)
         {
-            _piecesToRegen = newPieceCount;
+            _piecesToRegen = piecesInSupply;
         }
+        //If all else fails, place a piece onto every open piece.
         else
         {
             _piecesToRegen = openPieces;
         }
+        //Now, the logic above is very messy and may cause issues that I've yet to find. But every time I've tried it, it worked as intended. 
+
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", _piecesToRegen);
 
         _regenSuitChosen = true;
     }
@@ -629,22 +705,22 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// Damages a building based on a dice roll.
     /// </summary>
     /// <returns>A number from 0 to 2</returns>
-    public int CalculateBuildingDamage()
+    public int CalculateBuildingDamage(int diceRoll)
     {
-        int sideOfDie = Random.Range(0, _damageBuildingDieSides + 1);
-        int damageToTake;
+        //Converts a Dice Roll of 1 through 4 into a 1 or 2. 
+        int damageToTake = 0;
 
-        if(sideOfDie != 0 && sideOfDie != _damageBuildingDieSides)
+        if (diceRoll == 1)
+        {
+            damageToTake = 0;
+        }
+        else if (diceRoll == 2 || diceRoll == 3)
         {
             damageToTake = 1;
         }
-        else if(sideOfDie == _damageBuildingDieSides)
+        else if (diceRoll == 4)
         {
             damageToTake = 2;
-        }
-        else
-        {
-            damageToTake = 0;
         }
 
         return damageToTake;
@@ -654,6 +730,8 @@ public class OnlineCardEffects : MonoBehaviourPun
 
     /// <summary>
     /// Card effect Coroutine for Flowers. 
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Flowers()
@@ -736,13 +814,15 @@ public class OnlineCardEffects : MonoBehaviourPun
 
     /// <summary>
     /// Card effect Coroutine for Garden. 
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Garden()
     {
+        //Very similar logic for Garden. View Flowers for further detail. Garden places adjacent to Pawns instead, so things change for that.
         _gcm.DisableListObjects();
         bool enoughPieces;
-        int newPieceCount = 0;
         int openPieces = 0;
         if (_am.SupplyPile[0] >= _gardenPiecesToPlace)
         {
@@ -750,15 +830,19 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
         else
         {
-            newPieceCount = _am.SupplyPile[0];
             enoughPieces = false;
         }
 
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
+        }
+
         foreach (GameObject pawn in pawns)
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
@@ -772,16 +856,16 @@ public class OnlineCardEffects : MonoBehaviourPun
                         continue;
                     }
 
-                    if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
+                    if (!piece.GetComponent<OnlinePieceController>().IsPlaceable)
                     {
+                        piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
                         openPieces++;
                     }
-                    piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
                 }
             }
         }
 
-        if(openPieces == 0)
+        if (openPieces == 0)
         {
             PlacedPieces = 0;
             _bm.DisableAllBoardInteractions();
@@ -790,39 +874,59 @@ public class OnlineCardEffects : MonoBehaviourPun
             yield break;
         }
 
+        _bm.SetActiveCollider("Board");
+
         PlacedPieces = 0;
-        if (enoughPieces && openPieces >= _gardenPiecesToPlace)
+        int supplyAmount = _am.SupplyPile[0];
+        if (enoughPieces)
         {
-            while (PlacedPieces != _gardenPiecesToPlace)
+            if (openPieces >= _gardenPiecesToPlace)
             {
-                _gcm.UpdateCurrentActionText("Place " + _gardenPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
-                yield return null;
+                while (PlacedPieces != _gardenPiecesToPlace)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces adjacent to your Pawns!");
+                    yield return null;
+                }
             }
-        }
-        else if(openPieces >= newPieceCount)
-        {
-            while (PlacedPieces != newPieceCount)
+            else
             {
-                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces adjacent to your Pawns!");
-                yield return null;
+                while (PlacedPieces != openPieces)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces adjacent to your Pawns!");
+                    yield return null;
+                }
             }
         }
         else
         {
-            while (PlacedPieces != openPieces)
+            if (openPieces >= supplyAmount)
             {
-                _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces adjacent to your Pawns!");
-                yield return null;
+                while (PlacedPieces != supplyAmount)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + supplyAmount + " Grass Pieces adjacent to your Pawns!");
+                    yield return null;
+                }
+            }
+            else
+            {
+                while (PlacedPieces != openPieces)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces adjacent to your Pawns!");
+                    yield return null;
+                }
             }
         }
 
-        if(PlacedPieces > 0 && PlacedPieces < _gardenPiecesToPlace)
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
+
+        //Scores twice if the max piece amount is placed, but only once if any are placed.
+        if (PlacedPieces > 0 && PlacedPieces < _gardenPiecesToPlace)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
-        else if(PlacedPieces == _gardenPiecesToPlace)
+        else if (PlacedPieces == _gardenPiecesToPlace)
         {
-            _am.CallUpdateScore(_am.CurrentPlayer, 1);
+            _am.CallUpdateScore(_am.CurrentPlayer, 2);
         }
 
         PlacedPieces = 0;
@@ -832,58 +936,78 @@ public class OnlineCardEffects : MonoBehaviourPun
 
     /// <summary>
     /// Card effect Coroutine for Lawnmower. 
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Lawnmower()
     {
+        //Lawnmower digs pieces adjacent to your Pawns. Has very similar logic to EXCAVATOR, EROSION, and GOLDEN SHOVEL.
         _gcm.DisableListObjects();
 
+        //Generates a list of every Pawn.
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
         foreach (GameObject pawn in pawns)
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            //If the pawn is of the current player's...
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
+                //Generate a List of adjacent Pieces to that Pawn...
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
+                    //The piece must be Grass...
                     if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.One && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Six)
                     {
                         continue;
                     }
 
+                    //It must not have a Building or Pawn...
                     if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                     {
                         continue;
                     }
 
-                    if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
+                    //And will be made Diggable if all this succeeds. 
+                    if (!piece.GetComponent<OnlinePieceController>().IsDiggable)
                     {
+                        piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
+                        piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                         openPieces++;
                     }
-                    piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
-                    piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                 }
             }
         }
 
         DugPieces = 0;
 
-        if(openPieces >= _lawnmowerPiecesToDig)
+        //If there's more open pieces than diggable pieces...
+        if (openPieces >= _lawnmowerPiecesToDig)
         {
+            //Dig only as many of those as the card is able to dig.
             _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
             {
                 yield return null;
             }
         }
+        //If not...
         else
         {
+            //Dig every piece shown. This could be 0!
             _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
                 yield return null;
             }
+        }
+
+        //Reset every leftover Piece.
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
         }
 
         DugPieces = 0;
@@ -898,6 +1022,8 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator MorningJog(GameObject cardBody)
     {
+        //This card is a Persistent Card. All these Coroutines do is call "MakeCardPersistent" in PersistentCardManager, which is its own beast! Once made Persistent, its code is usable in other scripts.
+        //Morning Jog's code can be found in PieceController's Movement methods.
         FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
@@ -977,6 +1103,9 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Thief()
     {
+        //Thief steals Pieces from other players. Remember that earlier method? It works with that. It has very similar logic to DIRTY THIEF and MASTER THIEF.
+
+        //Enables UI and sets the steal amount.
         _gcm.UpdateCurrentActionText("Complete Thief actions!");
         _thiefUI.SetActive(true);
         _grassThiefButton.SetActive(true);
@@ -987,14 +1116,16 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (_am.CurrentPlayer == 1)
         {
-            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2RefinedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            //Disables certain buttons if no more pieces of those remain.
+            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
             {
+                //Disables the Gold button if players choose other pieces. You must take Gold OR 2 other Pieces.
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
                 {
                     _goldThiefButton.SetActive(false);
                 }
 
-                if(_am.P2CollectedPile[0] + _am.P2RefinedPile[0] == 0)
+                if (_am.P2CollectedPile[0] + _am.P2RefinedPile[0] == 0)
                 {
                     _grassThiefButton.SetActive(false);
                 }
@@ -1004,7 +1135,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                     _dirtThiefButton.SetActive(false);
                 }
 
-                if(_am.P2CollectedPile[3] + _am.P2RefinedPile[3] == 0)
+                if (_am.P2CollectedPile[3] + _am.P2RefinedPile[3] == 0)
                 {
                     _goldThiefButton.SetActive(false);
                 }
@@ -1012,9 +1143,10 @@ public class OnlineCardEffects : MonoBehaviourPun
                 yield return null;
             }
         }
+        //Identical for Player 2.
         else
         {
-            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1RefinedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
             {
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
                 {
@@ -1040,6 +1172,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        //Disables UI.
         _thiefUI.SetActive(false);
         _grassThiefButton.SetActive(false);
         _dirtThiefButton.SetActive(false);
@@ -1055,18 +1188,19 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// </summary>
     public void Walkway()
     {
+        //Walkway is simple and unique. It basically prompts "IsUsingWalkway" in every player's current pawns. This code can be found in PlayerPawn and PieceController in Walkway related code.
         _bm.DisableAllBoardInteractions();
 
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
-                pawn.GetComponent<PlayerPawn>().IsUsingWalkway = true;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<OnlinePlayerPawn>().IsUsingWalkway = true;
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().WaitingAnimName);
             }
         }
 
-        _gcm.UpdateCurrentActionText("Select a Pawn to Dig and Move with Walkway!");
+        _gcm.UpdateCurrentActionText("Select a Pawn for Walkway!");
         _bm.SetActiveCollider("Pawn");
     }
 
@@ -1076,7 +1210,8 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator WeedWhacker(GameObject cardBody)
     {
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        //Weed Whacker's logic can be found in DamageBuilding (Building).
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 
