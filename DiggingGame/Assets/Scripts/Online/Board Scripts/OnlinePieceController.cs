@@ -21,22 +21,21 @@ public class OnlinePieceController : MonoBehaviourPun
     //Edited: Rudy W. Organized with headers, added certain variables for functionality.
 
     [Header("Piece References")]
-/*    [SerializeField] private Sprite _grassSprite;
+    [SerializeField] private Sprite _grassSprite;
     [SerializeField] private Sprite _dirtSprite;
     [SerializeField] private Sprite _stoneSprite;
     [SerializeField] private Sprite _bedrockSprite;
-    [SerializeField] private Sprite _goldSprite;*/
-    [SerializeField] private GameObject _playerPawn;
-    private SpriteRenderer _sr;
+    [SerializeField] private Sprite _goldSprite;
+    [SerializeField] private Sprite _flowerSprite;
+    [SerializeField] private GameObject _molePawn;
+    [SerializeField] private GameObject _meerkatPawn;
+    [SerializeField] private SpriteRenderer _borderSr;
 
     [Header("Building References")]
     [SerializeField] private Transform _buildingSlot;
     [SerializeField] private GameObject _mFactory, _mBurrow, _mMine, _meeFactory, _meeBurrow, _meeMine;
 
     [Header("Tile Values/Information")]
-    [SerializeField] private Color _defaultColor;
-    [SerializeField] private Color _selectedColor;
-    [SerializeField] private Color _waitingColor;
     [HideInInspector] public bool IsMovable = false, IsDiggable = false, IsPlaceable = false, IsBuildable = false;
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasP1Building, HasP2Building;
@@ -65,17 +64,25 @@ public class OnlinePieceController : MonoBehaviourPun
     [SerializeField] private ParticleSystem _stonePS;
     [SerializeField] private ParticleSystem _goldPS;
 
-    private GameObject _currentPawn;
+    [Header("Lights")]
+    [SerializeField] private GameObject _goldLight;
 
     [Header("Other")]
     private bool _pawnIsMoving;
 
-    private int _currentPawnID;
-    private int _pieceID;
+    [Header("Animations")]
+    [SerializeField] private Animator _borderAnims;
+    [SerializeField] private Color _defaultColor;
+    [SerializeField] private Color _selectedColor;
+    [SerializeField] private Color _waitingColor;
+    [SerializeField] private GameObject _goldGlitter;
+
+    // ASD
+    private int _currentPawnID;     // Photon network ID of the currently selected pawn
+    private int _pieceID;       // Photon network ID of a piece
 
     private void Awake()
     {
-        _sr = GetComponent<SpriteRenderer>();
         _bm = FindObjectOfType<OnlineBoardManager>();
         _am = FindObjectOfType<OnlineActionManager>();
         _cm = FindObjectOfType<OnlineCardManager>();
@@ -101,9 +108,10 @@ public class OnlinePieceController : MonoBehaviourPun
 
     // Start is called before the first frame update
     private void Start()
-    {     
+    {
         SetPieceState(1);
-        _sr.color = _defaultColor;
+        _borderSr.color = _defaultColor;
+        _borderAnims.Play("PieceBorderIdle");
     }
 
     /// <summary>
@@ -190,13 +198,17 @@ public class OnlinePieceController : MonoBehaviourPun
                 {
                     CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
                 }
+
+                StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Dig", 1);
+
                 _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
             }
             //End of Shovel Code
 
             else
             {
-                _sr.color = _waitingColor;
+                _borderSr.color = _waitingColor;
+                _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
                 foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
                 {
@@ -225,6 +237,8 @@ public class OnlinePieceController : MonoBehaviourPun
                     yield return null;
                 }
                 _cm.PrepareCardSelection(0, "", true);
+
+                StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Dig", 1);
 
                 switch (ObjState)
                 {
@@ -640,44 +654,49 @@ public class OnlinePieceController : MonoBehaviourPun
 
     public IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
     {
-        _sr.color = _waitingColor;
+        _borderSr.color = _waitingColor;
+        _borderAnims.Play("PieceBorderWaiting");
         PieceIsSelected = true;
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
         }
 
-        //Master Builder Code
+        //Master Builder Start
+        int bCostReduction = 0;
         if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
         {
-            _cm.PrepareCardSelection(_ce.NewBuildingCost, suitOfPiece, false);
+            bCostReduction += _ce.BuildingReduction;
         }
-        else
+        //End Master Builder
+
+        if (suitOfPiece == "Gold")
         {
-            if (_am.CurrentPlayer == 1)
+            bCostReduction -= _am.BuildingPriceGoldRaise;
+        }
+
+        if (_am.CurrentPlayer == 1)
+        {
+            if (buildingIndex == 0 || buildingIndex == 1)
             {
-                if (buildingIndex == 0 || buildingIndex == 1)
-                {
-                    _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
-                }
-                else
-                {
-                    _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[2], suitOfPiece, false);
-                }
+                _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[buildingIndex] - bCostReduction, suitOfPiece, false);
             }
             else
             {
-                if (buildingIndex == 0 || buildingIndex == 1)
-                {
-                    _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex], suitOfPiece, false);
-                }
-                else
-                {
-                    _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[2], suitOfPiece, false);
-                }
+                _cm.PrepareCardSelection(_am.P1CurrentBuildingPrices[2] - bCostReduction, suitOfPiece, false);
             }
         }
-        //End Master Builder Code
+        else
+        {
+            if (buildingIndex == 0 || buildingIndex == 1)
+            {
+                _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[buildingIndex] - bCostReduction, suitOfPiece, false);
+            }
+            else
+            {
+                _cm.PrepareCardSelection(_am.P2CurrentBuildingPrices[2] - bCostReduction, suitOfPiece, false);
+            }
+        }
 
         while (!_cm.CheckCardSelection())
         {
@@ -715,13 +734,6 @@ public class OnlinePieceController : MonoBehaviourPun
                 _am.P2BuiltBuildings[buildingIndex]++;
             }
         }
-
-        //Master Builder Code
-        if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Master Builder"))
-        {
-            _pcm.DiscardPersistentCard(_am.CurrentPlayer, "Master Builder");
-        }
-        //End Master Builder
 
         InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
@@ -908,7 +920,7 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <param name="newSprite"></param>
     public void ChangeSprite(String newSprite)
     {
-        _sr.sprite = Resources.Load<Sprite>(newSprite);
+        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(newSprite);
     }
 
     /// <summary>
@@ -918,13 +930,15 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsMovable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             IsMovable = false;
             PieceIsSelected = false;
             CheckedByPawn = false;
@@ -938,13 +952,15 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsBuildable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             IsBuildable = false;
             PieceIsSelected = false;
             CheckedByPawn = false;
@@ -958,13 +974,15 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsDiggable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             PieceIsSelected = false;
             IsDiggable = false;
             CheckedByPawn = false;
@@ -978,13 +996,15 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsPlaceable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             PieceIsSelected = false;
             IsPlaceable = false;
             CheckedByPawn = false;
@@ -999,13 +1019,15 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsEarthquakeable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             PieceIsSelected = false;
             IsEarthquakeable = false;
             CheckedByPawn = false;
@@ -1020,13 +1042,15 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             IsFlippable = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             PieceIsSelected = false;
             IsFlippable = false;
             CheckedByPawn = false;
@@ -1042,13 +1066,15 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         if (show)
         {
-            _sr.color = _selectedColor;
+            _borderSr.color = _selectedColor;
+            _borderAnims.Play("PieceBorderWaiting");
             UsingWalkway = true;
             CheckedByPawn = true;
         }
         else
         {
-            _sr.color = _defaultColor;
+            _borderSr.color = _defaultColor;
+            _borderAnims.Play("PieceBorderIdle");
             UsingWalkway = false;
             PieceIsSelected = false;
             CheckedByPawn = false;

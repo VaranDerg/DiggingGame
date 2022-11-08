@@ -10,27 +10,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 [System.Serializable]
 public class OnlineBuilding : MonoBehaviourPun
 {
-    [Header("Values")]
-    [SerializeField] private Color _damagedColor;
-    [SerializeField] private Color _defaultColor;
+    //Sprites and Dice Face values.
+    [Header("References")]
+    [SerializeField] private Sprite _damagedSprite;
+    [SerializeField] private Sprite _defaultSprite;
+    [SerializeField] private int _showDiceFaceTimes = 30;
 
+    //Information regarding the Building.
+    [Header("Values")]
+    //Its health.
     public int BuildingHealth = 2;
+    //Which player built it
     [HideInInspector] public int PlayerOwning = 0;
+    //Its name (Factory, Grass Mine, Burrow, Etc)
     [HideInInspector] public string BuildingType = "";
+    //States
     [HideInInspector] public bool CanBeDamaged;
     [HideInInspector] public bool CanBeRepaired;
+    //How much damage the building will lose
     [HideInInspector] public int DamageTaken;
+    //What suit its on
     [HideInInspector] public string SuitOfPiece;
+    //Whether or not its participating in active selection
     [HideInInspector] public bool ActiveBuilding;
-    [HideInInspector] public bool DamageProtectionResponse;
 
+    //Buncha stuff for all of Caelie's wonderful animations
     [Header("Animations")]
+    [SerializeField] private string _animFirstPartName;
+    [SerializeField] private string _animSecondPartName;
+    [SerializeField] private string _buildingSpawnName;
+    [SerializeField] private string _buildingHideName;
+    [SerializeField] private string _buildingClickName;
+    [SerializeField] private string _buildingWaitingName;
+    [SerializeField] private string _buildingDamagedName;
+    [SerializeField] private string _buildingDamagedWaitingName;
+    [SerializeField] private float _minAnimWaitTime, _maxAnimWaitTime;
     [SerializeField] private float _removalAnimWaitTime;
+    [SerializeField] private GameObject _damageSmokePS;
+    [SerializeField] private GameObject _damageClickPS;
+    private GameObject _damageDice;
+    private int _nextAnim = 0;
+    private Coroutine _currentAnimCoroutine;
 
+    [Header("Partner Scripts & Values")]
     private List<GameObject> _boardPieces = new List<GameObject>();
     private OnlineActionManager _am;
     private OnlinePersistentCardManager _pcm;
@@ -57,7 +84,36 @@ public class OnlineBuilding : MonoBehaviourPun
     /// </summary>
     private void Start()
     {
+        _damageDice = GameObject.FindGameObjectWithTag("Damage Dice");
         FindBoardPieces();
+        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+    }
+
+    /// <summary>
+    /// Plays idle animations in random intervals.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator BuildingAnimations()
+    {
+        if (_nextAnim == 0)
+        {
+            _anims.Play(_buildingSpawnName);
+            _nextAnim++;
+        }
+        else if (_nextAnim == 1)
+        {
+            _anims.Play(_animFirstPartName);
+            _nextAnim++;
+        }
+        else if (_nextAnim == 2)
+        {
+            _anims.Play(_animSecondPartName);
+            _nextAnim = 1;
+        }
+
+        yield return new WaitForSeconds(Random.Range(_minAnimWaitTime, _maxAnimWaitTime));
+
+        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
     }
 
     /// <summary>
@@ -71,19 +127,27 @@ public class OnlineBuilding : MonoBehaviourPun
         }
     }
 
+    /// <summary>
+    /// For building interaction.
+    /// </summary>
     private void OnMouseOver()
     {
-        if(CanBeDamaged && !ActiveBuilding)
+        if (CanBeDamaged && !ActiveBuilding)
         {
-            if(Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                StartCoroutine(DamageBuiliding(_ce.CalculateBuildingDamage()));
+                _pcm.CurrentBuildingDamageProcess = StartCoroutine(DamageBuiliding());
             }
         }
-
-        if(CanBeRepaired && !ActiveBuilding)
+        else if (CanBeDamaged && ActiveBuilding)
         {
-            if(Input.GetKeyDown(KeyCode.Mouse0))
+            //This part is for my little investigator brain. You can ingnore it.
+            Debug.LogWarning("This is the Invincible Mine bug! Building is still somwhow active.");
+        }
+
+        if (CanBeRepaired && !ActiveBuilding)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 RepairBuilding();
             }
@@ -96,13 +160,36 @@ public class OnlineBuilding : MonoBehaviourPun
     /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <param name="damage">The amount of damage (1 or 2, for now)</param>
-    public IEnumerator DamageBuiliding(int damage)
+    public IEnumerator DamageBuiliding()
     {
+        //Sets colliders
         bool hasCard = false;
         ActiveBuilding = true;
         _bm.SetActiveCollider("Board");
 
-        //Weed Whacker and Dam Code
+        //Starts rolling the dice.
+        _damageDice.GetComponent<Animator>().Play("DiceEnter");
+        _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
+        int num = 0;
+        //Shows a face (1, 2, 3, 4) up to the variable's count.
+        for (int i = 0; i <= _showDiceFaceTimes; i++)
+        {
+            if (num == _ce.DamageDieSides)
+            {
+                num = 1;
+            }
+            else
+            {
+                num++;
+            }
+            _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        //The real result is separate from the visual
+        int damageDiceVisual = Random.Range(1, _ce.DamageDieSides + 1);
+
+        //Weed Whacker & Dam
         if (SuitOfPiece == "Grass")
         {
             hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Weed Whacker");
@@ -112,81 +199,113 @@ public class OnlineBuilding : MonoBehaviourPun
             hasCard = _pcm.CheckForPersistentCard(PlayerOwning, "Dam");
         }
 
+        //Forces a roll of 1 if the defensive card is in play.
         if (hasCard)
         {
-            _ce.ProtectBuildingUI.SetActive(true);
-
-            if(PlayerOwning == 1)
+            damageDiceVisual = 1;
+            if (SuitOfPiece == "Grass")
             {
-                _gcm.UpdateCurrentActionText("Player 1, protect your building?");
+                _pcm.DiscardPersistentCard(PlayerOwning, "Weed Whacker");
+            }
+            else if (SuitOfPiece == "Dirt")
+            {
+                _pcm.DiscardPersistentCard(PlayerOwning, "Dam");
+            }
+        }
+        //End Weed Whacker & Dam
+
+        //Calculates the damage, sets it to the dice, and subtracts that damage from the Building's health.
+        int damage = _ce.CalculateBuildingDamage(damageDiceVisual);
+        _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = damageDiceVisual.ToString();
+
+        BuildingHealth -= damage;
+
+        //The text updates based on this given damage.
+        if (damageDiceVisual == 4)
+        {
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken massive damage!");
+        }
+        else if (damageDiceVisual == 3 || damageDiceVisual == 2)
+        {
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
+        }
+        else if (damageDiceVisual == 1)
+        {
+            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " avoided taking damage!");
+        }
+
+        //Fun!
+        _damageClickPS.GetComponent<ParticleSystem>().Play();
+
+        //Destroyed
+        if (BuildingHealth <= 0)
+        {
+            //Removes the building from ActionManager's count
+            if (PlayerOwning == 1)
+            {
+                if (BuildingType == "Factory")
+                {
+                    _am.P1BuiltBuildings[0]--;
+                }
+                else if (BuildingType == "Burrow")
+                {
+                    _am.P1BuiltBuildings[1]--;
+                }
+                else if (BuildingType == "Grass Mine")
+                {
+                    _am.P1BuiltBuildings[2]--;
+                }
+                else if (BuildingType == "Dirt Mine")
+                {
+                    _am.P1BuiltBuildings[3]--;
+                }
+                else if (BuildingType == "Stone Mine")
+                {
+                    _am.P1BuiltBuildings[4]--;
+                }
+                else if (BuildingType == "Gold Mine")
+                {
+                    _am.P1BuiltBuildings[5]--;
+                }
             }
             else
             {
-                _gcm.UpdateCurrentActionText("Player 2, protect your building?");
-            }
-
-            while(!_pcm.DecidedBuildingProtection)
-            {
-                yield return null;
-            }
-
-            _ce.ProtectBuildingUI.SetActive(false);
-
-            _pcm.DecidedBuildingProtection = false;
-
-            if(DamageProtectionResponse == true)
-            {
-                if (SuitOfPiece == "Grass")
+                if (BuildingType == "Factory")
                 {
-                    _pcm.DiscardPersistentCard(PlayerOwning, "Weed Whacker");
+                    _am.P2BuiltBuildings[0]--;
                 }
-                else if (SuitOfPiece == "Dirt")
+                else if (BuildingType == "Burrow")
                 {
-                    _pcm.DiscardPersistentCard(PlayerOwning, "Dam");
+                    _am.P2BuiltBuildings[1]--;
                 }
-                _ce.CurrentDamages++;
-                _pcm.BuildingsDamaged++;
-                _bm.SetActiveCollider("Building");
-                yield break;
+                else if (BuildingType == "Grass Mine")
+                {
+                    _am.P2BuiltBuildings[2]--;
+                }
+                else if (BuildingType == "Dirt Mine")
+                {
+                    _am.P2BuiltBuildings[3]--;
+                }
+                else if (BuildingType == "Stone Mine")
+                {
+                    _am.P2BuiltBuildings[4]--;
+                }
+                else if (BuildingType == "Gold Mine")
+                {
+                    _am.P1BuiltBuildings[5]--;
+                }
             }
 
-            ActiveBuilding = false;
-        }
-        //End Weed Whacker and Dam Code
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Destroy", 1);
 
-        CallBuildingHP(-damage);
-
-        if(BuildingHealth <= 0)
-        {
-            // Andrea SD
-            if (BuildingType == "Factory")
-            {
-                CallRemoveBuilding(PlayerOwning, 0); 
-            }
-            else if (BuildingType == "Burrow")
-            {
-                CallRemoveBuilding(PlayerOwning, 1);
-            }
-            else if (BuildingType == "GMine")
-            {
-                CallRemoveBuilding(PlayerOwning, 2);
-            }
-            else if (BuildingType == "DMine")
-            {
-                CallRemoveBuilding(PlayerOwning, 3);
-            }
-            else if (BuildingType == "SMine")
-            {
-                CallRemoveBuilding(PlayerOwning, 4);
-            }
-
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has been destroyed!");
-            CallPlayAnimation("TempPawnDamage");
+            //Lets the players sob for a bit
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
 
-            GetComponentInParent<PieceController>().HasP1Building = false;
-            GetComponentInParent<PieceController>().HasP2Building = false;
+            //Resets the Piece
+            GetComponentInParent<OnlinePieceController>().HasP1Building = false;
+            GetComponentInParent<OnlinePieceController>().HasP2Building = false;
 
+            //Calls retribution here if need so
             if (_pcm.CheckForPersistentCard(PlayerOwning, "Retribution"))
             {
                 _pcm.DiscardPersistentCard(PlayerOwning, "Retribution");
@@ -195,30 +314,42 @@ public class OnlineBuilding : MonoBehaviourPun
 
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
 
-            CallPlayAnimation("TempPawnRemove");
+            //Hides the building and disables it
+            _anims.Play(_buildingHideName);
             yield return new WaitForSeconds(_removalAnimWaitTime);
             PrepBuilidingDamaging(false);
-            CallAnimStatus(false);
-            CallGameObjStatus(false);
+            _anims.enabled = false;
+            gameObject.SetActive(false);
         }
-        else if(BuildingHealth == 1)
+        else if (BuildingHealth == 1)
         {
-            CallChangeSprite("damaged");
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
-            CallPlayAnimation("TempPawnDamage");
+            //Updates visuals.
+            StopCoroutine(_currentAnimCoroutine);
+            _anims.Play(_buildingDamagedName);
+            GetComponent<SpriteRenderer>().sprite = _damagedSprite;
+            _damageSmokePS.SetActive(true);
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
-        else if(BuildingHealth == 2)
+        else if (BuildingHealth == 2)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has avoided damage!");
-            CallPlayAnimation("TempPawnDamage");
+            //Yippee!
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
 
-        _bm.SetActiveCollider("Building");
-        _gcm.UpdateCurrentActionText("Damage " + _ce.AllowedDamages + " more Buildings!");
+        //Additional damages are generally only for Tornado or Earthquake.
+        _damageDice.GetComponent<Animator>().Play("DiceExit");
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
+        if (_ce.CurrentDamages == _ce.AllowedDamages)
+        {
+            _bm.SetActiveCollider("Board");
+            _gcm.UpdateCurrentActionText("Damaging complete!");
+        }
+        else
+        {
+            _bm.SetActiveCollider("Building");
+            _gcm.UpdateCurrentActionText("Damage " + (_ce.AllowedDamages - _ce.CurrentDamages) + " more Buildings!");
+        }
         PrepBuilidingDamaging(false);
         ActiveBuilding = false;
     }
@@ -270,6 +401,7 @@ public class OnlineBuilding : MonoBehaviourPun
     {
         photonView.RPC("PlayAnimation", RpcTarget.All, animName);
     }
+
     /// <summary>
     /// Plays an animation on each client
     /// </summary>
@@ -311,6 +443,7 @@ public class OnlineBuilding : MonoBehaviourPun
     {
         photonView.RPC("SetAnimStatus", RpcTarget.All, status);
     }
+
     /// <summary>
     /// Sets the animator to true or false across clients
     /// 
@@ -333,6 +466,7 @@ public class OnlineBuilding : MonoBehaviourPun
     {
         photonView.RPC("ChangeSprite", RpcTarget.All, effect);
     }
+
     /// <summary>
     /// Modifies the building sprite
     /// 
@@ -345,10 +479,10 @@ public class OnlineBuilding : MonoBehaviourPun
         switch (effect)
         {
             case "damaged":
-                GetComponent<SpriteRenderer>().color = _damagedColor;
+                GetComponent<SpriteRenderer>().sprite = _damagedSprite;
                 break;
             case "default":
-                GetComponent<SpriteRenderer>().color = _defaultColor;
+                GetComponent<SpriteRenderer>().sprite= _defaultSprite;
                 break;
         }
         
@@ -359,9 +493,12 @@ public class OnlineBuilding : MonoBehaviourPun
     /// </summary>
     public void RepairBuilding()
     {
+        //Clicking a building Repairs it.
         CallBuildingHP(1);
-        CallChangeSprite("default");
+        _damageClickPS.GetComponent<ParticleSystem>().Play();
+        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
         _ce.RepairedBuildings++;
+        _damageSmokePS.SetActive(false);
         ActiveBuilding = true;
 
         //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
@@ -409,15 +546,31 @@ public class OnlineBuilding : MonoBehaviourPun
     /// <param name="show">True = Blink</param>
     public void PrepBuilidingDamaging(bool show)
     {
-        if(show)
+        StopCoroutine(_currentAnimCoroutine);
+
+        if (show)
         {
             CanBeDamaged = true;
-            GetComponent<Animator>().Play("TempPawnBlink");
+            if (BuildingHealth == 1)
+            {
+                _anims.Play(_buildingDamagedWaitingName);
+            }
+            else
+            {
+                _anims.Play(_buildingWaitingName);
+            }
         }
         else
         {
             CanBeDamaged = false;
-            GetComponent<Animator>().Play("TempPawnDefault");
+            if (BuildingHealth > 1)
+            {
+                _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+            }
+            else
+            {
+                _anims.Play(_buildingDamagedName);
+            }
         }
     }
 
@@ -427,15 +580,31 @@ public class OnlineBuilding : MonoBehaviourPun
     /// <param name="show">True = Blink</param>
     public void PrepBuilidingReapiring(bool show)
     {
+        StopCoroutine(_currentAnimCoroutine);
+
         if (show)
         {
             CanBeRepaired = true;
-            GetComponent<Animator>().Play("TempPawnBlink");
+            if (BuildingHealth == 1)
+            {
+                _anims.Play(_buildingDamagedWaitingName);
+            }
+            else
+            {
+                _anims.Play(_buildingWaitingName);
+            }
         }
         else
         {
             CanBeRepaired = false;
-            GetComponent<Animator>().Play("TempPawnDefault");
+            if (BuildingHealth > 1)
+            {
+                _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+            }
+            else
+            {
+                _anims.Play(_buildingDamagedName);
+            }
         }
     }
 }

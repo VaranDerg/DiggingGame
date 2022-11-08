@@ -13,14 +13,11 @@ using Photon.Pun;
 
 public class OnlinePlayerPawn : MonoBehaviourPun
 {
+
     [Header("References/Values")]
-    //1 or 2
     [Range(1, 2)] public int PawnPlayer;
-    [SerializeField] private Sprite _moleSprite;
-    [SerializeField] private Sprite _meerkatSprite;
 
     [Header("Other")]
-    //The (up to) 4 Board Pieces surrounding a player. NSEW.
     private List<GameObject> _shownPieces = new List<GameObject>();
     private List<GameObject> _boardPieces = new List<GameObject>();
     private OnlineBoardManager _bm;
@@ -28,7 +25,6 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     private OnlinePersistentCardManager _pcm;
     private OnlineCanvasManager _gcm;
     private Animator _anims;
-    private OnlineCardEffects _ce;
     [SerializeField] private SpriteRenderer _sr;
 
     [Header("Pawn Status for Other Scripts")]
@@ -39,6 +35,10 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     [HideInInspector] public bool MudslideMove;
     [HideInInspector] public bool IsUsingWalkway;
     [HideInInspector] public bool TeleportationMove;
+
+    [Header("Animations")]
+    public string WaitingAnimName;
+    public string IdleAnimName;
 
     /// <summary>
     /// Adds every board piece to a list.
@@ -59,12 +59,10 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (player == 1)
         {
-            _sr.sprite = _moleSprite;
             PawnPlayer = 1;
         }
         else
         {
-            _sr.sprite = _meerkatSprite;
             PawnPlayer = 2;
         }
     }
@@ -78,7 +76,6 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         _am = FindObjectOfType<OnlineActionManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
-        _ce = FindObjectOfType<OnlineCardEffects>();
         _anims = GetComponent<Animator>();
     }
 
@@ -133,7 +130,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         {
             if (pawn != gameObject)
             {
-                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
             }
         }
     }
@@ -251,11 +248,6 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                 }
 
                 piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
-                if (IsUsingWalkway)
-                {
-                    piece.GetComponent<OnlinePieceController>().UsingWalkway = true;
-                    IsUsingWalkway = false;
-                }
                 _shownPieces.Add(piece);
             }
 
@@ -292,22 +284,12 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                     continue;
                 }
 
-                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
-                {
-                    continue;
-                }
-
                 if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.One && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Six)
                 {
                     continue;
                 }
 
-                piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
-                if (IsUsingWalkway)
-                {
-                    piece.GetComponent<OnlinePieceController>().UsingWalkway = true;
-                    IsUsingWalkway = false;
-                }
+                piece.GetComponent<OnlinePieceController>().ShowHideWalkway(true);
                 _shownPieces.Add(piece);
             }
 
@@ -419,7 +401,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                     continue;
                 }
 
-                pawn.GetComponent<Animator>().Play("TempPawnDefault");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
                 pawn.GetComponent<PlayerPawn>().MudslideMove = false;
             }
 
@@ -482,7 +464,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         IsUsingWalkway = false;
         MudslideMove = false;
         BuildingToBuild = "";
-        _anims.Play("TempPawnDefault");
+        _anims.Play(IdleAnimName);
         _shownPieces.Clear();
     }
 
