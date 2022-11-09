@@ -40,6 +40,8 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     public string WaitingAnimName;
     public string IdleAnimName;
 
+    public int PawnID;  //ASD   
+
     /// <summary>
     /// Adds every board piece to a list.
     /// </summary>
@@ -85,6 +87,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     private void Start()
     {
         FindBoardPieces();
+        PawnID = photonView.ViewID;     //ASD
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ public class OnlinePieceController : MonoBehaviourPun
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasP1Building, HasP2Building;
     [HideInInspector] public bool HasPawn;
-    [HideInInspector] public GameObject CurrentPawn;
+    /*[HideInInspector]*/ public GameObject CurrentPawn;
     [HideInInspector] public bool PieceIsSelected = true;
     private OnlineBoardManager _bm;
     private OnlineActionManager _am;
@@ -78,8 +78,8 @@ public class OnlinePieceController : MonoBehaviourPun
     [SerializeField] private GameObject _goldGlitter;
 
     // ASD
-    private int _currentPawnID;     // Photon network ID of the currently selected pawn
-    private int _pieceID;       // Photon network ID of a piece
+    [SerializeField]private int _currentPawnID;     // Photon network ID of the currently selected pawn
+    [SerializeField]private int _pieceID;       // Photon network ID of a piece
 
     private void Awake()
     {
@@ -112,6 +112,7 @@ public class OnlinePieceController : MonoBehaviourPun
         SetPieceState(1);
         _borderSr.color = _defaultColor;
         _borderAnims.Play("PieceBorderIdle");
+        _pieceID = photonView.ViewID;
     }
 
     /// <summary>
@@ -451,8 +452,8 @@ public class OnlinePieceController : MonoBehaviourPun
     {
         //Debug.Log("Moving " + CurrentPawn + " to " + gameObject + ". The destination piece is " + destinationPiece + ".");
 
-        GameObject pawn = PhotonView.Find(_currentPawnID).gameObject;
-        GameObject destinationPiece = PhotonView.Find(_pieceID).gameObject;
+        GameObject pawn = PhotonView.Find(pawnID).gameObject;
+        GameObject destinationPiece = PhotonView.Find(pieceID).gameObject;
 
         pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
         _pawnIsMoving = true;
@@ -490,6 +491,14 @@ public class OnlinePieceController : MonoBehaviourPun
             //For the game's initial free move. The player has to spend cards unless this is true.
             if (_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
             {
+                _borderSr.color = _waitingColor;
+                _borderAnims.Play("PieceBorderWaiting");
+                PieceIsSelected = true;
+                foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+                {
+                    pawn.GetComponent<OnlinePlayerPawn>().HideNonSelectedTiles();
+                }
+
                 //Start of Morning Jog
                 if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog") && !_am.MorningJogUsed)
                 {
@@ -552,8 +561,8 @@ public class OnlinePieceController : MonoBehaviourPun
                     _cm.PrepareCardSelection(0, "", true);
                 }
 
-                _currentPawnID = CurrentPawn.GetPhotonView().ViewID;
-                _pieceID = gameObject.GetPhotonView().ViewID;
+                _currentPawnID = CurrentPawn.GetComponent<OnlinePlayerPawn>().PawnID;
+                
 
                 //StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
                 CallMovePawn(_currentPawnID, _pieceID);    //Andrea SD

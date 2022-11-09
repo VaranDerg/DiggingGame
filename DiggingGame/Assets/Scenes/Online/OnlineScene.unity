@@ -2132,6 +2132,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1943178534}
     m_Modifications:
+    - target: {fileID: -4363553245554103029, guid: da98b301ee67ccc498d1b89400480f6c, type: 3}
+      propertyPath: sceneViewId
+      value: 83
+      objectReference: {fileID: 0}
     - target: {fileID: 4786342984862977435, guid: da98b301ee67ccc498d1b89400480f6c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -17554,6 +17558,10 @@ PrefabInstance:
     - target: {fileID: 90388360678329879, guid: e3a55054512abe74f8096d999bdb855d, type: 3}
       propertyPath: m_Name
       value: MeerkatPawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 7252178341523319178, guid: e3a55054512abe74f8096d999bdb855d, type: 3}
+      propertyPath: sceneViewId
+      value: 82
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3a55054512abe74f8096d999bdb855d, type: 3}
