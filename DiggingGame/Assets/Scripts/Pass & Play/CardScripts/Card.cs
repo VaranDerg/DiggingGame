@@ -29,6 +29,8 @@ public class Card : ScriptableObject
     public bool persistent;
     public bool disaster;
 
+    [TextArea(3, 6)]
+    public string FlavorText;
     [TextArea(2, 4)]
     public string MoleQuote;
     [TextArea(2, 4)]

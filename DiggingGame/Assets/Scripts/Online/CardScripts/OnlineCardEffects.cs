@@ -105,6 +105,9 @@ public class OnlineCardEffects : MonoBehaviourPun
     [Header("Planned Gamble")]
     public int PlannedGambleCardsToDraw;
 
+    [Header("Transmutation")]
+    [SerializeField] private int _goldPiecesRequiredToScore;
+
     /// <summary>
     /// Variables for cards that flip stone.
     /// </summary>
@@ -2388,6 +2391,22 @@ public class OnlineCardEffects : MonoBehaviourPun
     public void Transmutation()
     {
         _am.CallUpdateScore(_am.CurrentPlayer, 1);
+
+        int curInterval = 0;
+        int pointsToScore = 0;
+        for (int i = 0; i <= _am.SupplyPile[3]; i++)
+        {
+            if (curInterval != _goldPiecesRequiredToScore)
+            {
+                curInterval++;
+                continue;
+            }
+
+            pointsToScore++;
+            curInterval = 1;
+        }
+
+        _am.CallUpdateScore(_am.CurrentPlayer, pointsToScore);
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();

@@ -6704,7 +6704,7 @@ GameObject:
   - component: {fileID: 1159710111}
   - component: {fileID: 1159710110}
   m_Layer: 5
-  m_Name: CardDescription
+  m_Name: CardFlavorText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6750,8 +6750,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: This is a Gallery Card Prefab. It's purely visual and will display itself
-    in the Gallery. Awesome!
+  m_text: This is Flavor Text for the Gallery Card Prefab. It gives some narrative
+    description of the Card and what it does!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -10505,8 +10505,9 @@ MonoBehaviour:
   CurrentDamages: 0
   EarthquakePieceSelected: 0
   PiecesToCollect: 1
-  BuildingReduction: 0
+  BuildingReduction: 1
   PlannedGambleCardsToDraw: 3
+  _goldPiecesRequiredToScore: 2
   MetalDetectorStoneToFlip: 4
   DiscerningEyeStoneToFlip: 4
   RemainingFlips: 0

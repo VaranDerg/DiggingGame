@@ -34,7 +34,7 @@ public class GalleryCardView : MonoBehaviour
                 _galleryCard.GetComponent<CardVisuals>().PrepareCardValues();
 
                 _cardNameText.text = card.CardName;
-                _cardDescText.text = card.CardDescription;
+                _cardDescText.text = card.FlavorText;
                 _moleQuoteText.text = card.MoleQuote;
                 _meerkatQuoteText.text = card.MeerkatQuote;
 
