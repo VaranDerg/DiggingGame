@@ -79,6 +79,7 @@ MonoBehaviour:
   - RemoveCard
   - ShuffleDiscardPile
   - AddCards
+  - SetCurrentPawnID
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

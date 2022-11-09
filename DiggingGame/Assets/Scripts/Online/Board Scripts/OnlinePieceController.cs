@@ -78,8 +78,10 @@ public class OnlinePieceController : MonoBehaviourPun
     [SerializeField] private GameObject _goldGlitter;
 
     // ASD
+    [Header("Photon")]
     [SerializeField]private int _currentPawnID;     // Photon network ID of the currently selected pawn
     [SerializeField]private int _pieceID;       // Photon network ID of a piece
+    [SerializeField] GameObject destinationPiece;
 
     private void Awake()
     {
@@ -117,12 +119,15 @@ public class OnlinePieceController : MonoBehaviourPun
 
     /// <summary>
     /// For pawn movement.
+    /// 
+    /// Edited - Andrea SD: modified for online use
     /// </summary>
     private void FixedUpdate()
     {
         if (_pawnIsMoving)
         {
-            CurrentPawn.transform.position = Vector2.Lerp(CurrentPawn.transform.position, gameObject.transform.position, _am.PawnMoveSpeed * Time.deltaTime);
+            GameObject pawn = GameObject.Find(PhotonView.Find(_currentPawnID).gameObject.name);     //ASD
+            pawn.transform.position = Vector2.Lerp(pawn.transform.position, gameObject.transform.position, _am.PawnMoveSpeed * Time.deltaTime);
         }
     }
 
@@ -286,8 +291,6 @@ public class OnlinePieceController : MonoBehaviourPun
     private IEnumerator UseWalkway()
     {
         // Andrea SD
-        _currentPawnID = CurrentPawn.GetPhotonView().ViewID;
-        _pieceID = gameObject.GetPhotonView().ViewID;
         CallMovePawn(_currentPawnID, _pieceID);
 
         while (_pawnIsMoving)
@@ -450,10 +453,10 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <returns></returns>
     public IEnumerator MovePawnTo(int pawnID, int pieceID, bool goBack)
     {
-        //Debug.Log("Moving " + CurrentPawn + " to " + gameObject + ". The destination piece is " + destinationPiece + ".");
+        Debug.Log("Moving " + CurrentPawn + " to " + gameObject + ". The destination piece is " + destinationPiece + ".");
 
-        GameObject pawn = PhotonView.Find(pawnID).gameObject;
-        GameObject destinationPiece = PhotonView.Find(pieceID).gameObject;
+        GameObject pawn = GameObject.Find(PhotonView.Find(pawnID).gameObject.name);
+        destinationPiece = gameObject;
 
         pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
         _pawnIsMoving = true;
@@ -486,11 +489,15 @@ public class OnlinePieceController : MonoBehaviourPun
     /// </summary>
     private IEnumerator PawnMovement()
     {
+        //Debug.Log("Starting pawn movement");
+
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //For the game's initial free move. The player has to spend cards unless this is true.
             if (_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
             {
+                Debug.Log("Curernt turn phase "+ _am.CurrentTurnPhase);
+
                 _borderSr.color = _waitingColor;
                 _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
@@ -560,13 +567,11 @@ public class OnlinePieceController : MonoBehaviourPun
                     }
                     _cm.PrepareCardSelection(0, "", true);
                 }
-
-                _currentPawnID = CurrentPawn.GetComponent<OnlinePlayerPawn>().PawnID;
-                
-
-                //StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
-                CallMovePawn(_currentPawnID, _pieceID);    //Andrea SD
             }
+            //StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
+            // CallPawnID(CurrentPawn.GetPhotonView().ViewID);
+            CallPawnID(CurrentPawn.GetComponent<OnlinePlayerPawn>().PawnID);
+            CallMovePawn(_currentPawnID, _pieceID);    //Andrea SD
         }
     }
 
@@ -595,6 +600,25 @@ public class OnlinePieceController : MonoBehaviourPun
     public void MovePawn(int objectID, int destinationID)
     {
         StartCoroutine(MovePawnTo(objectID, destinationID, true));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newID"></param>
+    public void CallPawnID(int newID)
+    {
+        photonView.RPC("SetCurrentPawnID", RpcTarget.All, newID);
+    }
+
+    /// <summary>
+    /// Updates the current pawn id to newID
+    /// </summary>
+    /// <param name="newID"> Network id of the current pawn </param>
+    [PunRPC]
+    public void SetCurrentPawnID(int newID)
+    {
+        _currentPawnID = newID;
     }
 
     /// <summary>

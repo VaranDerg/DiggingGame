@@ -165,6 +165,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                     foreach (GameObject piece in _shownPieces)
                     {
                         piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
+                        
                     }
                 }
 
@@ -214,6 +215,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                     foreach (GameObject piece in _shownPieces)
                     {
                         piece.GetComponent<OnlinePieceController>().CurrentPawn = gameObject;
+                        PawnID = photonView.ViewID;
                     }
                 }
             }
