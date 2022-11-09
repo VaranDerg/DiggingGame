@@ -1232,6 +1232,7 @@ GameObject:
   - component: {fileID: 1406311459966426615}
   - component: {fileID: 7076904163101635698}
   - component: {fileID: 6649470430099178404}
+  - component: {fileID: 7130050847017223559}
   m_Layer: 0
   m_Name: CardScript
   m_TagString: Untagged
@@ -1334,6 +1335,28 @@ MonoBehaviour:
   MadePersistentP2: 0
   _cardAnimator: {fileID: 7076904163101635698}
   _discardAnimWaitTime: 0.4
+--- !u!114 &7130050847017223559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406311459966426612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1406311460093232972
 GameObject:
   m_ObjectHideFlags: 0

@@ -130,7 +130,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         {
             if (pawn != gameObject)
             {
-                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().IdleAnimName);
             }
         }
     }

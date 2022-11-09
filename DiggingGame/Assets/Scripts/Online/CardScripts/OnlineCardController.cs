@@ -63,7 +63,7 @@ public class OnlineCardController : MonoBehaviourPun
     private void Awake()
     {
         _maximizeAnchor = GameObject.FindGameObjectWithTag("MaximizeAnchor").GetComponent<Transform>();
-        _cardBody.gameObject.name = GetComponentInChildren<OnlineCardVisuals>().ThisCard.CardName;
+        _cardBody.gameObject.name = GetComponentInChildren<CardVisuals>().ThisCard.CardName;
         _cm = FindObjectOfType<OnlineCardManager>();
         _am = FindObjectOfType<OnlineActionManager>();
         _bm = FindObjectOfType<OnlineBoardManager>();

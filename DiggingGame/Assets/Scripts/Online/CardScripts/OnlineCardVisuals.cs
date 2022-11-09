@@ -12,6 +12,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// Currently not in use
+
 public class OnlineCardVisuals : MonoBehaviour
 {
     //Edit: Andrea SD - Added online functionality
