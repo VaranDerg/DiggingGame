@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d642375a180ea41baad78c60d574e8, type: 3}
+  m_Name: Retribution
+  m_EditorClassIdentifier: 
+  CardName: Retribution
+  CardDescription: "The next time a Building of yours is destroyed, your opponent
+    must send all of their Pieces matching that Building\u2019s Piece to the Supply. "
+  GrassSuit: 0
+  DirtSuit: 0
+  StoneSuit: 0
+  GoldSuit: 1
+  GrassCost: 1
+  DirtCost: 1
+  StoneCost: 1
+  persistent: 1
+  disaster: 0
+  CardArt: {fileID: -1362304560, guid: 2720b28cf0cd8b84ba10ec7c2adc1b17, type: 3}

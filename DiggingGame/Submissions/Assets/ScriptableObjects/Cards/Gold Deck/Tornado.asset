@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d642375a180ea41baad78c60d574e8, type: 3}
+  m_Name: Tornado
+  m_EditorClassIdentifier: 
+  CardName: Tornado!
+  CardDescription: Choose a type of Building. Damage every building of that type
+    your opponent has built.
+  GrassSuit: 0
+  DirtSuit: 0
+  StoneSuit: 0
+  GoldSuit: 1
+  GrassCost: 3
+  DirtCost: 1
+  StoneCost: 0
+  persistent: 0
+  disaster: 1
+  CardArt: {fileID: -16575598, guid: 15f1311710243094384dbf8b1f6cc1b9, type: 3}
