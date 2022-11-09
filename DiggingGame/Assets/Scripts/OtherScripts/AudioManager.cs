@@ -12,15 +12,24 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public Sound[] sounds;
+    [Header("Mixer Groups")]
+    [SerializeField] private AudioMixerGroup _musicMixerGroup;
+    [SerializeField] private AudioMixerGroup _soundEffectsMixerGroup;
 
-    public static AudioManager instance;
+    [Header("Audio Clips")]
+    public Sound[] Sounds;
 
+    [Header("NDE Information")]
+    public static AudioManager s_Instance;
+
+    /// <summary>
+    /// Prepares the Audio Manager as a Nondestructable.
+    /// </summary>
     void Awake() 
     {
-        if (instance == null)
+        if (s_Instance == null)
         {
-            instance = this;
+            s_Instance = this;
         }
         else
         {
@@ -30,19 +39,34 @@ public class AudioManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        foreach (Sound s in sounds) 
+        foreach (Sound s in Sounds) 
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+
+            switch(s.audioType)
+            {
+                case Sound.AudioTypes.soundEffect:
+                    s.source.outputAudioMixerGroup = _soundEffectsMixerGroup;
+                    break;
+
+                case Sound.AudioTypes.music:
+                    s.source.outputAudioMixerGroup = _musicMixerGroup;
+                    break;
+            }
         }
     }
 
+    /// <summary>
+    /// Plays a sound
+    /// </summary>
+    /// <param name="name">Sound Name</param>
     public void Play(string name)
     {
-       Sound s = Array.Find(sounds, sound => sound.name == name);
+       Sound s = Array.Find(Sounds, sound => sound.name == name);
 
         if (s == null)
         {
@@ -51,6 +75,23 @@ public class AudioManager : MonoBehaviour
         }
 
         s.source.Play();
+    }
+
+    /// <summary>
+    /// Stops a sound
+    /// </summary>
+    /// <param name="name">Sound name</param>
+    public void Stop(string name)
+    {
+        Sound s = Array.Find(Sounds, sound => sound.name == name);
+
+        if (s == null)
+        {
+            Debug.LogWarning("Sound: " + name + "not found");
+            return;
+        }
+
+        s.source.Stop();
     }
 }
 
