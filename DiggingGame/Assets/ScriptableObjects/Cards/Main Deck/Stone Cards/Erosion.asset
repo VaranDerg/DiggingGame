@@ -23,5 +23,8 @@ MonoBehaviour:
   StoneCost: 1
   persistent: 0
   disaster: 0
+  FlavorText: This sure is Stone Card flavor text!
+  MoleQuote: '"I''m a Mole! Yippee!"'
+  MeerkatQuote: '"I''m a Meerkat! Yay!"'
   CardArt: {fileID: -1524755723, guid: 3cf20e312271287409fb7adb929cea0d, type: 3}
   ChangeWeatherTo: 2

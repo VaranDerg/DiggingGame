@@ -24,5 +24,8 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 1
   disaster: 0
+  FlavorText: This sure is Dirt Card flavor text!
+  MoleQuote: '"I''m a Mole! Yippee!"'
+  MeerkatQuote: '"I''m a Meerkat! Yay!"'
   CardArt: {fileID: -886911068, guid: 6266b86851a85034ba1f788ee60728a8, type: 3}
   ChangeWeatherTo: 8

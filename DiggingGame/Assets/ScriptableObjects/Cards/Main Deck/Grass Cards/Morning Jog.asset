@@ -24,5 +24,8 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 1
   disaster: 0
+  FlavorText: This sure is Grass Card flavor text!
+  MoleQuote: '"I''m a Mole! Yippee!"'
+  MeerkatQuote: '"I''m a Meerkat! Yay!"'
   CardArt: {fileID: 21300000, guid: 497edd2212217a84fbedf79ae1acc6dd, type: 3}
   ChangeWeatherTo: 10
