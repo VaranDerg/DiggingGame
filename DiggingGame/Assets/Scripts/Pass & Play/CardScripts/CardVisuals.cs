@@ -39,7 +39,7 @@ public class CardVisuals : MonoBehaviour
     /// <summary>
     /// Prepares the suit of the card. Does this automatically so all you have to do in the inspector is check a box.
     /// </summary>
-    private void PrepareCardSuit()
+    public void PrepareCardSuit()
     {
         if(ThisCard.GrassSuit)
         {
@@ -74,7 +74,7 @@ public class CardVisuals : MonoBehaviour
     /// <summary>
     /// Prepares other defined values in the card's scriptable object.
     /// </summary>
-    private void PrepareCardValues()
+    public void PrepareCardValues()
     {
         _nameText.text = ThisCard.CardName;
         _descriptionText.text = ThisCard.CardDescription;

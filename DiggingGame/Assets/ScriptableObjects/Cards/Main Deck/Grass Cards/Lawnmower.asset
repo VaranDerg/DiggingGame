@@ -23,5 +23,7 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
+  MoleQuote: '"I''m a Mole! Yippee!"'
+  MeerkatQuote: '"I''m a Meerkat! Yay!"'
   CardArt: {fileID: 21300000, guid: 507459b814f59fd438af3b5eeeb6517e, type: 3}
   ChangeWeatherTo: 10

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Transmutation
   m_EditorClassIdentifier: 
   CardName: Transmutation
-  CardDescription: Score 1 Point.
+  CardDescription: Score 1 point for every 2 Gold Pieces in the Supply.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
@@ -23,5 +23,7 @@ MonoBehaviour:
   StoneCost: 1
   persistent: 0
   disaster: 0
+  MoleQuote: '"I''m a Mole! Yippee!"'
+  MeerkatQuote: '"I''m a Meerkat! Yay!"'
   CardArt: {fileID: 21300000, guid: c95728c1750d5db4290e69712435b6ee, type: 3}
   ChangeWeatherTo: 9

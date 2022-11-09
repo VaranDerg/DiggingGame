@@ -15,6 +15,7 @@ using UnityEngine.UI;
 public class Card : ScriptableObject
 {
     public string CardName;
+    [TextArea(2, 4)]
     public string CardDescription;
     public bool GrassSuit;
     public bool DirtSuit;
@@ -27,6 +28,11 @@ public class Card : ScriptableObject
 
     public bool persistent;
     public bool disaster;
+
+    [TextArea(2, 4)]
+    public string MoleQuote;
+    [TextArea(2, 4)]
+    public string MeerkatQuote;
 
     public Sprite CardArt;
 

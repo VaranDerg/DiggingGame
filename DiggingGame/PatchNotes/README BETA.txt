@@ -51,6 +51,9 @@ Balance:
 - Compaction (Deck Presence 2 -> 1)
 	~ Compaction now only has a single copy of itself in the Universal Deck. Being a card with somewhat niche use until
 	later in rounds, its common appearance wasn't justified. 
+- Transmutation (1 Point -> 1 Point per 2 Supply Gold)
+	~ Transmutation's old effect was pretty uninspired. This change should have its purpose fluxuate through play, making
+	the Card act primarily for any suit early on, and in rare cases, score massive points.
 - Gold Cards
    ~ Golden Shovel (1 Grass 1 Dirt -> 1 Dirt 1 Stone)
    ~ Regeneration (3 Grass -> 2 Grass 1 Dirt 1 Stone)
