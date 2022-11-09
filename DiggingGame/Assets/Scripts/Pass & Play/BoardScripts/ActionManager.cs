@@ -46,6 +46,9 @@ public class ActionManager : MonoBehaviour
 
     [Header("Game Values")]
     public int StartingPlayer;
+    [SerializeField] private string _playerOneName;
+    [SerializeField] private string _playerTwoName;
+    [HideInInspector] public string CurrentPlayerName;
     public int CardActivations;
     public int StartingCards;
     public int HandLimit;
@@ -78,6 +81,7 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        CurrentPlayerName = _playerOneName;
         _menuButton.SetActive(false);
         _bm = FindObjectOfType<BoardManager>();
         _cm = FindObjectOfType<CardManager>();
@@ -700,8 +704,9 @@ public class ActionManager : MonoBehaviour
 
             CurrentTurnPhase = 0;
             CurrentPlayer = 2;
+            CurrentPlayerName = _playerTwoName;
             _gcm.StartTurnButton.SetActive(true);
-            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
+            _gcm.UpdateCurrentActionText(CurrentPlayerName + "s, start your turn.");
         }
         else
         {
@@ -716,6 +721,7 @@ public class ActionManager : MonoBehaviour
 
             CurrentTurnPhase = 0;
             CurrentPlayer = 1;
+            CurrentPlayerName = _playerOneName;
             CurrentRound++;
             StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Round", 1);
             if(CurrentRound % 2 == 0)
@@ -727,7 +733,7 @@ public class ActionManager : MonoBehaviour
                 FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
             }
             _gcm.StartTurnButton.SetActive(true);
-            _gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
+            _gcm.UpdateCurrentActionText(CurrentPlayerName + "s, start your turn.");
         }
 
         //Refresh persistent cards.

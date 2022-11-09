@@ -4251,6 +4251,9 @@ MonoBehaviour:
   P1CurrentBuildingPrices: 000000000000000000000000
   P2CurrentBuildingPrices: 000000000000000000000000
   StartingPlayer: 1
+  _playerOneName: Mole
+  _playerTwoName: Meerkat
+  CurrentPlayerName: 
   CardActivations: 1
   StartingCards: 5
   HandLimit: 7

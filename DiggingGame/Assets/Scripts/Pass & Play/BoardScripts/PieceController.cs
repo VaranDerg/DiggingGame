@@ -504,7 +504,6 @@ public class PieceController : MonoBehaviour
                 //Start of Morning Jog
                 if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog") && !_am.MorningJogUsed)
                 {
-                    Debug.Log("Player has Morning Jog!");
                     if (ObjState == GameState.One || ObjState == GameState.Six)
                     {
                         _am.MorningJogUsed = true;

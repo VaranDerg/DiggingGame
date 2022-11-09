@@ -227,7 +227,7 @@ public class PersistentCardManager : MonoBehaviour
         {
             //Puts every card into that state.
             int pCardCount = 0;
-            _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
+            _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + ", Discard a Persistent Card.");
             for(int i = 0; i < P2PersistentCards.Count; i++)
             {
                 P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
@@ -262,7 +262,7 @@ public class PersistentCardManager : MonoBehaviour
         else
         {
             int pCardCount = 0;
-            _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
+            _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + ", Discard a Persistent Card.");
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
                 P1PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
@@ -359,7 +359,5 @@ public class PersistentCardManager : MonoBehaviour
                 _am.P2RefinedPile[2] = 0;
             }
         }
-
-        _gcm.UpdateCurrentActionText("Player " + retributionPlayer + " suffered Retribution! " + sentPieces + " of their " + suit + " Pieces were sent to the Supply!");
     }
 }

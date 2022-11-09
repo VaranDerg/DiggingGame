@@ -308,7 +308,7 @@ public class CardEffects : MonoBehaviour
     {
         //Shows the correct UI Sprite and updates the Text correctly.
         _gcm.UpdateCurrentActionText("Activated Card!");
-        _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
+        _cardActivatedText.text = _am.CurrentPlayerName + "s have Activated " + effectName + "!";
         if(suit == "Grass")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _grassABar;
@@ -2606,7 +2606,7 @@ public class CardEffects : MonoBehaviour
         }
 
         _bm.SetActiveCollider("Pawn");
-        _gcm.UpdateCurrentActionText("Select a pawn to teleport and Piece to teleport onto.");
+        _gcm.UpdateCurrentActionText("Select a Pawn to teleport and Piece to teleport onto.");
     }
 
     /// <summary>

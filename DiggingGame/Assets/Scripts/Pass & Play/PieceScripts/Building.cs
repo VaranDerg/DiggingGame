@@ -220,15 +220,15 @@ public class Building : MonoBehaviour
         //The text updates based on this given damage.
         if(damageDiceVisual == 4)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken massive damage!");
+            _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + "'s " + BuildingType + " has taken massive damage!");
         }
         else if(damageDiceVisual == 3 || damageDiceVisual == 2)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
+            _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + "'s " + BuildingType + " has taken damage!");
         }
         else if(damageDiceVisual == 1)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " avoided taking damage!");
+            _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + "'s " + BuildingType + " avoided taking damage!");
         }
 
         //Fun!
