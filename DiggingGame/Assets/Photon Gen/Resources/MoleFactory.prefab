@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5343694222130580688}
   - component: {fileID: 6555884231763938227}
   - component: {fileID: -1576687373297738235}
+  - component: {fileID: 5288748648068734621}
   m_Layer: 7
   m_Name: MoleFactory
   m_TagString: Untagged
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 1771013127
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c44f93469180f3444b9ac6bf2f6fe759, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 654b58a5c91adb34abd5ad416c5d76fd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -120,8 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7769766f861db3f4d8ba34ae155ace2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damagedColor: {r: 0, g: 0, b: 0, a: 0}
-  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _damagedSprite: {fileID: 0}
+  _defaultSprite: {fileID: 0}
+  _showDiceFaceTimes: 35
   BuildingHealth: 2
   PlayerOwning: 0
   BuildingType: 
@@ -130,5 +132,36 @@ MonoBehaviour:
   DamageTaken: 0
   SuitOfPiece: 
   ActiveBuilding: 0
-  DamageProtectionResponse: 0
-  _removalAnimWaitTime: 0
+  _animFirstPartName: MoleFactoryFirstPart
+  _animSecondPartName: MoleFactorySecondPart
+  _buildingSpawnName: MoleFactorySpawn
+  _buildingHideName: MoleFactoryHide
+  _buildingClickName: MoleFactoryClick
+  _buildingWaitingName: MoleFactoryWaiting
+  _buildingDamagedName: MoleFactoryDamaged
+  _buildingDamagedWaitingName: MoleFactoryDamagedWaiting
+  _minAnimWaitTime: 2.5
+  _maxAnimWaitTime: 7.5
+  _removalAnimWaitTime: 0.25
+  _damageSmokePS: {fileID: 5355069875398092458, guid: 46b6bd99dcd0d1746b5dc1142e0cd82f, type: 3}
+  _damageClickPS: {fileID: 895168346198343857, guid: 7b589d9ea2682254db29b9d78911bf53, type: 3}
+--- !u!95 &5288748648068734621
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5343694222130580689}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: df724282d6ab3dc499f1501f60ae6d8b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

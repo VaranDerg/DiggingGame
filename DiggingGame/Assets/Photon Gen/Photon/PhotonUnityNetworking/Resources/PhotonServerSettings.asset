@@ -80,6 +80,14 @@ MonoBehaviour:
   - ShuffleDiscardPile
   - AddCards
   - SetCurrentPawnID
+  - DamagePSActivity
+  - PlayDMGParticle
+  - ModifyNextAnim
+  - CallGameObjStatus
+  - SetCurrentAnimCouroutine
+  - StartBuildingAnim
+  - StopCoroutineONL
+  - SetCurrentAnimCoroutine
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

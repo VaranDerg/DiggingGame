@@ -99,20 +99,20 @@ public class OnlineBoardManager : MonoBehaviour
     {
         foreach (GameObject piece in _boardPieces)
         {
-            piece.GetComponent<PieceController>().ShowHideBuildable(false);
-            piece.GetComponent<PieceController>().ShowHideDiggable(false);
-            piece.GetComponent<PieceController>().ShowHideMovable(false);
-            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
-            piece.GetComponent<PieceController>().ShowHideEarthquake(false);
-            piece.GetComponent<PieceController>().ShowHideFlippable(false);
-            piece.GetComponent<PieceController>().ShowHideWalkway(false);
-            piece.GetComponent<PieceController>().PieceIsSelected = false;
+            piece.GetComponent<OnlinePieceController>().ShowHideBuildable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideMovable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideEarthquake(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideFlippable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHideWalkway(false);
+            piece.GetComponent<OnlinePieceController>().PieceIsSelected = false;
             _am.StopPawnActions(_am.CurrentPlayer);
         }
 
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         }
     }
 

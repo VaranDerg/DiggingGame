@@ -218,9 +218,9 @@ public class OnlineCardManager : MonoBehaviourPun
                 {
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
-                    randomCard.GetComponentInChildren<CardController>().HandPosition = i;
-                    randomCard.GetComponentInChildren<CardController>().HeldByPlayer = _am.CurrentPlayer;
-                    randomCard.GetComponentInChildren<CardController>().NextPos = randomCard.transform.position;
+                    randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
+                    randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
+                    randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
                     P2Hand.Add(randomCard);
                     P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
@@ -304,14 +304,14 @@ public class OnlineCardManager : MonoBehaviourPun
             {
                 foreach (GameObject card in P1Hand)
                 {
-                    card.GetComponentInChildren<CardController>().CanBeSelected = false;
+                    card.GetComponentInChildren<OnlineCardController>().CanBeSelected = false;
                 }
             }
             else
             {
                 foreach (GameObject card in P2Hand)
                 {
-                    card.GetComponentInChildren<CardController>().CanBeSelected = false;
+                    card.GetComponentInChildren<OnlineCardController>().CanBeSelected = false;
                 }
             }
 
@@ -322,14 +322,14 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             foreach (GameObject card in P1Hand)
             {
-                card.GetComponentInChildren<CardController>().CanBeSelected = true;
+                card.GetComponentInChildren<OnlineCardController>().CanBeSelected = true;
             }
         }
         else
         {
             foreach (GameObject card in P2Hand)
             {
-                card.GetComponentInChildren<CardController>().CanBeSelected = true;
+                card.GetComponentInChildren<OnlineCardController>().CanBeSelected = true;
             }
         }
 
@@ -348,7 +348,7 @@ public class OnlineCardManager : MonoBehaviourPun
 
         foreach (GameObject card in SelectedCards)
         {
-            if (card.GetComponentInChildren<CardController>().Selected)
+            if (card.GetComponentInChildren<OnlineCardController>().Selected)
             {
                 if (card.GetComponentInChildren<CardVisuals>().ThisCard.GrassSuit && RequiredSuit == "Grass")
                 {
@@ -525,14 +525,14 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             foreach (GameObject card in P1Hand)
             {
-                card.GetComponentInChildren<CardController>().CanBeActivated = true;
+                card.GetComponentInChildren<OnlineCardController>().CanBeActivated = true;
             }
         }
         else
         {
             foreach (GameObject card in P2Hand)
             {
-                card.GetComponentInChildren<CardController>().CanBeActivated = true;
+                card.GetComponentInChildren<OnlineCardController>().CanBeActivated = true;
             }
         }
     }
@@ -547,14 +547,14 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             foreach (GameObject card in P1Hand)
             {
-                card.GetComponentInChildren<CardController>().CanBeActivated = false;
+                card.GetComponentInChildren<OnlineCardController>().CanBeActivated = false;
             }
         }
         else
         {
             foreach (GameObject card in P2Hand)
             {
-                card.GetComponentInChildren<CardController>().CanBeActivated = false;
+                card.GetComponentInChildren<OnlineCardController>().CanBeActivated = false;
             }
         }
     }

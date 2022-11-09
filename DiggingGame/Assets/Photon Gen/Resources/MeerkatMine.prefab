@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1986726487383918514}
   - component: {fileID: 8993959675975022629}
   - component: {fileID: 5715026685068887198}
+  - component: {fileID: 656098499243989359}
   m_Layer: 7
   m_Name: MeerkatMine
   m_TagString: Untagged
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 1771013127
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1ce6897d6aeefa545bb5b604cdf69455, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a5f7b17c78b08fc4ebec5010b3be0cb7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -120,8 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7769766f861db3f4d8ba34ae155ace2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damagedColor: {r: 0, g: 0, b: 0, a: 0}
-  _defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  _damagedSprite: {fileID: 21300000, guid: 91b9075bf6a723c488ff797e1fb9273b, type: 3}
+  _defaultSprite: {fileID: 21300000, guid: a5f7b17c78b08fc4ebec5010b3be0cb7, type: 3}
+  _showDiceFaceTimes: 35
   BuildingHealth: 2
   PlayerOwning: 0
   BuildingType: 
@@ -130,5 +132,36 @@ MonoBehaviour:
   DamageTaken: 0
   SuitOfPiece: 
   ActiveBuilding: 0
-  DamageProtectionResponse: 0
-  _removalAnimWaitTime: 0
+  _animFirstPartName: MeerkatMineFirstPart
+  _animSecondPartName: MeerkatMineSecondPart
+  _buildingSpawnName: MeerkatMineHide
+  _buildingHideName: MeerkatMineHide
+  _buildingClickName: MeerkatMineClick
+  _buildingWaitingName: MeerkatMineWaiting
+  _buildingDamagedName: MeerkatMineDamaged
+  _buildingDamagedWaitingName: MeerkatMineDamagedWaiting
+  _minAnimWaitTime: 2.5
+  _maxAnimWaitTime: 7.5
+  _removalAnimWaitTime: 0.25
+  _damageSmokePS: {fileID: 5355069875398092458, guid: 46b6bd99dcd0d1746b5dc1142e0cd82f, type: 3}
+  _damageClickPS: {fileID: 895168346198343857, guid: 7b589d9ea2682254db29b9d78911bf53, type: 3}
+--- !u!95 &656098499243989359
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986726487383918477}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b4eb8bfaa8054fd40ae158acf5839464, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -86,11 +86,13 @@ public class OnlineBuilding : MonoBehaviourPun
     {
         _damageDice = GameObject.FindGameObjectWithTag("Damage Dice");
         FindBoardPieces();
-        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+        CallCurrentAnim();     
     }
 
     /// <summary>
     /// Plays idle animations in random intervals.
+    /// 
+    /// Edited: Andrea SD - modified for online use
     /// </summary>
     /// <returns></returns>
     private IEnumerator BuildingAnimations()
@@ -113,7 +115,7 @@ public class OnlineBuilding : MonoBehaviourPun
 
         yield return new WaitForSeconds(Random.Range(_minAnimWaitTime, _maxAnimWaitTime));
 
-        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+        CallCurrentAnim();      // ASD
     }
 
     /// <summary>
@@ -315,19 +317,19 @@ public class OnlineBuilding : MonoBehaviourPun
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
 
             //Hides the building and disables it
-            _anims.Play(_buildingHideName);
+            CallPlayAnimation(_buildingHideName);   // ASD
             yield return new WaitForSeconds(_removalAnimWaitTime);
             PrepBuilidingDamaging(false);
-            _anims.enabled = false;
-            gameObject.SetActive(false);
+            CallAnimStatus(false);      // ASD
+            CallGameObjStatus(false);       // ASD
         }
         else if (BuildingHealth == 1)
         {
             //Updates visuals.
-            StopCoroutine(_currentAnimCoroutine);
-            _anims.Play(_buildingDamagedName);
-            GetComponent<SpriteRenderer>().sprite = _damagedSprite;
-            _damageSmokePS.SetActive(true);
+            CallCoroutineStop();
+            CallPlayAnimation(_buildingDamagedName);    // ASD
+            CallChangeSprite(_damagedSprite.name);  // ASD
+            CallDamagePS(true);     // ASD
             yield return new WaitForSeconds(_ce.BuildingDamageStatusWaitTime);
         }
         else if (BuildingHealth == 2)
@@ -352,6 +354,146 @@ public class OnlineBuilding : MonoBehaviourPun
         }
         PrepBuilidingDamaging(false);
         ActiveBuilding = false;
+    }
+
+    /// <summary>
+    /// Prepares a building for taking damage.
+    /// </summary>
+    /// <param name="show">True = Blink</param>
+    public void PrepBuilidingDamaging(bool show)
+    {
+        CallCoroutineStop();   // ASD
+
+        if (show)
+        {
+            CanBeDamaged = true;
+            if (BuildingHealth == 1)
+            {
+                _anims.Play(_buildingDamagedWaitingName);
+            }
+            else
+            {
+                _anims.Play(_buildingWaitingName);
+            }
+        }
+        else
+        {
+            CanBeDamaged = false;
+            if (BuildingHealth > 1)
+            {
+                CallCurrentAnim();  // ASD
+            }
+            else
+            {
+                CallPlayAnimation(_buildingDamagedName);    // ASD
+            }
+        }
+    }
+
+    /// <summary>
+    /// Repairs a building.
+    /// </summary>
+    public void RepairBuilding()
+    {
+        //Clicking a building Repairs it.
+        CallBuildingHP(1);     // ASD
+        CallDamagePS();     // ASD
+        CallCurrentAnim();  //ASD
+        _ce.RepairedBuildings++;
+        CallDamagePS(false);    // ASD
+        ActiveBuilding = true;
+
+        //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
+        if (_am.CurrentPlayer == 1 && PlayerOwning == 2)
+        {
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
+            _gcm.UpdateTextBothPlayers();
+        }
+        else if (_am.CurrentPlayer == 2 && PlayerOwning == 1)
+        {
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
+            _gcm.UpdateTextBothPlayers();
+        }
+
+        ActiveBuilding = false;
+        PrepBuildingRepairing(false);
+    }
+
+    /// <summary>
+    /// Prepares a building for repairing.
+    /// </summary>
+    /// <param name="show">True = Blink</param>
+    public void PrepBuildingRepairing(bool show)
+    {
+        StopCoroutine(_currentAnimCoroutine);
+
+        if (show)
+        {
+            CanBeRepaired = true;
+            if (BuildingHealth == 1)
+            {
+                _anims.Play(_buildingDamagedWaitingName);
+            }
+            else
+            {
+                _anims.Play(_buildingWaitingName);
+            }
+        }
+        else
+        {
+            CanBeRepaired = false;
+            if (BuildingHealth > 1)
+            {
+                _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+            }
+            else
+            {
+                _anims.Play(_buildingDamagedName);
+            }
+        }
+    }
+
+    #region RPCS
+
+    /// <summary>
+    /// Calls the RPC that plays the damage particle system
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallDamagePS()
+    {
+        photonView.RPC("PlayDMGParticle", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Plays the Damage particle system
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void PlayDMGParticle()
+    {
+        _damageClickPS.GetComponent<ParticleSystem>().Play();
+    }
+
+    /// <summary>
+    /// Calls the RPC that controls whether the damage particle system is
+    /// active or inactive
+    /// </summary>
+    /// <param name="active"> on or off</param>
+    public void CallDamagePS(bool active)
+    {
+        photonView.RPC("DamagePSActivity", RpcTarget.All, active);
+    }
+
+    /// <summary>
+    /// Sets the damage smoke particle system to active or inactive
+    /// </summary>
+    /// <param name="active"> on or off</param>
+    [PunRPC]
+    public void DamagePSActivity(bool active)
+    {
+        _damageSmokePS.SetActive(active);
     }
 
     /// <summary>
@@ -404,6 +546,8 @@ public class OnlineBuilding : MonoBehaviourPun
 
     /// <summary>
     /// Plays an animation on each client
+    /// 
+    /// Author: Andrea SD
     /// </summary>
     /// <param name="animName"> animation to be player </param>
     [PunRPC]
@@ -411,6 +555,29 @@ public class OnlineBuilding : MonoBehaviourPun
     {
         _anims.Play(animName);
     }
+
+    /// <summary>
+    /// Calls the RPC that modifies the _nextAnim variable
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"></param>
+    /*public void CallNextAnimModify(int amount)
+    {
+        photonView.RPC("ModifyNextAnim", RpcTarget.All, amount);
+    }*/
+
+    /// <summary>
+    /// Modifies the _nextAnim variable
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"> amount _nextAnim is modified by </param>
+    [PunRPC]
+    /*public void ModifyNextAnim(int amount)
+    {
+        _nextAnim = amount;
+    }*/
 
     /// <summary>
     /// Calls the RPC that changes the game object status
@@ -474,47 +641,9 @@ public class OnlineBuilding : MonoBehaviourPun
     /// </summary>
     /// <param name="effect"> effect the sprite is being modified to </param>
     [PunRPC]
-    public void ChangeSprite(string effect)
+    public void ChangeSprite(string newSprite)
     {
-        switch (effect)
-        {
-            case "damaged":
-                GetComponent<SpriteRenderer>().sprite = _damagedSprite;
-                break;
-            case "default":
-                GetComponent<SpriteRenderer>().sprite= _defaultSprite;
-                break;
-        }
-        
-    }
-
-    /// <summary>
-    /// Repairs a building.
-    /// </summary>
-    public void RepairBuilding()
-    {
-        //Clicking a building Repairs it.
-        CallBuildingHP(1);
-        _damageClickPS.GetComponent<ParticleSystem>().Play();
-        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
-        _ce.RepairedBuildings++;
-        _damageSmokePS.SetActive(false);
-        ActiveBuilding = true;
-
-        //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
-        if(_am.CurrentPlayer == 1 && PlayerOwning == 2)
-        {
-            _am.CallUpdateScore(_am.CurrentPlayer, 1);
-            _gcm.UpdateTextBothPlayers();
-        }
-        else if(_am.CurrentPlayer == 2 && PlayerOwning == 1)
-        {
-            _am.CallUpdateScore(_am.CurrentPlayer, 1);
-            _gcm.UpdateTextBothPlayers();
-        }
-
-        ActiveBuilding = false;
-        PrepBuilidingReapiring(false);
+        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(newSprite);
     }
 
     /// <summary>
@@ -541,70 +670,47 @@ public class OnlineBuilding : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Prepares a building for taking damage.
+    /// Calls the RPC that stops a coroutine online
+    /// 
+    /// Author: Andrea SD
     /// </summary>
-    /// <param name="show">True = Blink</param>
-    public void PrepBuilidingDamaging(bool show)
+    /// <param name="coroutineStop"> coroutine to be stopped </param>
+    public void CallCoroutineStop()
     {
-        StopCoroutine(_currentAnimCoroutine);
-
-        if (show)
-        {
-            CanBeDamaged = true;
-            if (BuildingHealth == 1)
-            {
-                _anims.Play(_buildingDamagedWaitingName);
-            }
-            else
-            {
-                _anims.Play(_buildingWaitingName);
-            }
-        }
-        else
-        {
-            CanBeDamaged = false;
-            if (BuildingHealth > 1)
-            {
-                _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
-            }
-            else
-            {
-                _anims.Play(_buildingDamagedName);
-            }
-        }
+        photonView.RPC("StopCoroutineONL", RpcTarget.All);
     }
 
     /// <summary>
-    /// Prepares a building for repairing.
+    /// Stops the coroutine across the network
+    /// 
+    /// Author: Andrea SD
     /// </summary>
-    /// <param name="show">True = Blink</param>
-    public void PrepBuilidingReapiring(bool show)
+    [PunRPC]
+    public void StopCoroutineONL()
     {
         StopCoroutine(_currentAnimCoroutine);
-
-        if (show)
-        {
-            CanBeRepaired = true;
-            if (BuildingHealth == 1)
-            {
-                _anims.Play(_buildingDamagedWaitingName);
-            }
-            else
-            {
-                _anims.Play(_buildingWaitingName);
-            }
-        }
-        else
-        {
-            CanBeRepaired = false;
-            if (BuildingHealth > 1)
-            {
-                _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
-            }
-            else
-            {
-                _anims.Play(_buildingDamagedName);
-            }
-        }
     }
+
+    /// <summary>
+    /// Calls the RPC to set the current animation coroutine
+    /// </summary>
+    /// <param name="animCoroutine"> starting animation coroutine </param>
+    public void CallCurrentAnim()
+    {
+        photonView.RPC("SetCurrentAnimCoroutine", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Starts the current animation coroutine
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="animCoroutine"> starting animation coroutine </param>
+    [PunRPC]
+    public void SetCurrentAnimCoroutine()
+    {
+        _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+    }
+
+    #endregion
 }

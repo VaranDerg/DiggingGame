@@ -31,7 +31,7 @@ public class OnlinePieceController : MonoBehaviourPun
     [SerializeField] private GameObject _meerkatPawn;
     [SerializeField] private SpriteRenderer _borderSr;
 
-    [Header("Building References")]
+    [Header("OnlineBuilding References")]
     [SerializeField] private Transform _buildingSlot;
     [SerializeField] private GameObject _mFactory, _mBurrow, _mMine, _meeFactory, _meeBurrow, _meeMine;
 
@@ -317,9 +317,9 @@ public class OnlinePieceController : MonoBehaviourPun
 
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
             {
-                if (piece.GetComponentInChildren<Building>())
+                if (piece.GetComponentInChildren<OnlineBuilding>())
                 {
-                    piece.GetComponentInChildren<Building>().PrepBuilidingDamaging(true);
+                    piece.GetComponentInChildren<OnlineBuilding>().PrepBuilidingDamaging(true);
                     _ce.AllowedDamages++;
                 }
             }
@@ -622,7 +622,7 @@ public class OnlinePieceController : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Method controlling Building placement and removal.
+    /// Method controlling OnlineBuilding placement and removal.
     /// </summary>
     private void StartBuildingPlacement()
     {
@@ -835,26 +835,26 @@ public class OnlinePieceController : MonoBehaviourPun
 
             if (buildingArrayNum == 0)
             {
-                thisBuilding.GetComponent<Building>().BuildingType = "Factory";
+                thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Factory";
             }
             else if (buildingArrayNum == 1)
             {
-                thisBuilding.GetComponent<Building>().BuildingType = "Burrow";
+                thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Burrow";
             }
             else if (buildingArrayNum == 2)
             {
-                thisBuilding.GetComponent<Building>().BuildingType = "Grass Mine";
+                thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Grass Mine";
             }
             else if (buildingArrayNum == 3)
             {
-                thisBuilding.GetComponent<Building>().BuildingType = "Dirt Mine";
+                thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Dirt Mine";
             }
             else if (buildingArrayNum == 4)
             {
-                thisBuilding.GetComponent<Building>().BuildingType = "Stone Mine";
+                thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Stone Mine";
             }
-            thisBuilding.GetComponent<Building>().SuitOfPiece = pieceSuit;
-            thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;
+            thisBuilding.GetComponent<OnlineBuilding>().SuitOfPiece = pieceSuit;
+            thisBuilding.GetComponent<OnlineBuilding>().PlayerOwning = _am.CurrentPlayer;
 
             //Planned Profit Code Start
             if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Planned Profit"))

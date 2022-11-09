@@ -221,7 +221,7 @@ public class OnlineActionManager : MonoBehaviourPun
                 pawn.GetComponent<OnlinePlayerPawn>().IsBuilding = false;
                 pawn.GetComponent<OnlinePlayerPawn>().IsDigging = false;
                 pawn.GetComponent<OnlinePlayerPawn>().IsPlacing = false;
-                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().IdleAnimName);
             }
         }
 
