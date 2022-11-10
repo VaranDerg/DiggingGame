@@ -270,40 +270,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _supplyPieces[3].text = "x" + _am.SupplyPile[3];
     }
 
-    /*    /// <summary>
-        /// Updates the Opponent View text.
-        /// Edit: Andrea SD - Modified for online use. 
-        /// Edit 2: Andrea SD - Commented out since it is no longer used
-        /// </summary>
-        /// <param name="curOpponent">1 or 2</param>
-        private void UpdateOpponentText(int curOpponent)
-        {
-            if (curOpponent == 1)
-            {
-                photonView.RPC("ChangeOpponentTextOne", RpcTarget.All);     //Andrea SD
-            }
-            else
-            {          
-                photonView.RPC("ChangeOpponentTextTwo", RpcTarget.All);     //Aea SD
-            }
-        }*/
-    /*    /// <summary>
-        /// Changes the opponent text on player one's screen with player two's vals
-        /// Author: Andrea SD
-        /// </summary>
-        [PunRPC]
-        public void ChangeOpponentTextTwo()
-        {
-            _opponentScoreText.text = "Score: " + _am.P2Score;
-            _opponentCardText.text = "Cards: " + _am.P2Cards;
-            _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
-
-            _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
-            _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
-            _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
-            _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
-        }*/
-
     /// <summary>
     /// Changes the opponent text on player two's screen with player one's vals
     /// Author: Andrea SD
@@ -487,19 +453,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Shows the opponent info
-    /// </summary>
-    [PunRPC]
-    public void ShowOpponentInfo()
-    {
-        /*_opponentInfoZone.SetActive(true);
-        _showHideOpponentInfoText.text = "Hide Opponent Info";
-        _opponentViewShowing = true;*/
-
-        OpponentInfoToggleWrapper();
-    }
-
-    /// <summary>
     /// Wrapper for starting the below Coroutine through a button.
     /// </summary>
     public void BuildingInfoToggleWrapper()
@@ -545,18 +498,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Modifies the current turn phase
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="amount"> how the turn phase is modified </param>
-    [PunRPC]
-    public void ChangeTurnPhase(int amount)
-    {
-        _am.CurrentTurnPhase += amount;
-    }
-
-    /// <summary>
     /// Moves the turn into the "First..." phase.
     /// 
     /// Edited: Andrea SD - online use
@@ -570,7 +511,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
         _am.StartMove(_am.CurrentPlayer);
-        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
+        CallChangePhase(1);
         StartCoroutine(_cm.ShowCards(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
@@ -588,7 +529,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         UpdateOpponentActionText(_am.CurrentPlayer + " is contemplating their next action...");     // Andrea SD
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
-        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
+        CallChangePhase(1);     // ASD
 
         _thenZone.SetActive(true);
         _thenActions.SetActive(true);
@@ -696,7 +637,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of playing a card...");  //Andrea SD
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
-        photonView.RPC("ChangeTurnPhase", RpcTarget.All, 1);
+        CallChangePhase(1);
 
         _finallyZone.SetActive(true);
 
@@ -766,6 +707,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void EndTurn()
     {
+        _am.CallStartButton();
+
         UpdateOpponentActionText("Start your turn.");
         DisableListObjects();
         _cm.StopCardActivating(_am.CurrentPlayer);
@@ -787,8 +730,42 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _mine.sprite = _moleMine;
         }
 
-        _am.EndTurn(_am.CurrentPlayer);     //Andrea SD
         UpdateTextBothPlayers();
+    }
 
-    }  
+    #region RPC Functions
+
+    /// <summary>
+    /// Calls the RPC that modifies the current turn phase
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"></param>
+    public void CallChangePhase(int amount)
+    {
+        photonView.RPC("ChangeTurnPhase", RpcTarget.All, amount);
+    }
+
+    /// <summary>
+    /// Modifies the current turn phase
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"> how the turn phase is modified </param>
+    [PunRPC]
+    public void ChangeTurnPhase(int amount)
+    {
+        _am.CurrentTurnPhase += amount;
+    }
+
+    /// <summary>
+    /// Shows the opponent info
+    /// </summary>
+    [PunRPC]
+    public void ShowOpponentInfo()
+    {
+        OpponentInfoToggleWrapper();
+    }
+
+    #endregion
 }

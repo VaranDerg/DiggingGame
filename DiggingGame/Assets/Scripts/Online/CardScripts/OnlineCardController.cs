@@ -410,6 +410,7 @@ public class OnlineCardController : MonoBehaviourPun
     {
         photonView.RPC("RemoveFromPersistent", RpcTarget.All, player);
     }
+
     /// <summary>
     /// Removes a card from the persistent card area and list
     /// 

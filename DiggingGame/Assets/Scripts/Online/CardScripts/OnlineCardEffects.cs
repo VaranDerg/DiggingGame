@@ -1089,13 +1089,13 @@ public class OnlineCardEffects : MonoBehaviourPun
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
             //Doesn't count your own buildings!
-            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning == _am.CurrentPlayer)
             {
                 continue;
             }
 
             //Must be on Grass
-            if (building.GetComponent<Building>().SuitOfPiece != "Grass")
+            if (building.GetComponent<OnlineBuilding>().SuitOfPiece != "Grass")
             {
                 continue;
             }
@@ -1118,11 +1118,11 @@ public class OnlineCardEffects : MonoBehaviourPun
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().PlayerOwning != _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning != _am.CurrentPlayer)
             {
-                if (building.GetComponent<Building>().SuitOfPiece == "Grass")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass")
                 {
-                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
@@ -1151,7 +1151,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         //Disables Buildings' damage state.
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().PrepBuilidingDamaging(false);
+            building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(false);
         }
 
         _bm.SetActiveCollider("Board");
@@ -1166,7 +1166,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator PlannedProfit(GameObject cardBody)
     {
         //Planned Profit's code can be found in PieceController's Building Methods.
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 
@@ -1305,7 +1305,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator Dam(GameObject cardBody)
     {
         //Dam's logic can be found in DamageBuilding (Building).
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 
@@ -1475,7 +1475,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
         }
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -1567,12 +1567,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         bool areThereBuildings = false;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning == _am.CurrentPlayer)
             {
                 continue;
             }
 
-            if (building.GetComponent<Building>().SuitOfPiece == "Stone" || building.GetComponent<Building>().SuitOfPiece == "Gold")
+            if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Stone" || building.GetComponent<OnlineBuilding>().SuitOfPiece == "Gold")
             {
                 continue;
             }
@@ -1594,11 +1594,11 @@ public class OnlineCardEffects : MonoBehaviourPun
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().PlayerOwning != _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning != _am.CurrentPlayer)
             {
-                if (building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Dirt")
                 {
-                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
@@ -1626,7 +1626,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().PrepBuilidingDamaging(false);
+            building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(false);
         }
 
         //Starts PCM's PersistentCardDiscardProcess, as per Overgrowth's wording.
@@ -1641,7 +1641,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         //Similar logic to Walkway. Preps movement in a very similar way with slightly different logic between PlayerPawn and PieceController.
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            pawn.GetComponent<PlayerPawn>().MudslideMove = true;
+            pawn.GetComponent<OnlinePlayerPawn>().MudslideMove = true;
             pawn.GetComponent<Animator>().Play("TempPawnBlink");
         }
 
@@ -1656,7 +1656,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator SecretTunnels(GameObject cardBody)
     {
         //Secret Tunnels's logic can be found in PlayerPawn.
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 
@@ -1671,7 +1671,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator Shovel(GameObject cardBody)
     {
         //Shovel's Logic can be found in PieceController.
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 
@@ -1692,12 +1692,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         bool areThereBuildings = false;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning == _am.CurrentPlayer)
             {
                 continue;
             }
 
-            if (building.GetComponent<Building>().SuitOfPiece == "Gold")
+            if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Gold")
             {
                 continue;
             }
@@ -1715,11 +1715,11 @@ public class OnlineCardEffects : MonoBehaviourPun
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().PlayerOwning != _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning != _am.CurrentPlayer)
             {
-                if (building.GetComponent<Building>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
                 {
-                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
@@ -1746,7 +1746,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().PrepBuilidingDamaging(false);
+            building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(false);
         }
 
         //Repeat but for your own Buildings.
@@ -1754,11 +1754,11 @@ public class OnlineCardEffects : MonoBehaviourPun
         int yourBuildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning == _am.CurrentPlayer)
             {
-                if (building.GetComponent<Building>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
                 {
-                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     yourBuildingCount++;
                 }
             }
@@ -1785,7 +1785,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().PrepBuilidingDamaging(false);
+            building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(false);
         }
 
         _bm.SetActiveCollider("Board");
@@ -1816,23 +1816,23 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+            piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
         }
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
             {
-                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if (!piece.GetComponent<PieceController>().IsPlaceable)
+                if (!piece.GetComponent<OnlinePieceController>().IsPlaceable)
                 {
                     openPieces++;
                 }
-                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
+                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
             }
         }
 
@@ -1911,7 +1911,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
             //Ignores buildings on Gold.
-            if (building.GetComponent<Building>().SuitOfPiece == "Gold")
+            if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Gold")
             {
                 continue;
             }
@@ -1933,19 +1933,19 @@ public class OnlineCardEffects : MonoBehaviourPun
         int pieceCount = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Five)
             {
                 continue;
             }
 
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
             {
-                if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
                 {
                     continue;
                 }
 
-                piece.GetComponent<PieceController>().ShowHideEarthquake(true);
+                piece.GetComponent<OnlinePieceController>().ShowHideEarthquake(true);
                 pieceCount++;
             }
         }
@@ -1977,7 +1977,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().PrepBuilidingDamaging(false);
+            building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(false);
         }
 
         _bm.DisableAllBoardInteractions();
@@ -1998,7 +1998,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject pawn in pawns)
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
@@ -2041,8 +2041,8 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            piece.GetComponent<PieceController>().ShowHideDiggable(false);
-            piece.GetComponent<PieceController>().FromActivatedCard = false;
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
         }
 
         _bm.DisableAllBoardInteractions();
@@ -2056,7 +2056,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator Geologist(GameObject cardBody)
     {
         //Geologist's logic can be found in RetrieveGold (ActionManager).
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 
@@ -2071,7 +2071,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator MasterBuilder(GameObject cardBody)
     {
         //Master Builder's code is in both GameCanvasManager for visuals and PieceController's Building methods.
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 
@@ -2147,7 +2147,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             foreach(GameObject card in _cm.P1Hand)
             {
-                StartCoroutine(card.GetComponentInChildren<CardController>().ToDiscard());
+                StartCoroutine(card.GetComponentInChildren<OnlineCardController>().ToDiscard());
             }
 
             for(int i = PlannedGambleCardsToDraw; i != 0; i--)
@@ -2159,7 +2159,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             foreach (GameObject card in _cm.P2Hand)
             {
-                StartCoroutine(card.GetComponentInChildren<CardController>().ToDiscard());
+                StartCoroutine(card.GetComponentInChildren<OnlineCardController>().ToDiscard());
             }
 
             for (int i = PlannedGambleCardsToDraw; i != 0; i--)
@@ -2243,7 +2243,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject pawn in pawns)
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
@@ -2405,12 +2405,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         int maxRepairs = 0;
         foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if(building.GetComponent<Building>().BuildingHealth != 1)
+            if(building.GetComponent<OnlineBuilding>().BuildingHealth != 1)
             {
                 continue;
             }
 
-            building.GetComponent<Building>().PrepBuilidingReapiring(true);
+            building.GetComponent<OnlineBuilding>().PrepBuildingRepairing(true);
             maxRepairs++;
         }
 
@@ -2429,12 +2429,12 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().BuildingHealth != 1)
+            if (building.GetComponent<OnlineBuilding>().BuildingHealth != 1)
             {
                 continue;
             }
 
-            building.GetComponent<Building>().PrepBuilidingReapiring(false);
+            building.GetComponent<OnlineBuilding>().PrepBuildingRepairing(false);
         }
 
         RepairedBuildings = 0;
@@ -2501,7 +2501,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator Retribution(GameObject cardBody)
     {
         //Retribution's Logic can be found in DamageBuilding (Building).
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 
@@ -2517,11 +2517,11 @@ public class OnlineCardEffects : MonoBehaviourPun
         //Very simple script, marks PlayerPawn as teleportationmove, and will then highlight every Piece without a Pawn.
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
-                pawn.GetComponent<PlayerPawn>().IsMoving = true;
+                pawn.GetComponent<OnlinePlayerPawn>().IsMoving = true;
                 pawn.GetComponent<Animator>().Play("TempPawnBlink");
-                pawn.GetComponent<PlayerPawn>().TeleportationMove = true;
+                pawn.GetComponent<OnlinePlayerPawn>().TeleportationMove = true;
             }
         }
 
@@ -2541,12 +2541,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         bool areThereBuildings = false;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning == _am.CurrentPlayer)
             {
                 continue;
             }
 
-            if (building.GetComponent<Building>().SuitOfPiece == "Gold")
+            if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Gold")
             {
                 continue;
             }
@@ -2583,7 +2583,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         bool factoriesExist = false;
         bool burrowsExist = false;
         bool minesExist = false;
-        foreach (Building building in FindObjectsOfType<Building>())
+        foreach (OnlineBuilding building in FindObjectsOfType<OnlineBuilding>())
         {
             if (_am.CurrentPlayer == 1)
             {
@@ -2646,32 +2646,32 @@ public class OnlineCardEffects : MonoBehaviourPun
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            if (building.GetComponent<OnlineBuilding>().PlayerOwning == _am.CurrentPlayer)
             {
                 continue;
             }
 
             if (_tornadoBuildingToDamage == 0)
             {
-                if (building.GetComponent<Building>().BuildingType == "Factory")
+                if (building.GetComponent<OnlineBuilding>().BuildingType == "Factory")
                 {
-                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
             else if (_tornadoBuildingToDamage == 1)
             {
-                if (building.GetComponent<Building>().BuildingType == "Burrow")
+                if (building.GetComponent<OnlineBuilding>().BuildingType == "Burrow")
                 {
-                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
             else if (_tornadoBuildingToDamage == 2)
             {
-                if (building.GetComponent<Building>().BuildingType == "Grass Mine" || building.GetComponent<Building>().BuildingType == "Dirt Mine" || building.GetComponent<Building>().BuildingType == "Stone Mine")
+                if (building.GetComponent<OnlineBuilding>().BuildingType == "Grass Mine" || building.GetComponent<Building>().BuildingType == "Dirt Mine" || building.GetComponent<Building>().BuildingType == "Stone Mine")
                 {
-                    building.GetComponent<Building>().PrepBuilidingDamaging(true);
+                    building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
                 }
             }
@@ -2700,7 +2700,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
-            building.GetComponent<Building>().PrepBuilidingDamaging(false);
+            building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(false);
         }
 
         _bm.SetActiveCollider("Board");

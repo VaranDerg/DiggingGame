@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 
 public class OnlineActionManager : MonoBehaviourPun
 {
-    //Edit: Andrea SD, Multiplayer functionality
+    //Edit: Andrea SD, Online functionality
 
     //Arrays for collected pile. Grass, Dirt, Stone, Gold.
     [HideInInspector] public int[] P1CollectedPile = new int[4];
@@ -98,8 +98,14 @@ public class OnlineActionManager : MonoBehaviourPun
     {
         // Board is disbled for player 2 at the start and enabled for player 1
         // Andrea SD
-        DisableBoard();
-        photonView.RPC("EnableBoard", RpcTarget.MasterClient);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            EnableStartButton();
+        }
+        else
+        {
+            DisableBoard();
+        }
     }
 
     /// <summary>
@@ -241,7 +247,7 @@ public class OnlineActionManager : MonoBehaviourPun
             switch (type)
             {
                 case "Grass":
-                    photonView.RPC("UpdateCollected", RpcTarget.All, 1, 0, 1);
+                    CallUpdatePieces(0, 1, 0, 1);
                     _gcm.UpdateTextBothPlayers();
                     if (goBack)
                     {
@@ -249,7 +255,7 @@ public class OnlineActionManager : MonoBehaviourPun
                     }
                     break;
                 case "Dirt":
-                    photonView.RPC("UpdateCollected", RpcTarget.All, 1, 1, 1);
+                    CallUpdatePieces(0, 1, 1, 1);
                     _gcm.UpdateTextBothPlayers();
                     if (goBack)
                     {
@@ -257,7 +263,7 @@ public class OnlineActionManager : MonoBehaviourPun
                     }
                     break;
                 case "Stone":
-                    photonView.RPC("UpdateCollected", RpcTarget.All, 1, 2, 1);
+                    CallUpdatePieces(0, 1, 2, 1);
                     _gcm.UpdateTextBothPlayers();
                     if (goBack)
                     {
@@ -265,7 +271,7 @@ public class OnlineActionManager : MonoBehaviourPun
                     }
                     break;
                 case "Gold":
-                    photonView.RPC("UpdateCollected", RpcTarget.All, 1, 3, 1);
+                    CallUpdatePieces(0, 1, 3, 1);
                     _gcm.UpdateTextBothPlayers();
                     if (goBack)
                     {
@@ -279,7 +285,7 @@ public class OnlineActionManager : MonoBehaviourPun
             switch (type)
             {
                 case "Grass":
-                    photonView.RPC("UpdateCollected", RpcTarget.All, 2, 0, 1);
+                    CallUpdatePieces(0, 2, 0, 1);
                     _gcm.UpdateTextBothPlayers();
                     if (goBack)
                     {
@@ -287,7 +293,7 @@ public class OnlineActionManager : MonoBehaviourPun
                     }
                     break;
                 case "Dirt":
-                    photonView.RPC("UpdateCollected", RpcTarget.All, 2, 1, 1);
+                    CallUpdatePieces(0, 2, 1, 1);
                     _gcm.UpdateTextBothPlayers();
                     if (goBack)
                     {
@@ -295,7 +301,7 @@ public class OnlineActionManager : MonoBehaviourPun
                     }
                     break;
                 case "Stone":
-                    photonView.RPC("UpdateCollected", RpcTarget.All, 2, 2, 1);
+                    CallUpdatePieces(0, 2, 2, 1);
                     _gcm.UpdateTextBothPlayers();
                     if (goBack)
                     {
@@ -303,7 +309,7 @@ public class OnlineActionManager : MonoBehaviourPun
                     }
                     break;
                 case "Gold":
-                    photonView.RPC("UpdateCollected", RpcTarget.All, 2, 3, 1);
+                    CallUpdatePieces(0, 2, 3, 1);
                     _gcm.UpdateTextBothPlayers();
                     if (goBack)
                     {
@@ -323,21 +329,21 @@ public class OnlineActionManager : MonoBehaviourPun
     {
         if (player == 1)
         {
-            photonView.RPC("UpdateRefined", RpcTarget.All, 1, 0, P1CollectedPile[0]);
-            photonView.RPC("UpdateRefined", RpcTarget.All, 1, 1, P1CollectedPile[1]);
-            photonView.RPC("UpdateRefined", RpcTarget.All, 1, 2, P1CollectedPile[2]);
-            photonView.RPC("UpdateRefined", RpcTarget.All, 1, 3, P1CollectedPile[3]);
+            CallUpdatePieces(1, 1, 0, P1CollectedPile[0]);
+            CallUpdatePieces(1, 1, 1, P1CollectedPile[1]);
+            CallUpdatePieces(1, 1, 2, P1CollectedPile[2]);
+            CallUpdatePieces(1, 1, 3, P1CollectedPile[3]);
 
-            photonView.RPC("EmptyCollection", RpcTarget.All, 1);
+            CallEmptyCollection(1);
         }
         else if (player == 2)
         {
-            photonView.RPC("UpdateRefined", RpcTarget.All, 2, 0, P2CollectedPile[0]);
-            photonView.RPC("UpdateRefined", RpcTarget.All, 2, 1, P2CollectedPile[1]);
-            photonView.RPC("UpdateRefined", RpcTarget.All, 2, 2, P2CollectedPile[2]);
-            photonView.RPC("UpdateRefined", RpcTarget.All, 2, 3, P2CollectedPile[3]);
+            CallUpdatePieces(1, 2, 0, P2CollectedPile[0]);
+            CallUpdatePieces(1, 2, 1, P2CollectedPile[1]);
+            CallUpdatePieces(1, 2, 2, P2CollectedPile[2]);
+            CallUpdatePieces(1, 2, 3, P2CollectedPile[3]);
 
-            photonView.RPC("EmptyCollection", RpcTarget.All, 2);
+            CallEmptyCollection(2);
         }
     }
 
@@ -433,42 +439,6 @@ public class OnlineActionManager : MonoBehaviourPun
                 break;
             case "Stone":
                 SupplyPileRPC(2, 1);
-                break;
-        }
-    }
-
-    /// <summary>
-    /// Calls the RPC to modify the supply pile across all clients
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="pieceType"></param>
-    /// <param name="amount"></param>
-    public void SupplyPileRPC(int pieceType, int amount)
-    {
-        photonView.RPC("ModifySupplyPile", RpcTarget.All, pieceType, amount);
-    }
-
-    /// <summary>
-    /// Removes pieces from the supply pile
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="pieceType"> type of piece being removed </param>
-    /// <param name="amount"> amount being removed </param>
-    [PunRPC]
-    public void ModifySupplyPile(int pieceType, int amount)
-    {
-        switch(pieceType)
-        {
-            case 0:
-                SupplyPile[0] -= amount;
-                break;
-            case 1:
-                SupplyPile[1] -= amount;
-                break;
-            case 2:
-                SupplyPile[2] -= amount;
                 break;
         }
     }
@@ -699,6 +669,7 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <summary>
     /// Ends the player's turn
     /// Updates round text values and progresses the game phase
+    /// 
     /// Edit: Andrea SD, modified for online play
     /// </summary>
     /// <param name="player"> Player who's turn is ending </param>
@@ -708,67 +679,33 @@ public class OnlineActionManager : MonoBehaviourPun
         {
             if (P1Score >= WinningScore)
             {
-                /* _gcm.UpdateCurrentActionText("Player 1 wins, as they've reached 15 points!");
-                 _gcm.UpdateOpponentActionText("Player 1 wins, as they've reached 15 points!");    //Andrea SD
-                 _menuButton.SetActive(true);
-                 return;*/
-
                 FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
-
-                //_gcm.UpdateCurrentActionText("Player 1 wins, as they've reached " + WinningScore + " points!");
-                //_menuButton.SetActive(true);
                 return;
             }
-            photonView.RPC("ResetTurnPhase", RpcTarget.All);    // Andrea SD
-
-            //_gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText("Player 2 is starting their turn.");
-            photonView.RPC("ChangeTurn", RpcTarget.All, 2);     // Andrea SD
+            CallChangeTurn(2);      // ASD
         }
         else
         {
             if (P2Score >= WinningScore)
             {
-                /*_gcm.UpdateCurrentActionText("Player 2 wins, as they've reached 15 points!");
-                _gcm.UpdateOpponentActionText("Player 2 wins, as they've reached 15 points!");    //Andrea SD
-                _menuButton.SetActive(true);
-                return;*/
-
                 FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
-
-                //_gcm.UpdateCurrentActionText("Player 2 wins, as they've reached " + WinningScore + " points!");
-                //_menuButton.SetActive(true);
                 return;
             }
-
-            CurrentTurnPhase = 0;
-            photonView.RPC("IncrementRound", RpcTarget.All);    // Andrea SD
-
-            //_gcm.UpdateCurrentActionText("Player " + CurrentPlayer + ", start your turn.");
             _gcm.UpdateCurrentActionText("Player 1 is starting their turn.");
-            photonView.RPC("ChangeTurn", RpcTarget.All, 1);     // Andrea SD
+
+            CallChangeTurn(1);  // ASD
+            CallIncrementRound();   // ASD
 
             StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Round", 1);
         }
 
         //Enables the start button for the other player then disables your own board 
         DisableBoard();
-        photonView.RPC("EnableBoard", RpcTarget.Others);
-
-        if (CurrentRound % 2 == 0)
-        {
-            FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Night);
-        }
-        else
-        {
-            FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
-        }
-
         //Refresh persistent cards.
         ShovelUsed = false;
         MorningJogUsed = false; 
     }
-
 
     /// <summary>
     /// Loads the Menu
@@ -776,6 +713,96 @@ public class OnlineActionManager : MonoBehaviourPun
     public void ToMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    /// <summary>
+    /// Disables & hides start turn button
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void DisableStartButton()
+    {
+        _gcm.StartTurnButton.SetActive(false);
+    }
+
+    /// <summary>
+    /// Disables all interactions by the player. This occurs when it is not
+    /// their turn. Enables the board for the other player.
+    ///
+    /// Author: Andrea SD
+    /// </summary>
+    private void DisableBoard()
+    { 
+        DisableStartButton();
+    }
+
+    #region RPC Functions
+
+    /// <summary>
+    /// Calls the UpdateScore RPC
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> how much the score is changing by </param>
+    public void CallUpdateScore(int player, int amount)
+    {
+        photonView.RPC("UpdateScore", RpcTarget.All, player, amount);
+    }
+
+    /// <summary>
+    /// Updates the players scores across the network
+    /// </summary>
+    /// <param name="player"> player who's score updating (1 or 2) </param>
+    /// <param name="amount"> amount the player's score is changing by
+    /// </param>
+    [PunRPC]
+    public void UpdateScore(int player, int amount)
+    {
+        if (photonView.IsMine)
+        {
+            _scoreTextAnimator.Play("ScorePoint");
+        }
+        if (player == 1)
+        {
+            P1Score += amount;
+        }
+        else
+        {
+            P2Score += amount;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC that changes the turn to player
+    /// </summary>
+    /// <param name="player"></param>
+    public void CallChangeTurn(int player)
+    {
+        photonView.RPC("ChangeTurn", RpcTarget.All, player);
+    }
+
+    /// <summary>
+    /// Changes the turn to the next player for online play
+    ///
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> Player who's turn it is changing to </param>
+    [PunRPC]
+    private void ChangeTurn(int player)
+    {
+        CurrentPlayer = player;
+        ResetTurnPhase();
+    }
+
+    /// <summary>
+    /// Calls the RPC that resets the current turn phase
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallPhaseReset()
+    {
+        photonView.RPC("ResetTurnPhase", RpcTarget.All);
     }
 
     /// <summary>
@@ -790,6 +817,14 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Calls the RPC that increments the round by 1
+    /// </summary>
+    public void CallIncrementRound()
+    {
+        photonView.RPC("IncrementRound", RpcTarget.All);
+    }
+
+    /// <summary>
     /// Increases the round number by 1 across all clients
     /// 
     /// Author: Andrea SD
@@ -801,87 +836,88 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Enables & shows the start turn button
+    /// Calls the RPC that changes the game from day to night depending
+    /// on the round
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void CallDayNight()
+    {
+        photonView.RPC("ChangeDayNight", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Changes the game from day to night depending on the round
     /// 
     /// Author: Andrea SD
     /// </summary>
     [PunRPC]
-    public void EnableStartButton()
+    public void ChangeDayNight()
     {
-        _gcm.StartTurnButton.SetActive(true);
+        if (CurrentRound % 2 == 0)
+        {
+            FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Night);
+        }
+        else
+        {
+            FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
+        }
     }
 
     /// <summary>
-    /// Disables & hides start turn button
+    /// Calls the RPC that resets the collection values to 0 for a player
     /// 
     /// Author: Andrea SD
     /// </summary>
-    public void DisableStartButton()
+    /// <param name="player"></param>
+    public void CallEmptyCollection(int player)
     {
-        _gcm.StartTurnButton.SetActive(false);
+        photonView.RPC("EmptyCollection", RpcTarget.All, player);
     }
 
     /// <summary>
-    /// Changes the turn to the next player for online play
-    ///
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="player"> Player who's turn it is changing to </param>
-    [PunRPC]
-    private void ChangeTurn(int player)
-    {
-        CurrentPlayer = player;
-    }
-
-    /// <summary>
-    /// Disables all interactions by the player. This occurs when it is not
-    /// their turn. Enables the board for the other player.
-    ///
-    /// Author: Andrea SD
-    /// </summary>
-    private void DisableBoard()
-    { 
-        _gcm.ShowOpponentInfo();
-        DisableStartButton();
-
-        //EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-        //eventSystem.enabled = false;
-
-        photonView.RPC("EnableBoard", RpcTarget.Others);
-    }
-
-    /// <summary>
-    /// Enables all interactions by the player. This occurs when their turn is
-    /// resumed.
+    /// Sets all collected pieces value to 0
     /// 
     /// Author: Andrea SD
     /// </summary>
+    /// <param name="player"> player who's collection is emptied </param>
     [PunRPC]
-    private void EnableBoard()
+    private void EmptyCollection(int player)
     {
-        EnableStartButton();
-
-        //EventSystem eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-        //eventSystem.enabled = true;
+        switch (player)
+        {
+            case 1:
+                P1CollectedPile[0] = 0;
+                P1CollectedPile[1] = 0;
+                P1CollectedPile[2] = 0;
+                P1CollectedPile[3] = 0;
+                break;
+            case 2:
+                P2CollectedPile[0] = 0;
+                P2CollectedPile[1] = 0;
+                P2CollectedPile[2] = 0;
+                P2CollectedPile[3] = 0;
+                break;
+        }
     }
 
     /// <summary>
-    /// Calls the PunRPC to update of the collected piles for a specific player
+    /// Calls the RPC to update of the collected piles for a specific player
     /// 
     /// Author: Andrea SD
     /// </summary>
     /// <param name="function"> 0 = UpdateCollected, 1 = UpdateRefined </param>
-    /// <param name="player"> 1 or 2</param>
+    /// <param name="player"> 1 or 2 </param>
     /// <param name="material"> 0 = Grass, 1 = Dirt, 2 = Stone, 3 = Gold 
     /// </param>
     /// <param name="amount"> How much the amount is changing </param>
-    public void CallUpdatePieces(int function, int player, int material, 
+    public void CallUpdatePieces(int function, int player, int material,
         int amount)
     {
-        switch(function)
+        switch (function)
         {
             case 0:
-                photonView.RPC("UpdateCollected", RpcTarget.All, player, 
+                photonView.RPC("UpdateCollected", RpcTarget.All, player,
                     material, amount);
                 break;
             case 1:
@@ -903,7 +939,7 @@ public class OnlineActionManager : MonoBehaviourPun
     [PunRPC]
     private void UpdateCollected(int player, int material, int amount)
     {
-        switch(player)
+        switch (player)
         {
             case 1:
                 P1CollectedPile[material] += amount;
@@ -938,65 +974,56 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Sets all collected pieces value to 0
+    /// Calls the RPC to modify the supply pile across all clients
     /// 
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="player"> player who's collection is emptied </param>
-    [PunRPC]
-    private void EmptyCollection(int player)
+    /// <param name="pieceType"></param>
+    /// <param name="amount"></param>
+    public void SupplyPileRPC(int pieceType, int amount)
     {
-        switch(player)
+        photonView.RPC("ModifySupplyPile", RpcTarget.All, pieceType, amount);
+    }
+
+    /// <summary>
+    /// Removes pieces from the supply pile
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="pieceType"> type of piece being removed </param>
+    /// <param name="amount"> amount being removed </param>
+    [PunRPC]
+    public void ModifySupplyPile(int pieceType, int amount)
+    {
+        switch (pieceType)
         {
+            case 0:
+                SupplyPile[0] -= amount;
+                break;
             case 1:
-                // P1CollectedPile.Initialize();
-                P1CollectedPile[0] = 0;
-                P1CollectedPile[1] = 0;
-                P1CollectedPile[2] = 0;
-                P1CollectedPile[3] = 0;
+                SupplyPile[1] -= amount;
                 break;
             case 2:
-               // P2CollectedPile.Initialize();
-                P2CollectedPile[0] = 0;
-                P2CollectedPile[1] = 0;
-                P2CollectedPile[2] = 0;
-                P2CollectedPile[3] = 0;
+                SupplyPile[2] -= amount;
                 break;
-        }    
+        }
+    }
+
+    public void CallStartButton()
+    {
+        photonView.RPC("EnableStartButton", RpcTarget.All);
     }
 
     /// <summary>
-    /// Calls the UpdateScore RPC
+    /// Enables & shows the start turn button
     /// 
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="player"> 1 or 2 </param>
-    /// <param name="amount"> how much the score is changing by </param>
-    public void CallUpdateScore(int player, int amount)
+    [PunRPC]
+    public void EnableStartButton()
     {
-        photonView.RPC("UpdateScore", RpcTarget.All, player, amount);
+        _gcm.StartTurnButton.SetActive(true);
     }
 
-    /// <summary>
-    /// Updates the players scores across the network
-    /// </summary>
-    /// <param name="player"> player who's score updating (1 or 2) </param>
-    /// <param name="amount"> amount the player's score is changing by
-    /// </param>
-    [PunRPC]
-    public void UpdateScore(int player, int amount)
-    {
-        if (photonView.IsMine)
-        {
-            _scoreTextAnimator.Play("ScorePoint");
-        }
-        if (player == 1)
-        {
-            P1Score += amount;
-        }
-        else
-        {
-            P2Score += amount;
-        }            
-    }
+    #endregion
 }

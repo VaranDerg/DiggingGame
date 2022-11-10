@@ -55,40 +55,17 @@ public class OnlineCardManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Calls the RPC AddCards() which adds cards in the scene to their 
-    /// respective decks.
-    /// 
-    /// Author: Andrea SD
+    /// Runs "AddCards" and "PrepareOpenHandSlots."
     /// </summary>
-    private void CallAddCards()
+    private void Start()
     {
-        photonView.RPC("AddCards", RpcTarget.AllBuffered);
-    }
-
-
-    /// <summary>
-    /// Adds cards in the scene to their respective decks.
-    /// 
-    /// Edited: Andrea SD - Turned into RPC
-    /// </summary>
-    [PunRPC]
-    private void AddCards()
-    {
-        int uCardAmount = 0;
-        int gCardAmount = 0;
-        foreach(GameObject uCard in GameObject.FindGameObjectsWithTag("Card"))
+        // Called by master client only
+        if (PhotonNetwork.IsMasterClient)    // Andrea SD
         {
-            _uDeck.Add(uCard);
-            uCard.SetActive(false);
-            uCardAmount++;
+            CallAddCards();
         }
-        foreach(GameObject gCard in GameObject.FindGameObjectsWithTag("GoldCard"))
-        {
-            _gDeck.Add(gCard);
-            gCard.SetActive(false);
-            gCardAmount++;
-        }
-        //Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
+        PrepareOpenHandSlots();
+        UpdatePileText();
     }
 
     /// <summary>
@@ -110,20 +87,6 @@ public class OnlineCardManager : MonoBehaviourPun
         }
 
         //Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
-    }
-
-    /// <summary>
-    /// Runs "AddCards" and "PrepareOpenHandSlots."
-    /// </summary>
-    private void Start()
-    {
-        // Called by master client only
-        if(PhotonNetwork.IsMasterClient)    // Andrea SD
-        {
-            CallAddCards();
-        }  
-        PrepareOpenHandSlots();
-        UpdatePileText();
     }
 
     /// <summary>
@@ -253,40 +216,6 @@ public class OnlineCardManager : MonoBehaviourPun
             }
         }
     }
-
-    /// <summary>
-    /// Calls the RemoveCard RPC which removes the card at deckPos from deck
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
-    /// <param name="deckPos"> Position of the card in the deck </param>
-    private void CallRemoveCard(string deck, int deckPos)
-    {
-        photonView.RPC("RemoveCard", RpcTarget.All, deck, deckPos);
-    }
-
-    /// <summary>
-    /// Removes the card at deckPos from deck
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
-    /// <param name="deckPos"> Position of the card in the deck </param>
-    [PunRPC]
-    public void RemoveCard(string deck, int deckPos)
-    {
-        switch(deck)
-        {
-            case "Universal":
-                _uDeck.RemoveAt(deckPos);
-                break;
-            default:
-                _gDeck.RemoveAt(deckPos);
-                break;
-        }
-    }
-
 
     /// <summary>
     /// Prepares selection value for checks related to spending cards.
@@ -419,51 +348,7 @@ public class OnlineCardManager : MonoBehaviourPun
         }
 
         SelectedCards.Clear();
-    }
-   
-    /// <summary>
-    /// Calls the ShuffleDiscardPile RPC which shuffles the discard pile back
-    /// into the main deck.
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    private void CallShuffleDiscard()
-    {
-        photonView.RPC("ShuffleDiscardPile", RpcTarget.All);
-    }
-
-    /// <summary>
-    /// Shuffles the discard pile back into the main deck.
-    /// 
-    /// Edited: Andrea SD - Turned into an RPC for online use
-    /// </summary>
-    [PunRPC]
-    public void ShuffleDiscardPile()
-    {
-        if(DPile.Count >= 1)
-        {
-            int shuffledUCards = 0;
-            int shuffledGCards = 0;
-
-            foreach(GameObject card in DPile)
-            {
-                _uDeck.Add(card);
-                if(card.CompareTag("Card"))
-                {
-                    shuffledUCards++;
-                }
-                else if(card.CompareTag("GoldCard"))
-                {
-                    shuffledGCards++;
-                }
-            }
-
-            //Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
-
-            DPile.Clear();
-            UpdatePileText();
-        }
-    }
+    }  
 
     /// <summary>
     /// Draws cards for a selected player.
@@ -611,4 +496,121 @@ public class OnlineCardManager : MonoBehaviourPun
             }
         }
     }
+
+    #region RPC Functions
+
+    /// <summary>
+    /// Calls the ShuffleDiscardPile RPC which shuffles the discard pile back
+    /// into the main deck.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void CallShuffleDiscard()
+    {
+        photonView.RPC("ShuffleDiscardPile", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Shuffles the discard pile back into the main deck.
+    /// 
+    /// Edited: Andrea SD - Turned into an RPC for online use
+    /// </summary>
+    [PunRPC]
+    public void ShuffleDiscardPile()
+    {
+        if (DPile.Count >= 1)
+        {
+            int shuffledUCards = 0;
+            int shuffledGCards = 0;
+
+            foreach (GameObject card in DPile)
+            {
+                _uDeck.Add(card);
+                if (card.CompareTag("Card"))
+                {
+                    shuffledUCards++;
+                }
+                else if (card.CompareTag("GoldCard"))
+                {
+                    shuffledGCards++;
+                }
+            }
+
+            //Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
+
+            DPile.Clear();
+            UpdatePileText();
+        }
+    }
+
+    /// <summary>
+    /// Calls the RemoveCard RPC which removes the card at deckPos from deck
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
+    /// <param name="deckPos"> Position of the card in the deck </param>
+    private void CallRemoveCard(string deck, int deckPos)
+    {
+        photonView.RPC("RemoveCard", RpcTarget.All, deck, deckPos);
+    }
+
+    /// <summary>
+    /// Removes the card at deckPos from deck
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
+    /// <param name="deckPos"> Position of the card in the deck </param>
+    [PunRPC]
+    public void RemoveCard(string deck, int deckPos)
+    {
+        switch (deck)
+        {
+            case "Universal":
+                _uDeck.RemoveAt(deckPos);
+                break;
+            default:
+                _gDeck.RemoveAt(deckPos);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC AddCards() which adds cards in the scene to their 
+    /// respective decks.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void CallAddCards()
+    {
+        photonView.RPC("AddCards", RpcTarget.AllBuffered);
+    }
+
+    /// <summary>
+    /// Adds cards in the scene to their respective decks.
+    /// 
+    /// Edited: Andrea SD - Turned into RPC
+    /// </summary>
+    [PunRPC]
+    private void AddCards()
+    {
+        int uCardAmount = 0;
+        int gCardAmount = 0;
+        foreach (GameObject uCard in GameObject.FindGameObjectsWithTag("Card"))
+        {
+            _uDeck.Add(uCard);
+            uCard.SetActive(false);
+            uCardAmount++;
+        }
+        foreach (GameObject gCard in GameObject.FindGameObjectsWithTag("GoldCard"))
+        {
+            _gDeck.Add(gCard);
+            gCard.SetActive(false);
+            gCardAmount++;
+        }
+        //Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
+    }
+
+    #endregion
 }
