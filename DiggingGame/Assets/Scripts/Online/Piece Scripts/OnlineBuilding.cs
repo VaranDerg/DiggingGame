@@ -709,6 +709,10 @@ public class OnlineBuilding : MonoBehaviourPun
     [PunRPC]
     public void SetCurrentAnimCoroutine()
     {
+        if (_currentAnimCoroutine != null)
+        {
+            StopCoroutine(_currentAnimCoroutine);
+        }
         _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
     }
 

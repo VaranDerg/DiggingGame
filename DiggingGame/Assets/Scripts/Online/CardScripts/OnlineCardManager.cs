@@ -65,12 +65,13 @@ public class OnlineCardManager : MonoBehaviourPun
         photonView.RPC("AddCards", RpcTarget.AllBuffered);
     }
 
-    [PunRPC]
+
     /// <summary>
     /// Adds cards in the scene to their respective decks.
     /// 
     /// Edited: Andrea SD - Turned into RPC
     /// </summary>
+    [PunRPC]
     private void AddCards()
     {
         int uCardAmount = 0;
@@ -119,7 +120,7 @@ public class OnlineCardManager : MonoBehaviourPun
         // Called by master client only
         if(PhotonNetwork.IsMasterClient)    // Andrea SD
         {
-            AddCards();
+            CallAddCards();
         }  
         PrepareOpenHandSlots();
         UpdatePileText();
