@@ -237,16 +237,19 @@ public class PieceController : MonoBehaviour
                         SetPieceState(2);
                         _grassPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
+                        FindObjectOfType<AudioManager>().Play("DigPiece");
                         break;
                     case GameState.Six:
                         SetPieceState(2);
                         _grassPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
+                        FindObjectOfType<AudioManager>().Play("DigPiece");
                         break;
                     case GameState.Two:
                         SetPieceState(3);
                         _dirtPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+                        FindObjectOfType<AudioManager>().Play("DigPiece");
                         break;
                     case GameState.Three:
                         SetPieceState(4);
@@ -255,11 +258,13 @@ public class PieceController : MonoBehaviour
                         {
                             _goldPS.Play();
                             _am.CollectTile(_am.CurrentPlayer, "Gold", true);
+                            FindObjectOfType<AudioManager>().Play("DigGold");
                         }
                         else
                         {
                             _stonePS.Play();
                             _am.CollectTile(_am.CurrentPlayer, "Stone", true);
+                            FindObjectOfType<AudioManager>().Play("DigPiece");
                         }
 
                         break;
@@ -427,6 +432,8 @@ public class PieceController : MonoBehaviour
 
             ShowHidePlaceable(false);
 
+            FindObjectOfType<AudioManager>().Play("PlacePiece");
+
             switch (ObjState)
             {
                 case GameState.Two:
@@ -460,6 +467,7 @@ public class PieceController : MonoBehaviour
 
         pawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
         _pawnIsMoving = true;
+        FindObjectOfType<AudioManager>().Play("MovePawn");
 
         //Start anim?
         yield return new WaitForSeconds(_am.PawnMoveAnimTime);
@@ -782,26 +790,32 @@ public class PieceController : MonoBehaviour
             if(buildingArrayNum == 0)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Factory";
+                FindObjectOfType<AudioManager>().Play("BuildFactory");
             }
             else if(buildingArrayNum == 1)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Burrow";
+                FindObjectOfType<AudioManager>().Play("BuildBurrow");
             }
             else if(buildingArrayNum == 2)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Grass Mine";
+                FindObjectOfType<AudioManager>().Play("BuildMine");
             }
             else if(buildingArrayNum == 3)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Dirt Mine";
+                FindObjectOfType<AudioManager>().Play("BuildMine");
             }
             else if(buildingArrayNum == 4)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Stone Mine";
+                FindObjectOfType<AudioManager>().Play("BuildMine");
             }
             else if(buildingArrayNum == 5)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Gold Mine";
+                FindObjectOfType<AudioManager>().Play("BuildMine");
             }
             thisBuilding.GetComponent<Building>().SuitOfPiece = pieceSuit;
             thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;
@@ -871,7 +885,9 @@ public class PieceController : MonoBehaviour
 
             if (spawnPawn)
             {
-                if(_am.CurrentPlayer == 1)
+                FindObjectOfType<AudioManager>().Play("SpawnPawn");
+
+                if (_am.CurrentPlayer == 1)
                 {
                     GameObject newPawn = Instantiate(_molePawn, _buildingSlot);
                     newPawn.GetComponent<PlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);

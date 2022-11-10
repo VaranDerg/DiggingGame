@@ -240,6 +240,7 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Shovel(pCardObject));
                 break;
             case "Thunderstorm!":
+                FindObjectOfType<AudioManager>().Play("LightningStrike");
                 StartCoroutine(Thunderstorm());
                 break;
             case "Compaction":
@@ -288,6 +289,7 @@ public class CardEffects : MonoBehaviour
                 Teleportation();
                 break;
             case "Tornado!":
+                FindObjectOfType<AudioManager>().Play("LightningStrike");
                 StartCoroutine(Tornado());
                 break;
             case "Transmutation":
@@ -312,18 +314,22 @@ public class CardEffects : MonoBehaviour
         if(suit == "Grass")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _grassABar;
+            FindObjectOfType<AudioManager>().Play("ActivateGrassCard");
         }
         else if(suit == "Dirt")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _dirtABar;
+            FindObjectOfType<AudioManager>().Play("ActivateDirtCard");
         }
         else if(suit == "Stone")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _stoneABar;
+            FindObjectOfType<AudioManager>().Play("ActivateStoneCard");
         }
         else if(suit == "Gold")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _goldABar;
+            FindObjectOfType<AudioManager>().Play("ActivateGoldCard");
         }
 
         if (start)
@@ -469,6 +475,9 @@ public class CardEffects : MonoBehaviour
         //StatManager is a statistic storing Class. 
         StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Steal", 1);
         //Updates variables. These are used to track how many more pieces a player can steal.
+
+        FindObjectOfType<AudioManager>().Play("StealPiece");
+
         _remainingPiecesToSteal--;
         _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
         _gcm.UpdateTextBothPlayers();

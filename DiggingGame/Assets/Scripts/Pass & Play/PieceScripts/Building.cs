@@ -221,10 +221,12 @@ public class Building : MonoBehaviour
         if(damageDiceVisual == 4)
         {
             _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + "'s " + BuildingType + " has taken massive damage!");
+            FindObjectOfType<AudioManager>().Play("DestroyBuilding");
         }
         else if(damageDiceVisual == 3 || damageDiceVisual == 2)
         {
             _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + "'s " + BuildingType + " has taken damage!");
+            FindObjectOfType<AudioManager>().Play("DamageBuilding");
         }
         else if(damageDiceVisual == 1)
         {

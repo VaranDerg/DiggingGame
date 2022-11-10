@@ -95,5 +95,5 @@ public class AudioManager : MonoBehaviour
     }
 }
 
-// FindObjectOfType<AudioManger>().Play("NameofSoundEffect");//
+// FindObjectOfType<AudioManager>().Play("NameofSoundEffect");//
 //this line of code is able to be placed into any script

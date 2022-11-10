@@ -149,6 +149,8 @@ public class CardManager : MonoBehaviour
             {
                 if(P1OpenHandPositions[i] == true)
                 {
+                    FindObjectOfType<AudioManager>().Play("DrawCard");
+
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<CardController>().HandPosition = i;
@@ -188,6 +190,8 @@ public class CardManager : MonoBehaviour
             {
                 if (P2OpenHandPositions[i] == true)
                 {
+                    FindObjectOfType<AudioManager>().Play("DrawCard");
+
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<CardController>().HandPosition = i;
@@ -499,6 +503,7 @@ public class CardManager : MonoBehaviour
             for(int i = 0; i < P1Hand.Count; i++)
             {
                 P1Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
+                FindObjectOfType<AudioManager>().Play("HideCard");
                 yield return new WaitForSeconds(_cardShowHideTime);
                 P1Hand[i].SetActive(false);
             }
@@ -508,6 +513,7 @@ public class CardManager : MonoBehaviour
             for (int i = 0; i < P2Hand.Count; i++)
             {
                 P2Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
+                FindObjectOfType<AudioManager>().Play("HideCard");
                 yield return new WaitForSeconds(_cardShowHideTime);
                 P2Hand[i].SetActive(false);
             }

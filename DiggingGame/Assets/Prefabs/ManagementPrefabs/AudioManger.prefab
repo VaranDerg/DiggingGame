@@ -46,4 +46,158 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _musicMixerGroup: {fileID: 2229216555446623194, guid: 6ef975e0af118ea4dbd6821684f0badb, type: 2}
   _soundEffectsMixerGroup: {fileID: 3602589269361353759, guid: 6ef975e0af118ea4dbd6821684f0badb, type: 2}
-  Sounds: []
+  Sounds:
+  - audioType: 0
+    name: ActivateDirtCard
+    clip: {fileID: 8300000, guid: 3a3298092d05217469eb6ef3fd4b40c2, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: ActivateGoldCard
+    clip: {fileID: 8300000, guid: 862a645976d593d4a87d5be55124d168, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: ActivateGrassCard
+    clip: {fileID: 8300000, guid: 81e1912a79a3dc245a2ca4adf22f009c, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: ActivateStoneCard
+    clip: {fileID: 8300000, guid: 22a128d31f7ac8e4e95fab0f677ae62c, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: BuildBurrow
+    clip: {fileID: 8300000, guid: cd954be65e658424b8a998552887c8ca, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: BuildFactory
+    clip: {fileID: 8300000, guid: cf22eeeb869d66b45b0796550ebaec7a, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: BuildMine
+    clip: {fileID: 8300000, guid: 7c9d643cef4e3a94b99a1f117e222a4d, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: DamageBuilding
+    clip: {fileID: 8300000, guid: cd4c73b36e33460408af66f1d6ca054c, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: DestroyBuilding
+    clip: {fileID: 8300000, guid: 5c0b85a898a29e34e8592d3aeb187474, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: DigGold
+    clip: {fileID: 8300000, guid: 8525c3ca8ef5d8941927c536b8bbde16, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: DigPiece
+    clip: {fileID: 8300000, guid: 14178c55106cd524b8c8fb45a1371369, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: DiscardCard
+    clip: {fileID: 8300000, guid: 8277ba1d9ed5a204793802e3be317eab, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: DrawCard
+    clip: {fileID: 8300000, guid: 6c6dffd19a98c9146a00e0048a8620b3, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: HideCard
+    clip: {fileID: 8300000, guid: e65985ba05b6980408c9538776f6b7d2, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: LightningStrike
+    clip: {fileID: 8300000, guid: 8f386214c8fe293428b26286cb4169bc, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: MovePawn
+    clip: {fileID: 8300000, guid: 608f9b170003ad34b886dbad372a8124, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: SpawnPawn
+    clip: {fileID: 8300000, guid: 8c1df54958c7d5242aea2e792c803b65, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: LoadScene
+    clip: {fileID: 8300000, guid: eaf70529d8aa69042b14b6c2c449001d, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: PlacePiece
+    clip: {fileID: 8300000, guid: 760b5a3c047afb147b1121ce817d4600, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: RetrieveGold
+    clip: {fileID: 8300000, guid: 70f6fbf151aa0d846a7b5336e4677fff, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: ScorePoint
+    clip: {fileID: 8300000, guid: 4b1179d50f7d9a24a8c1e70457888569, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - audioType: 0
+    name: StealPiece
+    clip: {fileID: 8300000, guid: dc583680ab7614b40a4cbf7d6550173a, type: 3}
+    volume: 0.25
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}

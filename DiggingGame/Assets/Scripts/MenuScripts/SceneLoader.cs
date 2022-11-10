@@ -45,6 +45,7 @@ public class SceneLoader : MonoBehaviour
     private IEnumerator SceneLoadingCoroutine(string sceneName)
     {
         _anims.SetTrigger("Start");
+        FindObjectOfType<AudioManager>().Play("LoadScene");
 
         yield return new WaitForSeconds(_transitionTime);
 

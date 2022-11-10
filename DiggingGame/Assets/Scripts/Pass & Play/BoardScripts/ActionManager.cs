@@ -134,6 +134,7 @@ public class ActionManager : MonoBehaviour
 
         _gcm.UpdateTextBothPlayers();
         _scoreTextAnimator.Play("ScorePoint");
+        FindObjectOfType<AudioManager>().Play("ScorePoint");
     }
 
     /// <summary>
@@ -382,6 +383,8 @@ public class ActionManager : MonoBehaviour
 
                 StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
 
+                FindObjectOfType<AudioManager>().Play("RetrieveGold");
+
                 StartCoroutine(_cm.DrawCard("Gold"));
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
@@ -414,6 +417,8 @@ public class ActionManager : MonoBehaviour
                 //End of Geologist code.
 
                 StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
+
+                FindObjectOfType<AudioManager>().Play("RetrieveGold");
 
                 StartCoroutine(_cm.DrawCard("Gold"));
                 P2RefinedPile[3]--;

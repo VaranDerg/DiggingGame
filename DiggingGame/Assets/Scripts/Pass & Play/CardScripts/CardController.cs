@@ -412,6 +412,7 @@ public class CardController : MonoBehaviour
         }
 
         _cardAnimator.Play("CardDiscard");
+        FindObjectOfType<AudioManager>().Play("DiscardCard");
         _gettingDiscarded = true;
         yield return new WaitForSeconds(_discardAnimWaitTime);
         _gettingDiscarded = false;
