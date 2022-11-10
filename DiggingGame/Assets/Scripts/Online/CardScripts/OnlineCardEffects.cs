@@ -364,7 +364,8 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
     public void StealPiece(string suit)
     {
-        if(_am.CurrentPlayer == 1)
+        //Takes a piece from the opponent based on "suit"
+        if (_am.CurrentPlayer == 1)
         {
             if(suit == "Grass")
             {
@@ -486,6 +487,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <param name="suit">"Grass" "Dirt" "Stone" "Gold" or "Point"</param>
     public void ClaimPiece(string suit)
     {
+        //Very similar to StealPiece, but takes the Piece from the Supply instead.
         if (suit == "Grass")
         {
             if (_am.SupplyPile[0] >= PiecesToClaim)
@@ -700,6 +702,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <param name="type">"Factory" "Burrow" or "Mine"</param>
     public void SelectBuildingToDamage(int buildingIndex)
     {
+        //A simple selection method for Tornado performed through a UI button.
         _tornadoBuildingToDamage = buildingIndex;
         _tornadoBuildingChosen = true;
     }
@@ -739,11 +742,14 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Flowers()
     {
+        //Hoo boy, here we go. Flowers has fairly identical logic to FERTILIZER, COMPACTION, and GARDEN. I'll give the most detail here.
         _gcm.DisableListObjects();
+        //Similar to regeneration.
         bool enoughPieces;
         int newPieceCount = 0;
         int openPieces = 0;
-        if(_am.SupplyPile[0] >= _flowersPiecesToPlace)
+        //enoughPieces is true if the Supply has enough Pieces to place the full effect of Flowers.
+        if (_am.SupplyPile[0] >= _flowersPiecesToPlace)
         {
             enoughPieces = true;
         }
@@ -755,13 +761,16 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if(piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Two)
+            //If a piece is Dirt...
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Two)
             {
+                //It cannot have a Pawn or Building...
                 if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
 
+                //If it's not already marked... Up openPieces by 1.
                 if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                 {
                     openPieces++;
@@ -770,7 +779,8 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
-        if(openPieces == 0)
+        //If there's no open pieces, break out of the Coroutine.
+        if (openPieces == 0)
         {
             PlacedPieces = 0;
             _bm.DisableAllBoardInteractions();
@@ -779,37 +789,67 @@ public class OnlineCardEffects : MonoBehaviourPun
             yield break;
         }
 
+        //SetActiveCollider enables one group of colliders and disables every other group. Unity hates overlapping colliders when it comes to mouse interaction.
+        _bm.SetActiveCollider("Board");
+
         PlacedPieces = 0;
-        if (enoughPieces && openPieces >= _flowersPiecesToPlace)
+        int supplyAmount = _am.SupplyPile[0];
+        //If the supply has enough pieces...
+        if (enoughPieces)
         {
-            while (PlacedPieces != _flowersPiecesToPlace)
+            //If the board has enough open pieces for Flowers...
+            if (openPieces >= _flowersPiecesToPlace)
             {
-                _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto Dirt Pieces!");
-                yield return null;
+                //Wait until PlacedPieces equals flowersPiecesToPlace. PlacedPieces is updated in PieceController, every time a Piece is Placed.
+                while (PlacedPieces != _flowersPiecesToPlace)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + _flowersPiecesToPlace + " Grass Pieces onto Dirt Pieces!");
+                    yield return null;
+                }
+            }
+            //If not...
+            else
+            {
+                //Place onto every open Piece possible.
+                while (PlacedPieces != openPieces)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces onto Dirt Pieces!");
+                    yield return null;
+                }
             }
         }
-        else if (openPieces >= newPieceCount)
-        {
-            while (PlacedPieces != newPieceCount)
-            {
-                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Grass Pieces onto Dirt Pieces!");
-                yield return null;
-            }
-        }
+        //If the Supply doesn't have enough pieces...
         else
         {
-            while (PlacedPieces != openPieces)
+            //If there's enough open pieces for the current supply amount...
+            if (openPieces >= supplyAmount)
             {
-                _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces onto Dirt Pieces!");
-                yield return null;
+                //Wait until the Supply is emptied.
+                while (PlacedPieces != supplyAmount)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + supplyAmount + " Grass Pieces onto Dirt Pieces!");
+                    yield return null;
+                }
+            }
+            //If not...
+            else
+            {
+                //Place onto every open Piece. This could work for 0 as well.
+                while (PlacedPieces != openPieces)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + openPieces + " Grass Pieces onto Dirt Pieces!");
+                    yield return null;
+                }
             }
         }
 
+        //If enough pieces are placed, Score a point.
         if (enoughPieces)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
 
+        //Reset variables just in case, and go back.
         PlacedPieces = 0;
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
@@ -1041,9 +1081,40 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Overgrowth()
     {
+        //Overgrowth damages buildings. This works in tandem with the Building class heavily. This has similar logic to FLOOD, THUNDERSTORM, EARTHQUAKE, and TORNADO.
         _gcm.DisableListObjects();
+
+        //First, checks to see if any buildings are on the board.
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            //Doesn't count your own buildings!
+            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            //Must be on Grass
+            if (building.GetComponent<Building>().SuitOfPiece != "Grass")
+            {
+                continue;
+            }
+
+            //Sets to true if the code reaches this point
+            areThereBuildings = true;
+        }
+
+        //Goes back if it does not.
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Overgrowth!");
+            yield break;
+        }
+
         _gcm.UpdateCurrentActionText("Select a building on a Grass Piece to damage!");
 
+        //Marks every building as Damageable, if they're not owned by the Current player.
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
@@ -1060,7 +1131,8 @@ public class OnlineCardEffects : MonoBehaviourPun
         _bm.SetActiveCollider("Building");
         CurrentDamages = 0;
 
-        if(buildingCount < AllowedDamages)
+        //Similar logic to other Methods. AllowedDamages is a default of 1 normally, so this is basically 1 or 0. If we ever want to buff Overgrowth, it's very easy!
+        if (buildingCount < AllowedDamages)
         {
             AllowedDamages = buildingCount;
         }
@@ -1069,13 +1141,14 @@ public class OnlineCardEffects : MonoBehaviourPun
             AllowedDamages = _overgrowthDamages;
         }
 
-        while(CurrentDamages != AllowedDamages)
+        while (CurrentDamages != AllowedDamages)
         {
             yield return null;
         }
 
         CurrentDamages = 0;
 
+        //Disables Buildings' damage state.
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
             building.GetComponent<Building>().PrepBuilidingDamaging(false);
@@ -1092,6 +1165,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator PlannedProfit(GameObject cardBody)
     {
+        //Planned Profit's code can be found in PieceController's Building Methods.
         FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
@@ -1230,6 +1304,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Dam(GameObject cardBody)
     {
+        //Dam's logic can be found in DamageBuilding (Building).
         FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
@@ -1244,6 +1319,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator DirtyThief()
     {
+        //Identical logic to Thief, but used different piles.
         _gcm.UpdateCurrentActionText("Complete Dirty Thief actions!");
         _thiefUI.SetActive(true);
         _stoneThiefButton.SetActive(true);
@@ -1387,7 +1463,6 @@ public class OnlineCardEffects : MonoBehaviourPun
     {
         _gcm.DisableListObjects();
         bool enoughPieces;
-        int newPieceCount = 0;
         int openPieces = 0;
         if (_am.SupplyPile[1] >= _fertilizerPiecesToPlace)
         {
@@ -1395,8 +1470,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
         else
         {
-            newPieceCount = _am.SupplyPile[1];
             enoughPieces = false;
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
         }
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
@@ -1426,28 +1505,43 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
 
         PlacedPieces = 0;
-        if (enoughPieces && openPieces >= _fertilizerPiecesToPlace)
+        int supplyAmount = _am.SupplyPile[1];
+        if (enoughPieces)
         {
-            while (PlacedPieces != _fertilizerPiecesToPlace)
+            if (openPieces >= _fertilizerPiecesToPlace)
             {
-                _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces onto Stone Pieces!");
-                yield return null;
+                while (PlacedPieces != _fertilizerPiecesToPlace)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + _fertilizerPiecesToPlace + " Dirt Pieces onto Stone Pieces!");
+                    yield return null;
+                }
             }
-        }
-        else if (openPieces >= newPieceCount)
-        {
-            while (PlacedPieces != newPieceCount)
+            else
             {
-                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Dirt Pieces onto Stone Pieces!");
-                yield return null;
+                while (PlacedPieces != openPieces)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + openPieces + " Dirt Pieces onto Stone Pieces!");
+                    yield return null;
+                }
             }
         }
         else
         {
-            while (PlacedPieces != openPieces)
+            if (openPieces >= supplyAmount)
             {
-                _gcm.UpdateCurrentActionText("Place " + openPieces + " Dirt Pieces onto Stone Pieces!");
-                yield return null;
+                while (PlacedPieces != supplyAmount)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + supplyAmount + " Dirt Pieces onto Stone Pieces!");
+                    yield return null;
+                }
+            }
+            else
+            {
+                while (PlacedPieces != openPieces)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + openPieces + " Dirt Pieces onto Stone Pieces!");
+                    yield return null;
+                }
             }
         }
 
@@ -1467,7 +1561,32 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Flood()
     {
+        //View Overgrowth for more detail of this code.
         _gcm.DisableListObjects();
+
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            if (building.GetComponent<Building>().SuitOfPiece == "Stone" || building.GetComponent<Building>().SuitOfPiece == "Gold")
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Flood!");
+            yield break;
+        }
+
         _gcm.UpdateCurrentActionText("Select a building on a Dirt Piece to damage!");
 
         AllowedDamages = _floodDamages;
@@ -1510,6 +1629,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
+        //Starts PCM's PersistentCardDiscardProcess, as per Overgrowth's wording.
         StartCoroutine(_pcm.PersistentCardDiscardProcess());
     }
 
@@ -1518,6 +1638,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// </summary>
     public void Mudslide()
     {
+        //Similar logic to Walkway. Preps movement in a very similar way with slightly different logic between PlayerPawn and PieceController.
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             pawn.GetComponent<PlayerPawn>().MudslideMove = true;
@@ -1534,6 +1655,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator SecretTunnels(GameObject cardBody)
     {
+        //Secret Tunnels's logic can be found in PlayerPawn.
         FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
@@ -1548,6 +1670,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Shovel(GameObject cardBody)
     {
+        //Shovel's Logic can be found in PieceController.
         FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
@@ -1562,8 +1685,32 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Thunderstorm()
     {
+        //For more detail on this code, view Overgrowth.
         _gcm.DisableListObjects();
         _gcm.UpdateCurrentActionText("Select a building on a Grass or Dirt Piece to damage!");
+
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            if (building.GetComponent<Building>().SuitOfPiece == "Gold")
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Thunderstorm!");
+            yield break;
+        }
 
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
@@ -1602,6 +1749,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
+        //Repeat but for your own Buildings.
         _gcm.UpdateCurrentActionText("Select a building on a Grass or Dirt Piece to damage!");
         int yourBuildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
@@ -1640,7 +1788,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
-        _bm.SetActiveCollider("Pawn");
+        _bm.SetActiveCollider("Board");
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
     }
@@ -1653,9 +1801,9 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Compaction()
     {
+        //For more detail, view Flowers.
         _gcm.DisableListObjects();
         bool enoughPieces;
-        int newPieceCount = 0;
         int openPieces = 0;
         if (_am.SupplyPile[2] >= _compactionPiecesToPlace)
         {
@@ -1663,24 +1811,28 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
         else
         {
-            newPieceCount = _compactionPiecesToPlace - _am.SupplyPile[2];
             enoughPieces = false;
         }
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
+            piece.GetComponent<PieceController>().ShowHidePlaceable(false);
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Four)
             {
-                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
+                if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
                     continue;
                 }
 
-                if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
+                if (!piece.GetComponent<PieceController>().IsPlaceable)
                 {
                     openPieces++;
                 }
-                piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(true);
+                piece.GetComponent<PieceController>().ShowHidePlaceable(true);
             }
         }
 
@@ -1693,33 +1845,50 @@ public class OnlineCardEffects : MonoBehaviourPun
             yield break;
         }
 
+        _bm.SetActiveCollider("Board");
+
         PlacedPieces = 0;
-        if (enoughPieces && openPieces >= _compactionPiecesToPlace)
+        int supplyAmount = _am.SupplyPile[2];
+        if (enoughPieces)
         {
-            while (PlacedPieces != _compactionPiecesToPlace)
+            if (openPieces >= _compactionPiecesToPlace)
             {
-                _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
-                yield return null;
+                while (PlacedPieces != _compactionPiecesToPlace)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + _compactionPiecesToPlace + " Stone Pieces onto Bedrock Pieces!");
+                    yield return null;
+                }
             }
-        }
-        else if (openPieces >= newPieceCount)
-        {
-            while (PlacedPieces != newPieceCount)
+            else
             {
-                _gcm.UpdateCurrentActionText("Place " + newPieceCount + " Stone Pieces onto Bedrock Pieces!");
-                yield return null;
+                while (PlacedPieces != openPieces)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + openPieces + " Stone Pieces onto Bedrock Pieces!");
+                    yield return null;
+                }
             }
         }
         else
         {
-            while (PlacedPieces != openPieces)
+            if (openPieces >= supplyAmount)
             {
-                _gcm.UpdateCurrentActionText("Place " + openPieces + " Stone Pieces onto Bedrock Pieces!");
-                yield return null;
+                while (PlacedPieces != supplyAmount)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + supplyAmount + " Stone Pieces onto Bedrock Pieces!");
+                    yield return null;
+                }
+            }
+            else
+            {
+                while (PlacedPieces != openPieces)
+                {
+                    _gcm.UpdateCurrentActionText("Place " + openPieces + " Stone Pieces onto Bedrock Pieces!");
+                    yield return null;
+                }
             }
         }
 
-        if (enoughPieces)
+        if (PlacedPieces == _compactionPiecesToPlace)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
@@ -1735,21 +1904,48 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Earthquake()
     {
+        //For more detail, view Overgrowth.
         _gcm.DisableListObjects();
+
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            //Ignores buildings on Gold.
+            if (building.GetComponent<Building>().SuitOfPiece == "Gold")
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Earthquake!");
+            yield break;
+        }
+
         _gcm.UpdateCurrentActionText("Select a Stone Piece for Earthquake!");
         AllowedDamages = 0;
 
+        //Marks based on pieces instead. Highlights stone pieces for Earthquake.
         int pieceCount = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Five)
             {
-                if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
+                continue;
+            }
+
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            {
+                if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
                 {
                     continue;
                 }
 
-                piece.GetComponent<OnlinePieceController>().ShowHideEarthquake(true);
+                piece.GetComponent<PieceController>().ShowHideEarthquake(true);
                 pieceCount++;
             }
         }
@@ -1770,6 +1966,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         _bm.SetActiveCollider("Building");
 
+        //Players must damage every building for the effect to conclude.
         CurrentDamages = 0;
         _gcm.UpdateCurrentActionText("Damage every adjacent Building!");
         while (CurrentDamages != AllowedDamages)
@@ -1793,6 +1990,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Erosion()
     {
+        //For more information, view Lawnmower.
         _gcm.DisableListObjects();
 
         int openPieces = 0;
@@ -1841,6 +2039,12 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            piece.GetComponent<PieceController>().FromActivatedCard = false;
+        }
+
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
     }
@@ -1851,6 +2055,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Geologist(GameObject cardBody)
     {
+        //Geologist's logic can be found in RetrieveGold (ActionManager).
         FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
@@ -1865,6 +2070,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator MasterBuilder(GameObject cardBody)
     {
+        //Master Builder's code is in both GameCanvasManager for visuals and PieceController's Building methods.
         FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
@@ -1879,10 +2085,12 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator MetalDetector()
     {
+        //Metal Detector sets Stone Pieces into a flippable state. This has similar logic to DISCERNING EYE.
         int stoneOnBoard = 0;
         foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if(piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
+            //If a Piece is stone...
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
             {
                 if(piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
@@ -1894,7 +2102,8 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
-        if(stoneOnBoard >= MetalDetectorStoneToFlip)
+        //Flip a piece up to the variable amount. 
+        if (stoneOnBoard >= MetalDetectorStoneToFlip)
         {
             RemainingFlips = MetalDetectorStoneToFlip;
         }
@@ -1910,12 +2119,14 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         _bm.SetActiveCollider("Board");
 
-        while(RemainingFlips != 0)
+        //Flips are controlled in PieceController.
+        while (RemainingFlips != 0)
         {
             _gcm.UpdateCurrentActionText("Select " + RemainingFlips + " more Stone Pieces to look for Gold in!");
             yield return null;
         }
 
+        //Disable Flippable state.
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             piece.GetComponent<OnlinePieceController>().ShowHideFlippable(false);
@@ -1930,7 +2141,9 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// </summary>
     public void PlannedGamble()
     {
-        if(_am.CurrentPlayer == 1)
+        //A fairly unique card. Discard every card in a player's hand and draws up to the variable's amount.
+
+        if (_am.CurrentPlayer == 1)
         {
             foreach(GameObject card in _cm.P1Hand)
             {
@@ -1967,6 +2180,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator DiscerningEye()
     {
+        //For more information on Discerning Eye's logic, view Metal Detector.
         int stoneOnBoard = 0;
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
@@ -2021,6 +2235,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator GoldenShovel()
     {
+        //For more information on Golden Shovel, view Lawnmower.
         _gcm.DisableListObjects();
 
         int openPieces = 0;
@@ -2083,6 +2298,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator HolyIdol()
     {
+        //Very simple card that operates similarily to Thief cards. 
         _gcm.UpdateCurrentActionText("Complete Holy Idol actions!");
         _holyIdolUI.SetActive(true);
 
@@ -2104,6 +2320,8 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator MasterThief()
     {
+        //For more information on Master Thief, view Thief.
+
         _gcm.UpdateCurrentActionText("Complete Master Thief actions!");
         _thiefUI.SetActive(true);
         _stoneThiefButton.SetActive(true);
@@ -2183,6 +2401,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Reconstruction()
     {
+        //Very similar to damaging buildings, but ups their health by "1" instead. You can only repair buildings that are damaged, and this works for any player's buildings.
         int maxRepairs = 0;
         foreach(GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
@@ -2231,6 +2450,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Regeneration()
     {
+        //Like a superior version of Flowers. View that code for specific information, and the other Regen method for UI interaction.
         _regenerationUI.SetActive(true);
         _gcm.UpdateCurrentActionText("Select a Piece to Regenerate!");
         while(!_regenSuitChosen)
@@ -2247,18 +2467,22 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
         PlacedPieces = 0;
 
+        //You score for every 3 pieces placed, for a maximum of 3.
         int pointsToScore = 0;
         int curInterval = 0;
-        for(int i = 0; i != _piecesToRegen; i++)
+        for (int i = 0; i <= PlacedPieces; i++)
         {
-            if(curInterval != _regenPiecesRequiredToScore)
+            if (curInterval != _regenPiecesRequiredToScore)
             {
                 curInterval++;
                 continue;
             }
 
             pointsToScore++;
+            curInterval = 1;
         }
+
+        PlacedPieces = 0;
 
         _am.CallUpdateScore(_am.CurrentPlayer, pointsToScore);
 
@@ -2276,6 +2500,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Retribution(GameObject cardBody)
     {
+        //Retribution's Logic can be found in DamageBuilding (Building).
         FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
@@ -2289,6 +2514,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// </summary>
     public void Teleportation()
     {
+        //Very simple script, marks PlayerPawn as teleportationmove, and will then highlight every Piece without a Pawn.
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
@@ -2300,7 +2526,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
 
         _bm.SetActiveCollider("Pawn");
-        _gcm.UpdateCurrentActionText("Select a pawn to teleport and Piece to teleport onto.");
+        _gcm.UpdateCurrentActionText("Select a Pawn to teleport and Piece to teleport onto.");
     }
 
     /// <summary>
@@ -2309,11 +2535,106 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Tornado()
     {
+        //Mostly similar to Overgrowth with some key differences.
         _gcm.DisableListObjects();
 
+        bool areThereBuildings = false;
+        foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
+        {
+            if (building.GetComponent<Building>().PlayerOwning == _am.CurrentPlayer)
+            {
+                continue;
+            }
+
+            if (building.GetComponent<Building>().SuitOfPiece == "Gold")
+            {
+                continue;
+            }
+
+            areThereBuildings = true;
+        }
+
+        if (!areThereBuildings)
+        {
+            _gcm.Back();
+            _gcm.UpdateCurrentActionText("No Buildings to damage with Tornado!");
+            yield break;
+        }
+
+        //Enables UI.
+        _tFactoryButton.SetActive(true);
+        _tBurrowButton.SetActive(true);
+        _tMineButton.SetActive(true);
+
+        if (_am.CurrentPlayer == 1)
+        {
+            _tFactoryButton.GetComponent<Image>().sprite = _meerFactory;
+            _tBurrowButton.GetComponent<Image>().sprite = _meerBurrow;
+            _tMineButton.GetComponent<Image>().sprite = _meerMine;
+        }
+        else
+        {
+            _tFactoryButton.GetComponent<Image>().sprite = _moleFactory;
+            _tBurrowButton.GetComponent<Image>().sprite = _moleBurrow;
+            _tMineButton.GetComponent<Image>().sprite = _moleMine;
+        }
+
+        //Checks to see what types of buildings are in play.
+        bool factoriesExist = false;
+        bool burrowsExist = false;
+        bool minesExist = false;
+        foreach (Building building in FindObjectsOfType<Building>())
+        {
+            if (_am.CurrentPlayer == 1)
+            {
+                if (building.BuildingType == "Factory" && building.PlayerOwning == 2)
+                {
+                    factoriesExist = true;
+                }
+                if (building.BuildingType == "Burrow" && building.PlayerOwning == 2)
+                {
+                    burrowsExist = true;
+                }
+                if ((building.BuildingType == "Grass Mine" || building.BuildingType == "Dirt Mine" || building.BuildingType == "Stone Mine") && building.PlayerOwning == 2)
+                {
+                    minesExist = true;
+                }
+            }
+            else
+            {
+                if (building.BuildingType == "Factory" && building.PlayerOwning == 1)
+                {
+                    factoriesExist = true;
+                }
+                if (building.BuildingType == "Burrow" && building.PlayerOwning == 1)
+                {
+                    burrowsExist = true;
+                }
+                if ((building.BuildingType == "Grass Mine" || building.BuildingType == "Dirt Mine" || building.BuildingType == "Stone Mine") && building.PlayerOwning == 1)
+                {
+                    minesExist = true;
+                }
+            }
+        }
+
+        //Disables unnecessary Buttons.
+        if (!factoriesExist)
+        {
+            _tFactoryButton.SetActive(false);
+        }
+        if (!burrowsExist)
+        {
+            _tBurrowButton.SetActive(false);
+        }
+        if (!minesExist)
+        {
+            _tMineButton.SetActive(false);
+        }
+
+        //Waits until a Building is selected.
         _tornadoBuildingChosen = false;
         _tornadoUI.SetActive(true);
-        while(!_tornadoBuildingChosen)
+        while (!_tornadoBuildingChosen)
         {
             _gcm.UpdateCurrentActionText("Select a Building type to damage!");
             yield return null;
@@ -2321,6 +2642,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         _tornadoUI.SetActive(false);
         _tornadoBuildingChosen = false;
 
+        //Preps every type of Building for damaging. 
         int buildingCount = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
@@ -2337,7 +2659,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                     buildingCount++;
                 }
             }
-            else if(_tornadoBuildingToDamage == 1)
+            else if (_tornadoBuildingToDamage == 1)
             {
                 if (building.GetComponent<Building>().BuildingType == "Burrow")
                 {
@@ -2345,7 +2667,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                     buildingCount++;
                 }
             }
-            else if(_tornadoBuildingToDamage == 2)
+            else if (_tornadoBuildingToDamage == 2)
             {
                 if (building.GetComponent<Building>().BuildingType == "Grass Mine" || building.GetComponent<Building>().BuildingType == "Dirt Mine" || building.GetComponent<Building>().BuildingType == "Stone Mine")
                 {
@@ -2357,15 +2679,16 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         _bm.SetActiveCollider("Building");
 
+        //Damage buildings up to AllowedDamages, which could be a max of 3.
         _gcm.UpdateCurrentActionText("Damage every Building of that type!");
 
-        if (buildingCount >= AllowedDamages)
+        if (buildingCount >= _tornadoDamages)
         {
-            AllowedDamages = buildingCount;
+            AllowedDamages = _tornadoDamages;
         }
         else
         {
-            AllowedDamages = _tornadoDamages;
+            AllowedDamages = buildingCount;
         }
 
         CurrentDamages = 0;
@@ -2380,7 +2703,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             building.GetComponent<Building>().PrepBuilidingDamaging(false);
         }
 
-        _bm.SetActiveCollider("Pawn");
+        _bm.SetActiveCollider("Board");
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
     }
@@ -2390,7 +2713,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// </summary>
     public void Transmutation()
     {
-        _am.CallUpdateScore(_am.CurrentPlayer, 1);
+        //Scores one point for every two "_goldPiecesRequiredToScore"
 
         int curInterval = 0;
         int pointsToScore = 0;

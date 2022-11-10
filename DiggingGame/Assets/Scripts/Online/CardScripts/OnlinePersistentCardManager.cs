@@ -289,6 +289,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
     /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
     public void RetributionStart(int retributionPlayer, string suit)
     {
+        //Sends every piece a player has to the supply, based on the Retribution card.
         int sentPieces = 0;
 
         //Note, should affect the opposite player.

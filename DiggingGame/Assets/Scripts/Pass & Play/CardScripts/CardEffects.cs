@@ -2802,7 +2802,7 @@ public class CardEffects : MonoBehaviour
     /// </summary>
     public void Transmutation()
     {
-        //This card is so hard to explain that I won't even try. I'm sorry.
+        //Scores one point for every two "_goldPiecesRequiredToScore"
 
         int curInterval = 0;
         int pointsToScore = 0;
