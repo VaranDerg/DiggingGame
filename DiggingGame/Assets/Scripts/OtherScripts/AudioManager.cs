@@ -78,6 +78,25 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Plays a Sound and returns the sound for future reference.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public Sound PlayReferenced(string name)
+    {
+        Sound s = Array.Find(Sounds, sound => sound.name == name);
+
+        if (s == null)
+        {
+            Debug.LogWarning("Sound: " + name + "not found");
+            return null;
+        }
+
+        s.source.Play();
+        return s;
+    }
+
+    /// <summary>
     /// Stops a sound
     /// </summary>
     /// <param name="name">Sound name</param>

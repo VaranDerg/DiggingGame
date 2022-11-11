@@ -1,5 +1,5 @@
 SFX LISTED BELOW FROM FREESOUND.ORG
-- - - - - - - - - - - - - - - - - - 
+
 Draw Card: https://freesound.org/people/dersuperanton/sounds/434472/
 Discard Card: https://freesound.org/people/el_boss/sounds/571581/
 Hide Card: https://freesound.org/people/deathpie/sounds/19244/
@@ -22,3 +22,27 @@ Lightning Strike: https://freesound.org/people/joe93barlow/sounds/105986/
 Retrieve: https://freesound.org/people/EminYILDIRIM/sounds/611193/
 New Pawn: https://freesound.org/people/marsllzent/sounds/421950/
 New Scene: https://freesound.org/people/moogy73/sounds/425699/
+
+- - - - - - - - - - - - - - - - - - 
+
+MUSIC LISTED BELOW FROM CHOSIC.COM
+
+Farm by Alexander Nakarada | https://www.serpentsoundstudios.com
+Music promoted by https://www.chosic.com/free-music/all/
+Creative Commons CC BY 4.0
+https://creativecommons.org/licenses/by/4.0/
+
+Planning by Alexander Nakarada | https://www.serpentsoundstudios.com
+Music promoted by https://www.chosic.com/free-music/all/
+Creative Commons CC BY 4.0
+https://creativecommons.org/licenses/by/4.0/
+
+Fireside Tales by Darren Curtis | https://www.darrencurtismusic.com/
+Music promoted on https://www.chosic.com/free-music/all/
+Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+https://creativecommons.org/licenses/by/3.0/
+
+Crystal Caverns by Darren Curtis | https://www.darrencurtismusic.com/
+Music promoted on https://www.chosic.com/free-music/all/
+Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+https://creativecommons.org/licenses/by/3.0/
