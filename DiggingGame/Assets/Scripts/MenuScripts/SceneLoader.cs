@@ -20,6 +20,8 @@ public class SceneLoader : MonoBehaviour
     [Header("Values")]
     [SerializeField] private float _transitionTime;
 
+    private static bool s_enteredGame = false;
+
     /// <summary>
     /// Turns on the Transition Manager.
     /// </summary>
@@ -50,19 +52,16 @@ public class SceneLoader : MonoBehaviour
 
         yield return new WaitForSeconds(_transitionTime);
 
-        
-        if (sceneName != "PnPWeather" && sceneName != "OnlineScene")
+        if (sceneName == "MainMenu" && s_enteredGame)
         {
-            //Loop current music
-            if(sceneName != "HowToPlay" && sceneName != "GalleryScene")
-            {
-                BGMManager.s_Instance.PlayMenuTheme();
-            }
+            BGMManager.s_Instance.Invoke("PlayMenuTheme", BGMManager.s_Instance.SongFadeTime);
+            s_enteredGame = false;
         }
         else
         {
             //Enable Gameplay Music
-            BGMManager.s_Instance.SwapTrack(false, true);
+            BGMManager.s_Instance.SwapTrack();
+            s_enteredGame = true;
         }
 
         SceneManager.LoadScene(sceneName);

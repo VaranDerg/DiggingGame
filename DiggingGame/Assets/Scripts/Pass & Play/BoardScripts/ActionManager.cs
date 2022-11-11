@@ -737,7 +737,7 @@ public class ActionManager : MonoBehaviour
             {
                 FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
             }
-            BGMManager.s_Instance.SwapTrack(false, false);
+            BGMManager.s_Instance.SwapTrack();
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText(CurrentPlayerName + "s, start your turn.");
         }

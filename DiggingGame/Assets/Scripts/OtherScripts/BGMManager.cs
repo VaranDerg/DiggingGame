@@ -34,7 +34,7 @@ public class BGMManager : MonoBehaviour
     }
 
     [Header("Values")]
-    [SerializeField] private float _songFadeTime;
+    public float SongFadeTime;
 
     [Header("Audio Clips")]
     [SerializeField] private Sound _mainMenuTheme;
@@ -47,6 +47,7 @@ public class BGMManager : MonoBehaviour
 
     [Header("Other Variables")]
     [HideInInspector] public bool IsPlayingDayTrack = false;
+    private Sound _currentTheme;
     private int _currentSongIndex;
 
     /// <summary>
@@ -111,12 +112,21 @@ public class BGMManager : MonoBehaviour
             }
         }
 
-        Invoke("PlayMenuTheme", _songFadeTime);
+        Invoke("PlayMenuTheme", SongFadeTime);
     }
 
     public void PlayMenuTheme()
     {
+        StopAllCoroutines();
+
         _mainMenuTheme.Source.Play();
+        StartCoroutine(FadeTrack(_mainMenuTheme, null));
+        _currentTheme = _mainMenuTheme;
+
+        StartCoroutine(FadeTrack(null, _daytimeTracks[_currentSongIndex]));
+        StartCoroutine(FadeTrack(null, _nighttimeTracks[_currentSongIndex]));
+        _currentSongIndex = 0;
+        IsPlayingDayTrack = false;
     }
 
     /// <summary>
@@ -124,85 +134,65 @@ public class BGMManager : MonoBehaviour
     /// </summary>
     /// <param name="toMenu">True if going back to menu.</param>
     /// <param name="fromMenu">True if leaving the menu.</param>
-    public void SwapTrack(bool toMenu, bool fromMenu)
+    public void SwapTrack()
     {
         StopAllCoroutines();
 
-        if(fromMenu)
-        {
-            StartCoroutine(FadeTrack(_daytimeTracks[_currentSongIndex], _mainMenuTheme));
-        }
-
         if (IsPlayingDayTrack)
         {
-            if(toMenu)
-            {
-                StartCoroutine(FadeTrack(_mainMenuTheme, _daytimeTracks[_currentSongIndex]));
-
-                _currentSongIndex = 0;
-                IsPlayingDayTrack = false;
-            }
-            else
-            {
-                StartCoroutine(FadeTrack(_nighttimeTracks[_currentSongIndex], _daytimeTracks[_currentSongIndex]));
-
-                IsPlayingDayTrack = !IsPlayingDayTrack;
-            }
+            StartCoroutine(FadeTrack(_currentTheme, _daytimeTracks[_currentSongIndex]));
         }
         else
         {
-            if (toMenu)
-            {
-                StartCoroutine(FadeTrack(_mainMenuTheme, _nighttimeTracks[_currentSongIndex]));
+            StartCoroutine(FadeTrack(_currentTheme, _nighttimeTracks[_currentSongIndex]));
 
-                _daytimeTracks[_currentSongIndex].Source.Stop();
-                _nighttimeTracks[_currentSongIndex].Source.Stop();
+            _currentSongIndex++;
+            if (_currentSongIndex >= _daytimeTracks.Length || _currentSongIndex >= _nighttimeTracks.Length)
+            {
                 _currentSongIndex = 0;
-                IsPlayingDayTrack = false;
-            }
-            else
-            {
-                StartCoroutine(FadeTrack(_daytimeTracks[_currentSongIndex], _nighttimeTracks[_currentSongIndex]));
-
-                _currentSongIndex++;
-                if (_currentSongIndex >= _daytimeTracks.Length || _currentSongIndex >= _nighttimeTracks.Length)
-                {
-                    _currentSongIndex = 0;
-                }
-
-                IsPlayingDayTrack = !IsPlayingDayTrack;
             }
         }
+
+        IsPlayingDayTrack = !IsPlayingDayTrack;
     }
 
     /// <summary>
     /// Fades a given track in, and then a given track out.
     /// </summary>
-    /// <param name="trackIn">Track to fade in.</param>
-    /// <param name="trackOut">Track to fade out.</param>
+    /// <param name="trackIn">Track to fade in. Can be null.</param>
+    /// <param name="trackOut">Track to fade out. Can be null.</param>
     /// <returns></returns>
     private IEnumerator FadeTrack(Sound trackIn, Sound trackOut)
     {
-        float fadeTime = _songFadeTime;
+        float fadeTime = SongFadeTime;
         float fadeElapsed = 0;
 
-        while (fadeElapsed < fadeTime)
+        if(trackOut != null)
         {
-            trackOut.Source.volume = Mathf.Lerp(trackOut.Volume, 0, fadeElapsed / fadeTime);
-            fadeElapsed += Time.deltaTime;
-            yield return null;
+            while (fadeElapsed < fadeTime)
+            {
+                trackOut.Source.volume = Mathf.Lerp(trackOut.Volume, 0, fadeElapsed / fadeTime);
+                fadeElapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            trackOut.Source.Stop();
         }
 
-        trackOut.Source.Stop();
-        fadeTime = _songFadeTime;
+        fadeTime = SongFadeTime;
         fadeElapsed = 0;
-        trackIn.Source.Play();
 
-        while (fadeElapsed < fadeTime)
+        if (trackIn != null)
         {
-            trackIn.Source.volume = Mathf.Lerp(0, trackIn.Volume, fadeElapsed / fadeTime);
-            fadeElapsed += Time.deltaTime;
-            yield return null;
+            trackIn.Source.Play();
+            _currentTheme = trackIn;
+
+            while (fadeElapsed < fadeTime)
+            {
+                trackIn.Source.volume = Mathf.Lerp(0, trackIn.Volume, fadeElapsed / fadeTime);
+                fadeElapsed += Time.deltaTime;
+                yield return null;
+            }
         }
     }
 }
