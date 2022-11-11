@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         Sound.cs
-// Author :            Sean Forrester
+// Author :            Sean Forrester, Rudy W.
 // Creation Date :     October 27th, 2022
 //
 // Brief Description : Sound Script
@@ -34,4 +34,7 @@ public class Sound
 
     [HideInInspector]
     public AudioSource source;
+
+    [HideInInspector]
+    public bool IsPlaying;
 } 

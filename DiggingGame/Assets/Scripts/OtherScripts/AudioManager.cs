@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         AudioManager.cs
-// Author :            Sean Forrester
+// Author :            Sean Forrester, Rudy W
 // Creation Date :     October 27th, 2022
 //
 // Brief Description : Audio Manager Script
@@ -30,11 +30,6 @@ public class AudioManager : MonoBehaviour
         if (s_Instance == null)
         {
             s_Instance = this;
-        }
-        else
-        {
-            DontDestroyOnLoad(gameObject);
-            return;
         }
 
         DontDestroyOnLoad(gameObject);
