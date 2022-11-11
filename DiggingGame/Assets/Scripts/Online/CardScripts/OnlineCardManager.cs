@@ -265,7 +265,14 @@ public class OnlineCardManager : MonoBehaviourPun
 
         RequiredSuit = suit;
         RequiredCardAmount = cardAmount;
-        _gcm.UpdateCurrentActionText("Select " + RequiredCardAmount + " " + RequiredSuit + " suited Cards!");
+        if (RequiredSuit == "Gold")
+        {
+            _gcm.UpdateCurrentActionText("Select " + RequiredCardAmount + " Stone suited Cards!");
+        }
+        else
+        {
+            _gcm.UpdateCurrentActionText("Select " + RequiredCardAmount + " " + RequiredSuit + " suited Cards!");
+        }
     }
 
     /// <summary>

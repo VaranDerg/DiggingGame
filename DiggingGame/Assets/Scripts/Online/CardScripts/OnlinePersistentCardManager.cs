@@ -24,6 +24,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
     [HideInInspector] public bool DiscardedPersistentCard;
     [HideInInspector] public bool DecidedBuildingProtection;
     [HideInInspector] public Coroutine CurrentBuildingDamageProcess;
+    [HideInInspector] public bool AutomaticDiscard = true;
 
     [Header("Retribution")]
     [HideInInspector] public int BuildingsDamaged;
