@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject selectMode;     
     [SerializeField] GameObject mainPage;
     [SerializeField] GameObject optionsPage;
+    [SerializeField] GameObject creditsPage;
 
     /// <summary>
     /// Enabled correct parts on startup.
@@ -28,6 +29,7 @@ public class MainMenu : MonoBehaviour
         selectMode.SetActive(false);
         mainPage.SetActive(true);
         optionsPage.SetActive(false);
+        creditsPage.SetActive(false);
     }
 
     /// <summary>
@@ -95,6 +97,17 @@ public class MainMenu : MonoBehaviour
     }
 
     /// <summary>
+    /// Loads options page
+    /// 
+    /// Author: Rudy W
+    /// </summary>
+    public void Credits()
+    {
+        creditsPage.SetActive(true);
+        mainPage.SetActive(false);
+    }
+
+    /// <summary>
     /// Returns to main menu page
     /// 
     /// Author: Andrea SD
@@ -104,6 +117,7 @@ public class MainMenu : MonoBehaviour
         optionsPage.SetActive(false);
         selectMode.SetActive(false);
         mainPage.SetActive(true);
+        creditsPage.SetActive(false);
     }
 
     /// <summary>

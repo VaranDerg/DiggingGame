@@ -33,6 +33,7 @@ public class WeatherState
     [Header("Weather State Information")]
     public string Name;
     public string Description;
+    public Sound WeatherAmbiance;
     public Color BackgroundColor;
 
     [Header("Point Light")]

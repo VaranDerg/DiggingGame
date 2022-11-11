@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7608666281206019427
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7608666281206019424}
+  - component: {fileID: 7608666281206019425}
+  m_Layer: 0
+  m_Name: BGMManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7608666281206019424
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7608666281206019427}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7608666281206019425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7608666281206019427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb606845dd797bf41b1a197ed1a60879, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _songFadeTime: 1
+  _mainMenuTheme:
+    AudioType: 1
+    IsDayMusic: 0
+    IsNightMusic: 0
+    Name: MainMenuTheme
+    Clip: {fileID: 8300000, guid: 32267e5785fe68f40be1299ad6f8f62f, type: 3}
+    Volume: 0.5
+    Pitch: 1
+    Loop: 0
+    Source: {fileID: 0}
+  _daytimeTracks:
+  - AudioType: 1
+    IsDayMusic: 0
+    IsNightMusic: 0
+    Name: Day1
+    Clip: {fileID: 8300000, guid: 442380dcf9e8ca54ca4fab6052872e60, type: 3}
+    Volume: 0.5
+    Pitch: 1
+    Loop: 0
+    Source: {fileID: 0}
+  _nighttimeTracks:
+  - AudioType: 1
+    IsDayMusic: 0
+    IsNightMusic: 0
+    Name: Night1
+    Clip: {fileID: 8300000, guid: 8f2aa1b710067bd458392d311f1274bd, type: 3}
+    Volume: 0.5
+    Pitch: 1
+    Loop: 0
+    Source: {fileID: 0}
+  _musicMixerGroup: {fileID: 2229216555446623194, guid: 6ef975e0af118ea4dbd6821684f0badb, type: 2}
+  _soundEffectsMixerGroup: {fileID: 3602589269361353759, guid: 6ef975e0af118ea4dbd6821684f0badb, type: 2}
+  IsPlayingDayTrack: 0

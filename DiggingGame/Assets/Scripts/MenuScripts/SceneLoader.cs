@@ -23,7 +23,7 @@ public class SceneLoader : MonoBehaviour
     /// <summary>
     /// Turns on the Transition Manager.
     /// </summary>
-    private void Awake()
+    private void Start()
     {
         gameObject.SetActive(true);
     }
@@ -45,9 +45,18 @@ public class SceneLoader : MonoBehaviour
     private IEnumerator SceneLoadingCoroutine(string sceneName)
     {
         _anims.SetTrigger("Start");
-        FindObjectOfType<AudioManager>().Play("LoadScene");
+        FindObjectOfType<SFXManager>().Play("LoadScene");
 
         yield return new WaitForSeconds(_transitionTime);
+
+        if (sceneName != "PnPWeather" && sceneName != "OnlineScene")
+        {
+            BGMManager.s_Instance.PlayMenuTheme();
+        }
+        else
+        {
+            BGMManager.s_Instance.SwapTrack(false, true);
+        }
 
         SceneManager.LoadScene(sceneName);
     }

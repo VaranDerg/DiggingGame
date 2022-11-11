@@ -14,27 +14,24 @@ public class Sound
 {
     public enum AudioTypes
     {
-        soundEffect,
-        music
+        SoundEffect,
+        Music
     }
-    public AudioTypes audioType;
-    public bool isDayMusic;
-    public bool isNightMusic;
+    public AudioTypes AudioType;
+    public bool IsDayMusic;
+    public bool IsNightMusic;
 
-    public string name;
+    public string Name;
 
-    public AudioClip clip;
+    public AudioClip Clip;
     
     [Range(0f, 1f)]
-    public float volume;
+    public float Volume = 0.5f;
     [Range(.1f, 3f)]
-    public float pitch;
+    public float Pitch = 1;
 
-    public bool loop;
-
-    [HideInInspector]
-    public AudioSource source;
+    public bool Loop;
 
     [HideInInspector]
-    public bool IsPlaying;
+    public AudioSource Source;
 } 

@@ -4630,6 +4630,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainDeck
       objectReference: {fileID: 0}
+    - target: {fileID: 5553973743735526666, guid: d5805cb6adbf3a945b0c2234ad27ee19, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553973743735526666, guid: d5805cb6adbf3a945b0c2234ad27ee19, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 8435762364348276375, guid: d5805cb6adbf3a945b0c2234ad27ee19, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.75

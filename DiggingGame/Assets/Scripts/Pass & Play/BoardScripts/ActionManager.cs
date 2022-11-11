@@ -134,7 +134,7 @@ public class ActionManager : MonoBehaviour
 
         _gcm.UpdateTextBothPlayers();
         _scoreTextAnimator.Play("ScorePoint");
-        FindObjectOfType<AudioManager>().Play("ScorePoint");
+        FindObjectOfType<SFXManager>().Play("ScorePoint");
     }
 
     /// <summary>
@@ -383,7 +383,7 @@ public class ActionManager : MonoBehaviour
 
                 StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
 
-                FindObjectOfType<AudioManager>().Play("RetrieveGold");
+                FindObjectOfType<SFXManager>().Play("RetrieveGold");
 
                 StartCoroutine(_cm.DrawCard("Gold"));
                 P1RefinedPile[3]--;
@@ -418,7 +418,7 @@ public class ActionManager : MonoBehaviour
 
                 StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
 
-                FindObjectOfType<AudioManager>().Play("RetrieveGold");
+                FindObjectOfType<SFXManager>().Play("RetrieveGold");
 
                 StartCoroutine(_cm.DrawCard("Gold"));
                 P2RefinedPile[3]--;
@@ -737,6 +737,7 @@ public class ActionManager : MonoBehaviour
             {
                 FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
             }
+            BGMManager.s_Instance.SwapTrack(false, false);
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText(CurrentPlayerName + "s, start your turn.");
         }
