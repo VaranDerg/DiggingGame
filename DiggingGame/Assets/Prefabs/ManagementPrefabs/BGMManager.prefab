@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb606845dd797bf41b1a197ed1a60879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _songFadeTime: 1
+  SongFadeTime: 1
   _mainMenuTheme:
     AudioType: 1
     IsDayMusic: 0

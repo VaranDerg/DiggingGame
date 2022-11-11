@@ -119,9 +119,7 @@ public class BGMManager : MonoBehaviour
     {
         StopAllCoroutines();
 
-        _mainMenuTheme.Source.Play();
         StartCoroutine(FadeTrack(_mainMenuTheme, null));
-        _currentTheme = _mainMenuTheme;
 
         StartCoroutine(FadeTrack(null, _daytimeTracks[_currentSongIndex]));
         StartCoroutine(FadeTrack(null, _nighttimeTracks[_currentSongIndex]));
@@ -138,13 +136,13 @@ public class BGMManager : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if (IsPlayingDayTrack)
+        if (!IsPlayingDayTrack)
         {
-            StartCoroutine(FadeTrack(_currentTheme, _daytimeTracks[_currentSongIndex]));
+            StartCoroutine(FadeTrack(_daytimeTracks[_currentSongIndex], _currentTheme));
         }
         else
         {
-            StartCoroutine(FadeTrack(_currentTheme, _nighttimeTracks[_currentSongIndex]));
+            StartCoroutine(FadeTrack(_nighttimeTracks[_currentSongIndex], _currentTheme));
 
             _currentSongIndex++;
             if (_currentSongIndex >= _daytimeTracks.Length || _currentSongIndex >= _nighttimeTracks.Length)
@@ -167,6 +165,11 @@ public class BGMManager : MonoBehaviour
         float fadeTime = SongFadeTime;
         float fadeElapsed = 0;
 
+        if(trackIn != null)
+        {
+            _currentTheme = trackIn;
+        }
+
         if(trackOut != null)
         {
             while (fadeElapsed < fadeTime)
@@ -178,6 +181,8 @@ public class BGMManager : MonoBehaviour
 
             trackOut.Source.Stop();
         }
+
+        yield return new WaitForSeconds(SongFadeTime);
 
         fadeTime = SongFadeTime;
         fadeElapsed = 0;

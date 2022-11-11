@@ -57,7 +57,7 @@ public class SceneLoader : MonoBehaviour
             BGMManager.s_Instance.Invoke("PlayMenuTheme", BGMManager.s_Instance.SongFadeTime);
             s_enteredGame = false;
         }
-        else
+        else if(sceneName == "PnPWeather" || sceneName == "OnlineScene")
         {
             //Enable Gameplay Music
             BGMManager.s_Instance.SwapTrack();
