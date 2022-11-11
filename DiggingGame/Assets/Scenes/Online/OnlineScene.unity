@@ -2949,6 +2949,7 @@ MonoBehaviour:
   P2OpenPCardSlots: 
   DiscardedPersistentCard: 0
   DecidedBuildingProtection: 0
+  AutomaticDiscard: 1
   BuildingsDamaged: 0
 --- !u!114 &1005441709
 MonoBehaviour:
@@ -6784,6 +6785,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3450878958116640487, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3934532104423689338, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -6840,6 +6845,10 @@ PrefabInstance:
       propertyPath: _anims
       value: 
       objectReference: {fileID: 2106489997}
+    - target: {fileID: 7080402369692237236, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8228228206896799521, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_SortingOrder
       value: 1

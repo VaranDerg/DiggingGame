@@ -58,11 +58,11 @@ public class ResultsDisplay : MonoBehaviour
 
         if(StatManager.s_P1FinalScore >= 18)
         {
-            _winText.text = "Player 1 Wins!";
+            _winText.text = "Moles Win!";
         }
         else
         {
-            _winText.text = "Player 2 Wins!";
+            _winText.text = "Meerkats Win!";
         }
     }
 

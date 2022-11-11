@@ -1789,7 +1789,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 79566669}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: Credits
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8492,7 +8492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3934532104423689339, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7080402369692237236, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -12643,6 +12643,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
       propertyPath: _songFadeTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
+      propertyPath: _mainMenuTheme.Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
+      propertyPath: _daytimeTracks.Array.data[0].Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
+      propertyPath: _nighttimeTracks.Array.data[0].Loop
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7608666281206019427, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}

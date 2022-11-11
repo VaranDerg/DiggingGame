@@ -216,7 +216,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     private void UpdateAlwaysActiveText()
     {
-        _activePlayerText.text = "Player " + _am.CurrentPlayer;
+        _activePlayerText.text = _am.CurrentPlayerName + "s";
         _activeRoundText.text = "Round " + _am.CurrentRound;
         _supplyPieces[0].text = "x" + _am.SupplyPile[0];
         _supplyPieces[1].text = "x" + _am.SupplyPile[1];

@@ -44,17 +44,24 @@ public class SceneLoader : MonoBehaviour
     /// <returns>Wait Time</returns>
     private IEnumerator SceneLoadingCoroutine(string sceneName)
     {
+        //Starts transition
         _anims.SetTrigger("Start");
         FindObjectOfType<SFXManager>().Play("LoadScene");
 
         yield return new WaitForSeconds(_transitionTime);
 
+        
         if (sceneName != "PnPWeather" && sceneName != "OnlineScene")
         {
-            BGMManager.s_Instance.PlayMenuTheme();
+            //Loop current music
+            if(sceneName != "HowToPlay" && sceneName != "GalleryScene")
+            {
+                BGMManager.s_Instance.PlayMenuTheme();
+            }
         }
         else
         {
+            //Enable Gameplay Music
             BGMManager.s_Instance.SwapTrack(false, true);
         }
 

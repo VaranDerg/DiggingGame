@@ -73,7 +73,7 @@ public class SFXManager : MonoBehaviour
 
         if (s == null)
         {
-            Debug.LogWarning("Sound: " + name + " not found!");
+            //Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
 
@@ -90,7 +90,7 @@ public class SFXManager : MonoBehaviour
 
         if (s == null)
         {
-            Debug.LogWarning("Sound: " + name + " not found!");
+            //Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
 
