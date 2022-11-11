@@ -371,7 +371,7 @@ public class OnlinePieceController : MonoBehaviourPun
             }
 
             ShowHideDiggable(false);
-            FindObjectOfType<CardEffects>().DugPieces++;
+            FindObjectOfType<OnlineCardEffects>().DugPieces++;
 
             switch (ObjState)
             {

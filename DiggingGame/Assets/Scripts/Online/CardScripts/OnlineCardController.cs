@@ -56,6 +56,7 @@ public class OnlineCardController : MonoBehaviourPun
     [Header("Animation")]
     [SerializeField] private Animator _cardAnimator;
     [SerializeField] private float _discardAnimWaitTime;
+    private bool _gettingDiscarded;
 
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
@@ -317,7 +318,9 @@ public class OnlineCardController : MonoBehaviourPun
                 {
                     _am.P1GoldCards--;
                 }
-                CallPersistentRemoval(1);   // Andrea SD
+                _cm.P1OpenHandPositions[HandPosition] = true;
+                Debug.Log("ToDiscard");
+                CallRemoveCard(1);   // Andrea SD
             }
             else if (HeldByPlayer == 2)
             {
@@ -329,8 +332,11 @@ public class OnlineCardController : MonoBehaviourPun
                 {
                     _am.P2GoldCards--;
                 }
-                CallPersistentRemoval(2);   // Andrea SD
+                _cm.P2OpenHandPositions[HandPosition] = true;
+                CallRemoveCard(2);   // Andrea SD
             }
+
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
 
             HeldByPlayer = 0;
             Selected = false;
@@ -346,12 +352,16 @@ public class OnlineCardController : MonoBehaviourPun
         {
             if (MadePersistentP1)
             {
+                _pcm.P1OpenPCardSlots[PHandPosition] = true;
                 CallPersistentRemoval(1);
             }
             else
             {
+                _pcm.P2OpenPCardSlots[PHandPosition] = true;
                 CallPersistentRemoval(2);
             }
+
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
 
             HeldByPlayer = 0;
             Selected = false;
@@ -360,6 +370,14 @@ public class OnlineCardController : MonoBehaviourPun
             CanBeActivated = false;
             MadePersistentP1 = false;
             MadePersistentP2 = false;
+            if (_pcm.AutomaticDiscard)
+            {
+                _pcm.AutomaticDiscard = false;
+            }
+            else
+            {
+                _pcm.DiscardedPersistentCard = true;
+            }
             _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
 
@@ -373,7 +391,10 @@ public class OnlineCardController : MonoBehaviourPun
         }
 
         _cardAnimator.Play("CardDiscard");
+        FindObjectOfType<AudioManager>().Play("DiscardCard");
+        _gettingDiscarded = true;
         yield return new WaitForSeconds(_discardAnimWaitTime);
+        _gettingDiscarded = false;
         _cardBody.SetActive(false);
     }
 
@@ -397,6 +418,37 @@ public class OnlineCardController : MonoBehaviourPun
     public void AddToDiscarded()
     {
         _cm.DPile.Add(_cardBody);
+    }
+
+    /// <summary>
+    /// Calls the RPC that removes a card from player's hand
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"></param>
+    public void CallRemoveCard(int player)
+    {
+        photonView.RPC("RemoveCard", RpcTarget.All, player);
+    }
+
+    /// <summary>
+    /// Removes a card from player's hand
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"></param>
+    [PunRPC]
+    public void RemoveCard(int player)
+    {
+        switch(player)
+        {
+            case 1:
+                _cm.P1Hand.Remove(_cardBody);
+                break;
+            case 2:
+                _cm.P2Hand.Remove(_cardBody);
+                break;
+        }
     }
 
     /// <summary>
