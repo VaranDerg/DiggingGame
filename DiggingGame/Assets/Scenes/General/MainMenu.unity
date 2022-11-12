@@ -6507,7 +6507,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1171582923
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7448,7 +7448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1288442448
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8492,7 +8492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3934532104423689339, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7080402369692237236, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10733,12 +10733,12 @@ MonoBehaviour:
 
     Weather Ambiance by:
 
-    Name
-    A.
+    Calming
+    Relaxation - YouTube
 
-    Name B.
+    Very Ambient - YouTube
 
-    Name C.'
+    Epidemic Ambience - YouTube'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
   m_sharedMaterial: {fileID: -4674183087742674415, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
