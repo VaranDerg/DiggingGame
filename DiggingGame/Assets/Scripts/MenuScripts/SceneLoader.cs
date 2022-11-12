@@ -59,7 +59,6 @@ public class SceneLoader : MonoBehaviour
         }
         else if(sceneName == "PnPWeather" || sceneName == "OnlineScene")
         {
-            Debug.Log("GAmer");
             //Enable Gameplay Music
             BGMManager.s_Instance.SwapTrack();
             s_enteredGame = true;

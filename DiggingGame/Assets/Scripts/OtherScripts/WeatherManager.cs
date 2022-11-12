@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Audio;
 
 public class WeatherManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private Light2D _pointLight;
     [SerializeField] private Light2D _bonusLight;
     [SerializeField] private SpriteRenderer _background;
+    [SerializeField] private SpriteRenderer _backgroundCover;
 
     [Header("Values")]
     [SerializeField] private float _weatherChangeSpeed;
@@ -29,13 +31,42 @@ public class WeatherManager : MonoBehaviour
     [HideInInspector] public WeatherState.Weather CurrentWeatherEnum;
     private Sound _currentAmbiance;
 
+    [Header("Audio")]
+    [SerializeField] private AudioMixerGroup _soundEffectsMixerGroup;
+    [SerializeField] private AudioMixerGroup _musicMixerGroup;
+
     private GameObject _currentPS;
 
     /// <summary>
-    /// Sets the weather to Day.
+    /// Sets the weather to Day & prepares Ambiance.
     /// </summary>
     private void Start()
     {
+        for(int i = 0; i < _weatherStates.Count; i++)
+        {
+            if(_weatherStates[i].WeatherAmbiance == null)
+            {
+                continue;
+            }
+
+            _weatherStates[i].WeatherAmbiance.Source = gameObject.AddComponent<AudioSource>();
+            _weatherStates[i].WeatherAmbiance.Source.clip = _weatherStates[i].WeatherAmbiance.Clip;
+            _weatherStates[i].WeatherAmbiance.Source.volume = _weatherStates[i].WeatherAmbiance.Volume;
+            _weatherStates[i].WeatherAmbiance.Source.pitch = _weatherStates[i].WeatherAmbiance.Pitch;
+            _weatherStates[i].WeatherAmbiance.Source.loop = _weatherStates[i].WeatherAmbiance.Loop;
+
+            switch (_weatherStates[i].WeatherAmbiance.AudioType)
+            {
+                case Sound.AudioTypes.SoundEffect:
+                    _weatherStates[i].WeatherAmbiance.Source.outputAudioMixerGroup = _soundEffectsMixerGroup;
+                    break;
+
+                case Sound.AudioTypes.Music:
+                    _weatherStates[i].WeatherAmbiance.Source.outputAudioMixerGroup = _musicMixerGroup;
+                    break;
+            }
+        }    
+
         SetActiveWeather(WeatherState.Weather.Day);
     }
 
@@ -109,24 +140,27 @@ public class WeatherManager : MonoBehaviour
             _globalLight.intensity = Mathf.Lerp(_globalLight.intensity, _weatherStates[_activeWeatherIndex].GlobalLightIntensity, _weatherChangeSpeed * Time.deltaTime);
             _pointLight.color = Color.Lerp(_pointLight.color, _weatherStates[_activeWeatherIndex].PointLightColor, _weatherChangeSpeed * Time.deltaTime);
             _pointLight.intensity = Mathf.Lerp(_pointLight.intensity, _weatherStates[_activeWeatherIndex].PointLightIntensity, _weatherChangeSpeed * Time.deltaTime);
+            _backgroundCover.color = Color.Lerp(_backgroundCover.color, _weatherStates[_activeWeatherIndex].BGCoverColor, _weatherChangeSpeed * Time.deltaTime);
         }
         else
         {
             _bonusLight.color = Color.Lerp(_bonusLight.color, _weatherStates[_activeWeatherIndex].BonusLightColor, _weatherChangeSpeed * Time.deltaTime);
             _bonusLight.intensity = Mathf.Lerp(_bonusLight.intensity, _weatherStates[_activeWeatherIndex].BonusLightIntensity, _weatherChangeSpeed * Time.deltaTime);
-        }
+            _background.color = Color.Lerp(_background.color, _weatherStates[_activeWeatherIndex].BackgroundColor, _weatherChangeSpeed * Time.deltaTime);
 
-        _background.color = Color.Lerp(_background.color, _weatherStates[_activeWeatherIndex].BackgroundColor, _weatherChangeSpeed * Time.deltaTime);
+            if(!_psSwitched)
+            {
+                if (_currentAmbiance != null)
+                {
+                    _currentAmbiance.Source.Stop();
+                    _currentAmbiance = null;
+                }
+            }
+        }
 
         if(!_psSwitched)
         {
-            if (_currentAmbiance != null)
-            {
-                _currentAmbiance.Source.Stop();
-                _currentAmbiance = null;
-            }
-
-            if (_weatherStates[_activeWeatherIndex].WeatherAmbiance != null)
+            if (_weatherStates[_activeWeatherIndex].WeatherAmbiance.Source.clip != null)
             {
                 _currentAmbiance = _weatherStates[_activeWeatherIndex].WeatherAmbiance;
                 _currentAmbiance.Source.Play();

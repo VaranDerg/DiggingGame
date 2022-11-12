@@ -250,7 +250,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1902855064251530295}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1902855063198037338
 SpriteRenderer:
@@ -472,6 +472,7 @@ MonoBehaviour:
       Loop: 0
       Source: {fileID: 0}
     BackgroundColor: {r: 0.24705882, g: 0.30980393, b: 0.25882354, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 0.6431373, g: 0.5372549, b: 0.32941177, a: 1}
     PointLightIntensity: 1
     GlobalLightColor: {r: 0.99607843, g: 1, b: 0.92941177, a: 1}
@@ -492,6 +493,7 @@ MonoBehaviour:
       Loop: 0
       Source: {fileID: 0}
     BackgroundColor: {r: 0.15774296, g: 0.1981132, b: 0.1653124, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0.39215687}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 0.41515908, g: 0.40690637, b: 0.6792453, a: 1}
@@ -507,11 +509,12 @@ MonoBehaviour:
       AudioType: 0
       Name: Rain
       Clip: {fileID: 8300000, guid: b35244d2dc8437f41904705cdf8e911a, type: 3}
-      Volume: 0.1
+      Volume: 0.3
       Pitch: 1
       Loop: 1
       Source: {fileID: 0}
     BackgroundColor: {r: 0.24705882, g: 0.3019608, b: 0.36862746, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -527,11 +530,12 @@ MonoBehaviour:
       AudioType: 0
       Name: ThunderstormAmbiance
       Clip: {fileID: 8300000, guid: 578249d5bce5c174db0c353c6c0c4df3, type: 3}
-      Volume: 0.1
+      Volume: 0.3
       Pitch: 1
       Loop: 1
       Source: {fileID: 0}
     BackgroundColor: {r: 0.14231043, g: 0.18881418, b: 0.24528301, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -552,6 +556,7 @@ MonoBehaviour:
       Loop: 0
       Source: {fileID: 0}
     BackgroundColor: {r: 0.26977313, g: 0.3962264, b: 0.25978997, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -567,11 +572,12 @@ MonoBehaviour:
       AudioType: 0
       Name: PollenWind
       Clip: {fileID: 8300000, guid: eea350c0b8438b6428612aa143a539ca, type: 3}
-      Volume: 0.5
+      Volume: 1
       Pitch: 1
       Loop: 1
       Source: {fileID: 0}
     BackgroundColor: {r: 0.15294118, g: 0.30980393, b: 0.14117648, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -592,6 +598,7 @@ MonoBehaviour:
       Loop: 0
       Source: {fileID: 0}
     BackgroundColor: {r: 0.3679245, g: 0.26641935, b: 0.17875579, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -607,11 +614,12 @@ MonoBehaviour:
       AudioType: 0
       Name: TornadoAmbiance
       Clip: {fileID: 8300000, guid: 578249d5bce5c174db0c353c6c0c4df3, type: 3}
-      Volume: 0.15
+      Volume: 0.25
       Pitch: 1
       Loop: 1
       Source: {fileID: 0}
     BackgroundColor: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -632,6 +640,7 @@ MonoBehaviour:
       Loop: 0
       Source: {fileID: 0}
     BackgroundColor: {r: 0.29411766, g: 0.29411766, b: 0.29411766, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -652,6 +661,7 @@ MonoBehaviour:
       Loop: 0
       Source: {fileID: 0}
     BackgroundColor: {r: 0.40392157, g: 0.36862746, b: 0.2, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -672,6 +682,7 @@ MonoBehaviour:
       Loop: 0
       Source: {fileID: 0}
     BackgroundColor: {r: 0.27058825, g: 0.34117648, b: 0.2627451, a: 1}
+    BGCoverColor: {r: 0, g: 0, b: 0, a: 0}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
     GlobalLightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -684,8 +695,11 @@ MonoBehaviour:
   _pointLight: {fileID: 1902855062653255327}
   _bonusLight: {fileID: 1902855063472194527}
   _background: {fileID: 1902855063198037338}
+  _backgroundCover: {fileID: 5413720660467346756}
   _weatherChangeSpeed: 0.5
   CurrentWeatherEnum: 0
+  _soundEffectsMixerGroup: {fileID: 3602589269361353759, guid: 6ef975e0af118ea4dbd6821684f0badb, type: 2}
+  _musicMixerGroup: {fileID: 2229216555446623194, guid: 6ef975e0af118ea4dbd6821684f0badb, type: 2}
 --- !u!1 &1902855064251530292
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,7 +731,92 @@ Transform:
   - {fileID: 1902855062701752919}
   - {fileID: 1902855063472194524}
   - {fileID: 1902855062653255324}
+  - {fileID: 5497034037296683540}
   - {fileID: 1902855063198037339}
   m_Father: {fileID: 1902855064150059474}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4038769762741440816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5497034037296683540}
+  - component: {fileID: 5413720660467346756}
+  m_Layer: 0
+  m_Name: BGDarkerner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5497034037296683540
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4038769762741440816}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 18, y: 11, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1902855064251530295}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &5413720660467346756
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4038769762741440816}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0

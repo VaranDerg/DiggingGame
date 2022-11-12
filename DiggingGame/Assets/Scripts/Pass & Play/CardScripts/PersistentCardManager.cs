@@ -25,10 +25,10 @@ public class PersistentCardManager : MonoBehaviour
     [HideInInspector] public List<GameObject> P2PersistentCards = new List<GameObject>();
     [HideInInspector] public bool[] P1OpenPCardSlots;
     [HideInInspector] public bool[] P2OpenPCardSlots;
-    [SerializeField] private GameObject _handCardArea;
+    [SerializeField] private GameObject _handCardCover;
     [SerializeField] private float _handCardHideSpeed;
-    private Vector3 _defaultHandPos;
-    private Vector3 _currentHandPos;
+    private Vector3 _defaultCoverPos;
+    private Vector3 _currentCoverPos;
 
     //Functional variables for specific code points.
     [Header("Other")]
@@ -79,7 +79,8 @@ public class PersistentCardManager : MonoBehaviour
     private void Start()
     {
         PreparePCardSlots();
-        _defaultHandPos = _handCardArea.transform.position;
+        _defaultCoverPos = _handCardCover.transform.position;
+        _currentCoverPos = _defaultCoverPos;
     }
 
     /// <summary>
@@ -87,7 +88,7 @@ public class PersistentCardManager : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        _handCardArea.transform.position = Vector3.Lerp(_handCardArea.transform.position, _currentHandPos, _handCardHideSpeed * Time.deltaTime);
+        _handCardCover.transform.position = Vector3.Lerp(_handCardCover.transform.position, _currentCoverPos, _handCardHideSpeed * Time.deltaTime);
     }
 
     /// <summary>
@@ -231,12 +232,13 @@ public class PersistentCardManager : MonoBehaviour
     /// </summary>
     public IEnumerator PersistentCardDiscardProcess()
     {
+        _currentCoverPos = new Vector3(_defaultCoverPos.x, _defaultCoverPos.y + 3, _defaultCoverPos.z);
+
         //This is for use with Flood. It sets Cards into a discardable state. 
         if (_am.CurrentPlayer == 1)
         {
             //Puts every card into that state.
             int pCardCount = 0;
-            _currentHandPos = new Vector3(_defaultHandPos.x, _defaultHandPos.y - 3, _defaultHandPos.z);
             _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s, Discard a Persistent Card. " + _am.PlayerOneName + "s, your Cards are hidden.");
             for(int i = 0; i < P2PersistentCards.Count; i++)
             {
@@ -258,7 +260,9 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
-            _currentHandPos = _defaultHandPos;
+            _gcm.UpdateCurrentActionText("Pass back to " + _am.CurrentPlayerName + "s.");
+            yield return new WaitForSeconds(2f);
+            _currentCoverPos = _defaultCoverPos;
 
             //Returns every other card to its original state.
             for (int i = 0; i < P2PersistentCards.Count; i++)
@@ -274,8 +278,7 @@ public class PersistentCardManager : MonoBehaviour
         else
         {
             int pCardCount = 0;
-            _currentHandPos = new Vector3(_defaultHandPos.x, _defaultHandPos.y - 3, _defaultHandPos.z);
-            _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s, Discard a Persistent Card." + _am.PlayerTwoName + "s, your Cards are hidden.");
+            _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s, Discard a Persistent Card. " + _am.PlayerTwoName + "s, your Cards are hidden.");
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
                 P1PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
@@ -296,7 +299,9 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
-            _currentHandPos = _defaultHandPos;
+            _gcm.UpdateCurrentActionText("Pass back to " + _am.CurrentPlayerName + "s.");
+            yield return new WaitForSeconds(2f);
+            _currentCoverPos = _defaultCoverPos;
 
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {

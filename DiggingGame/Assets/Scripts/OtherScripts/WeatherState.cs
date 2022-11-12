@@ -35,6 +35,7 @@ public class WeatherState
     public string Description;
     public Sound WeatherAmbiance;
     public Color BackgroundColor;
+    public Color BGCoverColor;
 
     [Header("Point Light")]
     public Color PointLightColor;

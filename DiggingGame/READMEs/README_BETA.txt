@@ -4,7 +4,9 @@
 	what your Buildings do. 
 - Weather
 	~ Cards now change the in-game Weather in different ways. Additionally, every round, it'll shift from Day to Night
-	and visa-versa.
+	and visa-versa. 
+- Gallery
+	~ You can now view cards in the gallery! Prepare yourself before playing!
 
 ~ CHANGES
 Mechanics:
@@ -18,6 +20,8 @@ Balance:
 	Thief cards to be equivalent with their steal amount gives them a more strategic purpose later on into the game flow
 	that allows players to commit more to slowing down their opponent. Master Thief's cost was updated according to this
 	rules but its current cost should make its activation amount less prevalent.
+- Shovel (1 Dirt 1 Stone -> 1 Dirt)
+	~ Shovel's stone cost was a tad steep. Its new price should put it more in line with Morning Jog.
 - Geologist (1 Dirt 2 Stone -> 2 Dirt 1 Stone)
 	~ Geologist is a very powerful card if a player is able to play it, but it still only tends to shine once every few
 	games. This updated cost should make the card more prevalent in games and would make losing it to Flood less punishing.

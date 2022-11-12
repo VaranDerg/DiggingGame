@@ -20,8 +20,8 @@ MonoBehaviour:
   StoneSuit: 0
   GoldSuit: 0
   GrassCost: 0
-  DirtCost: 1
-  StoneCost: 1
+  DirtCost: 2
+  StoneCost: 0
   persistent: 1
   disaster: 0
   FlavorText: This sure is Dirt Card flavor text!

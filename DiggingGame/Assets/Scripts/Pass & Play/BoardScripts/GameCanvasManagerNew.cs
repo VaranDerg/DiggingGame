@@ -71,6 +71,7 @@ public class GameCanvasManagerNew : MonoBehaviour
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
+    private Coroutine _curGoldCoroutine;
 
     /// <summary>
     /// Adds most Canvas Objects to a list. Does not add the Opponent Info Zone, since that can be left opened or closed.
@@ -517,7 +518,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         _thenZone.SetActive(true);
         _backButton.SetActive(true);
 
-        StartCoroutine(_am.UseGold(_am.CurrentPlayer));
+        _curGoldCoroutine = StartCoroutine(_am.UseGold(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
     }
@@ -571,6 +572,13 @@ public class GameCanvasManagerNew : MonoBehaviour
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
         _bm.SetActiveCollider("Board");
+
+        //Hm... Weird retrieval bug. This fixed it, but I'm not happy about it.
+        if(_curGoldCoroutine != null)
+        {
+            StopCoroutine(_curGoldCoroutine);
+        }
+
         foreach (PieceController script in FindObjectsOfType<PieceController>())
         {
             script.StopAllCoroutines();

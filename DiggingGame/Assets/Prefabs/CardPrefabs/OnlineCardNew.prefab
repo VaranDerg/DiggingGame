@@ -247,12 +247,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3.5
+  m_fontSize: 3.55
   m_fontSizeBase: 2.25
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 1.5
-  m_fontSizeMax: 3.5
+  m_fontSizeMax: 5
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -440,8 +440,8 @@ MonoBehaviour:
   m_text: This is a Card Prefab. All the visuals on this card update based on its
     scriptable object. That's pretty cool, don't you think?
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
+  m_sharedMaterial: {fileID: -4674183087742674415, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 2.45
+  m_fontSize: 2.5
   m_fontSizeBase: 2
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -542,8 +542,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.124999955, y: 0}
+  m_SizeDelta: {x: -0.25000012, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1406311459206698478
 CanvasRenderer:
@@ -891,8 +891,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.124999955, y: 0}
+  m_SizeDelta: {x: -0.25000012, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1406311459632769657
 CanvasRenderer:
@@ -1392,7 +1392,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.25, y: 0}
   m_SizeDelta: {x: 9, y: 9}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &1406311460093232975
@@ -1650,8 +1650,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.124999955, y: 0}
+  m_SizeDelta: {x: -0.25000012, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1406311460216652869
 CanvasRenderer:
