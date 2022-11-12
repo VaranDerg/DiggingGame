@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 62437
+  controlID: 105479
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 62438
+  controlID: 105480
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 62439
+  controlID: 105481
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -224,8 +224,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 14a00000
-      m_LastClickedID: 0
+      m_SelectedIDs: 824af3ff
+      m_LastClickedID: -832894
       m_ExpandedIDs: 302ef6ff6c64f6ffae8ff6ff40caf6ff4accf6ff84cdf6ff80cef6ff90e7f6ff56eaf6ffe4ebf6ffac1bf7ff661cf7ff844cf7ff8483f7ffd484f7ff4eb4f7ff32b5f7ff76bbf7ffc4eaf7ffba1af8ffa01bf8ff1c3af8ff4c3af8ff603af8ff983af8ffac3af8ffbe3af8ff7e3ef8ff0065f8ff9a3bfaff1c3dfaffea3dfaff4445fafff082faff3283faff4283faff5283faff5483faff6084faff7e85faff72dbfaff1ce1faffdc24fcffe624fcfff424fcff906dfcff5892fcfffa9dfcffcea0fcfff2aafcfffcb9fcffb2c0fcffb4c2fcff86c5feffb6fafeff5a36ffff6436ffff7236ffff0478ffffa67effff7e7fffff5080ffff9abcffff54bdffff56bdffff9cbdffffdcf8ffff1cfbfffff4ffffff12b4010092b4010060b50100fac601007ac70100eac8010004c90100881e030092220300b4240300a62503006e1104007e110400e81104007c120400fc120400321304004813040082130400c2130400f4130400dcb10500f8b1050010b205002cb205005cca050086ca0500a2ca0500acca0500d2ca0500deca0500f8ca050004cb0500c2d705003cd90500
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -517,7 +517,7 @@ MonoBehaviour:
       index: 10
       layout: 4
   m_WindowGUID: cc27987af1a868c49b0894db9c0f5429
-  m_Gizmos: 1
+  m_Gizmos: 0
   m_OverrideSceneCullingMask: 6917529027641081856
   m_SceneIsLit: 1
   m_SceneLighting: 1
@@ -526,9 +526,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 532.4525, y: 310.46304, z: 2.788041}
+    m_Target: {x: 435.50937, y: 237.64557, z: 3.2209077}
     speed: 2
-    m_Value: {x: 532.4525, y: 310.46304, z: 2.788041}
+    m_Value: {x: 435.50937, y: 237.64557, z: 3.2209077}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -579,9 +579,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 340.20526
+    m_Target: 352.6436
     speed: 2
-    m_Value: 340.20526
+    m_Value: 352.6436
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -722,7 +722,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 62514
+  controlID: 105439
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -790,36 +790,36 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes/General
+    - Assets/Audio
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scenes/General
+  - Assets/Audio
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\rwolf\Desktop\UnityProjects\Sophomore\DiggingGame\DiggingGame
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 479}
-    m_SelectedIDs: d89f0000
-    m_LastClickedID: 40920
+    scrollPos: {x: 0, y: 299}
+    m_SelectedIDs: c09f0000
+    m_LastClickedID: 40896
     m_ExpandedIDs: 000000007a9f00007c9f00007e9f0000829f0000849f0000869f00008a9f00008c9f0000909f0000b29f0000f29f0000f69f0000c2ae000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Old
-      m_OriginalName: Old
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 40922
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 12}
     m_SearchString: 
@@ -833,7 +833,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000007a9f00007c9f00007e9f0000809f0000829f0000849f0000869f00008a9f00008c9f00008e9f0000909f0000b29f000000ca9a3b
+    m_ExpandedIDs: 000000007a9f00007c9f00007e9f0000829f0000849f0000869f00008a9f00008c9f0000909f0000b29f0000f29f0000f69f0000c2ae000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -858,24 +858,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 14a00000
-    m_LastClickedInstanceID: 40980
+    m_SelectedInstanceIDs: 824af3ff
+    m_LastClickedInstanceID: -832894
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: PnPWeather
-      m_OriginalName: PnPWeather
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 44628
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 12}
     m_CreateAssetUtility:
@@ -916,7 +916,7 @@ MonoBehaviour:
   - {fileID: 16}
   - {fileID: 17}
   m_Selected: 0
-  m_LastSelected: 1
+  m_LastSelected: 2
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -975,7 +975,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -629652
+  m_LastSelectedObjectID: 415966
 --- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1006,7 +1006,7 @@ MonoBehaviour:
     m_SaveData: []
   m_MixersTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
+    m_SelectedIDs: a0930000
     m_LastClickedID: 37792
     m_ExpandedIDs: 12eb343c
     m_RenameOverlay:
@@ -1123,7 +1123,7 @@ MonoBehaviour:
       oldMaxSizes: 
       oldSplitSize: 0
     m_HorizontalSplitter:
-      ID: 12328
+      ID: 105452
       splitterInitialOffset: 0
       currentActiveSplitter: -1
       realSizes:

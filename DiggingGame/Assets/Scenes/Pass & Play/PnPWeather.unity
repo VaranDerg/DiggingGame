@@ -5947,15 +5947,15 @@ PrefabInstance:
       objectReference: {fileID: 1005441707}
     - target: {fileID: 1773380379119548635, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_Color.b
-      value: 0.38823533
+      value: 0.46226418
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379119548635, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_Color.g
-      value: 0.3803922
+      value: 0.46226418
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379119548635, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_Color.r
-      value: 0.38823533
+      value: 0.46226418
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379178922262, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_IsActive
@@ -5979,15 +5979,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379246484613, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_Color.b
-      value: 0.22352943
+      value: 0.2948113
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379246484613, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_Color.g
-      value: 0.31764707
+      value: 0.412062
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379246484613, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_Color.r
-      value: 0.38823533
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379248554481, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -6597,7 +6597,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3934532104423689339, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3934532104423689341, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: _anims

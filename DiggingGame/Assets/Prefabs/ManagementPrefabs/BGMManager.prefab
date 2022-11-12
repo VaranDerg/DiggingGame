@@ -51,7 +51,7 @@ MonoBehaviour:
     IsNightMusic: 0
     Name: MainMenuTheme
     Clip: {fileID: 8300000, guid: 32267e5785fe68f40be1299ad6f8f62f, type: 3}
-    Volume: 0.5
+    Volume: 0.25
     Pitch: 1
     Loop: 1
     Source: {fileID: 0}
@@ -61,7 +61,7 @@ MonoBehaviour:
     IsNightMusic: 0
     Name: Day1
     Clip: {fileID: 8300000, guid: 442380dcf9e8ca54ca4fab6052872e60, type: 3}
-    Volume: 0.5
+    Volume: 0.25
     Pitch: 1
     Loop: 1
     Source: {fileID: 0}
@@ -71,7 +71,7 @@ MonoBehaviour:
     IsNightMusic: 0
     Name: Night1
     Clip: {fileID: 8300000, guid: 8f2aa1b710067bd458392d311f1274bd, type: 3}
-    Volume: 0.5
+    Volume: 0.25
     Pitch: 1
     Loop: 1
     Source: {fileID: 0}

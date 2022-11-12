@@ -12650,12 +12650,24 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
+      propertyPath: _mainMenuTheme.Volume
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
       propertyPath: _daytimeTracks.Array.data[0].Loop
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
+      propertyPath: _daytimeTracks.Array.data[0].Volume
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
       propertyPath: _nighttimeTracks.Array.data[0].Loop
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7608666281206019425, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
+      propertyPath: _nighttimeTracks.Array.data[0].Volume
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 7608666281206019427, guid: 3e852bef0d66bdd498226807d446d6ca, type: 3}
       propertyPath: m_Name
