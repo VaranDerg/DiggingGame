@@ -316,7 +316,6 @@ public class OnlineCardManager : MonoBehaviourPun
 
         if (selectedCardValue == requiredCardValue)
         {
-            //Debug.Log("Adequate cards provided!");
             SpendSelectedCards();
             return true;
         }
@@ -337,7 +336,7 @@ public class OnlineCardManager : MonoBehaviourPun
     {
         foreach(GameObject card in SelectedCards)
         {
-            card.GetComponentInChildren<OnlineCardController>().ToDiscard();
+            StartCoroutine(card.GetComponentInChildren<OnlineCardController>().ToDiscard());
         }
 
         SelectedCards.Clear();
@@ -367,7 +366,6 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             StartCoroutine(DrawCard("Universal"));
         }
-        //Debug.Log("Drew " + cardsToDraw + " cards!");
     }
 
     /// <summary>

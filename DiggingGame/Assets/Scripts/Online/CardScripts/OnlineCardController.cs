@@ -79,6 +79,11 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void FixedUpdate()
     {
+        if (_gettingDiscarded)
+        {
+            return;
+        }
+
         if (MadePersistentP1 || MadePersistentP2)
         {
             transform.position = _defaultPos.position;
@@ -102,6 +107,11 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void OnMouseEnter()
     {
+        if (_gettingDiscarded)
+        {
+            return;
+        }
+
         if (CanBeDiscarded)
         {
             _cardBackground.GetComponent<Image>().color = _cardDiscardColor;
@@ -120,15 +130,20 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void OnMouseExit()
     {
-        if (CanBeDiscarded)
-        {
-            _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
-        }
-
         if (_currentlyMaximized)
         {
             Destroy(_maximizedCard);
             _currentlyMaximized = false;
+        }
+
+        if (_gettingDiscarded)
+        {
+            return;
+        }
+
+        if (CanBeDiscarded)
+        {
+            _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
         }
 
         if (MadePersistentP1 || MadePersistentP2)
@@ -145,6 +160,11 @@ public class OnlineCardController : MonoBehaviourPun
     private void OnMouseOver()
     {
         MaximizeCard(_cardVisualToMaximize);
+
+        if (_gettingDiscarded)
+        {
+            return;
+        }
 
         if (CanBeDiscarded)
         {
@@ -213,12 +233,16 @@ public class OnlineCardController : MonoBehaviourPun
         {
             if (_am.P1RefinedPile[0] >= grassCost && _am.P1RefinedPile[1] >= dirtCost && _am.P1RefinedPile[2] >= stoneCost)
             {
+                StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
+
                 _am.P1RefinedPile[0] -= grassCost;
                 _am.P1RefinedPile[1] -= dirtCost;
                 _am.P1RefinedPile[2] -= stoneCost;
                 _am.SupplyPile[0] += grassCost;
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
+
+                FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -239,6 +263,7 @@ public class OnlineCardController : MonoBehaviourPun
                 _cm.AllowedActivations--;
                 _gcm.UpdateTextBothPlayers();
                 _cm.StopCardActivating(_am.CurrentPlayer);
+
                 if (!GetComponentInChildren<CardVisuals>().ThisCard.persistent)
                 {
                     StartCoroutine(ToDiscard());
@@ -257,12 +282,16 @@ public class OnlineCardController : MonoBehaviourPun
         {
             if (_am.P2RefinedPile[0] >= grassCost && _am.P2RefinedPile[1] >= dirtCost && _am.P2RefinedPile[2] >= stoneCost)
             {
+                StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
+
                 _am.P2RefinedPile[0] -= grassCost;
                 _am.P2RefinedPile[1] -= dirtCost;
                 _am.P2RefinedPile[2] -= stoneCost;
                 _am.SupplyPile[0] += grassCost;
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
+
+                FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -305,9 +334,11 @@ public class OnlineCardController : MonoBehaviourPun
     public IEnumerator ToDiscard()
     {
         _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
+        Debug.Log("Held by player" + HeldByPlayer);
 
         if (!MadePersistentP1 && !MadePersistentP2)
         {
+            
             if (HeldByPlayer == 1)
             {
                 if (_cardBody.CompareTag("Card"))
@@ -319,7 +350,7 @@ public class OnlineCardController : MonoBehaviourPun
                     _am.P1GoldCards--;
                 }
                 _cm.P1OpenHandPositions[HandPosition] = true;
-                Debug.Log("ToDiscard");
+                Debug.Log("lmaooo1");
                 CallRemoveCard(1);   // Andrea SD
             }
             else if (HeldByPlayer == 2)
@@ -333,10 +364,11 @@ public class OnlineCardController : MonoBehaviourPun
                     _am.P2GoldCards--;
                 }
                 _cm.P2OpenHandPositions[HandPosition] = true;
+                Debug.Log("lmaooo2");
                 CallRemoveCard(2);   // Andrea SD
             }
 
-            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
+            //StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
 
             HeldByPlayer = 0;
             Selected = false;
@@ -344,6 +376,7 @@ public class OnlineCardController : MonoBehaviourPun
             CanBeDiscarded = false;
             CanBeActivated = false;
 
+            Debug.Log("lmaooo3");
             CallDiscardRPC();
 
             _cm.UpdatePileText();
@@ -353,11 +386,13 @@ public class OnlineCardController : MonoBehaviourPun
             if (MadePersistentP1)
             {
                 _pcm.P1OpenPCardSlots[PHandPosition] = true;
+                Debug.Log("lmaooo4");
                 CallPersistentRemoval(1);
             }
             else
             {
                 _pcm.P2OpenPCardSlots[PHandPosition] = true;
+                Debug.Log("lmaooo5");
                 CallPersistentRemoval(2);
             }
 
@@ -379,6 +414,7 @@ public class OnlineCardController : MonoBehaviourPun
                 _pcm.DiscardedPersistentCard = true;
             }
             _pcm.DiscardedPersistentCard = true;
+            Debug.Log("lmaooo6");
             CallDiscardRPC();
 
             _cm.UpdatePileText();
@@ -391,11 +427,12 @@ public class OnlineCardController : MonoBehaviourPun
         }
 
         _cardAnimator.Play("CardDiscard");
-        FindObjectOfType<SFXManager>().Play("DiscardCard");
+        //FindObjectOfType<SFXManager>().Play("DiscardCard");
         _gettingDiscarded = true;
         yield return new WaitForSeconds(_discardAnimWaitTime);
         _gettingDiscarded = false;
         _cardBody.SetActive(false);
+        Debug.Log("lmaooo");
     }
 
     /// <summary>
@@ -406,6 +443,7 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void CallDiscardRPC()
     {
+        Debug.Log("DiscardRPC");
         photonView.RPC("AddToDiscarded", RpcTarget.All);
     }
 
@@ -428,6 +466,7 @@ public class OnlineCardController : MonoBehaviourPun
     /// <param name="player"></param>
     public void CallRemoveCard(int player)
     {
+        Debug.Log("CallRemoveCard");
         photonView.RPC("RemoveCard", RpcTarget.All, player);
     }
 
