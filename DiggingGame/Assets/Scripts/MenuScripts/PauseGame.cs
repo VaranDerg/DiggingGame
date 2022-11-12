@@ -6,6 +6,7 @@
 // Brief Description : Simple script for Pause Menu functionality.
 *****************************************************************************/
 
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +37,7 @@ public class PauseGame : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         FindObjectOfType<SceneLoader>().LoadScene("MainMenu");
+        PhotonNetwork.Disconnect();
     }
 
     public void QuitGame()

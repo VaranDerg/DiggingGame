@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using Photon.Pun;
 
 public class ResultsDisplay : MonoBehaviour
 {
@@ -73,5 +74,6 @@ public class ResultsDisplay : MonoBehaviour
     {
         StatManager.s_Instance.ResetStatistics();
         FindObjectOfType<SceneLoader>().LoadScene("MainMenu");
+        PhotonNetwork.Disconnect();
     }
 }
