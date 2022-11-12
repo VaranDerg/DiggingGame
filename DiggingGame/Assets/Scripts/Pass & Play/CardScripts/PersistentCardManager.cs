@@ -25,6 +25,10 @@ public class PersistentCardManager : MonoBehaviour
     [HideInInspector] public List<GameObject> P2PersistentCards = new List<GameObject>();
     [HideInInspector] public bool[] P1OpenPCardSlots;
     [HideInInspector] public bool[] P2OpenPCardSlots;
+    [SerializeField] private GameObject _handCardArea;
+    [SerializeField] private float _handCardHideSpeed;
+    private Vector3 _defaultHandPos;
+    private Vector3 _currentHandPos;
 
     //Functional variables for specific code points.
     [Header("Other")]
@@ -39,8 +43,6 @@ public class PersistentCardManager : MonoBehaviour
     [Header("Partner Scripts")]
     private ActionManager _am;
     private BoardManager _bm;
-    private CardManager _cm;
-    private CardEffects _ce;
     private GameCanvasManagerNew _gcm;
 
     /// <summary>
@@ -50,8 +52,6 @@ public class PersistentCardManager : MonoBehaviour
     {
         _am = FindObjectOfType<ActionManager>();
         _bm = FindObjectOfType<BoardManager>();
-        _cm = FindObjectOfType<CardManager>();
-        _ce = FindObjectOfType<CardEffects>();
         _gcm = FindObjectOfType<GameCanvasManagerNew>();
     }
 
@@ -79,6 +79,15 @@ public class PersistentCardManager : MonoBehaviour
     private void Start()
     {
         PreparePCardSlots();
+        _defaultHandPos = _handCardArea.transform.position;
+    }
+
+    /// <summary>
+    /// For hiding the hand of cards.
+    /// </summary>
+    private void FixedUpdate()
+    {
+        _handCardArea.transform.position = Vector3.Lerp(_handCardArea.transform.position, _currentHandPos, _handCardHideSpeed * Time.deltaTime);
     }
 
     /// <summary>
@@ -227,7 +236,8 @@ public class PersistentCardManager : MonoBehaviour
         {
             //Puts every card into that state.
             int pCardCount = 0;
-            _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + ", Discard a Persistent Card.");
+            _currentHandPos = new Vector3(_defaultHandPos.x, _defaultHandPos.y - 3, _defaultHandPos.z);
+            _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s, Discard a Persistent Card. " + _am.PlayerOneName + "s, your Cards are hidden.");
             for(int i = 0; i < P2PersistentCards.Count; i++)
             {
                 P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
@@ -248,6 +258,8 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
+            _currentHandPos = _defaultHandPos;
+
             //Returns every other card to its original state.
             for (int i = 0; i < P2PersistentCards.Count; i++)
             {
@@ -262,7 +274,8 @@ public class PersistentCardManager : MonoBehaviour
         else
         {
             int pCardCount = 0;
-            _gcm.UpdateCurrentActionText(_am.CurrentPlayerName + ", Discard a Persistent Card.");
+            _currentHandPos = new Vector3(_defaultHandPos.x, _defaultHandPos.y - 3, _defaultHandPos.z);
+            _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s, Discard a Persistent Card." + _am.PlayerTwoName + "s, your Cards are hidden.");
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
                 P1PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
@@ -282,6 +295,8 @@ public class PersistentCardManager : MonoBehaviour
             {
                 yield return null;
             }
+
+            _currentHandPos = _defaultHandPos;
 
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {

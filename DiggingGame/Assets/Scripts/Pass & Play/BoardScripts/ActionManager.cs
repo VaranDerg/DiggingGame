@@ -46,8 +46,8 @@ public class ActionManager : MonoBehaviour
 
     [Header("Game Values")]
     public int StartingPlayer;
-    [SerializeField] private string _playerOneName;
-    [SerializeField] private string _playerTwoName;
+    public string PlayerOneName;
+    public string PlayerTwoName;
     [HideInInspector] public string CurrentPlayerName;
     public int CardActivations;
     public int StartingCards;
@@ -81,7 +81,7 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        CurrentPlayerName = _playerOneName;
+        CurrentPlayerName = PlayerOneName;
         _menuButton.SetActive(false);
         _bm = FindObjectOfType<BoardManager>();
         _cm = FindObjectOfType<CardManager>();
@@ -709,7 +709,7 @@ public class ActionManager : MonoBehaviour
 
             CurrentTurnPhase = 0;
             CurrentPlayer = 2;
-            CurrentPlayerName = _playerTwoName;
+            CurrentPlayerName = PlayerTwoName;
             _gcm.StartTurnButton.SetActive(true);
             _gcm.UpdateCurrentActionText(CurrentPlayerName + "s, start your turn.");
         }
@@ -726,7 +726,7 @@ public class ActionManager : MonoBehaviour
 
             CurrentTurnPhase = 0;
             CurrentPlayer = 1;
-            CurrentPlayerName = _playerOneName;
+            CurrentPlayerName = PlayerOneName;
             CurrentRound++;
             StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Round", 1);
             if(CurrentRound % 2 == 0)
