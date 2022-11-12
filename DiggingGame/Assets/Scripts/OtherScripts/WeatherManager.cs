@@ -27,6 +27,7 @@ public class WeatherManager : MonoBehaviour
     private int _activeWeatherIndex;
     private bool _psSwitched = true;
     [HideInInspector] public WeatherState.Weather CurrentWeatherEnum;
+    private Sound _currentAmbiance;
 
     private GameObject _currentPS;
 
@@ -119,6 +120,18 @@ public class WeatherManager : MonoBehaviour
 
         if(!_psSwitched)
         {
+            if (_currentAmbiance != null)
+            {
+                _currentAmbiance.Source.Stop();
+                _currentAmbiance = null;
+            }
+
+            if (_weatherStates[_activeWeatherIndex].WeatherAmbiance != null)
+            {
+                _currentAmbiance = _weatherStates[_activeWeatherIndex].WeatherAmbiance;
+                _currentAmbiance.Source.Play();
+            }
+
             if (_currentPS != null && _weatherStates[_activeWeatherIndex].ActiveParticles != null)
             {
                 _currentPS.GetComponent<ParticleSystem>().Stop();

@@ -463,6 +463,14 @@ MonoBehaviour:
   - WeatherEnum: 0
     Name: Day
     Description: Basic Daytime Lighting
+    WeatherAmbiance:
+      AudioType: 0
+      Name: 
+      Clip: {fileID: 0}
+      Volume: 0.5
+      Pitch: 1
+      Loop: 0
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.24705882, g: 0.30980393, b: 0.25882354, a: 1}
     PointLightColor: {r: 0.6431373, g: 0.5372549, b: 0.32941177, a: 1}
     PointLightIntensity: 1
@@ -475,6 +483,14 @@ MonoBehaviour:
   - WeatherEnum: 1
     Name: Night
     Description: Basic Nighttime Lighting
+    WeatherAmbiance:
+      AudioType: 0
+      Name: 
+      Clip: {fileID: 0}
+      Volume: 0.5
+      Pitch: 1
+      Loop: 0
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.15774296, g: 0.1981132, b: 0.1653124, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -485,8 +501,16 @@ MonoBehaviour:
     BonusLightIntensity: 0
     ActiveParticles: {fileID: 0}
   - WeatherEnum: 2
-    Name: Rain
+    Name: RainAmbiance
     Description: Rainy Weather
+    WeatherAmbiance:
+      AudioType: 0
+      Name: Rain
+      Clip: {fileID: 8300000, guid: b35244d2dc8437f41904705cdf8e911a, type: 3}
+      Volume: 0.1
+      Pitch: 1
+      Loop: 1
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.24705882, g: 0.3019608, b: 0.36862746, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -499,6 +523,14 @@ MonoBehaviour:
   - WeatherEnum: 3
     Name: Thunderstorm
     Description: Dark Rainy Night
+    WeatherAmbiance:
+      AudioType: 0
+      Name: ThunderstormAmbiance
+      Clip: {fileID: 8300000, guid: 578249d5bce5c174db0c353c6c0c4df3, type: 3}
+      Volume: 0.1
+      Pitch: 1
+      Loop: 1
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.14231043, g: 0.18881418, b: 0.24528301, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -511,6 +543,14 @@ MonoBehaviour:
   - WeatherEnum: 4
     Name: Flowers
     Description: Petals through the Wind
+    WeatherAmbiance:
+      AudioType: 0
+      Name: 
+      Clip: {fileID: 0}
+      Volume: 0.5
+      Pitch: 1
+      Loop: 0
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.26977313, g: 0.3962264, b: 0.25978997, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -521,8 +561,16 @@ MonoBehaviour:
     BonusLightIntensity: 0.2
     ActiveParticles: {fileID: 1001039878505968741, guid: 6892de8b534e43048b8cfc1dc3418b9e, type: 3}
   - WeatherEnum: 5
-    Name: Pollen
+    Name: PollenAmbiance
     Description: An Overgrowth of Plants
+    WeatherAmbiance:
+      AudioType: 0
+      Name: PollenWind
+      Clip: {fileID: 8300000, guid: eea350c0b8438b6428612aa143a539ca, type: 3}
+      Volume: 0.5
+      Pitch: 1
+      Loop: 1
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.15294118, g: 0.30980393, b: 0.14117648, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -535,6 +583,14 @@ MonoBehaviour:
   - WeatherEnum: 6
     Name: Dirty
     Description: Digging Through the Earth
+    WeatherAmbiance:
+      AudioType: 0
+      Name: 
+      Clip: {fileID: 0}
+      Volume: 0.5
+      Pitch: 1
+      Loop: 0
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.3679245, g: 0.26641935, b: 0.17875579, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -547,6 +603,14 @@ MonoBehaviour:
   - WeatherEnum: 7
     Name: Tornado
     Description: Weather going Wild
+    WeatherAmbiance:
+      AudioType: 0
+      Name: TornadoAmbiance
+      Clip: {fileID: 8300000, guid: 578249d5bce5c174db0c353c6c0c4df3, type: 3}
+      Volume: 0.15
+      Pitch: 1
+      Loop: 1
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -559,6 +623,14 @@ MonoBehaviour:
   - WeatherEnum: 8
     Name: Smoke
     Description: Machinery's Impact on the World
+    WeatherAmbiance:
+      AudioType: 0
+      Name: 
+      Clip: {fileID: 0}
+      Volume: 0.5
+      Pitch: 1
+      Loop: 0
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.29411766, g: 0.29411766, b: 0.29411766, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -571,6 +643,14 @@ MonoBehaviour:
   - WeatherEnum: 9
     Name: Holy
     Description: Magic Introduced to the World
+    WeatherAmbiance:
+      AudioType: 0
+      Name: 
+      Clip: {fileID: 0}
+      Volume: 0.5
+      Pitch: 1
+      Loop: 0
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.40392157, g: 0.36862746, b: 0.2, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45
@@ -583,6 +663,14 @@ MonoBehaviour:
   - WeatherEnum: 10
     Name: Clear
     Description: Nature goes to Rest
+    WeatherAmbiance:
+      AudioType: 0
+      Name: 
+      Clip: {fileID: 0}
+      Volume: 0.5
+      Pitch: 1
+      Loop: 0
+      Source: {fileID: 0}
     BackgroundColor: {r: 0.27058825, g: 0.34117648, b: 0.2627451, a: 1}
     PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     PointLightIntensity: 0.45

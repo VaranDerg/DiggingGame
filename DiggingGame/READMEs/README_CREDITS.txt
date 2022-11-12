@@ -46,3 +46,11 @@ Crystal Caverns by Darren Curtis | https://www.darrencurtismusic.com/
 Music promoted on https://www.chosic.com/free-music/all/
 Creative Commons Attribution 3.0 Unported (CC BY 3.0)
 https://creativecommons.org/licenses/by/3.0/
+
+- - - - - - - - - - - - - - - - - - 
+
+WEATHER AMBIANCE CREDITS
+
+Rain: https://www.youtube.com/watch?v=HbVYuPogyP0
+Thunderstorm: https://www.youtube.com/watch?v=7Vc4-FDGBxo
+Wind: https://www.youtube.com/watch?v=GFABlcMkoPA

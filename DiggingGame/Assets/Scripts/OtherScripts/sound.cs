@@ -18,8 +18,6 @@ public class Sound
         Music
     }
     public AudioTypes AudioType;
-    public bool IsDayMusic;
-    public bool IsNightMusic;
 
     public string Name;
 
