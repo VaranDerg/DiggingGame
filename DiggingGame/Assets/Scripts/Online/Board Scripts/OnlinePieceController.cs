@@ -40,7 +40,8 @@ public class OnlinePieceController : MonoBehaviourPun
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasP1Building, HasP2Building;
     [HideInInspector] public bool HasPawn;
-    /*[HideInInspector]*/ public GameObject CurrentPawn;
+    /*[HideInInspector]*/
+    public GameObject CurrentPawn;
     [HideInInspector] public bool PieceIsSelected = true;
     private OnlineBoardManager _bm;
     private OnlineActionManager _am;
@@ -79,8 +80,8 @@ public class OnlinePieceController : MonoBehaviourPun
 
     // ASD
     [Header("Photon")]
-    [SerializeField]private int _currentPawnID;     // Photon network ID of the currently selected pawn
-    [SerializeField]private int _pieceID;       // Photon network ID of a piece
+    [SerializeField] private int _currentPawnID;     // Photon network ID of the currently selected pawn
+    [SerializeField] private int _pieceID;       // Photon network ID of a piece
     [SerializeField] GameObject destinationPiece;
 
     private void Awake()
@@ -197,7 +198,7 @@ public class OnlinePieceController : MonoBehaviourPun
             //Start of Shovel Code
             if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
             {
-                SetPieceState(3);
+                CallPieceState(3);
                 _dirtPS.Play();
                 _am.ShovelUsed = true;
                 if (CurrentPawn != null)
@@ -249,26 +250,26 @@ public class OnlinePieceController : MonoBehaviourPun
                 switch (ObjState)
                 {
                     case GameState.One:
-                        photonView.RPC("SetPieceState", RpcTarget.All, 2);
-                        _grassPS.Play();
+                        CallPieceState(2);
+                        CallRemovalAnim(1);
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
                         break;
                     case GameState.Two:
-                        photonView.RPC("SetPieceState", RpcTarget.All, 3);
-                        _dirtPS.Play();
+                        CallPieceState(3);
+                        CallRemovalAnim(2);
                         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                         break;
                     case GameState.Three:
                         if (HasGold)
                         {
-                            _goldPS.Play();
+                            CallRemovalAnim(4);
                             _am.CollectTile(_am.CurrentPlayer, "Gold", true);
                         }
                         else
                         {
-                            _stonePS.Play();
-                            _am.CollectTile(_am.CurrentPlayer, "Stone", true);
-                            photonView.RPC("SetPieceState", RpcTarget.All, 4);
+                            CallPieceState(4);
+                            CallRemovalAnim(3);
+                            _am.CollectTile(_am.CurrentPlayer, "Stone", true); 
                         }
 
                         break;
@@ -428,17 +429,17 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 case GameState.Two:
                     photonView.RPC("SetPieceState", RpcTarget.All, 1);
-                    _grassPS.Play();
+                    CallRemovalAnim(1);
                     _am.PlaceTile("Grass");
                     break;
                 case GameState.Three:
                     photonView.RPC("SetPieceState", RpcTarget.All, 2);
-                    _dirtPS.Play();
+                    CallRemovalAnim(2);
                     _am.PlaceTile("Dirt");
                     break;
                 case GameState.Four:
                     photonView.RPC("SetPieceState", RpcTarget.All, 3);
-                    _stonePS.Play();
+                    CallRemovalAnim(3);
                     _am.PlaceTile("Stone");
                     break;
             }
@@ -464,7 +465,7 @@ public class OnlinePieceController : MonoBehaviourPun
         //Start anim?
         yield return new WaitForSeconds(_am.PawnMoveAnimTime);
         //End anim?
-        
+
         pawn.transform.position = destinationPiece.transform.position;
         pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         HasPawn = true;
@@ -473,9 +474,7 @@ public class OnlinePieceController : MonoBehaviourPun
         if (goBack)
         {
             // Only is called if in the right turn phase AND it's your turn
-            if ((_am.CurrentTurnPhase == 1 && (_am.CurrentPlayer == 1 && 
-                PhotonNetwork.IsMasterClient)) || _am.CurrentPlayer == 2 && 
-                    !PhotonNetwork.IsMasterClient)
+            if (photonView.IsMine)
             {
                 _gcm.ToThenPhase();
             }
@@ -499,7 +498,7 @@ public class OnlinePieceController : MonoBehaviourPun
             //For the game's initial free move. The player has to spend cards unless this is true.
             if (_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
             {
-                Debug.Log("Curernt turn phase "+ _am.CurrentTurnPhase);
+                Debug.Log("Curernt turn phase " + _am.CurrentTurnPhase);
 
                 _borderSr.color = _waitingColor;
                 _borderAnims.Play("PieceBorderWaiting");
@@ -574,52 +573,6 @@ public class OnlinePieceController : MonoBehaviourPun
             CallPawnID(CurrentPawn.GetComponent<OnlinePlayerPawn>().PawnID);
             CallMovePawn(_currentPawnID, _pieceID);    //Andrea SD
         }
-    }
-
-    /// <summary>
-    /// Calls the MovePawn RPC which moves a pawn on the other players screen.
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="objectID"> Network ID of the moving pawn </param>
-    /// <param name="destinationID"> Network ID of the pawn destination 
-    /// </param>
-    public void CallMovePawn(int objectID, int destinationID)
-    {
-        photonView.RPC("MovePawn", RpcTarget.All, objectID, destinationID);
-    }
-
-    /// <summary>
-    /// Moves a pawn on the other players screen.
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="objectID"> Network ID of the moving pawn </param>
-    /// <param name="destinationID"> Network ID of the pawn destination 
-    /// </param>
-    [PunRPC]
-    public void MovePawn(int objectID, int destinationID)
-    {
-        StartCoroutine(MovePawnTo(objectID, destinationID, true));
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="newID"></param>
-    public void CallPawnID(int newID)
-    {
-        photonView.RPC("SetCurrentPawnID", RpcTarget.All, newID);
-    }
-
-    /// <summary>
-    /// Updates the current pawn id to newID
-    /// </summary>
-    /// <param name="newID"> Network id of the current pawn </param>
-    [PunRPC]
-    public void SetCurrentPawnID(int newID)
-    {
-        _currentPawnID = newID;
     }
 
     /// <summary>
@@ -1134,6 +1087,100 @@ public class OnlinePieceController : MonoBehaviourPun
         PhotonNetwork.Instantiate(type, new Vector3(xPos, yPos, 0f), Quaternion.identity);
     }
 
+    #region RPC Functions
+
+    /// <summary>
+    /// Calls the RPC that plays the piece's animation when it's removed
+    /// </summary>
+    /// <param name="piece"> 1 = grass, 2 = dirt, 3 = stone, 4 = gold </param>
+    public void CallRemovalAnim(int piece)
+    {
+        photonView.RPC("PieceRemovalAnim", RpcTarget.All, piece);
+    }
+
+    /// <summary>
+    /// Plays the piece's animation when it's removed
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="piece"> 1 = grass, 2 = dirt, 3 = stone, 4 = gold </param>
+    [PunRPC]
+    public void PieceRemovalAnim(int piece)
+    {
+        switch (piece)
+        {
+            case 1:
+                _grassPS.Play();
+                break;
+            case 2:
+                _dirtPS.Play();
+                break;
+            case 3:
+                _stonePS.Play();
+                break;
+            case 4:
+                _goldPS.Play();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the MovePawn RPC which moves a pawn on the other players screen.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="objectID"> Network ID of the moving pawn </param>
+    /// <param name="destinationID"> Network ID of the pawn destination 
+    /// </param>
+    public void CallMovePawn(int objectID, int destinationID)
+    {
+        photonView.RPC("MovePawn", RpcTarget.All, objectID, destinationID);
+    }
+
+    /// <summary>
+    /// Moves a pawn on the other players screen.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="objectID"> Network ID of the moving pawn </param>
+    /// <param name="destinationID"> Network ID of the pawn destination 
+    /// </param>
+    [PunRPC]
+    public void MovePawn(int objectID, int destinationID)
+    {
+        StartCoroutine(MovePawnTo(objectID, destinationID, true));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newID"></param>
+    public void CallPawnID(int newID)
+    {
+        photonView.RPC("SetCurrentPawnID", RpcTarget.All, newID);
+    }
+
+    /// <summary>
+    /// Updates the current pawn id to newID
+    /// </summary>
+    /// <param name="newID"> Network id of the current pawn </param>
+    [PunRPC]
+    public void SetCurrentPawnID(int newID)
+    {
+        _currentPawnID = newID;
+    }
+
+    /// <summary>
+    /// Calls the RPC that switches the state of the piece
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="state"></param>
+    public void CallPieceState(int state)
+    {
+        photonView.RPC("SetPieceState", RpcTarget.All, state);
+    }
+
     /// <summary>
     /// Sets the state of the game object to one of the valid enum values
     /// Edited: 
@@ -1165,12 +1212,10 @@ public class OnlinePieceController : MonoBehaviourPun
                 ChangeSprite("BedrockPiece");
                 ObjState = GameState.Four;
                 break;
-           /* case 5:
-                ChangeSprite("GoldPiece");
-                ObjState = GameState.Five;
-                break;*/
             default:
                 throw new Exception("This board piece state does not exist.");
         }
     }
+
+    #endregion
 }
