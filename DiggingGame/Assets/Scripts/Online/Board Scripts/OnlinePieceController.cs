@@ -472,7 +472,10 @@ public class OnlinePieceController : MonoBehaviourPun
 
         if (goBack)
         {
-            if (_am.CurrentTurnPhase == 1)
+            // Only is called if in the right turn phase AND it's your turn
+            if ((_am.CurrentTurnPhase == 1 && (_am.CurrentPlayer == 1 && 
+                PhotonNetwork.IsMasterClient)) || _am.CurrentPlayer == 2 && 
+                    !PhotonNetwork.IsMasterClient)
             {
                 _gcm.ToThenPhase();
             }
@@ -568,8 +571,6 @@ public class OnlinePieceController : MonoBehaviourPun
                     _cm.PrepareCardSelection(0, "", true);
                 }
             }
-            //StartCoroutine(MovePawnTo(CurrentPawn, gameObject, true));
-            // CallPawnID(CurrentPawn.GetPhotonView().ViewID);
             CallPawnID(CurrentPawn.GetComponent<OnlinePlayerPawn>().PawnID);
             CallMovePawn(_currentPawnID, _pieceID);    //Andrea SD
         }

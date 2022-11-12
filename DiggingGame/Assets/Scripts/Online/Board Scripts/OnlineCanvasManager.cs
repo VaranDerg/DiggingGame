@@ -384,15 +384,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
         UpdateCurrentPlayerText();
         photonView.RPC("UpdateActiveTextOnline", RpcTarget.All);
 
-        /*if (_am.CurrentPlayer == 1)
-        {
-            photonView.RPC("ChangeOpponentTextTwo", RpcTarget.Others);     //Andrea SD
-        }
-        else
-        {
-            photonView.RPC("ChangeOpponentTextOne", RpcTarget.Others);     //Andrea SD
-        }*/
-
         photonView.RPC("ChangeOpponentText", RpcTarget.All);     //Andrea SD
     }
 
