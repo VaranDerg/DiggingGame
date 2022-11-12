@@ -666,25 +666,28 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 
-        if (_am.CurrentTurnPhase == 2)
+        if(photonView.IsMine)
         {
-            UpdateCurrentActionText("Select an Action.");
-            _thenZone.SetActive(true);
-            _thenActions.SetActive(true);
-            _endPhaseButton.SetActive(true);
-        }
-        else if(_am.CurrentTurnPhase == 3)
-        {
-            _finallyZone.SetActive(true);
-            _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations, false);
-
-            if (_am.CurrentPlayer == 1)
+            if (_am.CurrentTurnPhase == 2)
             {
-                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Card(s).");
+                UpdateCurrentActionText("Select an Action.");
+                _thenZone.SetActive(true);
+                _thenActions.SetActive(true);
+                _endPhaseButton.SetActive(true);
             }
-            else
+            else if (_am.CurrentTurnPhase == 3)
             {
-                UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Card(s).");
+                _finallyZone.SetActive(true);
+                _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations, false);
+
+                if (_am.CurrentPlayer == 1)
+                {
+                    UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Card(s).");
+                }
+                else
+                {
+                    UpdateCurrentActionText("Activate up to " + _cm.AllowedActivations + " Card(s).");
+                }
             }
         }
 
