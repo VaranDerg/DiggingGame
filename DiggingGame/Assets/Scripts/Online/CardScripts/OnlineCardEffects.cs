@@ -708,7 +708,6 @@ public class OnlineCardEffects : MonoBehaviourPun
         _gcm.DisableListObjects();
         //Similar to regeneration.
         bool enoughPieces;
-        int newPieceCount = 0;
         int openPieces = 0;
         //enoughPieces is true if the Supply has enough Pieces to place the full effect of Flowers.
         if (_am.SupplyPile[0] >= _flowersPiecesToPlace)
@@ -717,7 +716,6 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
         else
         {
-            newPieceCount = _am.SupplyPile[0];
             enoughPieces = false;
         }
 
@@ -805,8 +803,10 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
+
         //If enough pieces are placed, Score a point.
-        if (enoughPieces)
+        if (PlacedPieces == _flowersPiecesToPlace)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }

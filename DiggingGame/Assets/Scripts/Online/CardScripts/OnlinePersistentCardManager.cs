@@ -221,7 +221,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
             for (int i = 0; i < P2PersistentCards.Count; i++)
             {
-                P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
                 pCardCount++;
             }
 
@@ -242,7 +242,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             //Returns every other card to its original state.
             for (int i = 0; i < P2PersistentCards.Count; i++)
             {
-                P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
+                P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
             }
 
             DiscardedPersistentCard = false;
@@ -256,7 +256,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
-                P1PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = true;
+                P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
                 pCardCount++;
             }
 
@@ -274,7 +274,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
 
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
-                P1PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
+                P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
             }
 
             DiscardedPersistentCard = false;

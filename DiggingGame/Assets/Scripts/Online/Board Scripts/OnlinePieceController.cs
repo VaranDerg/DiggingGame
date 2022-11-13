@@ -40,7 +40,7 @@ public class OnlinePieceController : MonoBehaviourPun
     [HideInInspector] public GameState ObjState;
     [HideInInspector] public bool HasP1Building, HasP2Building;
     [HideInInspector] public bool HasPawn;
-    /*[HideInInspector]*/
+    [HideInInspector]
     public GameObject CurrentPawn;
     [HideInInspector] public bool PieceIsSelected = true;
     private OnlineBoardManager _bm;
@@ -199,7 +199,7 @@ public class OnlinePieceController : MonoBehaviourPun
             if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
             {
                 CallPieceState(3);
-                _dirtPS.Play();
+                CallRemovalAnim(2);
                 _am.ShovelUsed = true;
                 if (CurrentPawn != null)
                 {
@@ -491,7 +491,6 @@ public class OnlinePieceController : MonoBehaviourPun
     /// </summary>
     private IEnumerator PawnMovement()
     {
-        //Debug.Log("Starting pawn movement");
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -510,8 +509,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
                 //Start of Morning Jog
                 if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog") && !_am.MorningJogUsed)
-                {
-                    Debug.Log("Player has Morning Jog!");
+                { 
                     if (ObjState == GameState.One || ObjState == GameState.Six)
                     {
                         _am.MorningJogUsed = true;

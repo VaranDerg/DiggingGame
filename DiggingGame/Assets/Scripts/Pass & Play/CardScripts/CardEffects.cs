@@ -1206,7 +1206,7 @@ public class CardEffects : MonoBehaviour
         }
 
         //Waits until CurrentDamages (managed in Building's Coroutine DamageBuilding) equals the AllowedDamages.
-        while(CurrentDamages != AllowedDamages)
+        while (CurrentDamages != AllowedDamages)
         {
             yield return null;
         }
