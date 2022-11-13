@@ -28,7 +28,7 @@ MonoBehaviour:
     of any stone it scans. Legends describe old metal detectors being used to discover
     gold in its purest form - still nestled in the ground of The Valley.
   MoleQuote: '"That took all day, but at least we found some gold! We''ll harvest
-    it later, alrgiht?"'
+    it later, alright?"'
   MeerkatQuote: '"Yeah, later. Sure."'
   CardArt: {fileID: -555724726, guid: 36f27149a38efcd41bc8f85b2d5aa138, type: 3}
   ChangeWeatherTo: 10
