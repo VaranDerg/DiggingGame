@@ -30,13 +30,25 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        gameObject.SetActive(true);
         if(s_firstLoad)
         {
+            _cg.gameObject.SetActive(false);
             _cg.alpha = 0;
             _anims.enabled = false;
             s_firstLoad = false;
         }
+        else
+        {
+            Invoke("WaitForAnimComplete", 1f);
+        }
+    }
+
+    /// <summary>
+    /// Called after animation finishes to make canvas interactable.
+    /// </summary>
+    private void WaitForAnimComplete()
+    {
+        _cg.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -57,6 +69,7 @@ public class SceneLoader : MonoBehaviour
     {
         //Starts transition
         _anims.enabled = true;
+        _cg.gameObject.SetActive(true);
         _anims.SetTrigger("Start");
         FindObjectOfType<SFXManager>().Play("LoadScene");
 
