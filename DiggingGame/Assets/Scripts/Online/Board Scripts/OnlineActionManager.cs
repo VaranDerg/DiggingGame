@@ -427,8 +427,6 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <param name="type">"Grass" "Dirt" or "Stone"</param>
     public void PlaceTile(string type)
     {
-        //Debug.Log("Player " + player + " placed a " + type + " tile!");
-
         switch (type)
         {
             case "Grass":
@@ -476,7 +474,6 @@ public class OnlineActionManager : MonoBehaviourPun
                         }
                         return true;
                     default:
-                        Debug.LogWarning("Incorrect building provided: " + type);
                         return false;
                 }
             }
@@ -506,13 +503,11 @@ public class OnlineActionManager : MonoBehaviourPun
                         }
                         return true;
                     default:
-                        Debug.LogWarning("Incorrect building provided: " + type);
                         return false;
                 }
             }
             else
             {
-                Debug.LogWarning("Player " + player + " is not valid.");
                 return false;
             }
         }

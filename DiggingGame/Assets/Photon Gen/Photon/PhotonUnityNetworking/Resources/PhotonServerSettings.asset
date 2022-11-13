@@ -90,6 +90,7 @@ MonoBehaviour:
   - SetCurrentAnimCoroutine
   - ChangeDayNight
   - PieceRemovalAnim
+  - ShowActivationText
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

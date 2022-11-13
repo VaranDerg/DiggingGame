@@ -3067,6 +3067,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: OnlineCanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 1773380378680761996, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 4.9999847
+      objectReference: {fileID: 0}
     - target: {fileID: 1773380378718423487, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3128,6 +3132,10 @@ PrefabInstance:
       value: OnlineCardEffects, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379141416550, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1773380379178922262, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}

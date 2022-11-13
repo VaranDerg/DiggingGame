@@ -428,17 +428,17 @@ public class OnlinePieceController : MonoBehaviourPun
             switch (ObjState)
             {
                 case GameState.Two:
-                    photonView.RPC("SetPieceState", RpcTarget.All, 1);
+                    CallPieceState(1);
                     CallRemovalAnim(1);
                     _am.PlaceTile("Grass");
                     break;
                 case GameState.Three:
-                    photonView.RPC("SetPieceState", RpcTarget.All, 2);
+                    CallPieceState(2);
                     CallRemovalAnim(2);
                     _am.PlaceTile("Dirt");
                     break;
                 case GameState.Four:
-                    photonView.RPC("SetPieceState", RpcTarget.All, 3);
+                    CallPieceState(3);
                     CallRemovalAnim(3);
                     _am.PlaceTile("Stone");
                     break;
@@ -1076,17 +1076,6 @@ public class OnlinePieceController : MonoBehaviourPun
         HasGold = true;
     }
 
-    /// <summary>
-    /// Places the building on all other clients
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="type"> the building to be placed </param>
-    [PunRPC]
-    private void PlaceBuilding(String type, float xPos, float yPos)
-    {
-        PhotonNetwork.Instantiate(type, new Vector3(xPos, yPos, 0f), Quaternion.identity);
-    }
-
     #region RPC Functions
 
     /// <summary>
@@ -1216,6 +1205,32 @@ public class OnlinePieceController : MonoBehaviourPun
                 throw new Exception("This board piece state does not exist.");
         }
     }
+
+/*    /// <summary>
+    /// Calls the RPC that places a building on all clients.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="type"> the building being placed </param>
+    /// <param name="xPos"> x pos of building </param>
+    /// <param name="yPos"> y pos of building </param>
+    public void CallBuilding(String type, float xPos, float yPos)
+    {
+        photonView.RPC("PlaceBuilding", RpcTarget.All, type, xPos, yPos);
+    }
+
+    /// <summary>
+    /// Places the building on all other clients
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="type"> the building to be placed </param>
+    /// <param name="xPos"> x pos of building </param>
+    /// <param name="yPos"> y position of building </param>
+    [PunRPC]
+    private void PlaceBuilding(String type, float xPos, float yPos)
+    {
+        PhotonNetwork.Instantiate(type, new Vector3(xPos, yPos, 0f), Quaternion.identity);
+    }*/
 
     #endregion
 }

@@ -174,6 +174,8 @@ public class OnlineCardEffects : MonoBehaviourPun
 
     /// <summary>
     /// Pretty cringe method for starting effect coroutines. Keeps them localized here w/ an animation.
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
     /// <param name="effectName">Name of the effect, matches coroutine. Capitalize each letter, spaces between words.</param>
@@ -181,11 +183,11 @@ public class OnlineCardEffects : MonoBehaviourPun
     {
         //Enables the Activated response box and calls ShowActivationText.
         _activateResponseBox.SetActive(true);
-        ShowActivationText(suit, effectName, true);
+        CallActivationText(suit, effectName, true);
 
         yield return new WaitForSeconds(activateAnimWaitTime);
 
-        ShowActivationText(suit, effectName, false);
+        CallActivationText(suit, effectName, false);
 
         //DO NOT OPEN THIS YOU WILL BE JUMPSCARED
         switch (effectName)
@@ -296,47 +298,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                 Transmutation();
                 break;
             default:
-                Debug.LogWarning("No effect with name " + effectName + ".");
                 break;
-        }
-    }
-
-    /// <summary>
-    /// Function that plays an animation when a player activates a card.
-    /// </summary>
-    /// <param name="effectName">"Name of the Effect"</param>
-    /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
-    private void ShowActivationText(string suit, string effectName, bool start)
-    {
-        // Shows the correct UI Sprite and updates the Text correctly.
-        _gcm.UpdateCurrentActionText("Activated Card!");
-        _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
-        if (suit == "Grass")
-        {
-            _activateResponseBox.GetComponent<Image>().sprite = _grassABar;
-        }
-        else if (suit == "Dirt")
-        {
-            _activateResponseBox.GetComponent<Image>().sprite = _dirtABar;
-        }
-        else if (suit == "Stone")
-        {
-            _activateResponseBox.GetComponent<Image>().sprite = _stoneABar;
-        }
-        else if (suit == "Gold")
-        {
-            _activateResponseBox.GetComponent<Image>().sprite = _goldABar;
-        }
-
-        if (start)
-        {
-            _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeIn");
-            _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeIn");
-        }
-        else
-        {
-            _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeOut");
-            _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeOut");
         }
     }
 
@@ -2734,4 +2696,64 @@ public class OnlineCardEffects : MonoBehaviourPun
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
     }
+
+    #region RPC Functions
+
+    /// <summary>
+    /// Calls the RPC that plays an animation when a player activates a card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="suit"></param>
+    /// <param name="effectName"></param>
+    /// <param name="start"></param>
+    public void CallActivationText(string suit, string effectName, bool start)
+    {
+        photonView.RPC("ShowActivationText", RpcTarget.All, suit, effectName,
+            start);
+    }
+
+    /// <summary>
+    /// Function that plays an animation when a player activates a card.
+    /// 
+    /// Edited: Andrea SD - added RPC tag
+    /// </summary>
+    /// <param name="effectName">"Name of the Effect"</param>
+    /// <param name="suit">"Grass" "Dirt" "Stone" or "Gold"</param>
+    [PunRPC]
+    private void ShowActivationText(string suit, string effectName, bool start)
+    {
+        // Shows the correct UI Sprite and updates the Text correctly.
+        _gcm.UpdateCurrentActionText("Activated Card!");
+        _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
+        if (suit == "Grass")
+        {
+            _activateResponseBox.GetComponent<Image>().sprite = _grassABar;
+        }
+        else if (suit == "Dirt")
+        {
+            _activateResponseBox.GetComponent<Image>().sprite = _dirtABar;
+        }
+        else if (suit == "Stone")
+        {
+            _activateResponseBox.GetComponent<Image>().sprite = _stoneABar;
+        }
+        else if (suit == "Gold")
+        {
+            _activateResponseBox.GetComponent<Image>().sprite = _goldABar;
+        }
+
+        if (start)
+        {
+            _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeIn");
+            _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeIn");
+        }
+        else
+        {
+            _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeOut");
+            _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeOut");
+        }
+    }
+
+    #endregion
 }
