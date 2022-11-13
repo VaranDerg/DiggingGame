@@ -23,8 +23,12 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Stone Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: Work isn't everything to the animals, fun still must be had! And frankly,
+    I agree. Many animals spend break time bonding over cards. They say the best
+    games combine both luck and skill; seems like creating a game like that is very
+    difficult, put probably rewarding.
+  MoleQuote: '"I''m telling you, I''m winning on my next turn! You sure you don''t
+    wanna give up?"'
+  MeerkatQuote: '"Absolutely not - a little bit of luck is all I need!"'
   CardArt: {fileID: 21300000, guid: ed5bcdf8fbd26344e9f966bc8db85024, type: 3}
   ChangeWeatherTo: 10

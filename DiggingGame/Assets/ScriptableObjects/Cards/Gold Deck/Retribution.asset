@@ -24,8 +24,12 @@ MonoBehaviour:
   StoneCost: 1
   persistent: 1
   disaster: 0
-  FlavorText: This sure is Gold Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: 'It''s commonplace for animals to fight, but sometimes, things go too
+    far. The loss of a structure is rarely seen to throw the animals into a deep,
+    fierce rage. The Valley itself reacts to this anger, exhibiting a similar response
+    that could stunt a civilization''s resources permanently. '
+  MoleQuote: '"I put my heart into making this burrow. If anything were to happen
+    to it, I don''t know what I''d do!"'
+  MeerkatQuote: '"Oh, I wouldn''t want to see that happen. It''s a beautiful burrow!"'
   CardArt: {fileID: -1362304560, guid: 2720b28cf0cd8b84ba10ec7c2adc1b17, type: 3}
   ChangeWeatherTo: 3

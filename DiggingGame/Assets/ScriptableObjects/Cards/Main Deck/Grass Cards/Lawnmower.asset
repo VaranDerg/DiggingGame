@@ -23,8 +23,10 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Grass Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: 'The Valley is known for its plentiful grass. If left alone, it could
+    easily grow too large and damage infrastructure. It''s up to the animals to keep
+    it under control. '
+  MoleQuote: '"The perfect tool for reaching dirt!"'
+  MeerkatQuote: '"I just like how clean it makes everything look."'
   CardArt: {fileID: 21300000, guid: 507459b814f59fd438af3b5eeeb6517e, type: 3}
   ChangeWeatherTo: 10

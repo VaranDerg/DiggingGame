@@ -2798,7 +2798,7 @@ MonoBehaviour:
   P2PersistentCards: []
   P1OpenPCardSlots: 
   P2OpenPCardSlots: 
-  _handCardCover: {fileID: 1488065109}
+  _handCardCover: {fileID: 1031840203}
   _handCardHideSpeed: 10
   DiscardedPersistentCard: 0
   DecidedBuildingProtection: 0
@@ -2881,7 +2881,7 @@ GameObject:
   - component: {fileID: 1031840205}
   - component: {fileID: 1031840204}
   m_Layer: 0
-  m_Name: CardHolsterBG
+  m_Name: CardCover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3969,7 +3969,7 @@ GameObject:
   - component: {fileID: 1488065110}
   - component: {fileID: 1488065111}
   m_Layer: 0
-  m_Name: CardCover
+  m_Name: CardHolsterBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

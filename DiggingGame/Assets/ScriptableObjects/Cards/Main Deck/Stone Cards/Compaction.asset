@@ -24,8 +24,11 @@ MonoBehaviour:
   StoneCost: 1
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Stone Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: Although rare, this lengthy process is said to be sped up by The Valley's
+    magic itself. At times, animals will assist in the process, carrying leftover
+    rocks and metals to barren bedrock lands for them to merge back into the ground.
+  MoleQuote: '"This is so heavy... You better not be lying about this."'
+  MeerkatQuote: '"Yeah, just leave it overnight and the stone will grow back in the
+    morning!"'
   CardArt: {fileID: 21300000, guid: fa7b3d208583a424bb5d608d93ce151b, type: 3}
   ChangeWeatherTo: 8

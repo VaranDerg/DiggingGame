@@ -24,8 +24,10 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 1
   disaster: 0
-  FlavorText: This sure is Dirt Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: The Moles were always digging experts, but after shovels were created,
+    anyone could dig just as well as them. I've yet to try one myself; that's definitely
+    on my bucket list.
+  MoleQuote: '"Cool, right? It''s like a claw on a stick!"'
+  MeerkatQuote: '"It''s just nice to dig without getting my fur messy."'
   CardArt: {fileID: -2002532713, guid: c98ba8e7180ee07459682f41f9d07bc0, type: 3}
   ChangeWeatherTo: 6

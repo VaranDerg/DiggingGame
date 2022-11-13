@@ -20,12 +20,15 @@ MonoBehaviour:
   StoneSuit: 0
   GoldSuit: 1
   GrassCost: 3
-  DirtCost: 0
+  DirtCost: 2
   StoneCost: 1
   persistent: 0
   disaster: 1
-  FlavorText: This sure is Gold Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: A tornado is said to be The Valley's unbridled rage condensed into
+    a single whirling force of destruction, capable of wiping out entire populations.
+    I've only heard stories of tornadoes during my time here. It makes vines, floods,
+    and even quakes seem like minor disruptions.
+  MoleQuote: '"My granddad told me that he fought off a tornado with his bare hands!"'
+  MeerkatQuote: '"Yeah, sure. And I dig my holes with the Golden Shovel."'
   CardArt: {fileID: -16575598, guid: 15f1311710243094384dbf8b1f6cc1b9, type: 3}
   ChangeWeatherTo: 7

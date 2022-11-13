@@ -23,8 +23,11 @@ MonoBehaviour:
   StoneCost: 1
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Gold Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: The process of transmutation is a particular one, capable of turning
+    stone into the purest quality of gold. This is very difficult however, and I've
+    never seen it performed correctly. Most of the time, I just watch a perfectly
+    good stone dissolve into nothing. It's always a bit sad to see.
+  MoleQuote: '"And finally, you add a bit of this mixture and... Huh. Nothing happened."'
+  MeerkatQuote: '"Your rock obsession continues to confuse me."'
   CardArt: {fileID: 21300000, guid: c95728c1750d5db4290e69712435b6ee, type: 3}
   ChangeWeatherTo: 9

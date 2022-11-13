@@ -24,8 +24,11 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Dirt Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: Although The Valley's soil tends to be rough, some careful processing
+    and science is able to make it into healthy, rich fertilizer. This new soil,
+    although refined, is as natural as the real thing.
+  MoleQuote: '"If you pack it tightly enough, the roots will be able to settle in
+    easier!"'
+  MeerkatQuote: '"And I thought gardening was hard..."'
   CardArt: {fileID: 21300000, guid: f767c78b03e1b9c4e888bd412c0cb71e, type: 3}
   ChangeWeatherTo: 6

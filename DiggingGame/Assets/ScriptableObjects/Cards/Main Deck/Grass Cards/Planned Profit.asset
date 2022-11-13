@@ -24,8 +24,13 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 1
   disaster: 0
-  FlavorText: This sure is Grass Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: To us, their methods may seem entirely random, but believe me, there's
+    a lot of complex thought going on in those tiny minds. I've learned that certain
+    animals specialize in knowing exactly when and where their colonies should claim
+    more territory. These animals seem a tad lost once construction completes, however.
+  MoleQuote: '"There''s going to be a thunderstorm on that day, we should move our
+    plans sometime later."'
+  MeerkatQuote: '"Hm, that''s right. We''ll delay its construction by a week, that
+    should net us a greater sum..."'
   CardArt: {fileID: 1603679006, guid: d33c40a21d70ddf48acee06709a45acb, type: 3}
   ChangeWeatherTo: 10

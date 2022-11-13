@@ -23,8 +23,10 @@ MonoBehaviour:
   StoneCost: 1
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Stone Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: Not even stone is immune to the repeated pattering of rain. Animals
+    are able to recognize weaker stone patches, and look to harvest them as quickly
+    as possible. I'm always impressed by how well they use the world around them.
+  MoleQuote: '"Here, can you tell me the difference between these two rocks?"'
+  MeerkatQuote: '"Oh wow, this one''s so smooth. I think I get it now!"'
   CardArt: {fileID: -1524755723, guid: 3cf20e312271287409fb7adb929cea0d, type: 3}
   ChangeWeatherTo: 2

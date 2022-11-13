@@ -23,8 +23,11 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Dirt Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: 'I can officially note that the talk surrounding gold was no mere rumor,
+    as I was lucky enough to get a peek at some today. I had to hold myself back
+    from reaching out and grabbing it, so admittedly, I understand why certain animals
+    can''t help themselves. '
+  MoleQuote: '"Finally, gold just for myself! Gotta use it fast..."'
+  MeerkatQuote: '"Not if I get my hands on it first!"'
   CardArt: {fileID: 21300000, guid: 8d8e38fdf66e8764ab6c6c9010a8b6ae, type: 3}
   ChangeWeatherTo: 6

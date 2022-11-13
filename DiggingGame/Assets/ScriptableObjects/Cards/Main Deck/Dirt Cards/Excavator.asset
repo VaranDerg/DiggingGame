@@ -23,8 +23,11 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Dirt Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: As The Valley's mass amounts of grass gets refined, the earthy colors
+    of soil and minerals make their way to the surface. This material is even more
+    valuable, however, and animals construct machinerey simply to collect it at a
+    faster, more efficient pace.
+  MoleQuote: '"Out of the way, excavator coming through!"'
+  MeerkatQuote: '"Eep!"'
   CardArt: {fileID: 21300000, guid: 504e0460c69434e44ae88a5be969eca6, type: 3}
   ChangeWeatherTo: 8

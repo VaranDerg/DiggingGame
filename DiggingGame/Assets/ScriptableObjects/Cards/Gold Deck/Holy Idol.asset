@@ -24,8 +24,13 @@ MonoBehaviour:
   StoneCost: 1
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Gold Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: The Holy Idol is a legendary artifact created centuries ago to praise
+    the dieties of The Valley. Nothing more is recorded about these dieties or the
+    Idol besides its mere existence. It's said that any animal in possession of it
+    would have full control over every resource.
+  MoleQuote: '"Did you ever want to ask The Valley''s creators anything? Like, why
+    was The Valley made in the first place?"'
+  MeerkatQuote: '"Yeah... Of course I have. Maybe with the Idol you could, but good
+    luck finding that."'
   CardArt: {fileID: 21300000, guid: 62526d42124658144b7ac3e454a36206, type: 3}
   ChangeWeatherTo: 9

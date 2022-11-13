@@ -24,8 +24,11 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 1
-  FlavorText: This sure is Dirt Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: I didn't believe in luck until yesterday. A terrible mass of water
+    covered nearly half of The Valley - I heard many burrows were destroyed. I got
+    completely drenched, but somehow, my notebook stayed dry. Floods here have a
+    long history of ruining tunnels, tools, and similar things.
+  MoleQuote: '"Wah, my shovel! It''s gone!"'
+  MeerkatQuote: '"Has anyone seen my weed whacker!?"'
   CardArt: {fileID: 21300000, guid: 8bd220eaabad7e749bcff48bbec95d50, type: 3}
   ChangeWeatherTo: 2

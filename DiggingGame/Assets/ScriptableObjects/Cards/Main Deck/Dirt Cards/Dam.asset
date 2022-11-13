@@ -19,13 +19,15 @@ MonoBehaviour:
   DirtSuit: 1
   StoneSuit: 0
   GoldSuit: 0
-  GrassCost: 0
-  DirtCost: 2
+  GrassCost: 1
+  DirtCost: 1
   StoneCost: 0
   persistent: 1
   disaster: 0
-  FlavorText: This sure is Dirt Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: The first time I saw a dam, I had to pinch myself. Callingl such an
+    impressive structure jaw-dropping would simply be an understatement, as I never
+    believed the animals would find a way to so effectively combat rain and water.
+  MoleQuote: '"After months of work, our dam is finally complete!"'
+  MeerkatQuote: '"Is this crack here an issue?"'
   CardArt: {fileID: -886911068, guid: 6266b86851a85034ba1f788ee60728a8, type: 3}
   ChangeWeatherTo: 8

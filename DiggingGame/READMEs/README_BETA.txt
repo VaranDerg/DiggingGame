@@ -39,13 +39,16 @@ Balance:
 	~ Planned Gamble is exactly that, a gamble. And spending stone on a card that could rarely give you benefit isn't 
 	something that's too readily done. This change should make Planned Gamble still not overly easy to play, but would give
 	it a dynamic purpose in the game and control deck cycling more.
-- Dam (1 Dirt 1 Stone -> 2 Dirt)
+- Dam (1 Dirt 1 Stone -> 1 Dirt 1 Grass)
 	~ Protecting a building on Dirt is already fairly niche, making Dam's stone cost fairly unjustified. This should allow
 	the card to be easier to play.
 - Weed Whacker & Dam (Rework: Discard Immediately, Dice = 1)
 	~ Weed Whacker & Dam now both happen immediately once a Building matching their type is selected to be damaged. This is
 	to allow the cards cycle back into the deck quicker instead of sitting in a player's hand all game. Additionally, the 
 	card now simply forces a roll of 1 to increase simplicity.
+- Garden (1 Dirt -> 3 Dirt)
+	~ Garden is a wildly powerful card, being able to score 1 point very easily, along with a possible 2 points. This change
+	makes the card fairly expensive, which we believe is a justified cost for how powerful the card proves to be. 
 - Fertilizer (1 Grass 1 Dirt -> 2 Dirt)
 	~ Fertilizer, in comparison to Flowers and Compaction, was somewhat difficult to use at most points of the game due to
 	the Dirt Supply being fairly empty. Making it similar to other placement cards by making its cost equivalent to its
@@ -58,6 +61,10 @@ Balance:
 - Transmutation (1 Point -> 1 Point per 2 Supply Gold)
 	~ Transmutation's old effect was pretty uninspired. This change should have its purpose fluxuate through play, making
 	the Card act primarily for any suit early on, and in rare cases, score massive points.
+- Tornado (3 Grass 1 Stone -> 3 Grass 2 Dirt 1 Stone)
+	~ Tornado is easily the most powerful card in the game, capable of wiping a player off the board in a single activation.
+	This activation should be a players' end goal, not just something haphazardly activated. Its current cost acts of as a
+	combination of other disaster cards, marking it as the most powerful disaster.
 - Gold Cards
    ~ Golden Shovel (1 Grass 1 Dirt -> 1 Dirt 1 Stone)
    ~ Regeneration (3 Grass -> 2 Grass 1 Dirt 1 Stone)

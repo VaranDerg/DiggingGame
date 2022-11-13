@@ -24,8 +24,10 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 1
-  FlavorText: This sure is Dirt Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: A family of Moles let me stay overnight in during one of The Valley's
+    thunderstorms (although, the burrow was a tad small). The rain is pretty and
+    relaxing - until a nearby lighting strike reminded me of its danger.
+  MoleQuote: '"Nooo! We just finished that factory!"'
+  MeerkatQuote: '"Welp. That makes two of us."'
   CardArt: {fileID: 21300000, guid: 439befab9b84570439fa1298d2c9a754, type: 3}
   ChangeWeatherTo: 3

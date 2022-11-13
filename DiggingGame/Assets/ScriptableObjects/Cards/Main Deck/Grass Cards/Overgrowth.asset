@@ -23,8 +23,11 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 1
-  FlavorText: This sure is Grass Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: 'I escaped a ravaging vine just now with only a few scratches and a
+    crack in my glasses! Adrenaline is still pumping through my body... you can''t
+    ever get too comfortable in The Valley. '
+  MoleQuote: '"Grab the lawnmower, I''ll hold the vines off!"'
+  MeerkatQuote: '"I''m moving as fast as I can! We shouldn''t have built anything
+    here!"'
   CardArt: {fileID: -517803815, guid: 8a1e526c77eba494387164de2d78a3f6, type: 3}
   ChangeWeatherTo: 5

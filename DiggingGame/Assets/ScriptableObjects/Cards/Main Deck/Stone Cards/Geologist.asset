@@ -23,8 +23,11 @@ MonoBehaviour:
   StoneCost: 1
   persistent: 1
   disaster: 0
-  FlavorText: This sure is Stone Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: 'As gold became increasingly accepted by the animal people, experts
+    of the material called "Geologists" quickly rose to the highest parts of society.
+    Their skills at identifying and retrieving gold are unmatched by any animal. '
+  MoleQuote: '"With this simple process, we can double the power of this single ounce
+    of gold!"'
+  MeerkatQuote: '"That''s incredible! You''ll have to teach me one day."'
   CardArt: {fileID: 21300000, guid: 21da512d45d93a3429f53a50ddf997aa, type: 3}
   ChangeWeatherTo: 8

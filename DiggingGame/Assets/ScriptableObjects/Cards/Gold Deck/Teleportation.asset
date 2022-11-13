@@ -23,8 +23,11 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Gold Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: I was once trailing a Meerkat through the fields, hoping that I could
+    ask it some questions. But then I blinked, and it was gone! Only a purple afterimage
+    was left behind, and even that wasn't there for long. And yes, I checked the
+    tunnels.
+  MoleQuote: '"Finally, empty land with enough space to build!"'
+  MeerkatQuote: '"Oh, sorry. I was here first!"'
   CardArt: {fileID: 21300000, guid: 68dff6adbd85bb24e90ef8ac6616a426, type: 3}
   ChangeWeatherTo: 9

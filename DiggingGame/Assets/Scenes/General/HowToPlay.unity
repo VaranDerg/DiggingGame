@@ -269,7 +269,6 @@ GameObject:
   - component: {fileID: 28206621}
   - component: {fileID: 28206624}
   - component: {fileID: 28206623}
-  - component: {fileID: 28206622}
   m_Layer: 5
   m_Name: MoleBurrow
   m_TagString: Untagged
@@ -297,26 +296,6 @@ RectTransform:
   m_AnchoredPosition: {x: -30, y: 95}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &28206622
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 28206620}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &28206623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,7 +345,6 @@ GameObject:
   - component: {fileID: 38035484}
   - component: {fileID: 38035487}
   - component: {fileID: 38035486}
-  - component: {fileID: 38035485}
   m_Layer: 5
   m_Name: Burrow
   m_TagString: Untagged
@@ -394,26 +372,6 @@ RectTransform:
   m_AnchoredPosition: {x: 75, y: 60}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0, y: 0}
---- !u!95 &38035485
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 38035483}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &38035486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,7 +421,6 @@ GameObject:
   - component: {fileID: 40509885}
   - component: {fileID: 40509888}
   - component: {fileID: 40509887}
-  - component: {fileID: 40509886}
   m_Layer: 5
   m_Name: MeerBurrow
   m_TagString: Untagged
@@ -491,26 +448,6 @@ RectTransform:
   m_AnchoredPosition: {x: 30, y: 95}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &40509886
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 40509884}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &40509887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -695,7 +632,6 @@ GameObject:
   - component: {fileID: 64731277}
   - component: {fileID: 64731280}
   - component: {fileID: 64731279}
-  - component: {fileID: 64731278}
   m_Layer: 5
   m_Name: Mole
   m_TagString: Untagged
@@ -723,26 +659,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000015258789, y: 0}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0, y: 1}
---- !u!95 &64731278
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 64731276}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &64731279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -792,7 +708,6 @@ GameObject:
   - component: {fileID: 85842243}
   - component: {fileID: 85842246}
   - component: {fileID: 85842245}
-  - component: {fileID: 85842244}
   m_Layer: 5
   m_Name: MeerFactory
   m_TagString: Untagged
@@ -820,26 +735,6 @@ RectTransform:
   m_AnchoredPosition: {x: -120, y: 95}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &85842244
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 85842242}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &85842245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1024,7 +919,6 @@ GameObject:
   - component: {fileID: 140654056}
   - component: {fileID: 140654059}
   - component: {fileID: 140654058}
-  - component: {fileID: 140654057}
   m_Layer: 5
   m_Name: GrassPiece (3)
   m_TagString: Untagged
@@ -1052,26 +946,6 @@ RectTransform:
   m_AnchoredPosition: {x: -155, y: 150}
   m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &140654057
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 140654055}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &140654058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1819,7 +1693,16 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -4674183087742674415, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 3681064713740439673, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3681064713740439673, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 727865081751947473, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
 --- !u!224 &294939770 stripped
 RectTransform:
@@ -1972,7 +1855,6 @@ GameObject:
   - component: {fileID: 324342668}
   - component: {fileID: 324342671}
   - component: {fileID: 324342670}
-  - component: {fileID: 324342669}
   m_Layer: 5
   m_Name: DirtPiece
   m_TagString: Untagged
@@ -2000,26 +1882,6 @@ RectTransform:
   m_AnchoredPosition: {x: -100, y: 125}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &324342669
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 324342667}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &324342670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2340,7 +2202,8 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4290032820
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 727865081751947473, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
 --- !u!224 &339242103 stripped
 RectTransform:
@@ -2770,7 +2633,6 @@ GameObject:
   - component: {fileID: 408904227}
   - component: {fileID: 408904230}
   - component: {fileID: 408904229}
-  - component: {fileID: 408904228}
   m_Layer: 5
   m_Name: CapacityPiece
   m_TagString: Untagged
@@ -2800,26 +2662,6 @@ RectTransform:
   m_AnchoredPosition: {x: 165, y: 100}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &408904228
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 408904226}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &408904229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3409,7 +3251,6 @@ GameObject:
   - component: {fileID: 471052170}
   - component: {fileID: 471052173}
   - component: {fileID: 471052172}
-  - component: {fileID: 471052171}
   m_Layer: 5
   m_Name: MeerMine
   m_TagString: Untagged
@@ -3437,26 +3278,6 @@ RectTransform:
   m_AnchoredPosition: {x: 180, y: 95}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &471052171
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 471052169}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &471052172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3658,7 +3479,6 @@ GameObject:
   - component: {fileID: 484960718}
   - component: {fileID: 484960721}
   - component: {fileID: 484960720}
-  - component: {fileID: 484960719}
   m_Layer: 5
   m_Name: Mole
   m_TagString: Untagged
@@ -3686,26 +3506,6 @@ RectTransform:
   m_AnchoredPosition: {x: 55, y: 75}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0, y: 0.5}
---- !u!95 &484960719
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484960717}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &484960720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3890,7 +3690,6 @@ GameObject:
   - component: {fileID: 513190276}
   - component: {fileID: 513190279}
   - component: {fileID: 513190278}
-  - component: {fileID: 513190277}
   m_Layer: 5
   m_Name: Factory
   m_TagString: Untagged
@@ -3918,26 +3717,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000015258789, y: 0}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 1, y: 0}
---- !u!95 &513190277
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 513190275}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &513190278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4072,7 +3851,6 @@ GameObject:
   - component: {fileID: 557735327}
   - component: {fileID: 557735330}
   - component: {fileID: 557735329}
-  - component: {fileID: 557735328}
   m_Layer: 5
   m_Name: GrassPiece (2)
   m_TagString: Untagged
@@ -4100,26 +3878,6 @@ RectTransform:
   m_AnchoredPosition: {x: -115, y: 110}
   m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &557735328
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 557735326}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &557735329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4423,7 +4181,6 @@ GameObject:
   - component: {fileID: 603860405}
   - component: {fileID: 603860407}
   - component: {fileID: 603860406}
-  - component: {fileID: 603860408}
   m_Layer: 5
   m_Name: DamagedFactory
   m_TagString: Untagged
@@ -4489,26 +4246,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603860404}
   m_CullTransparentMesh: 1
---- !u!95 &603860408
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 603860404}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &612343948
 GameObject:
   m_ObjectHideFlags: 0
@@ -4655,7 +4392,6 @@ GameObject:
   - component: {fileID: 620016808}
   - component: {fileID: 620016811}
   - component: {fileID: 620016810}
-  - component: {fileID: 620016809}
   m_Layer: 5
   m_Name: GrassPiece (4)
   m_TagString: Untagged
@@ -4683,26 +4419,6 @@ RectTransform:
   m_AnchoredPosition: {x: -75, y: 150}
   m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &620016809
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 620016807}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &620016810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5451,7 +5167,6 @@ GameObject:
   - component: {fileID: 752540590}
   - component: {fileID: 752540593}
   - component: {fileID: 752540592}
-  - component: {fileID: 752540591}
   m_Layer: 5
   m_Name: Mole
   m_TagString: Untagged
@@ -5479,26 +5194,6 @@ RectTransform:
   m_AnchoredPosition: {x: 25, y: -25}
   m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 0, y: 1}
---- !u!95 &752540591
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 752540589}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &752540592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6273,8 +5968,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Board
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
+  m_sharedMaterial: {fileID: -4674183087742674415, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6298,8 +5993,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6494,7 +6189,6 @@ GameObject:
   - component: {fileID: 861071902}
   - component: {fileID: 861071904}
   - component: {fileID: 861071903}
-  - component: {fileID: 861071905}
   m_Layer: 5
   m_Name: GrassPiece
   m_TagString: Untagged
@@ -6560,26 +6254,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861071901}
   m_CullTransparentMesh: 1
---- !u!95 &861071905
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 861071901}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &868718547
 GameObject:
   m_ObjectHideFlags: 0
@@ -6860,7 +6534,6 @@ GameObject:
   - component: {fileID: 898271310}
   - component: {fileID: 898271313}
   - component: {fileID: 898271312}
-  - component: {fileID: 898271311}
   m_Layer: 5
   m_Name: MoleFactory
   m_TagString: Untagged
@@ -6888,26 +6561,6 @@ RectTransform:
   m_AnchoredPosition: {x: -180, y: 95}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &898271311
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 898271309}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &898271312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7362,7 +7015,6 @@ GameObject:
   - component: {fileID: 949170998}
   - component: {fileID: 949171000}
   - component: {fileID: 949170999}
-  - component: {fileID: 949171001}
   m_Layer: 5
   m_Name: Mole
   m_TagString: Untagged
@@ -7428,26 +7080,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 949170997}
   m_CullTransparentMesh: 1
---- !u!95 &949171001
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 949170997}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &966338980
 GameObject:
   m_ObjectHideFlags: 0
@@ -8397,7 +8029,6 @@ GameObject:
   - component: {fileID: 1081774450}
   - component: {fileID: 1081774453}
   - component: {fileID: 1081774452}
-  - component: {fileID: 1081774451}
   m_Layer: 5
   m_Name: GrassPiece (8)
   m_TagString: Untagged
@@ -8426,26 +8057,6 @@ RectTransform:
   m_AnchoredPosition: {x: -155, y: 110}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1081774451
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081774449}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1081774452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8495,7 +8106,6 @@ GameObject:
   - component: {fileID: 1093405536}
   - component: {fileID: 1093405539}
   - component: {fileID: 1093405538}
-  - component: {fileID: 1093405537}
   m_Layer: 5
   m_Name: GrassPiece (1)
   m_TagString: Untagged
@@ -8523,26 +8133,6 @@ RectTransform:
   m_AnchoredPosition: {x: -115, y: 190}
   m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1093405537
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1093405535}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1093405538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8727,7 +8317,6 @@ GameObject:
   - component: {fileID: 1144844062}
   - component: {fileID: 1144844065}
   - component: {fileID: 1144844064}
-  - component: {fileID: 1144844063}
   m_Layer: 5
   m_Name: Mines
   m_TagString: Untagged
@@ -8755,26 +8344,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1144844063
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1144844061}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1144844064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9806,7 +9375,6 @@ GameObject:
   - component: {fileID: 1286181637}
   - component: {fileID: 1286181640}
   - component: {fileID: 1286181639}
-  - component: {fileID: 1286181638}
   m_Layer: 5
   m_Name: GoldPiece
   m_TagString: Untagged
@@ -9834,26 +9402,6 @@ RectTransform:
   m_AnchoredPosition: {x: -75, y: 60}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 1, y: 0}
---- !u!95 &1286181638
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286181636}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1286181639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10174,7 +9722,6 @@ GameObject:
   - component: {fileID: 1293992653}
   - component: {fileID: 1293992656}
   - component: {fileID: 1293992655}
-  - component: {fileID: 1293992654}
   m_Layer: 5
   m_Name: GrassPiece
   m_TagString: Untagged
@@ -10203,26 +9750,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 100}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1293992654
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1293992652}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1293992655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10272,7 +9799,6 @@ GameObject:
   - component: {fileID: 1303225381}
   - component: {fileID: 1303225384}
   - component: {fileID: 1303225383}
-  - component: {fileID: 1303225382}
   m_Layer: 5
   m_Name: DirtPiece
   m_TagString: Untagged
@@ -10300,26 +9826,6 @@ RectTransform:
   m_AnchoredPosition: {x: -75, y: -25}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 1, y: 1}
---- !u!95 &1303225382
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1303225380}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1303225383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10645,7 +10151,6 @@ GameObject:
   - component: {fileID: 1339326940}
   - component: {fileID: 1339326943}
   - component: {fileID: 1339326942}
-  - component: {fileID: 1339326941}
   m_Layer: 5
   m_Name: Meerkat
   m_TagString: Untagged
@@ -10673,26 +10178,6 @@ RectTransform:
   m_AnchoredPosition: {x: -25, y: -25}
   m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 1, y: 1}
---- !u!95 &1339326941
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1339326939}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1339326942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10878,7 +10363,6 @@ GameObject:
   - component: {fileID: 1352889332}
   - component: {fileID: 1352889335}
   - component: {fileID: 1352889334}
-  - component: {fileID: 1352889333}
   m_Layer: 5
   m_Name: GrassPiece (5)
   m_TagString: Untagged
@@ -10907,26 +10391,6 @@ RectTransform:
   m_AnchoredPosition: {x: -155, y: 190}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1352889333
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1352889331}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1352889334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11096,7 +10560,16 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -4674183087742674415, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 3681064713740439673, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3681064713740439673, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 727865081751947473, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
 --- !u!224 &1354039728 stripped
 RectTransform:
@@ -11114,7 +10587,6 @@ GameObject:
   - component: {fileID: 1384110893}
   - component: {fileID: 1384110896}
   - component: {fileID: 1384110895}
-  - component: {fileID: 1384110894}
   m_Layer: 5
   m_Name: GoldPiece
   m_TagString: Untagged
@@ -11142,26 +10614,6 @@ RectTransform:
   m_AnchoredPosition: {x: 100, y: 125}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1384110894
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1384110892}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1384110895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11211,7 +10663,6 @@ GameObject:
   - component: {fileID: 1392314357}
   - component: {fileID: 1392314360}
   - component: {fileID: 1392314359}
-  - component: {fileID: 1392314358}
   m_Layer: 5
   m_Name: BedrockPiece
   m_TagString: Untagged
@@ -11239,26 +10690,6 @@ RectTransform:
   m_AnchoredPosition: {x: 200, y: 125}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1392314358
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1392314356}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1392314359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11308,7 +10739,6 @@ GameObject:
   - component: {fileID: 1398080638}
   - component: {fileID: 1398080641}
   - component: {fileID: 1398080640}
-  - component: {fileID: 1398080639}
   m_Layer: 5
   m_Name: Meerkat
   m_TagString: Untagged
@@ -11336,26 +10766,6 @@ RectTransform:
   m_AnchoredPosition: {x: -55, y: 75}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 1, y: 0.5}
---- !u!95 &1398080639
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1398080637}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1398080640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11405,7 +10815,6 @@ GameObject:
   - component: {fileID: 1408249942}
   - component: {fileID: 1408249945}
   - component: {fileID: 1408249944}
-  - component: {fileID: 1408249943}
   m_Layer: 5
   m_Name: StonePiece
   m_TagString: Untagged
@@ -11433,26 +10842,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 125}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1408249943
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1408249941}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1408249944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11502,7 +10891,6 @@ GameObject:
   - component: {fileID: 1443998028}
   - component: {fileID: 1443998031}
   - component: {fileID: 1443998030}
-  - component: {fileID: 1443998029}
   m_Layer: 5
   m_Name: MoleMine
   m_TagString: Untagged
@@ -11530,26 +10918,6 @@ RectTransform:
   m_AnchoredPosition: {x: 120, y: 95}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1443998029
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1443998027}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1443998030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11599,7 +10967,6 @@ GameObject:
   - component: {fileID: 1459852140}
   - component: {fileID: 1459852142}
   - component: {fileID: 1459852141}
-  - component: {fileID: 1459852143}
   m_Layer: 5
   m_Name: Factory
   m_TagString: Untagged
@@ -11665,26 +11032,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1459852139}
   m_CullTransparentMesh: 1
---- !u!95 &1459852143
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1459852139}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1472033670
 GameObject:
   m_ObjectHideFlags: 0
@@ -11696,7 +11043,6 @@ GameObject:
   - component: {fileID: 1472033671}
   - component: {fileID: 1472033674}
   - component: {fileID: 1472033673}
-  - component: {fileID: 1472033672}
   m_Layer: 5
   m_Name: GrassPiece
   m_TagString: Untagged
@@ -11725,26 +11071,6 @@ RectTransform:
   m_AnchoredPosition: {x: -115, y: 150}
   m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1472033672
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1472033670}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1472033673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12196,7 +11522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3934532104423689339, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3934532104423689341, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: _anims
@@ -12228,7 +11554,6 @@ GameObject:
   - component: {fileID: 1545881156}
   - component: {fileID: 1545881159}
   - component: {fileID: 1545881158}
-  - component: {fileID: 1545881157}
   m_Layer: 5
   m_Name: GrassPiece
   m_TagString: Untagged
@@ -12256,26 +11581,6 @@ RectTransform:
   m_AnchoredPosition: {x: -200, y: 125}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1545881157
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1545881155}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1545881158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13008,7 +12313,8 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4278190080
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 727865081751947473, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
 --- !u!224 &1650353459 stripped
 RectTransform:
@@ -13617,7 +12923,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 727865081751947473, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
 --- !u!224 &1732361348 stripped
 RectTransform:
@@ -13911,7 +13218,6 @@ GameObject:
   - component: {fileID: 1751929108}
   - component: {fileID: 1751929111}
   - component: {fileID: 1751929110}
-  - component: {fileID: 1751929109}
   m_Layer: 5
   m_Name: GrassPiece (7)
   m_TagString: Untagged
@@ -13940,26 +13246,6 @@ RectTransform:
   m_AnchoredPosition: {x: -75, y: 110}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1751929109
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751929107}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1751929110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15110,7 +14396,6 @@ GameObject:
   - component: {fileID: 1897654463}
   - component: {fileID: 1897654466}
   - component: {fileID: 1897654465}
-  - component: {fileID: 1897654464}
   m_Layer: 5
   m_Name: GrassPiece (6)
   m_TagString: Untagged
@@ -15139,26 +14424,6 @@ RectTransform:
   m_AnchoredPosition: {x: -75, y: 190}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1897654464
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1897654462}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 364d87fcb979add4dab6c1d2abe738e3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1897654465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17005,5 +16270,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 727865081751947473, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5058dd1042dbb07498cca32701c08fb2, type: 3}

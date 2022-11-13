@@ -24,8 +24,10 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 1
   disaster: 0
-  FlavorText: This sure is Grass Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: The animals are always crafting new ways to combat The Valley's natural
+    disasters. Most don't end up working out, but every now and then, some new idea
+    sticks. I'm constantly impressed by their cleverness.
+  MoleQuote: '"What are you doing?! That''s not a lawnmower!"'
+  MeerkatQuote: '"I don''t really know! Take this, vine!"'
   CardArt: {fileID: 21300000, guid: 9272ec60406d4f844ae6365ed009202b, type: 3}
   ChangeWeatherTo: 5

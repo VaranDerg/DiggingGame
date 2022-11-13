@@ -16,11 +16,14 @@ public class SceneLoader : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Animator _anims;
+    [SerializeField] private CanvasGroup _cg;
 
     [Header("Values")]
     [SerializeField] private float _transitionTime;
 
     private static bool s_enteredGame = false;
+    private static bool s_firstLoad = true;
+    [SerializeField] private bool _isMainMenu;
 
     /// <summary>
     /// Turns on the Transition Manager.
@@ -28,6 +31,12 @@ public class SceneLoader : MonoBehaviour
     private void Start()
     {
         gameObject.SetActive(true);
+        if(s_firstLoad)
+        {
+            _cg.alpha = 0;
+            _anims.enabled = false;
+            s_firstLoad = false;
+        }
     }
 
     /// <summary>
@@ -47,6 +56,7 @@ public class SceneLoader : MonoBehaviour
     private IEnumerator SceneLoadingCoroutine(string sceneName)
     {
         //Starts transition
+        _anims.enabled = true;
         _anims.SetTrigger("Start");
         FindObjectOfType<SFXManager>().Play("LoadScene");
 

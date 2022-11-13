@@ -23,8 +23,10 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Dirt Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: Mudsliding has become commonplace in The Valley over time, and many
+    consider it a sport! Although, after periods of rain, mudslides could sweep basically
+    anyone off of their feet! Trust me, I'm speaking from experience.
+  MoleQuote: '"I wish the dirt wasn''t so wet, it gets stuck between my claws..."'
+  MeerkatQuote: '"Weeeeee!!!"'
   CardArt: {fileID: 21300000, guid: e5f5ced801668e340b539131bd09eb25, type: 3}
   ChangeWeatherTo: 2

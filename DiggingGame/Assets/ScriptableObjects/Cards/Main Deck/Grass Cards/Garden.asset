@@ -20,12 +20,16 @@ MonoBehaviour:
   StoneSuit: 0
   GoldSuit: 0
   GrassCost: 0
-  DirtCost: 1
+  DirtCost: 3
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Grass Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: 'Many have commented on a rare structure known as a "Garden." Apparently
+    these collections of plants and crops are meticulously kept - a definite sign
+    of hard work and time. '
+  MoleQuote: '"I don''t really get this whole garden thing. What''s so great about
+    plants?"'
+  MeerkatQuote: '"It''s so relaxing, you should try! Nothing feels better than your
+    efforts paying off."'
   CardArt: {fileID: 1256136631, guid: 7915465f2c1f35b4888528e8cab7b55d, type: 3}
   ChangeWeatherTo: 4

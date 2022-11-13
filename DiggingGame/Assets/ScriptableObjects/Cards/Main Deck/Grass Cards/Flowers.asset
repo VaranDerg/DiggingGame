@@ -24,8 +24,11 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 0
-  FlavorText: This sure is Grass Card flavor text!
-  MoleQuote: '"I''m a Mole! Yippee!"'
-  MeerkatQuote: '"I''m a Meerkat! Yay!"'
+  FlavorText: Many would agree that flowers are the perfect way to brighten someone's
+    day. Animals of The Valley are commonly seen playing with them; sure looks like
+    they agree!
+  MoleQuote: '"Why are we planting flowers again? Weren''t we just going to build
+    here?"'
+  MeerkatQuote: '"I don''t know. The Valley could use some color."'
   CardArt: {fileID: 1828260438, guid: 131eb8ee67e7bcb48890572fc188d0d2, type: 3}
   ChangeWeatherTo: 4
