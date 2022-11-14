@@ -231,8 +231,6 @@ public class PersistentCardManager : MonoBehaviour
     /// </summary>
     public IEnumerator PersistentCardDiscardProcess()
     {
-        _currentCoverPos = new Vector3(_defaultCoverPos.x, _defaultCoverPos.y + 3, _defaultCoverPos.z);
-
         //This is for use with Flood. It sets Cards into a discardable state. 
         if (_am.CurrentPlayer == 1)
         {
@@ -252,6 +250,8 @@ public class PersistentCardManager : MonoBehaviour
                 _gcm.Back();
                 yield break;
             }
+
+            _currentCoverPos = new Vector3(_defaultCoverPos.x, _defaultCoverPos.y + 3, _defaultCoverPos.z);
 
             DiscardedPersistentCard = false;
 
@@ -292,6 +292,8 @@ public class PersistentCardManager : MonoBehaviour
                 _gcm.Back();
                 yield break;
             }
+
+            _currentCoverPos = new Vector3(_defaultCoverPos.x, _defaultCoverPos.y + 3, _defaultCoverPos.z);
 
             DiscardedPersistentCard = false;
 
