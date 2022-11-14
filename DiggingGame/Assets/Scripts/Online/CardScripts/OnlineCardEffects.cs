@@ -1592,7 +1592,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
 
         //Starts PCM's PersistentCardDiscardProcess, as per Overgrowth's wording.
-        StartCoroutine(_pcm.PersistentCardDiscardProcess());
+        CallPCDiscardProcess();    
     }
 
     /// <summary>
@@ -1679,7 +1679,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (building.GetComponent<OnlineBuilding>().PlayerOwning != _am.CurrentPlayer)
             {
-                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<OnlineBuilding>().SuitOfPiece == "Dirt")
                 {
                     building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
@@ -1718,7 +1718,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (building.GetComponent<OnlineBuilding>().PlayerOwning == _am.CurrentPlayer)
             {
-                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<OnlineBuilding>().SuitOfPiece == "Dirt")
                 {
                     building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     yourBuildingCount++;
@@ -2753,6 +2753,27 @@ public class OnlineCardEffects : MonoBehaviourPun
             _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeOut");
             _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeOut");
         }
+    }
+
+    /// <summary>
+    /// Calls the RPC that begins the persistent discard process coroutine
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallPCDiscardProcess()
+    {
+        photonView.RPC("PCDiscardProcess", RpcTarget.Others);
+    }
+
+    /// <summary>
+    /// Starts the persistent card discard process coroutine
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void PCDiscardProcess()
+    {
+        StartCoroutine(_pcm.PersistentCardDiscardProcess());
     }
 
     #endregion

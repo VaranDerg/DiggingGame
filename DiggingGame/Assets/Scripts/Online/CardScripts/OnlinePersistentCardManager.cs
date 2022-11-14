@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Photon.Pun;
 
 // Edited: Andrea SD - Modified for online use
 
-public class OnlinePersistentCardManager : MonoBehaviour
+public class OnlinePersistentCardManager : MonoBehaviourPun
 {
     [Header("References")]
     [SerializeField] private List<Transform> _p1PCardPositions = new List<Transform>();
@@ -36,6 +37,8 @@ public class OnlinePersistentCardManager : MonoBehaviour
     private OnlineActionManager _am;
     private OnlineBoardManager _bm;
     private OnlineCanvasManager _gcm;
+
+    private string _cName;
 
     /// <summary>
     /// Assigns Partner scripts.
@@ -91,11 +94,14 @@ public class OnlinePersistentCardManager : MonoBehaviour
                     //Plays an Animation.
                     card.GetComponentInChildren<Animator>().Play("CardPersistent");
                     //Says the Card is persistent and gives its current HandPosition.
-                    card.GetComponentInChildren<CardController>().MadePersistentP1 = true;
-                    card.GetComponentInChildren<CardController>().PHandPosition = i;
+                    card.GetComponentInChildren<OnlineCardController>().MadePersistentP1 = true;
+                    card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
                     //Removes it from the Hand.
-                    FindObjectOfType<CardManager>().P1OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
-                    FindObjectOfType<CardManager>().P1Hand.Remove(card);
+                    FindObjectOfType<OnlineCardManager>().P1OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
+
+                    // ASD
+                    int _cardPos = FindObjectOfType<OnlineCardManager>().P2Hand.IndexOf(card);
+
                     //Lowers count.
                     if (card.CompareTag("Card"))
                     {
@@ -106,7 +112,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
                         _am.P1GoldCards--;
                     }
                     //Adds to newest list.
-                    P1PersistentCards.Add(card);
+                    CallAddToPersistent(_cardPos, 1); ;
                     P1OpenPCardSlots[i] = false;
                     //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
@@ -122,10 +128,14 @@ public class OnlinePersistentCardManager : MonoBehaviour
                 {
                     card.transform.position = _p2PCardPositions[i].position;
                     card.GetComponentInChildren<Animator>().Play("CardPersistent");
-                    card.GetComponentInChildren<CardController>().MadePersistentP2 = true;
-                    card.GetComponentInChildren<CardController>().PHandPosition = i;
-                    FindObjectOfType<CardManager>().P2OpenHandPositions[card.GetComponentInChildren<CardController>().HandPosition] = true;
-                    FindObjectOfType<CardManager>().P2Hand.Remove(card);
+                    card.GetComponentInChildren<OnlineCardController>().MadePersistentP2 = true;
+                    card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
+                    FindObjectOfType<OnlineCardManager>().P2OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
+                  
+                    // ASD
+                    int _cardPos = FindObjectOfType<OnlineCardManager>().P2Hand.IndexOf(card);
+
+                    FindObjectOfType<OnlineCardManager>().P2Hand.Remove(card);
                     if (card.CompareTag("Card"))
                     {
                         _am.P2Cards--;
@@ -134,9 +144,8 @@ public class OnlinePersistentCardManager : MonoBehaviour
                     {
                         _am.P2GoldCards--;
                     }
-                    P2PersistentCards.Add(card);
+                    CallAddToPersistent(_cardPos, 2);
                     P2OpenPCardSlots[i] = false;
-                    //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
                 }
             }
@@ -246,7 +255,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
 
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
-            _gcm.Back();
+            CallGoBack();
         }
         //Identical for player 2.
         else
@@ -278,7 +287,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
 
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
-            _gcm.Back();
+            CallGoBack();
         }
     }
 
@@ -350,4 +359,65 @@ public class OnlinePersistentCardManager : MonoBehaviour
 
         _gcm.UpdateCurrentActionText("Player " + retributionPlayer + " suffered Retribution! " + sentPieces + " of their " + suit + " Pieces were sent to the Supply!");
     }
+
+    #region RPC Functions
+
+    /// <summary>
+    /// Calls the RPC that returns to the previous phase
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallGoBack()
+    {
+        photonView.RPC("GoBack", RpcTarget.Others);
+    }
+
+    /// <summary>
+    /// Returns to the previous phase
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void GoBack()
+    {
+        _gcm.Back();
+    }
+
+    /// <summary>
+    /// Calls the RPC that adds a card to persistant cards and removes it from
+    /// player's hand
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="pos"> pos of card being removed </param>
+    /// <param name="player"> player's hand </param>
+    public void CallAddToPersistent(int pos, int player)
+    {
+        photonView.RPC("AddToPersistent", RpcTarget.All, pos, player);
+    }
+
+    /// <summary>
+    /// Adds the card to persistant cards and removes from players hand
+    /// 
+    /// Author: ASD
+    /// </summary>
+    /// <param name="pos"> pos of card being removed </param>
+    /// <param name="player"> player's hand </param>
+    [PunRPC]
+    public void AddToPersistent(int pos, int player)
+    {
+        switch (player)
+        {
+            case 1:
+                P1PersistentCards.Add(FindObjectOfType<OnlineCardManager>().P1Hand[pos]);
+                FindObjectOfType<OnlineCardManager>().P1Hand.Remove(FindObjectOfType<OnlineCardManager>().P1Hand[pos]);
+                break;
+            case 2:
+                P2PersistentCards.Add(FindObjectOfType<OnlineCardManager>().P2Hand[pos]);
+                FindObjectOfType<OnlineCardManager>().P2Hand.Remove(FindObjectOfType<OnlineCardManager>().P2Hand[pos]);
+                break;
+        }
+    }
+
+    #endregion
 }

@@ -792,6 +792,8 @@ public class OnlinePieceController : MonoBehaviourPun
             GameObject thisBuilding = PhotonNetwork.Instantiate(building.name,
                 _buildingSlot.position, Quaternion.identity);   //Andrea SD
 
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Building", 1);
+
             if (buildingArrayNum == 0)
             {
                 thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Factory";
@@ -812,6 +814,11 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Stone Mine";
             }
+            else if (buildingArrayNum == 5)
+            {
+                thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Gold Mine";
+            }
+
             thisBuilding.GetComponent<OnlineBuilding>().SuitOfPiece = pieceSuit;
             thisBuilding.GetComponent<OnlineBuilding>().PlayerOwning = _am.CurrentPlayer;
 
@@ -880,10 +887,23 @@ public class OnlinePieceController : MonoBehaviourPun
 
             if (spawnPawn)
             {
-                Vector3 _buildingPlacement = _buildingSlot.transform.position;   // Andrea SD
-                GameObject newPawn = PhotonNetwork.Instantiate("OnlinePlayerPawn", _buildingPlacement, Quaternion.identity);   // Andrea SD
-                newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
-                newPawn.transform.SetParent(null);
+                if (_am.CurrentPlayer == 1)
+                {
+                    Vector3 _buildingPlacement = _buildingSlot.transform.position;   // Andrea SD
+                    GameObject newPawn = PhotonNetwork.Instantiate("MolePawnWorkEdition", _buildingPlacement, Quaternion.identity);   // Andrea SD
+                    newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
+                    newPawn.transform.SetParent(null);
+                    HasPawn = true;
+                }
+                else
+                {
+                    Vector3 _buildingPlacement = _buildingSlot.transform.position;   // Andrea SD
+                    GameObject newPawn = PhotonNetwork.Instantiate("MeerkatPawn", _buildingPlacement, Quaternion.identity);   // Andrea SD
+                    newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
+                    newPawn.transform.SetParent(null);
+                    HasPawn = true;
+                }
+                
             }
 
             if (_am.CurrentPlayer == 1)
