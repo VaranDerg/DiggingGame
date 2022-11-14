@@ -138,6 +138,7 @@ MonoBehaviour:
   TeleportationMove: 0
   WaitingAnimName: MoleWaiting
   IdleAnimName: MoleIdle
+  MoveAnimName: Mole Move
 --- !u!95 &7580750187432747781
 Animator:
   serializedVersion: 4

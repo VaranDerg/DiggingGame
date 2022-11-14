@@ -485,6 +485,7 @@ public class PieceController : MonoBehaviour
         pawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
         _pawnIsMoving = true;
         FindObjectOfType<SFXManager>().Play("Move");
+        pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().MoveAnimName);
 
         //Start anim?
         yield return new WaitForSeconds(_am.PawnMoveAnimTime);

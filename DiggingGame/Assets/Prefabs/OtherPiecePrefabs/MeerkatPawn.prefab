@@ -139,6 +139,7 @@ MonoBehaviour:
   TeleportationMove: 0
   WaitingAnimName: MeerkatWaiting
   IdleAnimName: MeerkatIdle
+  MoveAnimName: Meerkat Move
 --- !u!95 &1180634803487834951
 Animator:
   serializedVersion: 4

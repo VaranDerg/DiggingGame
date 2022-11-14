@@ -37,6 +37,7 @@ public class PlayerPawn : MonoBehaviour
     [Header("Animations")]
     public string WaitingAnimName;
     public string IdleAnimName;
+    public string MoveAnimName;
 
     /// <summary>
     /// Adds every board piece to a list.
