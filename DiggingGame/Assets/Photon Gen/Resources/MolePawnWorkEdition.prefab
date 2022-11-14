@@ -159,6 +159,8 @@ MonoBehaviour:
   TeleportationMove: 0
   WaitingAnimName: MoleWaiting
   IdleAnimName: MoleIdle
+  MoveAnimName: Mole Move
+  PawnID: 0
 --- !u!114 &-4363553245554103029
 MonoBehaviour:
   m_ObjectHideFlags: 0

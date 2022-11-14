@@ -18,13 +18,16 @@ public class OnlinePersistentCardManager : MonoBehaviour
     [HideInInspector] public List<GameObject> P2PersistentCards = new List<GameObject>();
     [HideInInspector] public bool[] P1OpenPCardSlots;
     [HideInInspector] public bool[] P2OpenPCardSlots;
+    [SerializeField] private GameObject _handCardCover;
+    [SerializeField] private float _handCardHideSpeed;
+    private Vector3 _defaultCoverPos;
+    private Vector3 _currentCoverPos;
 
     //Functional variables for specific code points.
     [Header("Other")]
     [HideInInspector] public bool DiscardedPersistentCard;
     [HideInInspector] public bool DecidedBuildingProtection;
     [HideInInspector] public Coroutine CurrentBuildingDamageProcess;
-    [HideInInspector] public bool AutomaticDiscard = true;
 
     [Header("Retribution")]
     [HideInInspector] public int BuildingsDamaged;
@@ -32,8 +35,6 @@ public class OnlinePersistentCardManager : MonoBehaviour
     [Header("Partner Scripts")]
     private OnlineActionManager _am;
     private OnlineBoardManager _bm;
-    private OnlineCardManager _cm;
-    private OnlineCardEffects _ce;
     private OnlineCanvasManager _gcm;
 
     /// <summary>
@@ -43,8 +44,6 @@ public class OnlinePersistentCardManager : MonoBehaviour
     {
         _am = FindObjectOfType<OnlineActionManager>();
         _bm = FindObjectOfType<OnlineBoardManager>();
-        _cm = FindObjectOfType<OnlineCardManager>();
-        _ce = FindObjectOfType<OnlineCardEffects>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
     }
 
@@ -192,7 +191,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             {
                 if (P1PersistentCards[i].name == cardName)
                 {
-                    StartCoroutine(P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
+                    StartCoroutine(P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().ToDiscard());
                 }
             }
         }
@@ -202,7 +201,7 @@ public class OnlinePersistentCardManager : MonoBehaviour
             {
                 if (P2PersistentCards[i].name == cardName)
                 {
-                    StartCoroutine(P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
+                    StartCoroutine(P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().ToDiscard());
                 }
             }
         }

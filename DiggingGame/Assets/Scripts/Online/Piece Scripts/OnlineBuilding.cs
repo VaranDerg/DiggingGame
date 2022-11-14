@@ -172,21 +172,6 @@ public class OnlineBuilding : MonoBehaviourPun
         //Starts rolling the dice.
         _damageDice.GetComponent<Animator>().Play("DiceEnter");
         _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
-        int num = 0;
-        //Shows a face (1, 2, 3, 4) up to the variable's count.
-        for (int i = 0; i <= _showDiceFaceTimes; i++)
-        {
-            if (num == _ce.DamageDieSides)
-            {
-                num = 1;
-            }
-            else
-            {
-                num++;
-            }
-            _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
-            yield return new WaitForSeconds(0.05f);
-        }
 
         //The real result is separate from the visual
         int damageDiceVisual = Random.Range(1, _ce.DamageDieSides + 1);
@@ -215,6 +200,22 @@ public class OnlineBuilding : MonoBehaviourPun
             }
         }
         //End Weed Whacker & Dam
+
+        int num = 0;
+        //Shows a face (1, 2, 3, 4) up to the variable's count.
+        for (int i = 0; i <= _showDiceFaceTimes; i++)
+        {
+            if (num == _ce.DamageDieSides)
+            {
+                num = 1;
+            }
+            else
+            {
+                num++;
+            }
+            _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
+            yield return new WaitForSeconds(0.05f);
+        }
 
         //Calculates the damage, sets it to the dice, and subtracts that damage from the Building's health.
         int damage = _ce.CalculateBuildingDamage(damageDiceVisual);

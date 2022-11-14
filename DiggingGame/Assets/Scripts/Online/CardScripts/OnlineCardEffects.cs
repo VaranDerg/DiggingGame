@@ -2691,7 +2691,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             curInterval = 1;
         }
 
-        _am.CallUpdateScore(_am.CurrentPlayer, pointsToScore);
+        _am.CallUpdateScore(_am.CurrentPlayer, 1 + pointsToScore);
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();

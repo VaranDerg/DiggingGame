@@ -404,6 +404,12 @@ public class OnlinePieceController : MonoBehaviourPun
                         _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     }
                     break;
+                case GameState.Five:
+                    SetPieceState(4);
+                    _goldPS.Play();
+                    _am.CollectTile(_am.CurrentPlayer, "Gold", true);
+                    FindObjectOfType<SFXManager>().Play("DigGold");
+                    break;
             }
 
             FromActivatedCard = false;
@@ -461,6 +467,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
         pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
         _pawnIsMoving = true;
+        pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().MoveAnimName);
 
         //Start anim?
         yield return new WaitForSeconds(_am.PawnMoveAnimTime);

@@ -39,6 +39,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     [Header("Animations")]
     public string WaitingAnimName;
     public string IdleAnimName;
+    public string MoveAnimName;
 
     public int PawnID;  //ASD   
 

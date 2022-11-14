@@ -242,7 +242,10 @@ public class OnlineCardController : MonoBehaviourPun
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                if (MultiSceneData.s_WeatherOption == 0)
+                {
+                    FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                }
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -291,7 +294,10 @@ public class OnlineCardController : MonoBehaviourPun
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                if (MultiSceneData.s_WeatherOption == 0)
+                {
+                    FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                }
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -350,7 +356,6 @@ public class OnlineCardController : MonoBehaviourPun
                     _am.P1GoldCards--;
                 }
                 _cm.P1OpenHandPositions[HandPosition] = true;
-                Debug.Log("lmaooo1");
                 CallRemoveCard(1);   // Andrea SD
             }
             else if (HeldByPlayer == 2)
@@ -364,7 +369,6 @@ public class OnlineCardController : MonoBehaviourPun
                     _am.P2GoldCards--;
                 }
                 _cm.P2OpenHandPositions[HandPosition] = true;
-                Debug.Log("lmaooo2");
                 CallRemoveCard(2);   // Andrea SD
             }
 
@@ -375,8 +379,9 @@ public class OnlineCardController : MonoBehaviourPun
             CanBeSelected = false;
             CanBeDiscarded = false;
             CanBeActivated = false;
-
-            Debug.Log("lmaooo3");
+            MadePersistentP1 = false;
+            MadePersistentP2 = false;
+            _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
 
             _cm.UpdatePileText();
@@ -386,13 +391,11 @@ public class OnlineCardController : MonoBehaviourPun
             if (MadePersistentP1)
             {
                 _pcm.P1OpenPCardSlots[PHandPosition] = true;
-                Debug.Log("lmaooo4");
                 CallPersistentRemoval(1);
             }
             else
             {
                 _pcm.P2OpenPCardSlots[PHandPosition] = true;
-                Debug.Log("lmaooo5");
                 CallPersistentRemoval(2);
             }
 
@@ -405,16 +408,8 @@ public class OnlineCardController : MonoBehaviourPun
             CanBeActivated = false;
             MadePersistentP1 = false;
             MadePersistentP2 = false;
-            if (_pcm.AutomaticDiscard)
-            {
-                _pcm.AutomaticDiscard = false;
-            }
-            else
-            {
-                _pcm.DiscardedPersistentCard = true;
-            }
+            
             _pcm.DiscardedPersistentCard = true;
-            Debug.Log("lmaooo6");
             CallDiscardRPC();
 
             _cm.UpdatePileText();
@@ -432,7 +427,6 @@ public class OnlineCardController : MonoBehaviourPun
         yield return new WaitForSeconds(_discardAnimWaitTime);
         _gettingDiscarded = false;
         _cardBody.SetActive(false);
-        Debug.Log("lmaooo");
     }
 
     /// <summary>
@@ -443,7 +437,6 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void CallDiscardRPC()
     {
-        Debug.Log("DiscardRPC");
         photonView.RPC("AddToDiscarded", RpcTarget.All);
     }
 
@@ -537,6 +530,8 @@ public class OnlineCardController : MonoBehaviourPun
                 return;
             }
 
+            FindObjectOfType<SFXManager>().Play("SelectCard");
+
             _maximizedCard = Instantiate(thingToMaximize, _maximizeAnchor);
             _maximizedCard.transform.position = _maximizeAnchor.transform.position;
             _currentlyMaximized = true;
@@ -547,6 +542,8 @@ public class OnlineCardController : MonoBehaviourPun
             {
                 return;
             }
+
+            FindObjectOfType<SFXManager>().Play("SelectCard");
 
             Destroy(_maximizedCard);
             _currentlyMaximized = false;
