@@ -253,6 +253,8 @@ public class PersistentCardManager : MonoBehaviour
                 yield break;
             }
 
+            DiscardedPersistentCard = false;
+
             //Waits until selected.
             while (!DiscardedPersistentCard)
             {
