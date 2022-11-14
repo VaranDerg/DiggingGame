@@ -120,7 +120,10 @@ public class CardController : MonoBehaviour
             return;
         }
 
-        FindObjectOfType<SFXManager>().Play("HoverCard");
+        if(!Selected)
+        {
+            FindObjectOfType<SFXManager>().Play("HoverCard");
+        }
 
         NextPos = _mouseOverPos.position;
     }

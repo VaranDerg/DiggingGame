@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Master Thief
   m_EditorClassIdentifier: 
   CardName: Master Thief
-  CardDescription: 'Take 3 Pieces that aren''t Gold from your opponent. '
+  CardDescription: 'Take 4 Pieces that aren''t Gold from your opponent. '
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
