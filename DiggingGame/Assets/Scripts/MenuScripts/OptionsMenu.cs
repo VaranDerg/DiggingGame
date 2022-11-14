@@ -22,6 +22,7 @@ public class OptionsMenu : MonoBehaviour
 
     [Header("Resolution")]
     [SerializeField] private TMP_Dropdown _resolutionDropdown;
+    [SerializeField] private TMP_Dropdown _weatherDropdown;
     private Resolution[] _resolutions;
 
     /// <summary>
@@ -46,6 +47,7 @@ public class OptionsMenu : MonoBehaviour
         _resolutionDropdown.AddOptions(options);
         _resolutionDropdown.value = currentResolutionIndex;
         _resolutionDropdown.RefreshShownValue();
+        _weatherDropdown.RefreshShownValue();
     }
 
     /// <summary>
@@ -90,7 +92,8 @@ public class OptionsMenu : MonoBehaviour
     /// <param name="weatherIndex">0 = All, 1 = Day & Night, 2 = Just Day</param>
     public void SetWeather(int weatherIndex)
     {
-        Debug.Log("Set weather to " + weatherIndex + ". This code is not complete.");
+        MultiSceneData.s_WeatherOption = weatherIndex;
+        _weatherDropdown.RefreshShownValue();
     }
 
     /// <summary>

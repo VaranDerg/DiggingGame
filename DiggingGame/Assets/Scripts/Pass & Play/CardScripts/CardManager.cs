@@ -503,7 +503,7 @@ public class CardManager : MonoBehaviour
             for(int i = 0; i < P1Hand.Count; i++)
             {
                 P1Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
-                FindObjectOfType<SFXManager>().Play("HideCard");
+                FindObjectOfType<SFXManager>().Play("DrawCard");
                 yield return new WaitForSeconds(_cardShowHideTime);
                 P1Hand[i].SetActive(false);
             }
@@ -513,7 +513,7 @@ public class CardManager : MonoBehaviour
             for (int i = 0; i < P2Hand.Count; i++)
             {
                 P2Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
-                FindObjectOfType<SFXManager>().Play("HideCard");
+                FindObjectOfType<SFXManager>().Play("DrawCard");
                 yield return new WaitForSeconds(_cardShowHideTime);
                 P2Hand[i].SetActive(false);
             }
@@ -532,6 +532,7 @@ public class CardManager : MonoBehaviour
             {
                 P1Hand[i].SetActive(true);
                 P1Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
+                FindObjectOfType<SFXManager>().Play("DrawCard");
                 yield return new WaitForSeconds(_cardShowHideTime);
             }
         }
@@ -541,6 +542,7 @@ public class CardManager : MonoBehaviour
             {
                 P2Hand[i].SetActive(true);
                 P2Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
+                FindObjectOfType<SFXManager>().Play("DrawCard");
                 yield return new WaitForSeconds(_cardShowHideTime);
             }
         }

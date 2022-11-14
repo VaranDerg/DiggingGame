@@ -110,7 +110,7 @@ public class CardController : MonoBehaviour
             return;
         }
 
-        if(CanBeDiscarded)
+        if (CanBeDiscarded)
         {
             _cardBackground.GetComponent<Image>().color = _cardDiscardColor;
         }
@@ -119,6 +119,8 @@ public class CardController : MonoBehaviour
         {
             return;
         }
+
+        FindObjectOfType<SFXManager>().Play("HoverCard");
 
         NextPos = _mouseOverPos.position;
     }
@@ -199,7 +201,9 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void SelectCard()
     {
-        if(!Selected)
+        FindObjectOfType<SFXManager>().Play("SelectCard");
+
+        if (!Selected)
         {
             _cm.SelectedCards.Add(_cardBody);
             Selected = true;
@@ -224,6 +228,7 @@ public class CardController : MonoBehaviour
         if(_cm.AllowedActivations == 0)
         {
             _gcm.UpdateCurrentActionText("You've Activated the max amount of Cards.");
+            FindObjectOfType<SFXManager>().PlayButtonSound();
             return;
         }
 
@@ -240,7 +245,12 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                if(MultiSceneData.s_WeatherOption == 0)
+                {
+                    FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                }
+
+                FindObjectOfType<SFXManager>().Play("ActivateCard");
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -273,6 +283,7 @@ public class CardController : MonoBehaviour
             else
             {
                 _gcm.UpdateCurrentActionText("Not enough Pieces to Activate this Card!");
+                FindObjectOfType<SFXManager>().PlayButtonSound();
             }
         }
         else
@@ -288,7 +299,12 @@ public class CardController : MonoBehaviour
                 _am.SupplyPile[1] += dirtCost;
                 _am.SupplyPile[2] += stoneCost;
 
-                FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                if(MultiSceneData.s_WeatherOption == 0)
+                {
+                    FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                }
+
+                FindObjectOfType<SFXManager>().Play("ActivateCard");
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -321,6 +337,7 @@ public class CardController : MonoBehaviour
             else
             {
                 _gcm.UpdateCurrentActionText("Not enough Pieces to Activate this card!");
+                FindObjectOfType<SFXManager>().PlayButtonSound();
             }
         }
     }
@@ -425,12 +442,14 @@ public class CardController : MonoBehaviour
     /// <param name="thingToMaximize">Card zone to maximize</param>
     private void MaximizeCard(GameObject thingToMaximize)
     {
-        if(Input.GetKeyDown(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             if (_currentlyMaximized)
             {
                 return;
             }
+
+            FindObjectOfType<SFXManager>().Play("SelectCard");
 
             _maximizedCard = Instantiate(thingToMaximize, _maximizeAnchor);
             _maximizedCard.transform.position = _maximizeAnchor.transform.position;
@@ -442,6 +461,8 @@ public class CardController : MonoBehaviour
             {
                 return;
             }
+
+            FindObjectOfType<SFXManager>().Play("SelectCard");
 
             Destroy(_maximizedCard);
             _currentlyMaximized = false;

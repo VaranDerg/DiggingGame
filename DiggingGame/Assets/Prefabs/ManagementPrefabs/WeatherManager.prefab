@@ -613,8 +613,8 @@ MonoBehaviour:
     WeatherAmbiance:
       AudioType: 0
       Name: TornadoAmbiance
-      Clip: {fileID: 8300000, guid: 578249d5bce5c174db0c353c6c0c4df3, type: 3}
-      Volume: 0.25
+      Clip: {fileID: 8300000, guid: eea350c0b8438b6428612aa143a539ca, type: 3}
+      Volume: 0.5
       Pitch: 1
       Loop: 1
       Source: {fileID: 0}

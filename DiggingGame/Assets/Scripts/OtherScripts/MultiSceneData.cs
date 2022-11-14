@@ -30,4 +30,6 @@ public class MultiSceneData : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
     }
+
+    public static int s_WeatherOption;
 }

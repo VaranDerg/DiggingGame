@@ -24,7 +24,8 @@ public class SFXManager : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(s_Instance);
+            s_Instance = this;
         }
 
         DontDestroyOnLoad(gameObject);
@@ -73,7 +74,7 @@ public class SFXManager : MonoBehaviour
 
         if (s == null)
         {
-            //Debug.LogWarning("Sound: " + name + " not found!");
+            Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
 
@@ -90,11 +91,31 @@ public class SFXManager : MonoBehaviour
 
         if (s == null)
         {
-            //Debug.LogWarning("Sound: " + name + " not found!");
+            Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
 
         s.Source.Stop();
+    }
+
+    /// <summary>
+    /// Plays a sound for clicking buttons.
+    /// </summary>
+    public void PlayButtonSound()
+    {
+        int sound2play = UnityEngine.Random.Range(1, 4);
+        if (sound2play == 1)
+        {
+            FindObjectOfType<SFXManager>().Play("Button1");
+        }
+        else if (sound2play == 2)
+        {
+            FindObjectOfType<SFXManager>().Play("Button2");
+        }
+        else
+        {
+            FindObjectOfType<SFXManager>().Play("Button3");
+        }
     }
 }
 

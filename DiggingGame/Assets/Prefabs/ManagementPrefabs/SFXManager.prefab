@@ -48,199 +48,148 @@ MonoBehaviour:
   _soundEffectsMixerGroup: {fileID: 3602589269361353759, guid: 6ef975e0af118ea4dbd6821684f0badb, type: 2}
   Sounds:
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: ActivateCard
+    Clip: {fileID: 8300000, guid: 7d1c9e45bd60a274a9750521c52c7835, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: BuildBuilding
+    Clip: {fileID: 8300000, guid: 88addf39dbf9d8540bbba78923462991, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: Button1
+    Clip: {fileID: 8300000, guid: 82d958de9baaf0e45a302757f79d8d30, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: Button2
+    Clip: {fileID: 8300000, guid: 4033b4eec40165b4fb77a2b2a98d06db, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: Button3
+    Clip: {fileID: 8300000, guid: 06a1a8aedda29cd429594e121964ffdd, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: ClickPawn
+    Clip: {fileID: 8300000, guid: fd32356aac322f54d98218830b05e333, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: DamageBuilding
+    Clip: {fileID: 8300000, guid: 3c040c5f9024d90479d4f9fc3041b04e, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: DigGold
+    Clip: {fileID: 8300000, guid: c67cb50b2be801d4a94ed09a19b87a67, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: DigDirt
+    Clip: {fileID: 8300000, guid: baa2b366fff90fc43a2a42b47a5fe64b, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: DigGrass
+    Clip: {fileID: 8300000, guid: 614236e86a0a3544eb94a24a32b3975a, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: DigStone
+    Clip: {fileID: 8300000, guid: b6a3362dc519abc4794fb1a8dca975df, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: DiscardCard
+    Clip: {fileID: 8300000, guid: 59f7b284657a37b42aa29e4ad0108ab6, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: DrawCard
+    Clip: {fileID: 8300000, guid: a53b0acdeed2f4746ba09f0cb9d76229, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: HoverCard
+    Clip: {fileID: 8300000, guid: cd0b4edf6fb54034f9c3612f22b56258, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: Move
+    Clip: {fileID: 8300000, guid: 02f2683c53e3bb14aa76a93efb2542e3, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: SpawnPawn
+    Clip: {fileID: 8300000, guid: b7dba9cc03ea9444b8de05f03775e8c5, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: LoadScene
+    Clip: {fileID: 8300000, guid: 3c398f0b6093a1f40a7856675916ce8a, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: Retrieve
+    Clip: {fileID: 8300000, guid: 06b94bba53c8f22408fc50f541fa9c8f, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: ScorePoint
+    Clip: {fileID: 8300000, guid: baa42c489c1fc954aa101ab24924ad83, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: SelectCard
+    Clip: {fileID: 8300000, guid: d7e9fb8883121fa439737009357b73ae, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
   - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
-    Volume: 0.5
-    Pitch: 1
-    Loop: 0
-    Source: {fileID: 0}
-  - AudioType: 0
-    IsDayMusic: 0
-    IsNightMusic: 0
-    Name: 
-    Clip: {fileID: 0}
+    Name: StealPiece
+    Clip: {fileID: 8300000, guid: 7da9fd75525aea44bbcff44e9a5b3dec, type: 3}
     Volume: 0.5
     Pitch: 1
     Loop: 0

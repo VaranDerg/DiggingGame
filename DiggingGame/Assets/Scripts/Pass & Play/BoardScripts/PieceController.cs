@@ -198,6 +198,7 @@ public class PieceController : MonoBehaviour
             //End of Shovel Code
             else
             {
+                FindObjectOfType<SFXManager>().Play("ClickPawn");
                 _borderSr.color = _waitingColor;
                 _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
@@ -237,19 +238,19 @@ public class PieceController : MonoBehaviour
                         SetPieceState(2);
                         _grassPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
-                        FindObjectOfType<SFXManager>().Play("DigPiece");
+                        FindObjectOfType<SFXManager>().Play("DigGrass");
                         break;
                     case GameState.Six:
                         SetPieceState(2);
                         _grassPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
-                        FindObjectOfType<SFXManager>().Play("DigPiece");
+                        FindObjectOfType<SFXManager>().Play("DigGrass");
                         break;
                     case GameState.Two:
                         SetPieceState(3);
                         _dirtPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
-                        FindObjectOfType<SFXManager>().Play("DigPiece");
+                        FindObjectOfType<SFXManager>().Play("DigDirt");
                         break;
                     case GameState.Three:
                         SetPieceState(4);
@@ -264,7 +265,7 @@ public class PieceController : MonoBehaviour
                         {
                             _stonePS.Play();
                             _am.CollectTile(_am.CurrentPlayer, "Stone", true);
-                            FindObjectOfType<SFXManager>().Play("DigPiece");
+                            FindObjectOfType<SFXManager>().Play("DigStone");
                         }
 
                         break;
@@ -272,6 +273,7 @@ public class PieceController : MonoBehaviour
                         SetPieceState(4);
                         _goldPS.Play();
                         _am.CollectTile(_am.CurrentPlayer, "Gold", true);
+                        FindObjectOfType<SFXManager>().Play("DigGold");
                         break;
                 }
 
@@ -300,6 +302,7 @@ public class PieceController : MonoBehaviour
         SetPieceState(3);
         _grassPS.Play();
         _dirtPS.Play();
+        FindObjectOfType<SFXManager>().Play("DigGrass");
         _am.CollectTile(_am.CurrentPlayer, "Grass", false);
         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
     }
@@ -345,6 +348,7 @@ public class PieceController : MonoBehaviour
 
             if (HasGold)
             {
+                FindObjectOfType<SFXManager>().Play("DigGold");
                 SetPieceState(5);
                 _goldPS.Play();
                 if (DiscerningEye)
@@ -354,6 +358,7 @@ public class PieceController : MonoBehaviour
             }
             else
             {
+                FindObjectOfType<SFXManager>().Play("DigStone");
                 _stonePS.Play();
             }
 
@@ -381,16 +386,19 @@ public class PieceController : MonoBehaviour
                 case GameState.One:
                     SetPieceState(2);
                     _grassPS.Play();
+                    FindObjectOfType<SFXManager>().Play("DigGrass");
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     break;
                 case GameState.Six:
                     SetPieceState(2);
                     _grassPS.Play();
+                    FindObjectOfType<SFXManager>().Play("DigGrass");
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     break;
                 case GameState.Two:
                     SetPieceState(3);
                     _dirtPS.Play();
+                    FindObjectOfType<SFXManager>().Play("DigDirt");
                     _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
                     break;
                 case GameState.Three:
@@ -398,13 +406,21 @@ public class PieceController : MonoBehaviour
                     if (HasGold)
                     {
                         _goldPS.Play();
+                        FindObjectOfType<SFXManager>().Play("DigGold");
                         _am.CollectTile(_am.CurrentPlayer, "Gold", false);
                     }
                     else
                     {
                         _stonePS.Play();
+                        FindObjectOfType<SFXManager>().Play("DigStone");
                         _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     }
+                    break;
+                case GameState.Five:
+                    SetPieceState(4);
+                    _goldPS.Play();
+                    _am.CollectTile(_am.CurrentPlayer, "Gold", true);
+                    FindObjectOfType<SFXManager>().Play("DigGold");
                     break;
             }
 
@@ -432,24 +448,25 @@ public class PieceController : MonoBehaviour
 
             ShowHidePlaceable(false);
 
-            FindObjectOfType<SFXManager>().Play("PlacePiece");
-
             switch (ObjState)
             {
                 case GameState.Two:
                     SetPieceState(6);
                     _grassPS.Play();
                     _am.PlaceTile("Grass");
+                    FindObjectOfType<SFXManager>().Play("DigGrass");
                     break;
                 case GameState.Three:
                     SetPieceState(2);
                     _dirtPS.Play();
                     _am.PlaceTile("Dirt");
+                    FindObjectOfType<SFXManager>().Play("DigDirt");
                     break;
                 case GameState.Four:
                     SetPieceState(3);
                     _stonePS.Play();
                     _am.PlaceTile("Stone");
+                    FindObjectOfType<SFXManager>().Play("DigStone");
                     break;
             }
         }
@@ -467,7 +484,7 @@ public class PieceController : MonoBehaviour
 
         pawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
         _pawnIsMoving = true;
-        FindObjectOfType<SFXManager>().Play("MovePawn");
+        FindObjectOfType<SFXManager>().Play("Move");
 
         //Start anim?
         yield return new WaitForSeconds(_am.PawnMoveAnimTime);
@@ -501,6 +518,7 @@ public class PieceController : MonoBehaviour
             //For the game's initial free move. The player has to spend cards unless this is true.
             if(_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
             {
+                FindObjectOfType<SFXManager>().Play("ClickPawn");
                 _borderSr.color = _waitingColor;
                 _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
@@ -647,6 +665,7 @@ public class PieceController : MonoBehaviour
 
     public IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
     {
+        FindObjectOfType<SFXManager>().Play("ClickPawn");
         _borderSr.color = _waitingColor;
         _borderAnims.Play("PieceBorderWaiting");
         PieceIsSelected = true;
@@ -787,35 +806,30 @@ public class PieceController : MonoBehaviour
             bool spawnPawn = false;
             GameObject thisBuilding = Instantiate(building, _buildingSlot);
             StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Building", 1);
-            if(buildingArrayNum == 0)
+            FindObjectOfType<SFXManager>().Play("BuildBuilding");
+            if (buildingArrayNum == 0)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Factory";
-                FindObjectOfType<SFXManager>().Play("BuildFactory");
             }
             else if(buildingArrayNum == 1)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Burrow";
-                FindObjectOfType<SFXManager>().Play("BuildBurrow");
             }
             else if(buildingArrayNum == 2)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Grass Mine";
-                FindObjectOfType<SFXManager>().Play("BuildMine");
             }
             else if(buildingArrayNum == 3)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Dirt Mine";
-                FindObjectOfType<SFXManager>().Play("BuildMine");
             }
             else if(buildingArrayNum == 4)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Stone Mine";
-                FindObjectOfType<SFXManager>().Play("BuildMine");
             }
             else if(buildingArrayNum == 5)
             {
                 thisBuilding.GetComponent<Building>().BuildingType = "Gold Mine";
-                FindObjectOfType<SFXManager>().Play("BuildMine");
             }
             thisBuilding.GetComponent<Building>().SuitOfPiece = pieceSuit;
             thisBuilding.GetComponent<Building>().PlayerOwning = _am.CurrentPlayer;

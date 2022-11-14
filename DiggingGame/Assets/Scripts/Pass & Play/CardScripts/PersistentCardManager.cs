@@ -126,6 +126,7 @@ public class PersistentCardManager : MonoBehaviour
                     //Adds to newest list.
                     P1PersistentCards.Add(card);
                     P1OpenPCardSlots[i] = false;
+                    FindObjectOfType<SFXManager>().Play("DrawCard");
                     //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
                 }
@@ -154,6 +155,7 @@ public class PersistentCardManager : MonoBehaviour
                     }
                     P2PersistentCards.Add(card);
                     P2OpenPCardSlots[i] = false;
+                    FindObjectOfType<SFXManager>().Play("DrawCard");
                     //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
                 }

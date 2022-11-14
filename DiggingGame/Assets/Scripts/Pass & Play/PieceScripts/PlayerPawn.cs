@@ -95,6 +95,7 @@ public class PlayerPawn : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
                 PreparePawnMovement();
+                FindObjectOfType<SFXManager>().Play("ClickPawn");
             }
         }
 
@@ -224,6 +225,7 @@ public class PlayerPawn : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
+            FindObjectOfType<SFXManager>().Play("ClickPawn");
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -266,6 +268,7 @@ public class PlayerPawn : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            FindObjectOfType<SFXManager>().Play("ClickPawn");
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -308,6 +311,7 @@ public class PlayerPawn : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            FindObjectOfType<SFXManager>().Play("ClickPawn");
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -367,6 +371,7 @@ public class PlayerPawn : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
+            FindObjectOfType<SFXManager>().Play("ClickPawn");
             DeselectOtherPawns();
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {

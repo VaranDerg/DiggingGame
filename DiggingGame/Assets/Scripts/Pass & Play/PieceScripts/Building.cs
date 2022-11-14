@@ -166,6 +166,7 @@ public class Building : MonoBehaviour
 
         //Starts rolling the dice.
         _damageDice.GetComponent<Animator>().Play("DiceEnter");
+        FindObjectOfType<SFXManager>().Play("DrawCard");
         _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
         int num = 0;
         //Shows a face (1, 2, 3, 4) up to the variable's count.
@@ -228,7 +229,7 @@ public class Building : MonoBehaviour
             {
                 _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " has taken massive damage!");
             }
-            FindObjectOfType<SFXManager>().Play("DestroyBuilding");
+            FindObjectOfType<SFXManager>().Play("DamageBuilding");
         }
         else if(damageDiceVisual == 3 || damageDiceVisual == 2)
         {
@@ -252,6 +253,7 @@ public class Building : MonoBehaviour
             {
                 _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " avoided taking damage!");
             }
+            FindObjectOfType<SFXManager>().Play("DamageBuilding");
         }
 
         //Fun!
@@ -358,6 +360,7 @@ public class Building : MonoBehaviour
 
         //Additional damages are generally only for Tornado or Earthquake.
         _damageDice.GetComponent<Animator>().Play("DiceExit");
+        FindObjectOfType<SFXManager>().Play("DrawCard");
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
         if (_ce.CurrentDamages == _ce.AllowedDamages)

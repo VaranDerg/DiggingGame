@@ -240,7 +240,6 @@ public class CardEffects : MonoBehaviour
                 StartCoroutine(Shovel(pCardObject));
                 break;
             case "Thunderstorm!":
-                FindObjectOfType<SFXManager>().Play("LightningStrike");
                 StartCoroutine(Thunderstorm());
                 break;
             case "Compaction":
@@ -289,7 +288,6 @@ public class CardEffects : MonoBehaviour
                 Teleportation();
                 break;
             case "Tornado!":
-                FindObjectOfType<SFXManager>().Play("LightningStrike");
                 StartCoroutine(Tornado());
                 break;
             case "Transmutation":
@@ -314,22 +312,18 @@ public class CardEffects : MonoBehaviour
         if(suit == "Grass")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _grassABar;
-            FindObjectOfType<SFXManager>().Play("ActivateGrassCard");
         }
         else if(suit == "Dirt")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _dirtABar;
-            FindObjectOfType<SFXManager>().Play("ActivateDirtCard");
         }
         else if(suit == "Stone")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _stoneABar;
-            FindObjectOfType<SFXManager>().Play("ActivateStoneCard");
         }
         else if(suit == "Gold")
         {
             _activateResponseBox.GetComponent<Image>().sprite = _goldABar;
-            FindObjectOfType<SFXManager>().Play("ActivateGoldCard");
         }
 
         if (start)
@@ -2818,7 +2812,7 @@ public class CardEffects : MonoBehaviour
             curInterval = 1;
         }
 
-        _am.ScorePoints(pointsToScore);
+        _am.ScorePoints(1 + pointsToScore);
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
