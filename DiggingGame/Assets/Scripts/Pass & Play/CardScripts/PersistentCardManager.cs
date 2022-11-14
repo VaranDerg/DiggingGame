@@ -261,15 +261,15 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
-            _gcm.UpdateCurrentActionText("Pass back to " + _am.CurrentPlayerName + "s.");
-            yield return new WaitForSeconds(2f);
-            _currentCoverPos = _defaultCoverPos;
-
             //Returns every other card to its original state.
             for (int i = 0; i < P2PersistentCards.Count; i++)
             {
                 P2PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
             }
+
+            _gcm.UpdateCurrentActionText("Pass back to " + _am.CurrentPlayerName + "s.");
+            yield return new WaitForSeconds(2f);
+            _currentCoverPos = _defaultCoverPos;
 
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
@@ -300,14 +300,14 @@ public class PersistentCardManager : MonoBehaviour
                 yield return null;
             }
 
-            _gcm.UpdateCurrentActionText("Pass back to " + _am.CurrentPlayerName + "s.");
-            yield return new WaitForSeconds(2f);
-            _currentCoverPos = _defaultCoverPos;
-
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
                 P1PersistentCards[i].GetComponentInChildren<CardController>().CanBeDiscarded = false;
             }
+
+            _gcm.UpdateCurrentActionText("Pass back to " + _am.CurrentPlayerName + "s.");
+            yield return new WaitForSeconds(2f);
+            _currentCoverPos = _defaultCoverPos;
 
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
