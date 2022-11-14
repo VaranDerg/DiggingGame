@@ -409,14 +409,6 @@ public class CardController : MonoBehaviour
             CanBeActivated = false;
             MadePersistentP1 = false;
             MadePersistentP2 = false;
-            if (_pcm.AutomaticDiscard)
-            {
-                _pcm.AutomaticDiscard = false;
-            }
-            else
-            {
-                _pcm.DiscardedPersistentCard = true;
-            }
             _cm.DPile.Add(_cardBody);
 
             _cm.UpdatePileText();

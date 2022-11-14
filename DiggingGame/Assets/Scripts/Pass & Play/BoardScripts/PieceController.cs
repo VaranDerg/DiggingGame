@@ -183,6 +183,7 @@ public class PieceController : MonoBehaviour
             //Start of Shovel Code
             if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
             {
+                FindObjectOfType<SFXManager>().Play("DigDirt");
                 SetPieceState(3);
                 _dirtPS.Play();
                 _am.ShovelUsed = true;

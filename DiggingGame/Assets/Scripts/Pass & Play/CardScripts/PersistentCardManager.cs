@@ -35,7 +35,6 @@ public class PersistentCardManager : MonoBehaviour
     [HideInInspector] public bool DiscardedPersistentCard;
     [HideInInspector] public bool DecidedBuildingProtection;
     [HideInInspector] public Coroutine CurrentBuildingDamageProcess;
-    [HideInInspector] public bool AutomaticDiscard = true;
 
     [Header("Retribution")]
     [HideInInspector] public int BuildingsDamaged;
@@ -211,7 +210,6 @@ public class PersistentCardManager : MonoBehaviour
             {
                 if(P1PersistentCards[i].name == cardName)
                 {
-                    AutomaticDiscard = true;
                     StartCoroutine(P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
                 }
             }
@@ -222,7 +220,6 @@ public class PersistentCardManager : MonoBehaviour
             {
                 if (P2PersistentCards[i].name == cardName)
                 {
-                    AutomaticDiscard = true;
                     StartCoroutine(P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
                 }
             }
