@@ -269,7 +269,7 @@ public class OnlinePieceController : MonoBehaviourPun
                         {
                             CallPieceState(4);
                             CallRemovalAnim(3);
-                            _am.CollectTile(_am.CurrentPlayer, "Stone", true); 
+                            _am.CollectTile(_am.CurrentPlayer, "Stone", true);
                         }
 
                         break;
@@ -460,8 +460,6 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <returns></returns>
     public IEnumerator MovePawnTo(int pawnID, int pieceID, bool goBack)
     {
-        Debug.Log("Moving " + CurrentPawn + " to " + gameObject + ". The destination piece is " + destinationPiece + ".");
-
         GameObject pawn = GameObject.Find(PhotonView.Find(pawnID).gameObject.name);
         destinationPiece = gameObject;
 
@@ -504,8 +502,6 @@ public class OnlinePieceController : MonoBehaviourPun
             //For the game's initial free move. The player has to spend cards unless this is true.
             if (_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
             {
-                Debug.Log("Curernt turn phase " + _am.CurrentTurnPhase);
-
                 _borderSr.color = _waitingColor;
                 _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
@@ -516,7 +512,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
                 //Start of Morning Jog
                 if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Morning Jog") && !_am.MorningJogUsed)
-                { 
+                {
                     if (ObjState == GameState.One || ObjState == GameState.Six)
                     {
                         _am.MorningJogUsed = true;
@@ -893,17 +889,17 @@ public class OnlinePieceController : MonoBehaviourPun
                     GameObject newPawn = PhotonNetwork.Instantiate("MolePawnWorkEdition", _buildingPlacement, Quaternion.identity);   // Andrea SD
                     newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
                     newPawn.transform.SetParent(null);
-                    HasPawn = true;
+                    CallSetHasPawn(true);
                 }
                 else
                 {
                     Vector3 _buildingPlacement = _buildingSlot.transform.position;   // Andrea SD
                     GameObject newPawn = PhotonNetwork.Instantiate("MeerkatPawn", _buildingPlacement, Quaternion.identity);   // Andrea SD
-                    newPawn.GetComponent<OnlinePlayerPawn>().SetPawnToPlayer(_am.CurrentPlayer);
+                    newPawn.GetComponent<OnlinePlayerPawn>().CallSetPawnPlayer(_am.CurrentPlayer);      // Andrea SD
                     newPawn.transform.SetParent(null);
-                    HasPawn = true;
+                    CallSetHasPawn(true);
                 }
-                
+
             }
 
             if (_am.CurrentPlayer == 1)
@@ -1229,6 +1225,29 @@ public class OnlinePieceController : MonoBehaviourPun
             default:
                 throw new Exception("This board piece state does not exist.");
         }
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets HawPawn to pawnCheck
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="pawnCheck"></param>
+    public void CallSetHasPawn(bool pawnCheck)
+    {
+        photonView.RPC("SetHasPawn", RpcTarget.All, pawnCheck);
+    }
+
+    /// <summary>
+    /// Sets HasPawn to pawnCheck
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="pawnCheck"> true of piece has a pawn </param>
+    [PunRPC]
+    public void SetHasPawn(bool pawnCheck)
+    {
+        HasPawn = pawnCheck;
     }
 
 /*    /// <summary>

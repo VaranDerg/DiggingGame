@@ -55,22 +55,6 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Adjusts the Pawn's values to fit a player.
-    /// </summary>
-    /// <param name="player">1 or 2</param>
-    public void SetPawnToPlayer(int player)
-    {
-        if (player == 1)
-        {
-            PawnPlayer = 1;
-        }
-        else
-        {
-            PawnPlayer = 2;
-        }
-    }
-
-    /// <summary>
     /// Assigns partner scripts and components.
     /// </summary>
     private void Awake()
@@ -407,8 +391,8 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                     continue;
                 }
 
-                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
-                pawn.GetComponent<PlayerPawn>().MudslideMove = false;
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().IdleAnimName);
+                pawn.GetComponent<OnlinePlayerPawn>().MudslideMove = false;
             }
 
             if (_shownPieces.Count > 0)
@@ -490,4 +474,38 @@ public class OnlinePlayerPawn : MonoBehaviourPun
             }
         }
     }
+
+    #region
+
+    /// <summary>
+    /// Calls the RPC that adjusts the Pawn's values to fit a player.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    public void CallSetPawnPlayer(int player)
+    {
+        photonView.RPC("SetPawnToPlayer", RpcTarget.All, player);
+    }
+
+    /// <summary>
+    /// Adjusts the Pawn's values to fit a player.
+    /// 
+    /// Edited: Andrea SD - Turned into an RPC
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    [PunRPC]
+    public void SetPawnToPlayer(int player)
+    {
+        if (player == 1)
+        {
+            PawnPlayer = 1;
+        }
+        else
+        {
+            PawnPlayer = 2;
+        }
+    }
+
+    #endregion
 }
