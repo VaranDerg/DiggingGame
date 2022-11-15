@@ -76,6 +76,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     [Header("Other")]
     private List<GameObject> _allObjects = new List<GameObject>();
+    private Coroutine _curGoldCoroutine;
 
     /// <summary>
     /// Adds most Canvas Objects to a list. Does not add the Opponent Info Zone, since that can be left opened or closed.
@@ -597,7 +598,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _thenZone.SetActive(true);
         _backButton.SetActive(true);
 
-        StartCoroutine(_am.UseGold(_am.CurrentPlayer));
+        _curGoldCoroutine = StartCoroutine(_am.UseGold(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
     }
@@ -655,6 +656,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
         _bm.SetActiveCollider("Board");
+
+        if (_curGoldCoroutine != null)
+        {
+            StopCoroutine(_curGoldCoroutine);
+        }
 
         foreach (OnlinePieceController script in FindObjectsOfType<OnlinePieceController>())
         {
