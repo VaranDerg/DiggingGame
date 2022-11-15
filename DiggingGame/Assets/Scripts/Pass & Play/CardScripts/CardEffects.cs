@@ -2095,10 +2095,12 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        DugPieces = 0;
+
         if (openPieces >= _erosionPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
-            while (DugPieces != _lawnmowerPiecesToDig)
+            while (DugPieces != _erosionPiecesToDig)
             {
                 yield return null;
             }
@@ -2111,6 +2113,8 @@ public class CardEffects : MonoBehaviour
                 yield return null;
             }
         }
+
+        DugPieces = 0;
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
