@@ -261,6 +261,7 @@ public class PieceController : MonoBehaviour
                             _goldPS.Play();
                             _am.CollectTile(_am.CurrentPlayer, "Gold", true);
                             FindObjectOfType<SFXManager>().Play("DigGold");
+                            HasGold = false;
                         }
                         else
                         {
@@ -409,6 +410,7 @@ public class PieceController : MonoBehaviour
                         _goldPS.Play();
                         FindObjectOfType<SFXManager>().Play("DigGold");
                         _am.CollectTile(_am.CurrentPlayer, "Gold", false);
+                        HasGold = false;
                     }
                     else
                     {
