@@ -667,7 +667,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 
-        if(photonView.IsMine)
+        //photonView.isMine
+        if(PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 1 || !PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 2)
         {
             if (_am.CurrentTurnPhase == 2)
             {
