@@ -496,7 +496,6 @@ public class OnlinePieceController : MonoBehaviourPun
             }
             else if ((_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3) && (PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 1 || !PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 2))
             {
-                Debug.Log("Heyo back");
                 _gcm.Back();
             }
         }
