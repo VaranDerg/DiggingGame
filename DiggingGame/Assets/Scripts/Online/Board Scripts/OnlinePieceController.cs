@@ -279,6 +279,8 @@ public class OnlinePieceController : MonoBehaviourPun
                 {
                     CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
                 }
+
+                Debug.Log("diggy back");
                 _gcm.Back();
             }
         }
@@ -492,8 +494,9 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 _gcm.ToThenPhase();
             }
-            else if ((_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3) && (PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 1) || !PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 2)
+            else if ((_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3) && (PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 1 || !PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 2))
             {
+                Debug.Log("Heyo back");
                 _gcm.Back();
             }
         }
@@ -647,7 +650,6 @@ public class OnlinePieceController : MonoBehaviourPun
             }
         }
     }
-
 
     public IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
     {
