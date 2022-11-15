@@ -1226,8 +1226,6 @@ public class OnlinePieceController : MonoBehaviourPun
                 ChangeSprite("BedrockPiece");
                 ObjState = GameState.Four;
                 break;
-            default:
-                throw new Exception("This board piece state does not exist.");
         }
     }
 
