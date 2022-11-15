@@ -271,7 +271,11 @@ public class OnlinePieceController : MonoBehaviourPun
                             CallRemovalAnim(3);
                             _am.CollectTile(_am.CurrentPlayer, "Stone", true);
                         }
-
+                        break;
+                    case GameState.Five:
+                        CallPieceState(4);
+                        CallRemovalAnim(4);
+                        _am.CollectTile(_am.CurrentPlayer, "Gold", true);
                         break;
                 }
 
