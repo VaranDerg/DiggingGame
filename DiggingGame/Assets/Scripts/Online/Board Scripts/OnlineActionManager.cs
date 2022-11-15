@@ -702,7 +702,10 @@ public class OnlineActionManager : MonoBehaviourPun
         DisableBoard();
         //Refresh persistent cards.
         ShovelUsed = false;
-        MorningJogUsed = false; 
+        MorningJogUsed = false;
+
+        _gcm.UpdateOpponentActionText("Start your turn.");
+        CallStartButton();
     }
 
     /// <summary>
