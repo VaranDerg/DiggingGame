@@ -396,6 +396,7 @@ public class OnlineCardManager : MonoBehaviourPun
             yield return null;
         }
         PrepareCardSelection(0, "", true);
+
         _am.EndTurn(_am.CurrentPlayer);
     }
 
