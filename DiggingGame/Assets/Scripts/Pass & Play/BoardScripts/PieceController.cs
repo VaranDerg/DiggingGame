@@ -483,8 +483,6 @@ public class PieceController : MonoBehaviour
     /// <returns></returns>
     public IEnumerator MovePawnTo(GameObject pawn, GameObject destinationPiece, bool goBack)
     {
-        //Debug.Log("Moving " + CurrentPawn + " to " + gameObject + ". The destination piece is " + destinationPiece + ".");
-
         pawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
         _pawnIsMoving = true;
         FindObjectOfType<SFXManager>().Play("Move");
