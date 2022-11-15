@@ -1015,7 +1015,7 @@ public class OnlineActionManager : MonoBehaviourPun
 
     public void CallStartButton()
     {
-        photonView.RPC("EnableStartButton", RpcTarget.All);
+        photonView.RPC("EnableStartButton", RpcTarget.Others);
     }
 
     /// <summary>
