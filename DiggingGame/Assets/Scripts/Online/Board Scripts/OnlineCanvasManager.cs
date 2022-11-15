@@ -726,7 +726,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _mine.sprite = _moleMine;
         }
 
-        _am.EndTurn(_am.CurrentPlayer);
         UpdateTextBothPlayers();
     }
 
