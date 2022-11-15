@@ -36,8 +36,7 @@ public class PauseGame : MonoBehaviour
     public void Menu()
     {
         Time.timeScale = 1.0f;
-        StatManager.s_P1FinalScore = 0;
-        StatManager.s_P2FinalScore = 0;
+        StatManager.s_Instance.ResetStatistics();
         FindObjectOfType<SceneLoader>().LoadScene("MainMenu");
         PhotonNetwork.Disconnect();
     }
