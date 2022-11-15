@@ -94,6 +94,11 @@ MonoBehaviour:
   - GoBack
   - PCDiscardProcess
   - AddToPersistent
+  - SetPawnToPlayer
+  - SetHasPawn
+  - SetPieceSuit
+  - SetPlayerOwning
+  - SetBuildingPlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

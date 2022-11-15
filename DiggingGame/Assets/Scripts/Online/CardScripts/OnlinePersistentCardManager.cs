@@ -302,31 +302,31 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         int sentPieces = 0;
 
         //Note, should affect the opposite player.
-        if(retributionPlayer == 2)
+        if (retributionPlayer == 2)
         {
-            if(suit == "Grass")
+            if (suit == "Grass")
             {
                 sentPieces += _am.P1CollectedPile[0];
                 sentPieces += _am.P1RefinedPile[0];
-                _am.SupplyPile[0] += sentPieces;
-                _am.P1CollectedPile[0] = 0;
-                _am.P1RefinedPile[0] = 0;
+                _am.SupplyPileRPC(0, sentPieces);
+                _am.CallUpdatePieces(1, 1, 0, -_am.P1RefinedPile[0]);
+                _am.CallUpdatePieces(0, 1, 0, -_am.P1CollectedPile[0]);
             }
-            else if(suit == "Dirt")
+            else if (suit == "Dirt")
             {
                 sentPieces += _am.P1CollectedPile[1];
                 sentPieces += _am.P1RefinedPile[1];
-                _am.SupplyPile[1] += sentPieces;
-                _am.P1CollectedPile[1] = 0;
-                _am.P1RefinedPile[1] = 0;
+                _am.SupplyPileRPC(1, sentPieces);
+                _am.CallUpdatePieces(1, 1, 1, -_am.P1RefinedPile[1]);
+                _am.CallUpdatePieces(0, 1, 1, -_am.P1CollectedPile[1]);
             }
-            else if(suit == "Stone")
+            else if (suit == "Stone")
             {
                 sentPieces += _am.P1CollectedPile[2];
                 sentPieces += _am.P1RefinedPile[2];
-                _am.SupplyPile[2] += sentPieces;
-                _am.P1CollectedPile[2] = 0;
-                _am.P1RefinedPile[2] = 0;
+                _am.SupplyPileRPC(2, sentPieces);
+                _am.CallUpdatePieces(1, 1, 2, -_am.P1RefinedPile[2]);
+                _am.CallUpdatePieces(0, 1, 2, -_am.P1CollectedPile[2]);
             }
         }
         else
@@ -335,29 +335,27 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
             {
                 sentPieces += _am.P2CollectedPile[0];
                 sentPieces += _am.P2RefinedPile[0];
-                _am.SupplyPile[0] += sentPieces;
-                _am.P2CollectedPile[0] = 0;
-                _am.P2RefinedPile[0] = 0;
+                _am.SupplyPileRPC(0, sentPieces);
+                _am.CallUpdatePieces(1, 2, 0, -_am.P2RefinedPile[0]);
+                _am.CallUpdatePieces(0, 2, 0, -_am.P2CollectedPile[0]);
             }
             else if (suit == "Dirt")
             {
                 sentPieces += _am.P2CollectedPile[1];
                 sentPieces += _am.P2RefinedPile[1];
-                _am.SupplyPile[1] += sentPieces;
-                _am.P2CollectedPile[1] = 0;
-                _am.P2RefinedPile[1] = 0;
+                _am.SupplyPileRPC(1, sentPieces);
+                _am.CallUpdatePieces(1, 2, 1, -_am.P2RefinedPile[0]);
+                _am.CallUpdatePieces(0, 2, 1, -_am.P2CollectedPile[0]);
             }
             else if (suit == "Stone")
             {
                 sentPieces += _am.P2CollectedPile[2];
                 sentPieces += _am.P2RefinedPile[2];
-                _am.SupplyPile[2] += sentPieces;
-                _am.P2CollectedPile[2] = 0;
-                _am.P2RefinedPile[2] = 0;
+                _am.SupplyPileRPC(2, sentPieces);
+                _am.CallUpdatePieces(1, 2, 2, -_am.P2RefinedPile[0]);
+                _am.CallUpdatePieces(0, 2, 2, -_am.P2CollectedPile[0]);
             }
         }
-
-        _gcm.UpdateCurrentActionText("Player " + retributionPlayer + " suffered Retribution! " + sentPieces + " of their " + suit + " Pieces were sent to the Supply!");
     }
 
     #region RPC Functions

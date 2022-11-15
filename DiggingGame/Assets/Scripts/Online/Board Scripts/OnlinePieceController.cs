@@ -318,6 +318,11 @@ public class OnlinePieceController : MonoBehaviourPun
 
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(gameObject))
             {
+                if (piece.GetComponent<OnlinePieceController>().ObjState == GameState.Five)
+                {
+                    continue;
+                }
+
                 if (piece.GetComponentInChildren<OnlineBuilding>())
                 {
                     piece.GetComponentInChildren<OnlineBuilding>().PrepBuilidingDamaging(true);
@@ -352,7 +357,7 @@ public class OnlinePieceController : MonoBehaviourPun
             }
             else
             {
-                _stonePS.Play();
+                CallRemovalAnim(3);
             }
 
             ShowHideFlippable(false);
@@ -463,7 +468,7 @@ public class OnlinePieceController : MonoBehaviourPun
         GameObject pawn = GameObject.Find(PhotonView.Find(pawnID).gameObject.name);
         destinationPiece = gameObject;
 
-        pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().HasPawn = false;
+        pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().CallSetHasPawn(false);     // ASD
         _pawnIsMoving = true;
         pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().MoveAnimName);
 
@@ -473,7 +478,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
         pawn.transform.position = destinationPiece.transform.position;
         pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
-        HasPawn = true;
+        CallSetHasPawn(true);
         _pawnIsMoving = false;
 
         if (goBack)
@@ -815,8 +820,8 @@ public class OnlinePieceController : MonoBehaviourPun
                 thisBuilding.GetComponent<OnlineBuilding>().BuildingType = "Gold Mine";
             }
 
-            thisBuilding.GetComponent<OnlineBuilding>().SuitOfPiece = pieceSuit;
-            thisBuilding.GetComponent<OnlineBuilding>().PlayerOwning = _am.CurrentPlayer;
+            thisBuilding.GetComponent<OnlineBuilding>().CallSetSuit(pieceSuit);     // ASD
+            thisBuilding.GetComponent<OnlineBuilding>().CallPlayerOwning(_am.CurrentPlayer);
 
             //Planned Profit Code Start
             if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Planned Profit"))
@@ -902,14 +907,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             }
 
-            if (_am.CurrentPlayer == 1)
-            {
-                HasP1Building = true;
-            }
-            else
-            {
-                HasP2Building = true;
-            }
+            SetBuildingPlayer(_am.CurrentPlayer, true);     // ASD
 
             return true;
         }
@@ -1250,31 +1248,66 @@ public class OnlinePieceController : MonoBehaviourPun
         HasPawn = pawnCheck;
     }
 
-/*    /// <summary>
-    /// Calls the RPC that places a building on all clients.
+    /// <summary>
+    /// Calls the RPC that sets player's building to check. Indiates which 
+    /// player owns the building
     /// 
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="type"> the building being placed </param>
-    /// <param name="xPos"> x pos of building </param>
-    /// <param name="yPos"> y pos of building </param>
-    public void CallBuilding(String type, float xPos, float yPos)
+    /// <param name="player"></param>
+    /// <param name="check"></param>
+    public void CallBuildingPlayer(int player, bool check)
     {
-        photonView.RPC("PlaceBuilding", RpcTarget.All, type, xPos, yPos);
+        photonView.RPC("SetBuildingPlayer", RpcTarget.All, player, check);
     }
 
     /// <summary>
-    /// Places the building on all other clients
+    /// Sets player's building to check. Indiates which player owns the
+    /// building
+    /// 
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="type"> the building to be placed </param>
-    /// <param name="xPos"> x pos of building </param>
-    /// <param name="yPos"> y position of building </param>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="check"> true if has building, false if not </param>
     [PunRPC]
-    private void PlaceBuilding(String type, float xPos, float yPos)
+    public void SetBuildingPlayer(int player, bool check)
     {
-        PhotonNetwork.Instantiate(type, new Vector3(xPos, yPos, 0f), Quaternion.identity);
-    }*/
+        switch (player)
+        {
+            case 1:
+                HasP1Building = check;
+                break;
+            case 2:
+                HasP2Building = check;
+                break;
+        }
+    }
+
+    /*    /// <summary>
+        /// Calls the RPC that places a building on all clients.
+        /// 
+        /// Author: Andrea SD
+        /// </summary>
+        /// <param name="type"> the building being placed </param>
+        /// <param name="xPos"> x pos of building </param>
+        /// <param name="yPos"> y pos of building </param>
+        public void CallBuilding(String type, float xPos, float yPos)
+        {
+            photonView.RPC("PlaceBuilding", RpcTarget.All, type, xPos, yPos);
+        }
+
+        /// <summary>
+        /// Places the building on all other clients
+        /// Author: Andrea SD
+        /// </summary>
+        /// <param name="type"> the building to be placed </param>
+        /// <param name="xPos"> x pos of building </param>
+        /// <param name="yPos"> y position of building </param>
+        [PunRPC]
+        private void PlaceBuilding(String type, float xPos, float yPos)
+        {
+            PhotonNetwork.Instantiate(type, new Vector3(xPos, yPos, 0f), Quaternion.identity);
+        }*/
 
     #endregion
 }

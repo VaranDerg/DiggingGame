@@ -717,5 +717,52 @@ public class OnlineBuilding : MonoBehaviourPun
         _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
     }
 
+    /// <summary>
+    /// Calls the RPC that sets SuitOfPiece to suit
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="suit"> suit of the piece </param>
+    public void CallSetSuit(string suit)
+    {
+        photonView.RPC("SetPieceSuit", RpcTarget.All, suit);
+    }  
+    
+    /// <summary>
+    /// Sets SuitOfPiece to suit
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="suit"> suit of the piece </param>
+
+    [PunRPC]
+    public void SetPieceSuit(string suit)
+    {
+        SuitOfPiece = suit;
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets PlayerOwning to player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"></param>
+    public void CallPlayerOwning(int player)
+    {
+        photonView.RPC("SetPlayerOwning", RpcTarget.All, player);
+    }
+
+    /// <summary>
+    /// Sets PlayerOwning to player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    [PunRPC]
+    public void SetPlayerOwning(int player)
+    {
+        PlayerOwning = player;
+    }
+
     #endregion
 }
