@@ -703,9 +703,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void EndTurn()
     {
-        _am.CallStartButton();
-
-        UpdateOpponentActionText("Start your turn.");
         DisableListObjects();
         _cm.StopCardActivating(_am.CurrentPlayer);
 
