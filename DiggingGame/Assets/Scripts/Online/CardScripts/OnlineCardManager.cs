@@ -375,11 +375,13 @@ public class OnlineCardManager : MonoBehaviourPun
     {
         Debug.Log("P1 Cards: " + (_am.P1Cards + _am.P1GoldCards));
         Debug.Log("P2 Cards: " + (_am.P2Cards + _am.P2GoldCards));
+        Debug.Log(player + " = Current Player");
 
         if (player == 1)
         {
             if (_am.P1Cards + _am.P1GoldCards > _am.HandLimit)
             {
+                Debug.Log("Card discard prep call");
                 PrepareCardSelection(_am.P1Cards + _am.P1GoldCards - _am.HandLimit, "Any", false);
                 _gcm.UpdateCurrentActionText("Discard " + (_am.P1Cards + _am.P1GoldCards - _am.HandLimit) + " Cards.");
             }
@@ -388,6 +390,7 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             if (_am.P2Cards + _am.P2GoldCards > _am.HandLimit)
             {
+                Debug.Log("Card discard prep call");
                 PrepareCardSelection(_am.P2Cards + _am.P2GoldCards - _am.HandLimit, "Any", false);
                 _gcm.UpdateCurrentActionText("Discard " + (_am.P2Cards + _am.P2GoldCards - _am.HandLimit) + " Cards.");
             }
