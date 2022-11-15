@@ -2947,9 +2947,10 @@ MonoBehaviour:
   P2PersistentCards: []
   P1OpenPCardSlots: 
   P2OpenPCardSlots: 
+  _handCardCover: {fileID: 0}
+  _handCardHideSpeed: 0
   DiscardedPersistentCard: 0
   DecidedBuildingProtection: 0
-  AutomaticDiscard: 1
   BuildingsDamaged: 0
 --- !u!114 &1005441709
 MonoBehaviour:
@@ -5390,7 +5391,7 @@ MonoBehaviour:
   WinningScore: 18
   _menuButton: {fileID: 861217911}
   BaseBuildingPrice: 1
-  BuildingPriceGoldRaise: 0
+  BuildingPriceGoldRaise: 1
   TotalBuildings: 3
   ShovelUsed: 0
   MorningJogUsed: 0
