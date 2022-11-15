@@ -104,6 +104,7 @@ public class OnlineActionManager : MonoBehaviourPun
         }
         else
         {
+            CurrentPlayer = 1;
             DisableBoard();
         }
     }

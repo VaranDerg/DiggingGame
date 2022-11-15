@@ -15,6 +15,7 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
+using Unity.VisualScripting;
 
 public class OnlineCanvasManager : MonoBehaviourPun
 {
@@ -724,6 +725,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _mine.sprite = _moleMine;
         }
 
+        _am.EndTurn(_am.CurrentPlayer);
         UpdateTextBothPlayers();
     }
 

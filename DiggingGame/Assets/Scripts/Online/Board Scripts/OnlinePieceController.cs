@@ -292,7 +292,7 @@ public class OnlinePieceController : MonoBehaviourPun
     private IEnumerator UseWalkway()
     {
         // Andrea SD
-        CallMovePawn(_currentPawnID, _pieceID);
+        CallMovePawn(_currentPawnID, _pieceID, false);
 
         while (_pawnIsMoving)
         {
@@ -484,11 +484,15 @@ public class OnlinePieceController : MonoBehaviourPun
         if (goBack)
         {
             // Only is called if in the right turn phase AND it's your turn
-            if (photonView.IsMine)
+            if (_am.CurrentTurnPhase == 1 && PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 1)
             {
                 _gcm.ToThenPhase();
             }
-            else if (_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3)
+            else if (_am.CurrentTurnPhase == 1 && !PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 2)
+            {
+                _gcm.ToThenPhase();
+            }
+            else if ((_am.CurrentTurnPhase == 2 || _am.CurrentTurnPhase == 3) && (PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 1) || !PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 2)
             {
                 _gcm.Back();
             }
@@ -577,7 +581,7 @@ public class OnlinePieceController : MonoBehaviourPun
                 }
             }
             CallPawnID(CurrentPawn.GetComponent<OnlinePlayerPawn>().PawnID);
-            CallMovePawn(_currentPawnID, _pieceID);    //Andrea SD
+            CallMovePawn(_currentPawnID, _pieceID, true);    //Andrea SD
         }
     }
 
@@ -1140,9 +1144,9 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <param name="objectID"> Network ID of the moving pawn </param>
     /// <param name="destinationID"> Network ID of the pawn destination 
     /// </param>
-    public void CallMovePawn(int objectID, int destinationID)
+    public void CallMovePawn(int objectID, int destinationID, bool back)
     {
-        photonView.RPC("MovePawn", RpcTarget.All, objectID, destinationID);
+        photonView.RPC("MovePawn", RpcTarget.All, objectID, destinationID, back);
     }
 
     /// <summary>
@@ -1154,9 +1158,9 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <param name="destinationID"> Network ID of the pawn destination 
     /// </param>
     [PunRPC]
-    public void MovePawn(int objectID, int destinationID)
+    public void MovePawn(int objectID, int destinationID, bool back)
     {
-        StartCoroutine(MovePawnTo(objectID, destinationID, true));
+        StartCoroutine(MovePawnTo(objectID, destinationID, back));
     }
 
     /// <summary>

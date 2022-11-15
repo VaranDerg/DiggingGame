@@ -395,9 +395,6 @@ public class OnlineCardManager : MonoBehaviourPun
             yield return null;
         }
         PrepareCardSelection(0, "", true);
-
-        StartCoroutine(HideCards(_am.CurrentPlayer));
-        _am.EndTurn(_am.CurrentPlayer);
     }
 
     /// <summary>
