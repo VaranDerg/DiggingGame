@@ -900,7 +900,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (WIP, Available Soon!)
+  m_text: (WIP)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
   m_sharedMaterial: {fileID: -4674183087742674415, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
@@ -11252,7 +11252,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1946569582}
   m_OnClick:
     m_PersistentCalls:

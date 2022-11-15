@@ -160,6 +160,8 @@ MonoBehaviour:
   TeleportationMove: 0
   WaitingAnimName: MeerkatWaiting
   IdleAnimName: MeerkatIdle
+  MoveAnimName: Meerkat Move
+  PawnID: 0
 --- !u!114 &7252178341523319178
 MonoBehaviour:
   m_ObjectHideFlags: 0

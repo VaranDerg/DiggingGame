@@ -24,7 +24,7 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 1
-  FlavorText: A family of Moles let me stay overnight in during one of The Valley's
+  FlavorText: A family of Moles let me stay overnight during one of The Valley's
     thunderstorms (although, the burrow was a tad small). The rain is pretty and
     relaxing - until a nearby lighting strike reminded me of its danger.
   MoleQuote: '"Nooo! We just finished that factory!"'

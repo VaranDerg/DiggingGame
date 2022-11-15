@@ -693,6 +693,8 @@ public class OnlineActionManager : MonoBehaviourPun
             CallIncrementRound();   // ASD
 
             StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Round", 1);
+
+            CallDayNight();
         }
 
         //Enables the start button for the other player then disables your own board 
@@ -849,13 +851,16 @@ public class OnlineActionManager : MonoBehaviourPun
     [PunRPC]
     public void ChangeDayNight()
     {
-        if (CurrentRound % 2 == 0)
+        if (MultiSceneData.s_WeatherOption != 2)
         {
-            FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Night);
-        }
-        else
-        {
-            FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
+            if (CurrentRound % 2 == 0)
+            {
+                FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Night);
+            }
+            else
+            {
+                FindObjectOfType<WeatherManager>().SetActiveWeather(WeatherState.Weather.Day);
+            }
         }
     }
 

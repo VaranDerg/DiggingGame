@@ -1357,6 +1357,8 @@ public class OnlineCardEffects : MonoBehaviourPun
 
     /// <summary>
     /// Card effect Coroutine for Excavator. 
+    /// 
+    /// Edited: Andrea SD - Modified for online use
     /// </summary>
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Excavator()
@@ -1368,7 +1370,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject pawn in pawns)
         {
-            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
@@ -1382,12 +1384,12 @@ public class OnlineCardEffects : MonoBehaviourPun
                         continue;
                     }
 
-                    if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
+                    if (!piece.GetComponent<OnlinePieceController>().IsDiggable)
                     {
+                        piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
+                        piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                         openPieces++;
                     }
-                    piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
-                    piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                 }
             }
         }
@@ -1409,6 +1411,12 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 yield return null;
             }
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
         }
 
         DugPieces = 0;
@@ -1506,7 +1514,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
             }
         }
-
+        
         if (enoughPieces)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
@@ -1592,7 +1600,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
 
         //Starts PCM's PersistentCardDiscardProcess, as per Overgrowth's wording.
-        StartCoroutine(_pcm.PersistentCardDiscardProcess());
+        CallPCDiscardProcess();    
     }
 
     /// <summary>
@@ -1679,7 +1687,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (building.GetComponent<OnlineBuilding>().PlayerOwning != _am.CurrentPlayer)
             {
-                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<OnlineBuilding>().SuitOfPiece == "Dirt")
                 {
                     building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
@@ -1718,7 +1726,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (building.GetComponent<OnlineBuilding>().PlayerOwning == _am.CurrentPlayer)
             {
-                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<OnlineBuilding>().SuitOfPiece == "Dirt")
                 {
                     building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     yourBuildingCount++;
@@ -1785,7 +1793,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
             {
-                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
+                if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
                     continue;
                 }
@@ -1850,6 +1858,8 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
+
         if (PlacedPieces == _compactionPiecesToPlace)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
@@ -1902,7 +1912,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
             if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
             {
-                if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
+                if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                 {
                     continue;
                 }
@@ -1976,10 +1986,10 @@ public class OnlineCardEffects : MonoBehaviourPun
 
                     if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                     {
+                        piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
+                        piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                         openPieces++;
                     }
-                    piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
-                    piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                 }
             }
         }
@@ -2107,21 +2117,25 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (_am.CurrentPlayer == 1)
         {
-            foreach(GameObject card in _cm.P1Hand)
+            int cardsToDiscard = _cm.P1Hand.Count;
+
+            for (int i = 0; i < cardsToDiscard; i++)
             {
-                StartCoroutine(card.GetComponentInChildren<OnlineCardController>().ToDiscard());
+                StartCoroutine(_cm.P1Hand[0].GetComponentInChildren<OnlineCardController>().ToDiscard());
             }
 
-            for(int i = PlannedGambleCardsToDraw; i != 0; i--)
+            for (int i = PlannedGambleCardsToDraw; i != 0; i--)
             {
                 StartCoroutine(_cm.DrawCard("Universal"));
             }
         }
         else
         {
-            foreach (GameObject card in _cm.P2Hand)
+            int cardsToDiscard = _cm.P2Hand.Count;
+
+            for (int i = 0; i < cardsToDiscard; i++)
             {
-                StartCoroutine(card.GetComponentInChildren<OnlineCardController>().ToDiscard());
+                StartCoroutine(_cm.P2Hand[0].GetComponentInChildren<OnlineCardController>().ToDiscard());
             }
 
             for (int i = PlannedGambleCardsToDraw; i != 0; i--)
@@ -2691,7 +2705,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             curInterval = 1;
         }
 
-        _am.CallUpdateScore(_am.CurrentPlayer, pointsToScore);
+        _am.CallUpdateScore(_am.CurrentPlayer, 1 + pointsToScore);
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
@@ -2753,6 +2767,27 @@ public class OnlineCardEffects : MonoBehaviourPun
             _activateResponseBox.GetComponent<Animator>().Play("ActivateBoxFadeOut");
             _cardActivatedText.GetComponent<Animator>().Play("ActivateBoxFadeOut");
         }
+    }
+
+    /// <summary>
+    /// Calls the RPC that begins the persistent discard process coroutine
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallPCDiscardProcess()
+    {
+        photonView.RPC("PCDiscardProcess", RpcTarget.Others);
+    }
+
+    /// <summary>
+    /// Starts the persistent card discard process coroutine
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void PCDiscardProcess()
+    {
+        StartCoroutine(_pcm.PersistentCardDiscardProcess());
     }
 
     #endregion

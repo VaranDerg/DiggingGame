@@ -24,10 +24,10 @@ MonoBehaviour:
   StoneCost: 0
   persistent: 0
   disaster: 1
-  FlavorText: I didn't believe in luck until yesterday. A terrible mass of water
+  FlavorText: I didn't believe in luck until yesterday. A terrible wave of water
     covered nearly half of The Valley - I heard many burrows were destroyed. I got
-    completely drenched, but somehow, my notebook stayed dry. Floods here have a
-    long history of ruining tunnels, tools, and similar things.
+    completely drenched, but somehow my notebook stayed dry. Floods here have a long
+    history of ruining tunnels, tools, and similar things.
   MoleQuote: '"Wah, my shovel! It''s gone!"'
   MeerkatQuote: '"Has anyone seen my weed whacker!?"'
   CardArt: {fileID: 21300000, guid: 8bd220eaabad7e749bcff48bbec95d50, type: 3}

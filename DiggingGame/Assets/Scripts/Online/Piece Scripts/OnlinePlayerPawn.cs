@@ -39,6 +39,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     [Header("Animations")]
     public string WaitingAnimName;
     public string IdleAnimName;
+    public string MoveAnimName;
 
     public int PawnID;  //ASD   
 
@@ -50,22 +51,6 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             _boardPieces.Add(piece);
-        }
-    }
-
-    /// <summary>
-    /// Adjusts the Pawn's values to fit a player.
-    /// </summary>
-    /// <param name="player">1 or 2</param>
-    public void SetPawnToPlayer(int player)
-    {
-        if (player == 1)
-        {
-            PawnPlayer = 1;
-        }
-        else
-        {
-            PawnPlayer = 2;
         }
     }
 
@@ -406,8 +391,8 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                     continue;
                 }
 
-                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
-                pawn.GetComponent<PlayerPawn>().MudslideMove = false;
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().IdleAnimName);
+                pawn.GetComponent<OnlinePlayerPawn>().MudslideMove = false;
             }
 
             if (_shownPieces.Count > 0)
@@ -489,4 +474,38 @@ public class OnlinePlayerPawn : MonoBehaviourPun
             }
         }
     }
+
+    #region
+
+    /// <summary>
+    /// Calls the RPC that adjusts the Pawn's values to fit a player.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    public void CallSetPawnPlayer(int player)
+    {
+        photonView.RPC("SetPawnToPlayer", RpcTarget.All, player);
+    }
+
+    /// <summary>
+    /// Adjusts the Pawn's values to fit a player.
+    /// 
+    /// Edited: Andrea SD - Turned into an RPC
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    [PunRPC]
+    public void SetPawnToPlayer(int player)
+    {
+        if (player == 1)
+        {
+            PawnPlayer = 1;
+        }
+        else
+        {
+            PawnPlayer = 2;
+        }
+    }
+
+    #endregion
 }

@@ -172,21 +172,6 @@ public class OnlineBuilding : MonoBehaviourPun
         //Starts rolling the dice.
         _damageDice.GetComponent<Animator>().Play("DiceEnter");
         _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
-        int num = 0;
-        //Shows a face (1, 2, 3, 4) up to the variable's count.
-        for (int i = 0; i <= _showDiceFaceTimes; i++)
-        {
-            if (num == _ce.DamageDieSides)
-            {
-                num = 1;
-            }
-            else
-            {
-                num++;
-            }
-            _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
-            yield return new WaitForSeconds(0.05f);
-        }
 
         //The real result is separate from the visual
         int damageDiceVisual = Random.Range(1, _ce.DamageDieSides + 1);
@@ -215,6 +200,22 @@ public class OnlineBuilding : MonoBehaviourPun
             }
         }
         //End Weed Whacker & Dam
+
+        int num = 0;
+        //Shows a face (1, 2, 3, 4) up to the variable's count.
+        for (int i = 0; i <= _showDiceFaceTimes; i++)
+        {
+            if (num == _ce.DamageDieSides)
+            {
+                num = 1;
+            }
+            else
+            {
+                num++;
+            }
+            _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
+            yield return new WaitForSeconds(0.05f);
+        }
 
         //Calculates the damage, sets it to the dice, and subtracts that damage from the Building's health.
         int damage = _ce.CalculateBuildingDamage(damageDiceVisual);
@@ -714,6 +715,53 @@ public class OnlineBuilding : MonoBehaviourPun
             StopCoroutine(_currentAnimCoroutine);
         }
         _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets SuitOfPiece to suit
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="suit"> suit of the piece </param>
+    public void CallSetSuit(string suit)
+    {
+        photonView.RPC("SetPieceSuit", RpcTarget.All, suit);
+    }  
+    
+    /// <summary>
+    /// Sets SuitOfPiece to suit
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="suit"> suit of the piece </param>
+
+    [PunRPC]
+    public void SetPieceSuit(string suit)
+    {
+        SuitOfPiece = suit;
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets PlayerOwning to player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"></param>
+    public void CallPlayerOwning(int player)
+    {
+        photonView.RPC("SetPlayerOwning", RpcTarget.All, player);
+    }
+
+    /// <summary>
+    /// Sets PlayerOwning to player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    [PunRPC]
+    public void SetPlayerOwning(int player)
+    {
+        PlayerOwning = player;
     }
 
     #endregion
