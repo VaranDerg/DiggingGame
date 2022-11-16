@@ -141,11 +141,6 @@ public class OnlineBuilding : MonoBehaviourPun
                 _pcm.CurrentBuildingDamageProcess = StartCoroutine(DamageBuiliding());
             }
         }
-        else if (CanBeDamaged && ActiveBuilding)
-        {
-            //This part is for my little investigator brain. You can ingnore it.
-            Debug.LogWarning("This is the Invincible Mine bug! Building is still somwhow active.");
-        }
 
         if (CanBeRepaired && !ActiveBuilding)
         {

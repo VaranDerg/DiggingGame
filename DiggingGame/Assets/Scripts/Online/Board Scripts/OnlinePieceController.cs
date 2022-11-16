@@ -15,6 +15,7 @@ using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UnityEditor;
 using UnityEngine.Apple;
+using Unity.VisualScripting;
 
 public class OnlinePieceController : MonoBehaviourPun
 {
@@ -49,6 +50,8 @@ public class OnlinePieceController : MonoBehaviourPun
     private OnlineCanvasManager _gcm;
     private OnlinePersistentCardManager _pcm;
     private OnlineCardEffects _ce;
+    private OnlineAudioPlayer _ap;
+
     [HideInInspector] public bool HasGold;    //true if the piece reveals gold when flipped
     [HideInInspector] public bool CheckedByPawn;
 
@@ -92,6 +95,7 @@ public class OnlinePieceController : MonoBehaviourPun
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _ce = FindObjectOfType<OnlineCardEffects>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
     }
 
     /// <summary>
@@ -198,6 +202,7 @@ public class OnlinePieceController : MonoBehaviourPun
             //Start of Shovel Code
             if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
             {
+                _ap.PlaySound("DigDirt", true); // ASD
                 CallPieceState(3);
                 CallRemovalAnim(2);
                 _am.ShovelUsed = true;
@@ -214,6 +219,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             else
             {
+                _ap.PlaySound("ClickPawn", true);   // ASD
                 _borderSr.color = _waitingColor;
                 _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
@@ -253,30 +259,43 @@ public class OnlinePieceController : MonoBehaviourPun
                         CallPieceState(2);
                         CallRemovalAnim(1);
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
+                        _ap.PlaySound("DigGrass", true);
+                        break;
+                    case GameState.Six:
+                        CallPieceState(1);
+                        CallRemovalAnim(1);
+                        _am.CollectTile(_am.CurrentPlayer, "Grass", true);
+                        _ap.PlaySound("DigGrass", true);
                         break;
                     case GameState.Two:
                         CallPieceState(3);
                         CallRemovalAnim(2);
                         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+                        _ap.PlaySound("DigDirt", true);
                         break;
                     case GameState.Three:
+                        CallPieceState(4);
+
                         if (HasGold)
                         {
                             CallRemovalAnim(4);
                             _am.CollectTile(_am.CurrentPlayer, "Gold", true);
+                            _ap.PlaySound("DigGold", true);
+                            CallRemoveGold();
                         }
                         else
                         {
-                            CallPieceState(4);
                             CallRemovalAnim(3);
                             _am.CollectTile(_am.CurrentPlayer, "Stone", true);
+                            _ap.PlaySound("DigStone", true);
                         }
-                        
+              
                         break;
                     case GameState.Five:
                         CallPieceState(4);
                         CallRemovalAnim(4);
                         _am.CollectTile(_am.CurrentPlayer, "Gold", true);
+                        _ap.PlaySound("DigGold", true);
                         break;
                 }
 
@@ -388,38 +407,44 @@ public class OnlinePieceController : MonoBehaviourPun
             switch (ObjState)
             {
                 case GameState.One:
-                    SetPieceState(2);
-                    _grassPS.Play();
+                    CallPieceState(2);
+                    CallRemovalAnim(1);
+                    _ap.PlaySound("DigGrass", true);
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     break;
                 case GameState.Six:
                     SetPieceState(2);
-                    _grassPS.Play();
+                    CallRemovalAnim(1);
+                    _ap.PlaySound("DigGrass", true);
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     break;
                 case GameState.Two:
                     SetPieceState(3);
-                    _dirtPS.Play();
+                    CallRemovalAnim(2);
+                    _ap.PlaySound("DigDirt", true);
                     _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
                     break;
                 case GameState.Three:
                     SetPieceState(4);
                     if (HasGold)
                     {
-                        _goldPS.Play();
+                        CallRemovalAnim(4);
+                        _ap.PlaySound("DigGold", true);
                         _am.CollectTile(_am.CurrentPlayer, "Gold", false);
+                        CallRemoveGold();
                     }
                     else
                     {
-                        _stonePS.Play();
+                        CallRemovalAnim(3);
+                        _ap.PlaySound("DigStone", true);
                         _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     }
                     break;
                 case GameState.Five:
                     SetPieceState(4);
-                    _goldPS.Play();
+                    CallRemovalAnim(4);
                     _am.CollectTile(_am.CurrentPlayer, "Gold", true);
-                    FindObjectOfType<SFXManager>().Play("DigGold");
+                    _ap.PlaySound("DigGold", true);
                     break;
             }
 
@@ -439,25 +464,34 @@ public class OnlinePieceController : MonoBehaviourPun
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
-            _gcm.Back();
+            if (CurrentPawn != null)
+            {
+                CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
+            }
+
+            FindObjectOfType<OnlineCardEffects>().PlacedPieces++;
+
+            ShowHidePlaceable(false);
 
             switch (ObjState)
             {
                 case GameState.Two:
-                    CallPieceState(1);
+                    CallPieceState(6);
                     CallRemovalAnim(1);
                     _am.PlaceTile("Grass");
+                    _ap.PlaySound("DigGrass", true);
                     break;
                 case GameState.Three:
                     CallPieceState(2);
                     CallRemovalAnim(2);
                     _am.PlaceTile("Dirt");
+                    _ap.PlaySound("DigDirt", true);
                     break;
                 case GameState.Four:
                     CallPieceState(3);
                     CallRemovalAnim(3);
                     _am.PlaceTile("Stone");
+                    _ap.PlaySound("DigStone", true);
                     break;
             }
         }
@@ -610,10 +644,6 @@ public class OnlinePieceController : MonoBehaviourPun
             else if (ObjState == GameState.Three)
             {
                 pieceSuit = "Stone";
-            }
-            else if (ObjState == GameState.Four || ObjState == GameState.Five)
-            {
-                Debug.LogWarning("Cannot place building on this piece, yet it was able to be selected?");
             }
 
             int buildingIndex = 0;
@@ -1290,6 +1320,27 @@ public class OnlinePieceController : MonoBehaviourPun
                 HasP2Building = check;
                 break;
         }
+    }
+
+    /// <summary>
+    /// Calls the RPC that removes gold from the stone piece
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallRemoveGold()
+    {
+        photonView.RPC("RemoveGold", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Removes gold from the stone piece
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void RemoveGold()
+    {
+        HasGold = false;
     }
 
     /*    /// <summary>

@@ -138,10 +138,16 @@ public class OnlineCanvasManager : MonoBehaviourPun
         if(PhotonNetwork.IsMasterClient)
         {
             UpdateCurrentActionText("Press Start Turn to begin!");
+            _factory.sprite = _moleFactory;
+            _burrow.sprite = _moleBurrow;
+            _mine.sprite = _moleMine;
         }
         else
         {
             UpdateCurrentActionText("Player 1 is going first!");
+            _factory.sprite = _meerkatFactory;
+            _burrow.sprite = _meerkatBurrow;
+            _mine.sprite = _meerkatMine;
         }
 
     }
@@ -173,7 +179,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         }
         //End Master Builder
 
-        if (PhotonNetwork.IsMasterClient)   /*curPlayer == 1*/ //Edited: Andrea SD
+        if (PhotonNetwork.IsMasterClient)   //Edited: Andrea SD
         {
             _currentPlayerScore.text = "Score: " + _am.P1Score + "/" + _am.WinningScore;
             _currentPlayerCollectedPieces[0].text = "x" + _am.P1CollectedPile[0];
@@ -716,19 +722,13 @@ public class OnlineCanvasManager : MonoBehaviourPun
         {
             _cm.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
             StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
-            _factory.sprite = _meerkatFactory;
-            _burrow.sprite = _meerkatBurrow;
-            _mine.sprite = _meerkatMine;
+           
         }
         else
         {
             _cm.DrawAlottedCards(_am.CardDraw + _am.P2BuiltBuildings[0]);
-            StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
-            _factory.sprite = _moleFactory;
-            _burrow.sprite = _moleBurrow;
-            _mine.sprite = _moleMine;
+            StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));        
         }
-
         UpdateTextBothPlayers();
     }
 

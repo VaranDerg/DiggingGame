@@ -142,6 +142,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     private OnlineBoardManager _bm;
     private OnlineActionManager _am;
     private OnlinePersistentCardManager _pcm;
+    private OnlineAudioPlayer _ap;
 
     /// <summary>
     /// Assigns partner scripts.
@@ -154,6 +155,8 @@ public class OnlineCardEffects : MonoBehaviourPun
         _bm = FindObjectOfType<OnlineBoardManager>();
         _am = FindObjectOfType<OnlineActionManager>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();    
+
         DisableCardEffectUI();
     }
 
@@ -731,7 +734,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
 
                 //If it's not already marked... Up openPieces by 1.
-                if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
+                if (!piece.GetComponent<OnlinePieceController>().IsPlaceable)
                 {
                     openPieces++;
                 }
@@ -1029,7 +1032,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     {
         //This card is a Persistent Card. All these Coroutines do is call "MakeCardPersistent" in PersistentCardManager, which is its own beast! Once made Persistent, its code is usable in other scripts.
         //Morning Jog's code can be found in PieceController's Movement methods.
-        FindObjectOfType<PersistentCardManager>().MakeCardPersistent(cardBody);
+        FindObjectOfType<OnlinePersistentCardManager>().MakeCardPersistent(cardBody);
 
         yield return null;
 

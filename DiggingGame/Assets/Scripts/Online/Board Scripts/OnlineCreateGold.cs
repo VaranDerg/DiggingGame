@@ -40,7 +40,7 @@ public class OnlineCreateGold : MonoBehaviourPun
 
         while (numGold > 0)
         { 
-            if(_stonePieces.Count >= numGold)
+            if(_stonePieces.Count >=  numGold)
             {
                 // Once a piece has gold, it's removed from the list of options
                 _randomNum = Random.Range(0, _stonePieces.Count);

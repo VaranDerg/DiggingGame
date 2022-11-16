@@ -225,6 +225,73 @@ Transform:
   m_Father: {fileID: 845158029}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &90733487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 90733490}
+  - component: {fileID: 90733489}
+  - component: {fileID: 90733488}
+  m_Layer: 0
+  m_Name: OnlineAudioPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &90733488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90733487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8594dfca929db24fbf3a42cd91c3c4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &90733489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90733487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 37
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!4 &90733490
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90733487}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 403, y: 229.11874, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &123252229
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2972,7 +3039,7 @@ MonoBehaviour:
   _goldABar: {fileID: 21300000, guid: 9fc05201defc9334d8180efc4c749af4, type: 3}
   _cardActivatedText: {fileID: 1358549656}
   _thiefUI: {fileID: 1358549655}
-  ProtectBuildingUI: {fileID: 1358549654}
+  ProtectBuildingUI: {fileID: 0}
   _grassThiefButton: {fileID: 1358549653}
   _dirtThiefButton: {fileID: 1358549652}
   _stoneThiefButton: {fileID: 1358549651}
@@ -3454,7 +3521,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1773380380478588375, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1773380380552097014, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -4721,11 +4788,6 @@ GameObject:
 --- !u!1 &1358549653 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1773380380769825939, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
-  m_PrefabInstance: {fileID: 1037039226}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1358549654 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1773380380236979889, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
   m_PrefabInstance: {fileID: 1037039226}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1358549655 stripped
