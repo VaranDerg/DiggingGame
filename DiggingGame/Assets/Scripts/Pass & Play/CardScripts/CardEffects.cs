@@ -2048,6 +2048,9 @@ public class CardEffects : MonoBehaviour
         }
         CurrentDamages = 0;
 
+        //It's fixed now :3
+        AllowedDamages = 0;
+
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
             building.GetComponent<Building>().PrepBuilidingDamaging(false);
