@@ -2235,10 +2235,10 @@ public class OnlineCardEffects : MonoBehaviourPun
 
                     if (!piece.GetComponent<OnlinePieceController>().CheckedByPawn)
                     {
+                        piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
+                        piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
                         openPieces++;
-                    }
-                    piece.GetComponent<OnlinePieceController>().FromActivatedCard = true;
-                    piece.GetComponent<OnlinePieceController>().ShowHideDiggable(true);
+                    }             
                 }
             }
         }
@@ -2247,19 +2247,25 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (openPieces >= _goldenShovelPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _goldenShovelPiecesToDig + " Pieces adjacent to your Pawns!");
             while (DugPieces != _goldenShovelPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _goldenShovelPiecesToDig + " Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
-        {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Pieces adjacent to your Pawns!");
+        { 
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Pieces adjacent to your Pawns!");
                 yield return null;
             }
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
         }
 
         DugPieces = 0;
@@ -2441,7 +2447,6 @@ public class OnlineCardEffects : MonoBehaviourPun
             _gcm.UpdateCurrentActionText("Regenerate " + (_piecesToRegen - PlacedPieces) + " more Pieces!");
             yield return null;
         }
-        PlacedPieces = 0;
 
         //You score for every 3 pieces placed, for a maximum of 3.
         int pointsToScore = 0;
@@ -2496,7 +2501,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == _am.CurrentPlayer)
             {
                 pawn.GetComponent<OnlinePlayerPawn>().IsMoving = true;
-                pawn.GetComponent<Animator>().Play("TempPawnBlink");
+                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().WaitingAnimName);
                 pawn.GetComponent<OnlinePlayerPawn>().TeleportationMove = true;
             }
         }
@@ -2645,7 +2650,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
             else if (_tornadoBuildingToDamage == 2)
             {
-                if (building.GetComponent<OnlineBuilding>().BuildingType == "Grass Mine" || building.GetComponent<Building>().BuildingType == "Dirt Mine" || building.GetComponent<Building>().BuildingType == "Stone Mine")
+                if (building.GetComponent<OnlineBuilding>().BuildingType == "Grass Mine" || building.GetComponent<OnlineBuilding>().BuildingType == "Dirt Mine" || building.GetComponent<OnlineBuilding>().BuildingType == "Stone Mine")
                 {
                     building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
@@ -2718,9 +2723,9 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// 
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="suit"></param>
-    /// <param name="effectName"></param>
-    /// <param name="start"></param>
+    /// <param name="suit"> suit of the card </param>
+    /// <param name="effectName"> name of the card effect </param>
+    /// <param name="start"> controls the text anim </param>
     public void CallActivationText(string suit, string effectName, bool start)
     {
         photonView.RPC("ShowActivationText", RpcTarget.All, suit, effectName,
@@ -2738,7 +2743,6 @@ public class OnlineCardEffects : MonoBehaviourPun
     private void ShowActivationText(string suit, string effectName, bool start)
     {
         // Shows the correct UI Sprite and updates the Text correctly.
-        _gcm.UpdateCurrentActionText("Activated Card!");
         _cardActivatedText.text = "Player " + _am.CurrentPlayer + " has Activated " + effectName + "!";
         if (suit == "Grass")
         {

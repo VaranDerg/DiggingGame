@@ -271,6 +271,7 @@ public class OnlinePieceController : MonoBehaviourPun
                             CallRemovalAnim(3);
                             _am.CollectTile(_am.CurrentPlayer, "Stone", true);
                         }
+                        
                         break;
                     case GameState.Five:
                         CallPieceState(4);
@@ -284,7 +285,6 @@ public class OnlinePieceController : MonoBehaviourPun
                     CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
                 }
 
-                Debug.Log("diggy back");
                 _gcm.Back();
             }
         }
@@ -1149,6 +1149,7 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <param name="objectID"> Network ID of the moving pawn </param>
     /// <param name="destinationID"> Network ID of the pawn destination 
     /// </param>
+    /// <param name="back"> if the UI goes back once complete </param>
     public void CallMovePawn(int objectID, int destinationID, bool back)
     {
         photonView.RPC("MovePawn", RpcTarget.All, objectID, destinationID, back);
@@ -1162,6 +1163,7 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <param name="objectID"> Network ID of the moving pawn </param>
     /// <param name="destinationID"> Network ID of the pawn destination 
     /// </param>
+    /// /// <param name="back"> if the UI goes back once complete </param>
     [PunRPC]
     public void MovePawn(int objectID, int destinationID, bool back)
     {

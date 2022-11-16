@@ -398,7 +398,7 @@ public class OnlineBuilding : MonoBehaviourPun
     {
         //Clicking a building Repairs it.
         CallBuildingHP(1);     // ASD
-        CallDamagePS();     // ASD
+        CallDamagePS(true);     // ASD
         CallCurrentAnim();  //ASD
         _ce.RepairedBuildings++;
         CallDamagePS(false);    // ASD
@@ -461,9 +461,9 @@ public class OnlineBuilding : MonoBehaviourPun
     /// 
     /// Author: Andrea SD
     /// </summary>
-    public void CallDamagePS()
+    public void CallDamagePS(bool active)
     {
-        photonView.RPC("PlayDMGParticle", RpcTarget.All);
+        photonView.RPC("PlayDMGParticle", RpcTarget.All, active);
     }
 
     /// <summary>
@@ -472,19 +472,16 @@ public class OnlineBuilding : MonoBehaviourPun
     /// Author: Andrea SD
     /// </summary>
     [PunRPC]
-    public void PlayDMGParticle()
+    public void PlayDMGParticle(bool active)
     {
-        _damageClickPS.GetComponent<ParticleSystem>().Play();
-    }
-
-    /// <summary>
-    /// Calls the RPC that controls whether the damage particle system is
-    /// active or inactive
-    /// </summary>
-    /// <param name="active"> on or off</param>
-    public void CallDamagePS(bool active)
-    {
-        photonView.RPC("DamagePSActivity", RpcTarget.All, active);
+        if(active)
+        {
+            _damageClickPS.GetComponent<ParticleSystem>().Play();
+        }
+        else
+        {
+            _damageSmokePS.SetActive(false);
+        }
     }
 
     /// <summary>
