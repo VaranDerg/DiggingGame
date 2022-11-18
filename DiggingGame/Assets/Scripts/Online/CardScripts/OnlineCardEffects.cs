@@ -35,7 +35,6 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// </summary>
     [Header("Card UI References")]
     [SerializeField] private GameObject _thiefUI;
-    public GameObject ProtectBuildingUI;
     [SerializeField] private GameObject _grassThiefButton, _dirtThiefButton, _stoneThiefButton, _goldThiefButton;
     [SerializeField] private TextMeshProUGUI _remainingStealsText;
     [SerializeField] private GameObject _holyIdolUI;
