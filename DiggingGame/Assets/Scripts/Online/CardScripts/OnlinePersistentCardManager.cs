@@ -120,7 +120,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 {
                     float xPos = _p2PCardPositions[i].transform.position.x;
                     float yPos = _p2PCardPositions[i].transform.position.y;
-                    CallMovePersistent(card.GetComponent<OnlineCardController>().GetCardID(), xPos, yPos);
+                    CallMovePersistent(card.GetComponentInChildren<OnlineCardController>().GetCardID(), xPos, yPos);
                    
                     card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
                     FindObjectOfType<OnlineCardManager>().P2OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;

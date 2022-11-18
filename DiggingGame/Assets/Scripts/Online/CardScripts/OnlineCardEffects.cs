@@ -165,7 +165,6 @@ public class OnlineCardEffects : MonoBehaviourPun
     public void DisableCardEffectUI()
     {
         _thiefUI.SetActive(false);
-        ProtectBuildingUI.SetActive(false);
         _grassThiefButton.SetActive(false);
         _dirtThiefButton.SetActive(false);
         _stoneThiefButton.SetActive(false);
