@@ -89,16 +89,12 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
             {
                 if (P1OpenPCardSlots[i] == true)
                 {
-                    //Moves it there.
-                    card.transform.position = _p1PCardPositions[i].position;
-                    //Plays an Animation.
-                    card.GetComponentInChildren<Animator>().Play("CardPersistent");
-                    //Says the Card is persistent and gives its current HandPosition.
-                    card.GetComponentInChildren<OnlineCardController>().MadePersistentP1 = true;
+                    CallMakePersistent(card.GetComponent<OnlineCardController>().CardID, _p1PCardPositions[i].position.x, _p1PCardPositions[i].position.y);
+                   
                     card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
                     //Removes it from the Hand.
                     FindObjectOfType<OnlineCardManager>().P1OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
-
+                   
                     // ASD
                     int _cardPos = FindObjectOfType<OnlineCardManager>().P2Hand.IndexOf(card);
 
@@ -111,10 +107,10 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                     {
                         _am.P1GoldCards--;
                     }
+
                     //Adds to newest list.
                     CallAddToPersistent(_cardPos, 1); ;
                     P1OpenPCardSlots[i] = false;
-                    //Debug.Log("Made " + card.name + " persistent for player " + _am.CurrentPlayer + "!");
                     return;
                 }
             }
@@ -126,9 +122,8 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
             {
                 if (P2OpenPCardSlots[i] == true)
                 {
-                    card.transform.position = _p2PCardPositions[i].position;
-                    card.GetComponentInChildren<Animator>().Play("CardPersistent");
-                    card.GetComponentInChildren<OnlineCardController>().MadePersistentP2 = true;
+                    CallMakePersistent(card.GetComponent<OnlineCardController>().CardID, _p2PCardPositions[i].position.x, _p2PCardPositions[i].position.y);
+                   
                     card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
                     FindObjectOfType<OnlineCardManager>().P2OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
                   
@@ -415,6 +410,24 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 FindObjectOfType<OnlineCardManager>().P2Hand.Remove(FindObjectOfType<OnlineCardManager>().P2Hand[pos]);
                 break;
         }
+    }
+
+    public void CallMakePersistent(int cardID, float xPos, float yPos)
+    {
+        photonView.RPC("MakeCardPersistent", RpcTarget.All, cardID, xPos, yPos);
+    }
+
+    [PunRPC]
+    public void MakeCardPersistent(int cardID, float xPos, float yPos)
+    {
+        GameObject card = GameObject.Find(PhotonView.Find(cardID).gameObject.name);
+
+        //Moves it there.
+        card.transform.position = new Vector2(xPos, yPos);
+        //Plays an Animation.
+        card.GetComponentInChildren<Animator>().Play("CardPersistent");
+        //Says the Card is persistent and gives its current HandPosition.
+        card.GetComponentInChildren<OnlineCardController>().MadePersistentP1 = true;
     }
 
     #endregion
