@@ -101,6 +101,8 @@ MonoBehaviour:
   - SetBuildingPlayer
   - RemoveGold
   - PlaySound
+  - MakeCardPersistent
+  - MovePersistentCard
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
