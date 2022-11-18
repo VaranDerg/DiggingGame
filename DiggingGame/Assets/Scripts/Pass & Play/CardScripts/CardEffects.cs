@@ -33,7 +33,6 @@ public class CardEffects : MonoBehaviour
     /// </summary>
     [Header("Card UI References")]
     [SerializeField] private GameObject _thiefUI;
-    public GameObject ProtectBuildingUI;
     [SerializeField] private GameObject _grassThiefButton, _dirtThiefButton, _stoneThiefButton, _goldThiefButton;
     [SerializeField] private TextMeshProUGUI _remainingStealsText;
     [SerializeField] private GameObject _holyIdolUI;
@@ -161,7 +160,6 @@ public class CardEffects : MonoBehaviour
     public void DisableCardEffectUI()
     {
         _thiefUI.SetActive(false);
-        ProtectBuildingUI.SetActive(false);
         _grassThiefButton.SetActive(false);
         _dirtThiefButton.SetActive(false);
         _stoneThiefButton.SetActive(false);
