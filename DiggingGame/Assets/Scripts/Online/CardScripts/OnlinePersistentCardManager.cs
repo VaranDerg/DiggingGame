@@ -85,14 +85,14 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 {
                     float xPos = _p1PCardPositions[i].transform.position.x;
                     float yPos = _p1PCardPositions[i].transform.position.y;
-                    CallMovePersistent(card.GetComponent<OnlineCardController>().GetCardID(), xPos, yPos);
+                    CallMovePersistent(card.GetComponentInChildren<OnlineCardController>().GetCardID(), xPos, yPos);
                    
                     card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
                     //Removes it from the Hand.
                     FindObjectOfType<OnlineCardManager>().P1OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
                    
                     // ASD
-                    int _cardPos = FindObjectOfType<OnlineCardManager>().P2Hand.IndexOf(card);
+                    int _cardPos = FindObjectOfType<OnlineCardManager>().P1Hand.IndexOf(card);
 
                     //Lowers count.
                     if (card.CompareTag("Card"))
