@@ -140,7 +140,7 @@ public class OnlineCardManager : MonoBehaviourPun
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
                     randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
                     randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
-                    P1Hand.Add(randomCard);
+                    CallAddCardToHand(1, randomCard.GetComponentInChildren<OnlineCardController>().GetCardID());
                     P1OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
@@ -180,7 +180,7 @@ public class OnlineCardManager : MonoBehaviourPun
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
                     randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
                     randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
-                    P2Hand.Add(randomCard);
+                    CallAddCardToHand(2, randomCard.GetComponentInChildren<OnlineCardController>().GetCardID());
                     P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
@@ -608,7 +608,42 @@ public class OnlineCardManager : MonoBehaviourPun
             gCard.SetActive(false);
             gCardAmount++;
         }
-        //Debug.Log("Added " + uCardAmount + " Cards to the Universal Deck and " + gCardAmount + " Gold Cards to the Gold Deck.");
+    }
+
+    /// <summary>
+    /// Adds a card to player's hand
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player 1 or 2 </param>
+    /// <param name="cardID"> ID of the card game object </param>
+    public void CallAddCardToHand(int player, int cardID)
+    {
+        photonView.RPC("AddCardToHand", RpcTarget.All, player, cardID);
+    }
+
+    /// <summary>
+    /// Adds a card to player's hand
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player 1 or 2 </param>
+    /// <param name="cardID"> ID of the card game object </param>
+    [PunRPC]
+    public void AddCardToHand(int player, int cardID)
+    {
+        GameObject card = GameObject.Find(PhotonView.Find(cardID).gameObject.name);
+
+        switch (player)
+        {
+            case 1:
+                P1Hand.Add(card);
+                break;
+            case 2:
+                P2Hand.Add(card);
+                break;
+        }
+
     }
 
     #endregion
