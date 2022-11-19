@@ -83,9 +83,10 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
             {
                 if (P1OpenPCardSlots[i] == true)
                 {
-                    float xPos = _p1PCardPositions[i].transform.position.x;
-                    float yPos = _p1PCardPositions[i].transform.position.y;
-                    CallMovePersistent(card.GetComponentInChildren<OnlineCardController>().GetCardID(), xPos, yPos);
+                    float xPos = _p1PCardPositions[i].position.x;
+                    float yPos = _p1PCardPositions[i].position.y;
+                    float zPos = _p1PCardPositions[i].position.z;
+                    CallMovePersistent(card.GetComponentInChildren<OnlineCardController>().GetCardID(), 1, xPos, yPos, zPos);
                    
                     card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
                     //Removes it from the Hand.
@@ -118,9 +119,10 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
             {
                 if (P2OpenPCardSlots[i] == true)
                 {
-                    float xPos = _p2PCardPositions[i].transform.position.x;
-                    float yPos = _p2PCardPositions[i].transform.position.y;
-                    CallMovePersistent(card.GetComponentInChildren<OnlineCardController>().GetCardID(), xPos, yPos);
+                    float xPos = _p2PCardPositions[i].position.x;
+                    float yPos = _p2PCardPositions[i].position.y;
+                    float zPos = _p2PCardPositions[i].position.z;
+                    CallMovePersistent(card.GetComponentInChildren<OnlineCardController>().GetCardID(), 2, xPos, yPos, zPos);
                    
                     card.GetComponentInChildren<OnlineCardController>().PHandPosition = i;
                     FindObjectOfType<OnlineCardManager>().P2OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
@@ -410,22 +412,32 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         }
     }
 
-    public void CallMovePersistent(int cardID, float xPos, float yPos)
+    public void CallMovePersistent(int cardID, int player, float xPos, float yPos, float zPos)
     {
-        photonView.RPC("MovePersistentCard", RpcTarget.All, cardID, xPos, yPos);
+        photonView.RPC("MovePersistentCard", RpcTarget.All, cardID, player, xPos, yPos, zPos);
     }
 
     [PunRPC]
-    public void MovePersistentCard(int cardID, float xPos, float yPos)
+    public void MovePersistentCard(int cardID, int player, float xPos, float yPos, float zPos)
     {
         GameObject card = GameObject.Find(PhotonView.Find(cardID).gameObject.name);
 
         //Moves it there.
-        card.transform.position = new Vector2(xPos, yPos);
+        card.transform.position = new Vector3(xPos, yPos, zPos);
+
+        Debug.Log("Moved to " + xPos + ", " + yPos + ", " + zPos + ".");
+
         //Plays an Animation.
         card.GetComponentInChildren<Animator>().Play("CardPersistent");
         //Says the Card is persistent and gives its current HandPosition.
-        card.GetComponentInChildren<OnlineCardController>().MadePersistentP1 = true;
+        if (player == 1)
+        {
+            card.GetComponentInChildren<OnlineCardController>().MadePersistentP1 = true;
+        }
+        else
+        {
+            card.GetComponentInChildren<OnlineCardController>().MadePersistentP2 = true;
+        }
     }
 
     #endregion
