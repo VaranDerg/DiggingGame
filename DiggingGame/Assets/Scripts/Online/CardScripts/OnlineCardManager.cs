@@ -25,8 +25,8 @@ public class OnlineCardManager : MonoBehaviourPun
     private List<GameObject> _uDeck = new List<GameObject>();
     private List<GameObject> _gDeck = new List<GameObject>();
     [HideInInspector] public List<GameObject> DPile = new List<GameObject>();
-    [HideInInspector] public List<GameObject> P1Hand = new List<GameObject>();
-    [HideInInspector] public List<GameObject> P2Hand = new List<GameObject>();
+    /*[HideInInspector]*/ public List<GameObject> P1Hand = new List<GameObject>();
+    /*[HideInInspector]*/ public List<GameObject> P2Hand = new List<GameObject>();
     [HideInInspector] public List<GameObject> SelectedCards = new List<GameObject>();
     [HideInInspector] public bool[] P1OpenHandPositions;
     [HideInInspector] public bool[] P2OpenHandPositions;
