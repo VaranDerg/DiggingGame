@@ -399,6 +399,8 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     [PunRPC]
     public void AddToPersistent(int pos, int player)
     {
+        Debug.Log(pos);
+
         switch (player)
         {
             case 1:
