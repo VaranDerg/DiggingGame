@@ -58,7 +58,7 @@ public class OnlineCardController : MonoBehaviourPun
     [SerializeField] private float _discardAnimWaitTime;
     private bool _gettingDiscarded;
 
-    [SerializeField] private int _cardID;  //ASD
+    private int _cardID;  //ASD
 
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
