@@ -51,6 +51,9 @@ public class OnlineActionManager : MonoBehaviourPun
 
     [Header("Game Values")]
     public int StartingPlayer;
+    public string PlayerOneName;
+    public string PlayerTwoName;
+    [HideInInspector] public string CurrentPlayerName;
     public int CardActivations;
     public int StartingCards;
     public int HandLimit;
@@ -77,17 +80,20 @@ public class OnlineActionManager : MonoBehaviourPun
     private OnlineCardManager _cm;
     private OnlineCanvasManager _gcm;
     private OnlinePersistentCardManager _pcm;
+    private OnlineAudioPlayer _ap;
 
     /// <summary>
     /// Calls PrepareStartingValues and assigns partner scripts.
     /// </summary>
     private void Awake()
     {
+        CurrentPlayerName = PlayerOneName;
         _menuButton.SetActive(false);
         _bm = FindObjectOfType<OnlineBoardManager>();
         _cm = FindObjectOfType<OnlineCardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
         PrepareStartingValues();
     }
     
@@ -704,7 +710,7 @@ public class OnlineActionManager : MonoBehaviourPun
         ShovelUsed = false;
         MorningJogUsed = false;
 
-        _gcm.UpdateOpponentActionText("Start your turn.");
+        _gcm.CallOpponentActionText("Start your turn.");
         CallStartButton();
     }
 
@@ -748,6 +754,8 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <param name="amount"> how much the score is changing by </param>
     public void CallUpdateScore(int player, int amount)
     {
+        _scoreTextAnimator.Play("ScorePoint");
+        _ap.PlaySound("ScorePoint", false);
         photonView.RPC("UpdateScore", RpcTarget.All, player, amount);
     }
 
@@ -760,17 +768,15 @@ public class OnlineActionManager : MonoBehaviourPun
     [PunRPC]
     public void UpdateScore(int player, int amount)
     {
-        if (photonView.IsMine)
-        {
-            _scoreTextAnimator.Play("ScorePoint");
-        }
         if (player == 1)
         {
             P1Score += amount;
+            StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Score", amount);
         }
         else
         {
             P2Score += amount;
+            StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Score", amount);
         }
     }
 
@@ -1027,6 +1033,37 @@ public class OnlineActionManager : MonoBehaviourPun
     public void EnableStartButton()
     {
         _gcm.StartTurnButton.SetActive(true);
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets the current player name to player one or two's name
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player 1 or 2 </param>
+    public void CallSetPlayerName(int player)
+    {
+        photonView.RPC("SetCurrentName", RpcTarget.All, player);
+    }
+
+    /// <summary>
+    /// Sets the current player name to player one or two's name
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> player 1 or 2 </param>
+    [PunRPC]
+    public void SetCurrentName(int player)
+    {
+        switch (player)
+        {
+            case 1:
+                CurrentPlayerName = PlayerOneName;
+                break;
+            case 2:
+                CurrentPlayerName = PlayerTwoName;
+                break;
+        }
     }
 
     #endregion

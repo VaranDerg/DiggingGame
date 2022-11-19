@@ -103,6 +103,8 @@ MonoBehaviour:
   - PlaySound
   - MakeCardPersistent
   - MovePersistentCard
+  - SetCurrentName
+  - BuildingInfoRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

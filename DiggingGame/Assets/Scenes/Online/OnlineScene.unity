@@ -3014,8 +3014,6 @@ MonoBehaviour:
   P2PersistentCards: []
   P1OpenPCardSlots: 
   P2OpenPCardSlots: 
-  _handCardCover: {fileID: 0}
-  _handCardHideSpeed: 0
   DiscardedPersistentCard: 0
   DecidedBuildingProtection: 0
   BuildingsDamaged: 0
@@ -3039,7 +3037,6 @@ MonoBehaviour:
   _goldABar: {fileID: 21300000, guid: 9fc05201defc9334d8180efc4c749af4, type: 3}
   _cardActivatedText: {fileID: 1358549656}
   _thiefUI: {fileID: 1358549655}
-  ProtectBuildingUI: {fileID: 0}
   _grassThiefButton: {fileID: 1358549653}
   _dirtThiefButton: {fileID: 1358549652}
   _stoneThiefButton: {fileID: 1358549651}
@@ -3129,7 +3126,7 @@ PrefabInstance:
       objectReference: {fileID: 1037039229}
     - target: {fileID: 1773380378665292744, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShowOpponentInfo
+      value: OpponentInfoToggleWrapper
       objectReference: {fileID: 0}
     - target: {fileID: 1773380378665292744, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -3282,10 +3279,14 @@ PrefabInstance:
     - target: {fileID: 1773380379417348018, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1037039227}
+      objectReference: {fileID: 1037039229}
     - target: {fileID: 1773380379417348018, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: BuildingInfoToggleWrapper
+      objectReference: {fileID: 0}
+    - target: {fileID: 1773380379417348018, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: OnlineCanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379935891260, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -5446,6 +5447,9 @@ MonoBehaviour:
   P1CurrentBuildingPrices: 000000000000000000000000
   P2CurrentBuildingPrices: 000000000000000000000000
   StartingPlayer: 1
+  PlayerOneName: 
+  PlayerTwoName: 
+  CurrentPlayerName: 
   CardActivations: 1
   StartingCards: 5
   HandLimit: 7
