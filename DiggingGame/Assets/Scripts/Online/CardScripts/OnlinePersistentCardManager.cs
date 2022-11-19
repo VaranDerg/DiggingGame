@@ -425,8 +425,6 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         //Moves it there.
         card.transform.position = new Vector3(xPos, yPos, zPos);
 
-        Debug.Log("Moved to " + xPos + ", " + yPos + ", " + zPos + ".");
-
         //Plays an Animation.
         card.GetComponentInChildren<Animator>().Play("CardPersistent");
         //Says the Card is persistent and gives its current HandPosition.

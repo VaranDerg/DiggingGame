@@ -355,7 +355,6 @@ public class OnlineCardController : MonoBehaviourPun
     public IEnumerator ToDiscard()
     {
         _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
-        Debug.Log("Held by player" + HeldByPlayer);
 
         if (!MadePersistentP1 && !MadePersistentP2)
         {
@@ -474,7 +473,6 @@ public class OnlineCardController : MonoBehaviourPun
     /// <param name="player"></param>
     public void CallRemoveCard(int player)
     {
-        Debug.Log("CallRemoveCard");
         photonView.RPC("RemoveCard", RpcTarget.All, player);
     }
 
