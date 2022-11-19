@@ -133,14 +133,18 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _opponentInfoZone.SetActive(false);
 
         UpdateTextBothPlayers();
-        
+
         // Author: Andrea SD
-        if(PhotonNetwork.IsMasterClient)
+        // Sets sprites to the correct client's player animal
+        if (PhotonNetwork.IsMasterClient)
         {
             UpdateCurrentActionText("Press Start Turn to begin!");
             _factory.sprite = _moleFactory;
             _burrow.sprite = _moleBurrow;
             _mine.sprite = _moleMine;
+            _bothFactoryImage.sprite = _moleFactory;
+            _bothBurrowImage.sprite = _moleBurrow;
+            _bothMineImage.sprite = _moleMine;
         }
         else
         {
@@ -148,8 +152,10 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _factory.sprite = _meerkatFactory;
             _burrow.sprite = _meerkatBurrow;
             _mine.sprite = _meerkatMine;
+            _bothFactoryImage.sprite = _meerkatFactory;
+            _bothBurrowImage.sprite = _meerkatBurrow;
+            _bothMineImage.sprite = _meerkatMine;
         }
-
     }
 
     /// <summary>
@@ -270,7 +276,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     private void UpdateAlwaysActiveText()
     {
-        _activePlayerText.text = "Player " + _am.CurrentPlayer;
+        _activePlayerText.text = _am.CurrentPlayerName + "s";
         _activeRoundText.text = "Round " + _am.CurrentRound;
         _supplyPieces[0].text = "x" + _am.SupplyPile[0];
         _supplyPieces[1].text = "x" + _am.SupplyPile[1];
@@ -279,53 +285,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Changes the opponent text on player two's screen with player one's vals
-    /// Author: Andrea SD
-    /// </summary>
-    [PunRPC]
-    public void ChangeOpponentText()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            _opponentScoreText.text = "Score: " + _am.P2Score;
-            _opponentCardText.text = "Cards: " + _am.P2Cards;
-            _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
-
-            _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
-            _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
-            _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
-            _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
-        }
-        else
-        {
-            _opponentScoreText.text = "Score: " + _am.P1Score;
-            _opponentCardText.text = "Cards: " + _am.P1Cards;
-            _opponentGoldCardText.text = "Gold Cards: " + _am.P1GoldCards;
-
-            _opponentPieces[0].text = "Grass: " + (_am.P1CollectedPile[0] + _am.P1RefinedPile[0]);
-            _opponentPieces[1].text = "Dirt: " + (_am.P1CollectedPile[1] + _am.P1RefinedPile[1]);
-            _opponentPieces[2].text = "Stone: " + (_am.P1CollectedPile[2] + _am.P1RefinedPile[2]);
-            _opponentPieces[3].text = "Gold: " + (_am.P1CollectedPile[3] + _am.P1RefinedPile[3]);
-        }
-    }
-
-    /// <summary>
     /// Updates the Building Info text.
     /// </summary>
     private void UpdateBuildingText()
     {
-        if (_am.CurrentPlayer == 1)
-        {
-            _bothFactoryImage.sprite = _moleFactory;
-            _bothBurrowImage.sprite = _moleBurrow;
-            _bothMineImage.sprite = _moleMine;
-        }
-        else
-        {
-            _bothFactoryImage.sprite = _meerkatFactory;
-            _bothBurrowImage.sprite = _meerkatBurrow;
-            _bothMineImage.sprite = _meerkatMine;
-        }
+        /* note: _bothFactoryImage.sprite was moved to start for online play */
 
         //Master Builder Start
         int bCostReduction = 0;
@@ -335,18 +299,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         }
         //End Master Builder
 
-        if (_am.CurrentPlayer == 1)
-        {
-            _factoryInfoText.text = "Factories" + Environment.NewLine + "Card Draw: " + (_am.CardDraw + _am.P1BuiltBuildings[0]) + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[0] - bCostReduction);
-            _burrowInfoText.text = "Burrows" + Environment.NewLine + "Activations: " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[1] - bCostReduction);
-            _mineInfoText.text = "Mines" + Environment.NewLine + "Supply Pieces" + Environment.NewLine + Environment.NewLine + (_am.P1BuiltBuildings[2] + _am.P1BuiltBuildings[3] + _am.P1BuiltBuildings[4] + _am.P1BuiltBuildings[5]) + " Built" + Environment.NewLine + _am.P1RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[2] - bCostReduction);
-        }
-        else
-        {
-            _factoryInfoText.text = "Factories" + Environment.NewLine + "Card Draw: " + (_am.CardDraw + _am.P2BuiltBuildings[0]) + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P2RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[0] - bCostReduction);
-            _burrowInfoText.text = "Burrows" + Environment.NewLine + "Activations: " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P2RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[1] - bCostReduction);
-            _mineInfoText.text = "Mines" + Environment.NewLine + "Supply Pieces" + Environment.NewLine + Environment.NewLine + (_am.P2BuiltBuildings[2] + _am.P2BuiltBuildings[3] + _am.P2BuiltBuildings[4] + _am.P2BuiltBuildings[5]) + " Built" + Environment.NewLine + _am.P2RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[2] - bCostReduction);
-        }
+        CallBuildingInfoRPC(bCostReduction);    // ASD
     }
 
     /// <summary>
@@ -354,29 +307,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     /// <param name="updatedText">New text to show</param>
     public void UpdateCurrentActionText(string updatedText)
-    {
-        _currentActionText.text = updatedText;
-    }
-
-    /// <summary>
-    /// Calls the local RPC to update opponent text across the network
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="updatedText"></param>
-    public void UpdateOpponentActionText(string updatedText)
-    {
-        photonView.RPC("UpdateOnlineActionText", RpcTarget.Others, updatedText);
-    }
-
-    /// <summary>
-    /// Updates the Current Action text for the non-active player
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    /// <param name="updatedText"></param>
-    [PunRPC]
-    public void UpdateOnlineActionText(string updatedText)
     {
         _currentActionText.text = updatedText;
     }
@@ -390,20 +320,9 @@ public class OnlineCanvasManager : MonoBehaviourPun
     public void UpdateTextBothPlayers()
     {
         UpdateCurrentPlayerText();
-        photonView.RPC("UpdateActiveTextOnline", RpcTarget.All);
-
-        photonView.RPC("ChangeOpponentText", RpcTarget.All);     //Andrea SD
-    }
-
-    /// <summary>
-    /// Updates always active text for each player
-    /// 
-    /// Author: Andrea SD
-    /// </summary>
-    [PunRPC] 
-    public void UpdateActiveTextOnline()
-    {
-        UpdateAlwaysActiveText();
+        UpdateBuildingText();
+        CallUpdateActiveTextONL();
+        CallOpponentText();
     }
 
     /// <summary>
@@ -515,7 +434,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
-        UpdateOpponentActionText(_am.CurrentPlayer + " is taking their first move!");       // Andrea SD
+        CallOpponentActionText(_am.CurrentPlayer + " is taking their first move!");       // Andrea SD
     }
 
     /// <summary>
@@ -525,7 +444,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void ToThenPhase()
     {
-        UpdateOpponentActionText(_am.CurrentPlayer + " is contemplating their next action...");     // Andrea SD
+        CallOpponentActionText(_am.CurrentPlayer + " is contemplating their next action...");     // Andrea SD
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
         CallChangePhase(1);     // ASD
@@ -545,7 +464,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void Move()
     {
-        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is moving...");      // Andrea SD
+        CallOpponentActionText("Player " + _am.CurrentPlayer + " is moving...");      // Andrea SD
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
 
@@ -564,7 +483,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void Dig()
     {
-        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is digging...");     // Andrea SD
+        CallOpponentActionText("Player " + _am.CurrentPlayer + " is digging...");     // Andrea SD
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
 
@@ -583,7 +502,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void OpenBuildMenu()
     {
-        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is building...");
+        CallOpponentActionText("Player " + _am.CurrentPlayer + " is building...");
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
 
@@ -633,7 +552,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void ToFinallyPhase()
     {
-        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of playing a card...");  //Andrea SD
+        CallOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of playing a card...");  //Andrea SD
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
         CallChangePhase(1);
@@ -658,7 +577,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void Back()
     {
-        UpdateOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of their next action...");
+        CallOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of their next action...");
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
         _bm.SetActiveCollider("Board");
@@ -679,7 +598,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 
-        //photonView.isMine
+        // This conditional determines if it is the calling client's turn
         if(PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 1 || !PhotonNetwork.IsMasterClient && _am.CurrentPlayer == 2)
         {
             if (_am.CurrentTurnPhase == 2)
@@ -718,11 +637,12 @@ public class OnlineCanvasManager : MonoBehaviourPun
         DisableListObjects();
         _cm.StopCardActivating(_am.CurrentPlayer);
 
+        /* note: _building.sprite code was moved to start for online use */
         if (_am.CurrentPlayer == 1)
         {
             _cm.DrawAlottedCards(_am.CardDraw + _am.P1BuiltBuildings[0]);
             StartCoroutine(_cm.CardDiscardProcess(_am.CurrentPlayer));
-           
+
         }
         else
         {
@@ -757,13 +677,116 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _am.CurrentTurnPhase += amount;
     }
 
+    public void CallOpponentText()
+    {
+        photonView.RPC("ChangeOpponentText", RpcTarget.All);
+    }
+
     /// <summary>
-    /// Shows the opponent info
+    /// Changes the opponent text on player two's screen with player one's vals
+    /// Author: Andrea SD
     /// </summary>
     [PunRPC]
-    public void ShowOpponentInfo()
+    public void ChangeOpponentText()
     {
-        OpponentInfoToggleWrapper();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _opponentScoreText.text = "Score: " + _am.P2Score;
+            _opponentCardText.text = "Cards: " + _am.P2Cards;
+            _opponentGoldCardText.text = "Gold Cards: " + _am.P2GoldCards;
+
+            _opponentPieces[0].text = "Grass: " + (_am.P2CollectedPile[0] + _am.P2RefinedPile[0]);
+            _opponentPieces[1].text = "Dirt: " + (_am.P2CollectedPile[1] + _am.P2RefinedPile[1]);
+            _opponentPieces[2].text = "Stone: " + (_am.P2CollectedPile[2] + _am.P2RefinedPile[2]);
+            _opponentPieces[3].text = "Gold: " + (_am.P2CollectedPile[3] + _am.P2RefinedPile[3]);
+        }
+        else
+        {
+            _opponentScoreText.text = "Score: " + _am.P1Score;
+            _opponentCardText.text = "Cards: " + _am.P1Cards;
+            _opponentGoldCardText.text = "Gold Cards: " + _am.P1GoldCards;
+
+            _opponentPieces[0].text = "Grass: " + (_am.P1CollectedPile[0] + _am.P1RefinedPile[0]);
+            _opponentPieces[1].text = "Dirt: " + (_am.P1CollectedPile[1] + _am.P1RefinedPile[1]);
+            _opponentPieces[2].text = "Stone: " + (_am.P1CollectedPile[2] + _am.P1RefinedPile[2]);
+            _opponentPieces[3].text = "Gold: " + (_am.P1CollectedPile[3] + _am.P1RefinedPile[3]);
+        }
+    }
+
+    /// <summary>
+    /// Calls the local RPC to update opponent text across the network
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="updatedText"></param>
+    public void CallOpponentActionText(string updatedText)
+    {
+        photonView.RPC("UpdateOnlineActionText", RpcTarget.Others, updatedText);
+    }
+
+    /// <summary>
+    /// Updates the Current Action text for the non-active player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="updatedText"></param>
+    [PunRPC]
+    public void UpdateOnlineActionText(string updatedText)
+    {
+        _currentActionText.text = updatedText;
+    }
+
+    /// <summary>
+    /// Calls the RPC that updates the building info text depending
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="costReduction"> How much the building cost is reduced by
+    /// from the master builder card </param>
+    public void CallBuildingInfoRPC(int costReduction)
+    {
+        photonView.RPC("BuildingInfoRPC", RpcTarget.All, costReduction);
+    }
+
+    /// <summary>
+    /// Updates the building info text depending
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="costReduction"> How much the building cost is reduced by
+    /// from the master builder card </param>
+    [PunRPC]
+    public void BuildingInfoRPC(int costReduction)
+    {
+        int bCostReduction = costReduction;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _factoryInfoText.text = "Factories" + Environment.NewLine + "Card Draw: " + (_am.CardDraw + _am.P1BuiltBuildings[0]) + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[0] - bCostReduction);
+            _burrowInfoText.text = "Burrows" + Environment.NewLine + "Activations: " + (_am.CardActivations + _am.P1BuiltBuildings[1]) + Environment.NewLine + Environment.NewLine + _am.P1BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P1RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[1] - bCostReduction);
+            _mineInfoText.text = "Mines" + Environment.NewLine + "Supply Pieces" + Environment.NewLine + Environment.NewLine + (_am.P1BuiltBuildings[2] + _am.P1BuiltBuildings[3] + _am.P1BuiltBuildings[4] + _am.P1BuiltBuildings[5]) + " Built" + Environment.NewLine + _am.P1RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P1CurrentBuildingPrices[2] - bCostReduction);
+        }
+        else
+        {
+            _factoryInfoText.text = "Factories" + Environment.NewLine + "Card Draw: " + (_am.CardDraw + _am.P2BuiltBuildings[0]) + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[0] + " Built" + Environment.NewLine + _am.P2RemainingBuildings[0] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[0] - bCostReduction);
+            _burrowInfoText.text = "Burrows" + Environment.NewLine + "Activations: " + (_am.CardActivations + _am.P2BuiltBuildings[1]) + Environment.NewLine + Environment.NewLine + _am.P2BuiltBuildings[1] + " Built" + Environment.NewLine + _am.P2RemainingBuildings[1] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[1] - bCostReduction);
+            _mineInfoText.text = "Mines" + Environment.NewLine + "Supply Pieces" + Environment.NewLine + Environment.NewLine + (_am.P2BuiltBuildings[2] + _am.P2BuiltBuildings[3] + _am.P2BuiltBuildings[4] + _am.P2BuiltBuildings[5]) + " Built" + Environment.NewLine + _am.P2RemainingBuildings[2] + " Left" + Environment.NewLine + "Cost " + (_am.P2CurrentBuildingPrices[2] - bCostReduction);
+        }
+    }
+
+    public void CallUpdateActiveTextONL()
+    {
+        photonView.RPC("UpdateActiveTextOnline", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Updates always active text for each player
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void UpdateActiveTextOnline()
+    {
+        UpdateAlwaysActiveText();
     }
 
     #endregion
