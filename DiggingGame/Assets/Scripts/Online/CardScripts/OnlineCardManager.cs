@@ -128,10 +128,6 @@ public class OnlineCardManager : MonoBehaviourPun
 
             randomCard = _gDeck[Random.Range(0, _gDeck.Count)];
         }
-        else
-        {
-            Debug.LogWarning("Incorrect deck parameter provided: " + deck);
-        }
 
         if (_am.CurrentPlayer == 1)
         {
@@ -165,7 +161,6 @@ public class OnlineCardManager : MonoBehaviourPun
                     {
                         _am.P1Cards++;
                     }
-                    //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     randomCard.SetActive(true);
                     randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
                     yield return new WaitForSeconds(_cardShowHideTime);
@@ -317,7 +312,6 @@ public class OnlineCardManager : MonoBehaviourPun
         if (selectedCardValue == requiredCardValue)
         {
             SpendSelectedCards();
-            Debug.Log("Adequate cards selected");
             return true;
         }
         else if (selectedCardValue > requiredCardValue)
