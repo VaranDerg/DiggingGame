@@ -76,9 +76,12 @@ public class OnlineCardController : MonoBehaviourPun
         HeldByPlayer = 0;
     }
 
+    /// <summary>
+    /// Gets ViewID :3
+    /// </summary>
     private void Start()
     {
-        _cardID = photonView.ViewID;     //ASD
+        _cardID = GetComponentInParent<PhotonView>().ViewID;     //ASD
     }
 
     /// <summary>
