@@ -317,7 +317,6 @@ public class OnlineCardManager : MonoBehaviourPun
         if (selectedCardValue == requiredCardValue)
         {
             SpendSelectedCards();
-            Debug.Log("Adequate cards selected");
             return true;
         }
         else if (selectedCardValue > requiredCardValue)
