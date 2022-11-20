@@ -361,7 +361,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         photonView.RPC("GoBack", RpcTarget.Others);
     }
 
-    /// <summary>
+    /// <summary>S
     /// Returns to the previous phase
     /// 
     /// Author: Andrea SD
@@ -395,7 +395,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     [PunRPC]
     public void AddToPersistent(int cardID, int player)
     {
-        GameObject card = PhotonView.Find(cardID).gameObject;
+        GameObject card = PhotonView.Find(cardID).transform.parent.gameObject;
 
         switch (player)
         {
@@ -418,7 +418,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     [PunRPC]
     public void MovePersistentCard(int cardID, int player, float xPos, float yPos, float zPos)
     {
-        GameObject card = PhotonView.Find(cardID).gameObject;
+        GameObject card = PhotonView.Find(cardID).transform.parent.gameObject;
 
         //Moves it there.
         card.transform.position = new Vector3(xPos, yPos, zPos);

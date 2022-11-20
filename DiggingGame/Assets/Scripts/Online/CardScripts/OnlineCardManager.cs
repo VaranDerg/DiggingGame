@@ -557,7 +557,7 @@ public class OnlineCardManager : MonoBehaviourPun
     [PunRPC]
     public void RemoveCard(string deck, int cardID)
     {
-        GameObject card = PhotonView.Find(cardID).gameObject;
+        GameObject card = PhotonView.Find(cardID).transform.parent.gameObject;
         switch (deck)
         {
             case "Universal":
@@ -626,7 +626,7 @@ public class OnlineCardManager : MonoBehaviourPun
     [PunRPC]
     public void AddCardToHand(int player, int cardID)
     {
-        GameObject card = PhotonView.Find(cardID).gameObject;
+        GameObject card = PhotonView.Find(cardID).transform.parent.gameObject;
         switch (player)
         {
             case 1:
