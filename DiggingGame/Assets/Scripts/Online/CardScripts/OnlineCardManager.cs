@@ -129,6 +129,8 @@ public class OnlineCardManager : MonoBehaviourPun
             randomCard = _gDeck[Random.Range(0, _gDeck.Count)];
         }
 
+        int randomCardID = randomCard.GetComponentInChildren<OnlineCardController>().GetCardID();
+
         if (_am.CurrentPlayer == 1)
         {
             for (int i = 0; i < P1OpenHandPositions.Length; i++)
@@ -140,7 +142,7 @@ public class OnlineCardManager : MonoBehaviourPun
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
                     randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
                     randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
-                    CallAddCardToHand(1, randomCard.GetComponentInChildren<OnlineCardController>().GetCardID());
+                    CallAddCardToHand(1, randomCardID);
                     P1OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
@@ -180,7 +182,7 @@ public class OnlineCardManager : MonoBehaviourPun
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
                     randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
                     randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
-                    CallAddCardToHand(2, randomCard.GetComponentInChildren<OnlineCardController>().GetCardID());
+                    CallAddCardToHand(2, randomCardID);
                     P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
