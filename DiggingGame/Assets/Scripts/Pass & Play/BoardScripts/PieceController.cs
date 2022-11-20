@@ -24,6 +24,8 @@ public class PieceController : MonoBehaviour
     [SerializeField] private Sprite _bedrockSprite;
     [SerializeField] private Sprite _goldSprite;
     [SerializeField] private Sprite _flowerSprite;
+    [SerializeField] private Sprite _fertilizerSprite;
+    [SerializeField] private Sprite _compactionSprite;
     [SerializeField] private GameObject _molePawn;
     [SerializeField] private GameObject _meerkatPawn;
     [SerializeField] private SpriteRenderer _borderSr;
@@ -96,7 +98,9 @@ public class PieceController : MonoBehaviour
         Three,
         Four,
         Five,
-        Six
+        Six,
+        Seven,
+        Eight
     }
 
     // Start is called before the first frame update
@@ -981,6 +985,18 @@ public class PieceController : MonoBehaviour
                 _goldLight.SetActive(false);
                 _goldGlitter.SetActive(false);
                 ObjState = GameState.Six;
+                break;
+            case 7:
+                gameObject.GetComponent<SpriteRenderer>().sprite = _fertilizerSprite;
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
+                ObjState = GameState.Seven;
+                break;
+            case 8:
+                gameObject.GetComponent<SpriteRenderer>().sprite = _compactionSprite;
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
+                ObjState = GameState.Eight;
                 break;
             default:
                 throw new Exception("This board piece state does not exist.");
