@@ -18,7 +18,7 @@ public class Building : MonoBehaviour
     [Header("References")]
     [SerializeField] private Sprite _damagedSprite;
     [SerializeField] private Sprite _defaultSprite;
-    [SerializeField] private int _showDiceFaceTimes = 30;
+    [SerializeField] private int _showDiceFaceTimes = 15;
 
     //Information regarding the Building.
     [Header("Values")]

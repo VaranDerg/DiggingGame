@@ -136,8 +136,12 @@ public class ActionManager : MonoBehaviour
         }
 
         _gcm.UpdateTextBothPlayers();
-        _scoreTextAnimator.Play("ScorePoint");
-        FindObjectOfType<SFXManager>().Play("ScorePoint");
+
+        if(amount > 0)
+        {
+            _scoreTextAnimator.Play("ScorePoint");
+            FindObjectOfType<SFXManager>().Play("ScorePoint");
+        }
     }
 
     /// <summary>
