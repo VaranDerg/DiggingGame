@@ -433,6 +433,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         DisableListObjects();
 
         _firstZone.SetActive(true);
+        _backButton.SetActive(true);
         _am.DrawStartingCards();
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
@@ -573,8 +574,18 @@ public class GameCanvasManagerNew : MonoBehaviour
         _bm.DisableAllBoardInteractions();
         _bm.SetActiveCollider("Board");
 
+        //For going back during the initial move. I have to invoke a move wrapper since compilation makes animations work incorrectly.
+        if (_am.CurrentTurnPhase == 1)
+        {
+            _backButton.SetActive(true);
+            _firstZone.SetActive(true);
+            Invoke("PlayerMoveWrapper", 0.1f);
+            UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto, or select Skip Move.");
+            return;
+        }
+
         //Hm... Weird retrieval bug. This fixed it, but I'm not happy about it.
-        if(_curGoldCoroutine != null)
+        if (_curGoldCoroutine != null)
         {
             StopCoroutine(_curGoldCoroutine);
         }
@@ -612,6 +623,14 @@ public class GameCanvasManagerNew : MonoBehaviour
         }
 
         UpdateTextBothPlayers();
+    }
+
+    /// <summary>
+    /// A wrapper to call startmove with the above method.
+    /// </summary>
+    private void PlayerMoveWrapper()
+    {
+        _am.StartMove(_am.CurrentPlayer);
     }
 
     /// <summary>
