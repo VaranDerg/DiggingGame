@@ -649,7 +649,7 @@ public class CardEffects : MonoBehaviour
                 }
 
                 //Does not highlight if the Piece isn't Dirt
-                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Seven)
                 {
                     continue;
                 }
@@ -681,7 +681,7 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three)
+                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Eight)
                 {
                     continue;
                 }
@@ -820,7 +820,7 @@ public class CardEffects : MonoBehaviour
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             //If a piece is Dirt...
-            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
+            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Seven)
             {
                 //It cannot have a Pawn or Building...
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -947,7 +947,7 @@ public class CardEffects : MonoBehaviour
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Seven)
                     {
                         continue;
                     }
@@ -1468,7 +1468,7 @@ public class CardEffects : MonoBehaviour
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Seven)
                     {
                         continue;
                     }
@@ -1545,7 +1545,7 @@ public class CardEffects : MonoBehaviour
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Eight)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
@@ -2009,7 +2009,7 @@ public class CardEffects : MonoBehaviour
                 continue;
             }
 
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Eight)
             {
                 if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
                 {
@@ -2076,7 +2076,7 @@ public class CardEffects : MonoBehaviour
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Five)
+                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Five && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Eight)
                     {
                         continue;
                     }

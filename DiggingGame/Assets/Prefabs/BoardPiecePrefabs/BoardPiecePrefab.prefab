@@ -322,6 +322,8 @@ MonoBehaviour:
   _bedrockSprite: {fileID: 21300000, guid: d6092582ec4d67c42a318eecd215b92c, type: 3}
   _goldSprite: {fileID: 21300000, guid: 7566eea44f1676a49a57d4e12bfd9f71, type: 3}
   _flowerSprite: {fileID: 21300000, guid: bcca3f52f5a4b9c499961920f54c2ab7, type: 3}
+  _fertilizerSprite: {fileID: 21300000, guid: 49a25e2bc0d1887449d0af0dca28f173, type: 3}
+  _compactionSprite: {fileID: 21300000, guid: 6747856942e5f564ba55b490d970f3b9, type: 3}
   _molePawn: {fileID: 5257196919382382254, guid: b1517406f927dbb4894d7e0faebe1bfb, type: 3}
   _meerkatPawn: {fileID: 4383287940573218761, guid: 0e84e64742383f64fae2c13b95306adc, type: 3}
   _borderSr: {fileID: 5651979733519898489}
