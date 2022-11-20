@@ -632,7 +632,7 @@ public class OnlineCardManager : MonoBehaviourPun
     [PunRPC]
     public void AddCardToHand(int player, int cardID)
     {
-        GameObject card = PhotonView.Find(cardID).gameObject;
+        GameObject card = GameObject.Find(PhotonView.Find(cardID).gameObject.name);
 
         switch (player)
         {
