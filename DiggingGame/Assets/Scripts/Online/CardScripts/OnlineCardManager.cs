@@ -85,8 +85,6 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             P2OpenHandPositions[i] = true;
         }
-
-        //Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
     }
 
     /// <summary>
@@ -146,13 +144,11 @@ public class OnlineCardManager : MonoBehaviourPun
                     P1OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
-                        _deckPos = _uDeck.IndexOf(randomCard);
-                        CallRemoveCard("Universal", _deckPos);
+                        CallRemoveCard("Universal", randomCardID);
                     }
                     else
                     {
-                        _deckPos = _gDeck.IndexOf(randomCard);
-                        CallRemoveCard("Gold", _deckPos);
+                        CallRemoveCard("Gold", randomCardID);
                     }
 
                     if (randomCard.CompareTag("GoldCard"))
@@ -186,13 +182,11 @@ public class OnlineCardManager : MonoBehaviourPun
                     P2OpenHandPositions[i] = false;
                     if (deck == "Universal")
                     {
-                        _deckPos = _uDeck.IndexOf(randomCard);
-                        CallRemoveCard("Universal", _deckPos);  // ASD
+                        CallRemoveCard("Universal", randomCardID);  // ASD
                     }
                     else
                     {
-                        _deckPos = _gDeck.IndexOf(randomCard);
-                        CallRemoveCard("Gold", _deckPos);   // ASD
+                        CallRemoveCard("Gold", randomCardID);   // ASD
                     }
 
                     if (randomCard.CompareTag("GoldCard"))
@@ -203,7 +197,6 @@ public class OnlineCardManager : MonoBehaviourPun
                     {
                         _am.P2Cards++;
                     }
-                    //Debug.Log("Drew " + randomCard.name + " to Player " + _am.CurrentPlayer + ".");
                     randomCard.SetActive(true);
                     randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
                     yield return new WaitForSeconds(_cardShowHideTime);
@@ -537,8 +530,6 @@ public class OnlineCardManager : MonoBehaviourPun
                 }
             }
 
-            //Debug.Log("Shuffled " + shuffledUCards + " Cards and " + shuffledGCards + " Gold Cards back into the Draw Pile.");
-
             DPile.Clear();
             UpdatePileText();
         }
@@ -564,15 +555,16 @@ public class OnlineCardManager : MonoBehaviourPun
     /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
     /// <param name="deckPos"> Position of the card in the deck </param>
     [PunRPC]
-    public void RemoveCard(string deck, int deckPos)
+    public void RemoveCard(string deck, int cardID)
     {
+        GameObject card = PhotonView.Find(cardID).gameObject;
         switch (deck)
         {
             case "Universal":
-                _uDeck.RemoveAt(deckPos);
+                _uDeck.Remove(card);
                 break;
             default:
-                _gDeck.RemoveAt(deckPos);
+                _gDeck.Remove(card);
                 break;
         }
     }
@@ -635,7 +627,6 @@ public class OnlineCardManager : MonoBehaviourPun
     public void AddCardToHand(int player, int cardID)
     {
         GameObject card = PhotonView.Find(cardID).gameObject;
-
         switch (player)
         {
             case 1:
@@ -645,7 +636,6 @@ public class OnlineCardManager : MonoBehaviourPun
                 P2Hand.Add(card);
                 break;
         }
-
     }
 
     #endregion

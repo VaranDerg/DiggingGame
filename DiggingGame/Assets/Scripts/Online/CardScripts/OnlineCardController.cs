@@ -374,6 +374,7 @@ public class OnlineCardController : MonoBehaviourPun
                 }
                 _cm.P1OpenHandPositions[HandPosition] = true;
                 CallRemoveCard(1);   // Andrea SD
+                GetComponentInChildren<OnlineCardController>().CallRemoveCard(1);
             }
             else if (HeldByPlayer == 2)
             {
@@ -400,6 +401,7 @@ public class OnlineCardController : MonoBehaviourPun
             MadePersistentP2 = false;
             _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
+
 
             _cm.UpdatePileText();
         }
@@ -452,7 +454,7 @@ public class OnlineCardController : MonoBehaviourPun
     /// 
     /// Author: Andrea SD
     /// </summary>
-    private void CallDiscardRPC()
+    public void CallDiscardRPC()
     {
         photonView.RPC("AddToDiscarded", RpcTarget.All);
     }

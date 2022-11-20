@@ -5607,8 +5607,8 @@ MonoBehaviour:
   P1CurrentBuildingPrices: 000000000000000000000000
   P2CurrentBuildingPrices: 000000000000000000000000
   StartingPlayer: 1
-  PlayerOneName: 
-  PlayerTwoName: 
+  PlayerOneName: Mole
+  PlayerTwoName: Meerkat
   CurrentPlayerName: 
   CardActivations: 1
   StartingCards: 5
