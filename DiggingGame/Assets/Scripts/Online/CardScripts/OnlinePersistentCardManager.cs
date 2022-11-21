@@ -134,7 +134,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                     {
                         _am.P2GoldCards--;
                     }
-                    CallAddToPersistent(card.GetComponentInParent<PhotonView>().ViewID, 2);
+                    CallAddToPersistent(card.GetComponentInChildren<PhotonView>().ViewID, 2);
                     P2OpenPCardSlots[i] = false;
                     return;
                 }
@@ -395,6 +395,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     public void AddToPersistent(int cardID, int player)
     {
         GameObject card = PhotonView.Find(cardID).transform.parent.gameObject;
+        card.SetActive(true);
 
         switch (player)
         {
