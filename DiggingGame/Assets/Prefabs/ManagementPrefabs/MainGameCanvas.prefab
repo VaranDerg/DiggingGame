@@ -10059,6 +10059,7 @@ GameObject:
   - component: {fileID: 1773380380033186545}
   - component: {fileID: 1773380380033186546}
   - component: {fileID: 1773380380033186550}
+  - component: {fileID: 3272493147952064287}
   m_Layer: 5
   m_Name: MainGameCanvas
   m_TagString: Untagged
@@ -10234,6 +10235,19 @@ MonoBehaviour:
   _oppInfoAnims: {fileID: 1773380380077404802}
   _buildingInfoAnims: {fileID: 1773380378712795165}
   _infoAnimWaitTime: 0.25
+--- !u!114 &3272493147952064287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773380380033186547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 794e0a7bc991e9140a3df3ab2122672b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pauseScreen: {fileID: 0}
 --- !u!1 &1773380380064204687
 GameObject:
   m_ObjectHideFlags: 0

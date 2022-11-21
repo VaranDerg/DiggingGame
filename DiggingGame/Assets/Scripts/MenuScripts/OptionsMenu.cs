@@ -148,15 +148,13 @@ public class OptionsMenu : MonoBehaviour
     /// <param name="helpEnabled"></param>
     public void SetHelpToggle(bool helpEnabled)
     {
-        Debug.Log("Help: " + helpEnabled);
-
         if (helpEnabled)
         {
-            MultiSceneData.s_HelpEnabled = false;
+            MultiSceneData.s_HelpEnabled = true;
         }
         else
         {
-            MultiSceneData.s_HelpEnabled = true;
+            MultiSceneData.s_HelpEnabled = false;
         }
     }
 }

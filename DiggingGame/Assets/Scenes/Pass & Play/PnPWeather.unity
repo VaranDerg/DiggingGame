@@ -6071,37 +6071,58 @@ PrefabInstance:
     - target: {fileID: 178171955411404332, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1773380380366791149}
     - target: {fileID: 178171955411404332, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 401183532}
+    - target: {fileID: 178171955411404332, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 178171956205057229, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1773380380366791149}
     - target: {fileID: 178171956205057229, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 401183532}
+    - target: {fileID: 178171956205057229, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Rules
+      objectReference: {fileID: 0}
+    - target: {fileID: 178171956208430317, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1773380380366791149}
+    - target: {fileID: 178171956208430317, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 401183532}
     - target: {fileID: 178171956208430317, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Resume
       objectReference: {fileID: 0}
-    - target: {fileID: 178171956208430317, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 401183532}
     - target: {fileID: 178171957282936686, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1773380380366791149}
     - target: {fileID: 178171957282936686, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 401183532}
+    - target: {fileID: 178171957282936686, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: QuitGame
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
+--- !u!1 &178171956166946040 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 178171955374619531, guid: 501110fd964bee34aa8bd391091d4fdb, type: 3}
+  m_PrefabInstance: {fileID: 178171956166946039}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1773380380366791147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6386,12 +6407,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379118304052, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1773380380366791149}
+    - target: {fileID: 1773380379118304052, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 401183532}
     - target: {fileID: 1773380379118304052, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1773380379118304052, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Pause
       objectReference: {fileID: 0}
     - target: {fileID: 1773380379118304052, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -7953,6 +7982,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3272493147952064287, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: _pauseScreen
+      value: 
+      objectReference: {fileID: 178171956166946040}
     m_RemovedComponents:
     - {fileID: 1773380380033186549, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
@@ -7965,6 +7998,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4df7bfed5a4323f4e8407f366c3eaf3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1773380380366791149 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3272493147952064287, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+  m_PrefabInstance: {fileID: 1773380380366791147}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 794e0a7bc991e9140a3df3ab2122672b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1902855063482645501
