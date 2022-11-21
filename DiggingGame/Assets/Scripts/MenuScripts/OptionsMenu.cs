@@ -133,8 +133,28 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Toggles fullscreen.
+    /// </summary>
+    /// <param name="isFullscreen"></param>
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+    }
+
+    /// <summary>
+    /// Toggles help boxes.
+    /// </summary>
+    /// <param name="helpEnabled"></param>
+    public void SetHelpToggle(bool helpEnabled)
+    {
+        if (helpEnabled)
+        {
+            MultiSceneData.s_HelpEnabled = false;
+        }
+        else
+        {
+            MultiSceneData.s_HelpEnabled = true;
+        }
     }
 }
