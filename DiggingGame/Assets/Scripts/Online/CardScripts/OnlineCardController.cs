@@ -140,6 +140,16 @@ public class OnlineCardController : MonoBehaviourPun
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            MaximizeCard();
+        }
+
+        if (!Selected)
+        {
+            FindObjectOfType<SFXManager>().Play("HoverCard");
+        }
+
         NextPos = _mouseOverPos.position;
     }
 
@@ -150,8 +160,7 @@ public class OnlineCardController : MonoBehaviourPun
     {
         if (_currentlyMaximized)
         {
-            Destroy(_maximizedCard);
-            _currentlyMaximized = false;
+            DemaximizeCard();
         }
 
         if (_gettingDiscarded)
@@ -177,7 +186,15 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void OnMouseOver()
     {
-        MaximizeCard(_cardVisualToMaximize);
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            MaximizeCard();
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            DemaximizeCard();
+        }
 
         if (_gettingDiscarded)
         {
@@ -449,6 +466,42 @@ public class OnlineCardController : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Maximizes a card for easier view.
+    /// </summary>
+    /// <param name="thingToMaximize">Card zone to maximize</param>
+    private void MaximizeCard()
+    {
+        if (_currentlyMaximized)
+        {
+            return;
+        }
+
+        FindObjectOfType<SFXManager>().Play("SelectCard");
+
+        _maximizedCard = Instantiate(_cardVisualToMaximize, _maximizeAnchor);
+        _maximizedCard.transform.position = _maximizeAnchor.transform.position;
+        _currentlyMaximized = true;
+    }
+
+    /// <summary>
+    /// Demaximizes a card.
+    /// </summary>
+    private void DemaximizeCard()
+    {
+        if (!_currentlyMaximized)
+        {
+            return;
+        }
+
+        FindObjectOfType<SFXManager>().Play("SelectCard");
+
+        Destroy(_maximizedCard);
+        _currentlyMaximized = false;
+    }
+
+    #region RPC Function
+
+    /// <summary>
     /// Calls the AddToDiscarded RPC across all clients. This adds the card to
     /// the discard pile.
     /// 
@@ -535,36 +588,5 @@ public class OnlineCardController : MonoBehaviourPun
         }     
     }
 
-    /// <summary>
-    /// Maximizes a card for easier view.
-    /// </summary>
-    /// <param name="thingToMaximize">Card zone to maximize</param>
-    private void MaximizeCard(GameObject thingToMaximize)
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            if (_currentlyMaximized)
-            {
-                return;
-            }
-
-            FindObjectOfType<SFXManager>().Play("SelectCard");
-
-            _maximizedCard = Instantiate(thingToMaximize, _maximizeAnchor);
-            _maximizedCard.transform.position = _maximizeAnchor.transform.position;
-            _currentlyMaximized = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.Mouse1))
-        {
-            if (!_currentlyMaximized)
-            {
-                return;
-            }
-
-            FindObjectOfType<SFXManager>().Play("SelectCard");
-
-            Destroy(_maximizedCard);
-            _currentlyMaximized = false;
-        }
-    }
+    #endregion
 }
