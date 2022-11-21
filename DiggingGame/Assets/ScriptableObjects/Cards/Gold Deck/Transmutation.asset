@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Transmutation
   m_EditorClassIdentifier: 
   CardName: Transmutation
-  CardDescription: Score 1 point + 1 additional point for every 2 Gold Pieces in
-    the Supply.
+  CardDescription: Score 1 point for every 2 Gold Pieces in the Supply.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0

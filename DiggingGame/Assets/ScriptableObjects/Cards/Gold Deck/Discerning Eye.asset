@@ -19,8 +19,8 @@ MonoBehaviour:
   StoneSuit: 0
   GoldSuit: 1
   GrassCost: 0
-  DirtCost: 0
-  StoneCost: 2
+  DirtCost: 2
+  StoneCost: 0
   persistent: 0
   disaster: 0
   FlavorText: Practiced Geologists will rarely unlock the ability of spotting gold

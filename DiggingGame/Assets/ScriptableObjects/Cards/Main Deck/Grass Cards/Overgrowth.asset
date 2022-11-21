@@ -18,7 +18,7 @@ MonoBehaviour:
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 0
-  GrassCost: 3
+  GrassCost: 4
   DirtCost: 0
   StoneCost: 0
   persistent: 0

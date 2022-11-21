@@ -2722,7 +2722,7 @@ MonoBehaviour:
   _regenerationUI: {fileID: 710729077}
   _tornadoUI: {fileID: 1706800653}
   _gardenPiecesToPlace: 3
-  _flowersPiecesToPlace: 3
+  _flowersPiecesToPlace: 4
   _fertilizerPiecesToPlace: 3
   _compactionPiecesToPlace: 2
   _lawnmowerPiecesToDig: 4

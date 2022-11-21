@@ -1641,7 +1641,7 @@ public class CardEffects : MonoBehaviour
                 continue;
             }
 
-            if(building.GetComponent<Building>().SuitOfPiece == "Stone" || building.GetComponent<Building>().SuitOfPiece == "Gold")
+            if(building.GetComponent<Building>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Gold")
             {
                 continue;
             }
@@ -1656,7 +1656,7 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        _gcm.UpdateCurrentActionText("Select a building on a Dirt Piece to damage!");
+        _gcm.UpdateCurrentActionText("Select a building on a Dirt or Stone Piece to damage!");
 
         AllowedDamages = _floodDamages;
 
@@ -1665,7 +1665,7 @@ public class CardEffects : MonoBehaviour
         {
             if (building.GetComponent<Building>().PlayerOwning != _am.CurrentPlayer)
             {
-                if (building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<Building>().SuitOfPiece == "Dirt" || building.GetComponent<Building>().SuitOfPiece == "Stone")
                 {
                     building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     buildingCount++;
@@ -2817,7 +2817,7 @@ public class CardEffects : MonoBehaviour
             curInterval = 1;
         }
 
-        _am.ScorePoints(1 + pointsToScore);
+        _am.ScorePoints(pointsToScore);
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();
