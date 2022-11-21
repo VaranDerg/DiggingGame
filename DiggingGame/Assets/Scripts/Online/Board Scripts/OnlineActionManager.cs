@@ -754,8 +754,11 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <param name="amount"> how much the score is changing by </param>
     public void CallUpdateScore(int player, int amount)
     {
-        _scoreTextAnimator.Play("ScorePoint");
-        _ap.PlaySound("ScorePoint", false);
+        if(amount > 0)
+        {
+            _scoreTextAnimator.Play("ScorePoint");
+            _ap.PlaySound("ScorePoint", false);
+        }
         photonView.RPC("UpdateScore", RpcTarget.All, player, amount);
     }
 

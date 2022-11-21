@@ -188,14 +188,14 @@ public class OnlineCanvasManager : MonoBehaviourPun
         if (PhotonNetwork.IsMasterClient)   //Edited: Andrea SD
         {
             _currentPlayerScore.text = "Score: " + _am.P1Score + "/" + _am.WinningScore;
-            _currentPlayerCollectedPieces[0].text = "x" + _am.P1CollectedPile[0];
-            _currentPlayerCollectedPieces[1].text = "x" + _am.P1CollectedPile[1];
-            _currentPlayerCollectedPieces[2].text = "x" + _am.P1CollectedPile[2];
-            _currentPlayerCollectedPieces[3].text = "x" + _am.P1CollectedPile[3];
-            _currentPlayerRefinedPieces[0].text = "x" + _am.P1RefinedPile[0];
-            _currentPlayerRefinedPieces[1].text = "x" + _am.P1RefinedPile[1];
-            _currentPlayerRefinedPieces[2].text = "x" + _am.P1RefinedPile[2];
-            _currentPlayerRefinedPieces[3].text = "x" + _am.P1RefinedPile[3];
+            _currentPlayerCollectedPieces[0].text = _am.P1CollectedPile[0].ToString();
+            _currentPlayerCollectedPieces[1].text = _am.P1CollectedPile[1].ToString();
+            _currentPlayerCollectedPieces[2].text = _am.P1CollectedPile[2].ToString();
+            _currentPlayerCollectedPieces[3].text = _am.P1CollectedPile[3].ToString();
+            _currentPlayerRefinedPieces[0].text = _am.P1RefinedPile[0].ToString();
+            _currentPlayerRefinedPieces[1].text = _am.P1RefinedPile[1].ToString();
+            _currentPlayerRefinedPieces[2].text = _am.P1RefinedPile[2].ToString();
+            _currentPlayerRefinedPieces[3].text = _am.P1RefinedPile[3].ToString();
             _currentPlayerRemainingBuildings[0].text = _am.P1RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
@@ -230,14 +230,14 @@ public class OnlineCanvasManager : MonoBehaviourPun
         else    // Player 2
         {
             _currentPlayerScore.text = "Score: " + _am.P2Score + "/" + _am.WinningScore;
-            _currentPlayerCollectedPieces[0].text = "x" + _am.P2CollectedPile[0];
-            _currentPlayerCollectedPieces[1].text = "x" + _am.P2CollectedPile[1];
-            _currentPlayerCollectedPieces[2].text = "x" + _am.P2CollectedPile[2];
-            _currentPlayerCollectedPieces[3].text = "x" + _am.P2CollectedPile[3];
-            _currentPlayerRefinedPieces[0].text = "x" + _am.P2RefinedPile[0];
-            _currentPlayerRefinedPieces[1].text = "x" + _am.P2RefinedPile[1];
-            _currentPlayerRefinedPieces[2].text = "x" + _am.P2RefinedPile[2];
-            _currentPlayerRefinedPieces[3].text = "x" + _am.P2RefinedPile[3];
+            _currentPlayerCollectedPieces[0].text = _am.P2CollectedPile[0].ToString();
+            _currentPlayerCollectedPieces[1].text = _am.P2CollectedPile[1].ToString();
+            _currentPlayerCollectedPieces[2].text = _am.P2CollectedPile[2].ToString();
+            _currentPlayerCollectedPieces[3].text = _am.P2CollectedPile[3].ToString();
+            _currentPlayerRefinedPieces[0].text = _am.P2RefinedPile[0].ToString();
+            _currentPlayerRefinedPieces[1].text = _am.P2RefinedPile[1].ToString();
+            _currentPlayerRefinedPieces[2].text = _am.P2RefinedPile[2].ToString();
+            _currentPlayerRefinedPieces[3].text = _am.P2RefinedPile[3].ToString();
             _currentPlayerRemainingBuildings[0].text = _am.P2RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
@@ -278,10 +278,10 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         _activePlayerText.text = _am.CurrentPlayerName + "s";
         _activeRoundText.text = "Round " + _am.CurrentRound;
-        _supplyPieces[0].text = "x" + _am.SupplyPile[0];
-        _supplyPieces[1].text = "x" + _am.SupplyPile[1];
-        _supplyPieces[2].text = "x" + _am.SupplyPile[2];
-        _supplyPieces[3].text = "x" + _am.SupplyPile[3];
+        _supplyPieces[0].text = _am.SupplyPile[0].ToString();
+        _supplyPieces[1].text = _am.SupplyPile[1].ToString();
+        _supplyPieces[2].text = _am.SupplyPile[2].ToString();
+        _supplyPieces[3].text = _am.SupplyPile[3].ToString();
     }
 
     /// <summary>
