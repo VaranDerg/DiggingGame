@@ -160,6 +160,16 @@ public class OnlineCardEffects : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Activates the activate response box
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void Start()
+    {
+        _activateResponseBox.SetActive(true);
+    }
+
+    /// <summary>
     /// Disables all card effect UI.
     /// </summary>
     public void DisableCardEffectUI()
@@ -183,7 +193,8 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator ActivateCardEffect(string suit, string effectName, GameObject pCardObject)
     {
         //Enables the Activated response box and calls ShowActivationText.
-        _activateResponseBox.SetActive(true);
+        /* note: Activate response box code was moved to start */
+
         CallActivationText(suit, effectName, true);
 
         yield return new WaitForSeconds(activateAnimWaitTime);

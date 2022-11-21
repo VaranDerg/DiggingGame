@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Unity.VisualScripting;
 
 // Edited: Andrea SD - Edited for online use
 public class OnlineCardController : MonoBehaviourPun
@@ -32,8 +33,8 @@ public class OnlineCardController : MonoBehaviourPun
     private OnlineCardManager _cm;
     private OnlineActionManager _am;
     private OnlineCanvasManager _gcm;
-    private OnlineBoardManager _bm;
     private OnlineCardEffects _ce;
+    private OnlineAudioPlayer _ap;
     private OnlinePersistentCardManager _pcm;
     [HideInInspector] public int HandPosition;
     [HideInInspector] public int PHandPosition;
@@ -69,10 +70,10 @@ public class OnlineCardController : MonoBehaviourPun
         _cardBody.gameObject.name = GetComponentInChildren<CardVisuals>().ThisCard.CardName;
         _cm = FindObjectOfType<OnlineCardManager>();
         _am = FindObjectOfType<OnlineActionManager>();
-        _bm = FindObjectOfType<OnlineBoardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         _ce = FindObjectOfType<OnlineCardEffects>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
         HeldByPlayer = 0;
     }
 
@@ -147,7 +148,7 @@ public class OnlineCardController : MonoBehaviourPun
 
         if (!Selected)
         {
-            FindObjectOfType<SFXManager>().Play("HoverCard");
+            _ap.PlaySound("HoverCard", false);
         }
 
         NextPos = _mouseOverPos.position;
@@ -419,7 +420,6 @@ public class OnlineCardController : MonoBehaviourPun
             _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
 
-
             _cm.UpdatePileText();
         }
         else if (MadePersistentP1 || MadePersistentP2)
@@ -458,7 +458,7 @@ public class OnlineCardController : MonoBehaviourPun
         }
 
         _cardAnimator.Play("CardDiscard");
-        //FindObjectOfType<SFXManager>().Play("DiscardCard");
+        _ap.PlaySound("DiscardCard", false);
         _gettingDiscarded = true;
         yield return new WaitForSeconds(_discardAnimWaitTime);
         _gettingDiscarded = false;
