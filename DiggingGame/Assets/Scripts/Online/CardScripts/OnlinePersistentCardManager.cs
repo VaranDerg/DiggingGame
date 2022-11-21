@@ -93,7 +93,6 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                     FindObjectOfType<OnlineCardManager>().P1OpenHandPositions[card.GetComponentInChildren<OnlineCardController>().HandPosition] = true;
                    
                     // ASD
-                    int _cardPos = FindObjectOfType<OnlineCardManager>().P1Hand.IndexOf(card);
 
                     //Lowers count.
                     if (card.CompareTag("Card"))
@@ -106,7 +105,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                     }
 
                     //Adds to newest list.
-                    CallAddToPersistent(card.GetComponentInParent<PhotonView>().ViewID, 1);
+                    CallAddToPersistent(card.GetComponentInChildren<OnlineCardController>().GetCardID(), 1);
                     P1OpenPCardSlots[i] = false;
                     return;
                 }

@@ -58,7 +58,7 @@ public class OnlineCardController : MonoBehaviourPun
     [SerializeField] private float _discardAnimWaitTime;
     private bool _gettingDiscarded;
 
-    private int _cardID;  //ASD
+    [SerializeField] private int _cardID;  //ASD
 
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
@@ -81,7 +81,7 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void Start()
     {
-        _cardID = GetComponentInParent<PhotonView>().ViewID;     //ASD
+        _cardID = photonView.ViewID;     //ASD
     }
 
     /// <summary>
