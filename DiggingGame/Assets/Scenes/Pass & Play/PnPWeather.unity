@@ -2739,7 +2739,7 @@ MonoBehaviour:
   _earthquakeDamages: 1
   _thunderstormDamages: 1
   _tornadoDamages: 3
-  DamageDieSides: 4
+  DamageDieSides: 6
   SelectedBuilding: {fileID: 0}
   AllowedDamages: 0
   _allowedRepairs: 3
