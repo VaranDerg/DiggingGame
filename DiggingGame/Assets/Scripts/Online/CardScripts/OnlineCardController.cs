@@ -79,10 +79,12 @@ public class OnlineCardController : MonoBehaviourPun
 
     /// <summary>
     /// Gets ViewID :3
+    /// 
+    /// Author: Andrea SD
     /// </summary>
     private void Start()
     {
-        _cardID = photonView.ViewID;     //ASD
+        _cardID = photonView.ViewID; 
     }
 
     /// <summary>
@@ -420,7 +422,7 @@ public class OnlineCardController : MonoBehaviourPun
             _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
 
-            _cm.UpdatePileText();
+            _cm.CallPileText();
         }
         else if (MadePersistentP1 || MadePersistentP2)
         {
@@ -448,7 +450,7 @@ public class OnlineCardController : MonoBehaviourPun
             _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
 
-            _cm.UpdatePileText();
+            _cm.CallPileText();
         }
 
         if (_currentlyMaximized)

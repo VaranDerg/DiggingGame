@@ -25,14 +25,13 @@ public class OnlineCardManager : MonoBehaviourPun
     private List<GameObject> _uDeck = new List<GameObject>();
     private List<GameObject> _gDeck = new List<GameObject>();
     [HideInInspector] public List<GameObject> DPile = new List<GameObject>();
-    /*[HideInInspector]*/ public List<GameObject> P1Hand = new List<GameObject>();
-    /*[HideInInspector]*/ public List<GameObject> P2Hand = new List<GameObject>();
+    [HideInInspector] public List<GameObject> P1Hand = new List<GameObject>();
+    [HideInInspector] public List<GameObject> P2Hand = new List<GameObject>();
     [HideInInspector] public List<GameObject> SelectedCards = new List<GameObject>();
     [HideInInspector] public bool[] P1OpenHandPositions;
     [HideInInspector] public bool[] P2OpenHandPositions;
     [HideInInspector] public int AllowedActivations;
     private OnlineActionManager _am;
-    private OnlineBoardManager _bm;
     private OnlineCanvasManager _gcm;
 
     [Header("Selection Requiements")]
@@ -42,15 +41,12 @@ public class OnlineCardManager : MonoBehaviourPun
     [Header("Animations")]
     [SerializeField] private float _cardShowHideTime;
 
-    private int _deckPos;   // Position of a card in the deck. ASD
-
     /// <summary>
     /// Assigns partner scripts
     /// </summary>
     private void Awake()
     {
         _am = FindObjectOfType<OnlineActionManager>();
-        _bm = FindObjectOfType<OnlineBoardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
     }
 
@@ -65,7 +61,7 @@ public class OnlineCardManager : MonoBehaviourPun
             CallAddCards();
         }
         PrepareOpenHandSlots();
-        UpdatePileText();
+        CallPileText();
     }
 
     /// <summary>
@@ -85,16 +81,6 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             P2OpenHandPositions[i] = true;
         }
-    }
-
-    /// <summary>
-    /// Updates the text for each pile of cards.
-    /// </summary>
-    public void UpdatePileText()
-    {
-        _uDeckSizeText.text = _uDeck.Count.ToString();
-        _gDeckSizeText.text = _gDeck.Count.ToString();
-        _dPileSizeText.text = DPile.Count.ToString();
     }
 
     /// <summary>
@@ -153,16 +139,16 @@ public class OnlineCardManager : MonoBehaviourPun
 
                     if (randomCard.CompareTag("GoldCard"))
                     {
-                        _am.P1GoldCards++;
+                        CallGoldCards(1, 1);
                     }
                     else
                     {
-                        _am.P1Cards++;
+                        CallNormalCards(1, 1);
                     }
                     randomCard.SetActive(true);
                     randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
                     yield return new WaitForSeconds(_cardShowHideTime);
-                    UpdatePileText();
+                    CallPileText();
                     yield break;
                 }
             }
@@ -191,16 +177,16 @@ public class OnlineCardManager : MonoBehaviourPun
 
                     if (randomCard.CompareTag("GoldCard"))
                     {
-                        _am.P2GoldCards++;
+                        CallGoldCards(2, 1);
                     }
                     else
                     {
-                        _am.P2Cards++;
+                        CallNormalCards(2, 1);
                     }
                     randomCard.SetActive(true);
                     randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
                     yield return new WaitForSeconds(_cardShowHideTime);
-                    UpdatePileText();
+                    CallPileText();
                     yield break;
                 }
             }
@@ -531,7 +517,7 @@ public class OnlineCardManager : MonoBehaviourPun
             }
 
             DPile.Clear();
-            UpdatePileText();
+            CallPileText();
         }
     }
 
@@ -636,6 +622,93 @@ public class OnlineCardManager : MonoBehaviourPun
                 P2Hand.Add(card);
                 break;
         }
+    }
+
+    /// <summary>
+    /// Calls the RPC that changes player's number of gold cards
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> amount the cards are changed by </param>
+    public void CallNormalCards(int player, int amount)
+    {
+        photonView.RPC("ModifyGoldCards", RpcTarget.All, player, amount);
+    }
+
+    /// <summary>
+    /// Changes player's number of gold cards
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> amount the cards are changed by </param>
+    [PunRPC]
+    public void ModifyNormalCards(int player, int amount)
+    {
+        switch (player)
+        {
+            case 1:
+                _am.P1Cards += amount;
+                break;
+            case 2:
+                _am.P2Cards += amount;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC that changes player's number of gold cards
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> amount the cards are changed by </param>
+    public void CallGoldCards(int player, int amount)
+    {
+        photonView.RPC("ModifyGoldCards", RpcTarget.All, player, amount);
+    }
+
+    /// <summary>
+    /// Changes player's number of gold cards
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> amount the cards are changed by </param>
+    [PunRPC]
+    public void ModifyGoldCards(int player, int amount)
+    {
+        switch (player)
+        {
+            case 1:
+                _am.P1GoldCards += amount;
+                break;
+            case 2:
+                _am.P2GoldCards += amount;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC that updates the text for each pile of cards.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallPileText()
+    {
+        photonView.RPC("UpdatePileText", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Updates the text for each pile of cards.
+    /// 
+    /// Edited: Andrea SD - Turned into an RPC
+    /// </summary>
+    [PunRPC]
+    public void UpdatePileText()
+    {
+        _uDeckSizeText.text = _uDeck.Count.ToString();
+        _gDeckSizeText.text = _gDeck.Count.ToString();
+        _dPileSizeText.text = DPile.Count.ToString();
     }
 
     #endregion
