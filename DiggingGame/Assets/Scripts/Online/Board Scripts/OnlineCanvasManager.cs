@@ -426,16 +426,25 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
         _firstZone.SetActive(true);
         _backButton.SetActive(true);
-        _am.DrawStartingCards();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _am.DrawStartingCards();
+            photonView.RPC("CallStartingCards", RpcTarget.Others);
+        }
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
         _am.StartMove(_am.CurrentPlayer);
         CallChangePhase(1);
-        StartCoroutine(_cm.ShowCards(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
         CallOpponentActionText(_am.CurrentPlayer + " is taking their first move!");       // Andrea SD
+    }
+
+    [PunRPC]
+    public void CallStartingCards()
+    {
+        _am.DrawStartingCards();
     }
 
     /// <summary>

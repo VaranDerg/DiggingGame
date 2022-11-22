@@ -115,7 +115,7 @@ public class OnlineCardManager : MonoBehaviourPun
 
         int randomCardID = randomCard.GetComponentInChildren<OnlineCardController>().GetCardID();
 
-        if (_am.CurrentPlayer == 1)
+        if (_am.CurrentPlayer == 1 && PhotonNetwork.IsMasterClient)
         {
             for (int i = 0; i < P1OpenHandPositions.Length; i++)
             {
@@ -153,7 +153,7 @@ public class OnlineCardManager : MonoBehaviourPun
                 }
             }
         }
-        else if (_am.CurrentPlayer == 2)
+        else
         {
             for (int i = 0; i < P2OpenHandPositions.Length; i++)
             {
@@ -527,10 +527,10 @@ public class OnlineCardManager : MonoBehaviourPun
     /// Author: Andrea SD
     /// </summary>
     /// <param name="deck"> Either removed from "Universal" or "Gold" </param>
-    /// <param name="deckPos"> Position of the card in the deck </param>
-    private void CallRemoveCard(string deck, int deckPos)
+    /// <param name="cardID"> ID of the card being removed </param>
+    private void CallRemoveCard(string deck, int cardID)
     {
-        photonView.RPC("RemoveCard", RpcTarget.All, deck, deckPos);
+        photonView.RPC("RemoveCard", RpcTarget.All, deck, cardID);
     }
 
     /// <summary>
@@ -633,7 +633,7 @@ public class OnlineCardManager : MonoBehaviourPun
     /// <param name="amount"> amount the cards are changed by </param>
     public void CallNormalCards(int player, int amount)
     {
-        photonView.RPC("ModifyGoldCards", RpcTarget.All, player, amount);
+        photonView.RPC("ModifyNormalCards", RpcTarget.All, player, amount);
     }
 
     /// <summary>
