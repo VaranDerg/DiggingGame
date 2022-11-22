@@ -818,7 +818,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void CallStartingCards()
     {
-        photonView.RPC("CallStartingCards", RpcTarget.OthersBuffered);
+        photonView.RPC("DrawStartingCards", RpcTarget.OthersBuffered);
     }
 
     /// <summary>
