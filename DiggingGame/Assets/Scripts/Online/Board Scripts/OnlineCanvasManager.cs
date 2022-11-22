@@ -429,7 +429,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         if (PhotonNetwork.IsMasterClient)
         {
             _am.DrawStartingCards();
-            photonView.RPC("CallStartingCards", RpcTarget.Others);
+            CallStartingCards();
         }
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
@@ -439,12 +439,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
         CallOpponentActionText(_am.CurrentPlayer + " is taking their first move!");       // Andrea SD
-    }
-
-    [PunRPC]
-    public void CallStartingCards()
-    {
-        _am.DrawStartingCards();
     }
 
     /// <summary>
@@ -815,6 +809,27 @@ public class OnlineCanvasManager : MonoBehaviourPun
     public void UpdateActiveTextOnline()
     {
         UpdateAlwaysActiveText();
+    }
+
+    /// <summary>
+    /// Calls the RPC that draws the starting cards on the other client
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallStartingCards()
+    {
+        photonView.RPC("CallStartingCards", RpcTarget.OthersBuffered);
+    }
+
+    /// <summary>
+    /// Draws the starting cards
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void DrawStartingCards()
+    {
+        _am.DrawStartingCards();
     }
 
     #endregion
