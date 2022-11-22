@@ -219,17 +219,41 @@ public class OnlineBuilding : MonoBehaviourPun
         BuildingHealth -= damage;
 
         //The text updates based on this given damage.
-        if (damageDiceVisual == 4)
+        if (damageDiceVisual == _ce.DamageDieSides)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken massive damage!");
+            if (PlayerOwning == 1)
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s' " + BuildingType + " has taken massive damage!");
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " has taken massive damage!");
+            }
+            FindObjectOfType<SFXManager>().Play("DamageBuilding");
         }
-        else if (damageDiceVisual == 3 || damageDiceVisual == 2)
+        else if (damageDiceVisual != 1)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
+            if (PlayerOwning == 1)
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s' " + BuildingType + " has taken damage!");
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " has taken damage!");
+            }
+            FindObjectOfType<SFXManager>().Play("DamageBuilding");
         }
         else if (damageDiceVisual == 1)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " avoided taking damage!");
+            if (PlayerOwning == 1)
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s' " + BuildingType + " avoided taking damage!");
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " avoided taking damage!");
+            }
+            FindObjectOfType<SFXManager>().Play("DamageBuilding");
         }
 
         //Fun!

@@ -202,7 +202,7 @@ public class OnlinePieceController : MonoBehaviourPun
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Start of Shovel Code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && (ObjState == GameState.Two || ObjState == GameState.Seven) && !_am.ShovelUsed)
             {
                 _ap.PlaySound("DigDirt", true); // ASD
                 CallPieceState(3);
@@ -234,11 +234,11 @@ public class OnlinePieceController : MonoBehaviourPun
                 {
                     _cm.PrepareCardSelection(1, "Grass", false);
                 }
-                else if (ObjState == GameState.Two)
+                else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                 {
                     _cm.PrepareCardSelection(1, "Dirt", false);
                 }
-                else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                 {
                     _cm.PrepareCardSelection(1, "Stone", false);
                 }
@@ -611,11 +611,11 @@ public class OnlinePieceController : MonoBehaviourPun
                         {
                             _cm.PrepareCardSelection(1, "Grass", false);
                         }
-                        else if (ObjState == GameState.Two)
+                        else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                         {
                             _cm.PrepareCardSelection(1, "Dirt", false);
                         }
-                        else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                        else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                         {
                             _cm.PrepareCardSelection(1, "Stone", false);
                         }
@@ -639,11 +639,11 @@ public class OnlinePieceController : MonoBehaviourPun
                     {
                         _cm.PrepareCardSelection(1, "Grass", false);
                     }
-                    else if (ObjState == GameState.Two)
+                    else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                     {
                         _cm.PrepareCardSelection(1, "Dirt", false);
                     }
-                    else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                    else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                     {
                         _cm.PrepareCardSelection(1, "Stone", false);
                     }
@@ -676,16 +676,16 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 pieceSuit = "Grass";
             }
-            else if (ObjState == GameState.Two)
+            else if (ObjState == GameState.Two || ObjState == GameState.Seven)
             {
                 pieceSuit = "Dirt";
             }
-            else if (ObjState == GameState.Three)
+            else if (ObjState == GameState.Three || ObjState == GameState.Eight)
             {
                 pieceSuit = "Stone";
             }
 
-            int buildingIndex = 0;
+                int buildingIndex = 0;
             if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Factory")
             {
                 buildingIndex = 0;
