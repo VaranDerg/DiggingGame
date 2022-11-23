@@ -8,12 +8,11 @@
 *****************************************************************************/
 
 using Photon.Pun;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class OnlineActionManager : MonoBehaviourPun
 {
@@ -218,27 +217,6 @@ public class OnlineActionManager : MonoBehaviourPun
         }
 
         _bm.SetActiveCollider("Pawn");
-    }
-
-    /// <summary>
-    /// Stops pawns from doing stuff.
-    /// </summary>
-    /// <param name="player">1 or 2</param>
-    public void StopPawnActions(int player)
-    {
-        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
-        {
-            if (pawn.GetComponent<OnlinePlayerPawn>().PawnPlayer == player)
-            {
-                pawn.GetComponent<OnlinePlayerPawn>().IsMoving = false;
-                pawn.GetComponent<OnlinePlayerPawn>().IsBuilding = false;
-                pawn.GetComponent<OnlinePlayerPawn>().IsDigging = false;
-                pawn.GetComponent<OnlinePlayerPawn>().IsPlacing = false;
-                pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().IdleAnimName);
-            }
-        }
-
-        _bm.SetActiveCollider("Board");
     }
 
     /// <summary>

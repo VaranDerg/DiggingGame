@@ -582,19 +582,23 @@ public class OnlineCanvasManager : MonoBehaviourPun
     public void Back()
     {
         CallOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of their next action...");
-        DisableListObjects();
-        _bm.DisableAllBoardInteractions();
-        _bm.SetActiveCollider("Board");
 
-        //For going back during the initial move. I have to invoke a move wrapper since compilation makes animations work incorrectly.
         if (_am.CurrentTurnPhase == 1)
         {
+            DisableListObjects();
+            _bm.DisableAllBoardInteractions();
+            _bm.SetActiveCollider("Board");
+
             _backButton.SetActive(true);
             _firstZone.SetActive(true);
-            Invoke("PlayerMoveWrapper", 0.1f);
+            _am.StartMove(_am.CurrentPlayer);
             UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto, or select Skip Move.");
             return;
         }
+
+        DisableListObjects();
+        _bm.DisableAllBoardInteractions();
+        _bm.SetActiveCollider("Board");
 
         if (_curGoldCoroutine != null)
         {
@@ -609,6 +613,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         {
             script.StopAllCoroutines();
         }
+
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 
@@ -639,14 +644,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
         }
 
         UpdateTextBothPlayers();
-    }
-
-    /// <summary>
-    /// A wrapper to call startmove with the above method.
-    /// </summary>
-    private void PlayerMoveWrapper()
-    {
-        _am.StartMove(_am.CurrentPlayer);
     }
 
     /// <summary>

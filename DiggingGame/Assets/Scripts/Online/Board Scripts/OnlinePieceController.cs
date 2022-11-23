@@ -543,11 +543,10 @@ public class OnlinePieceController : MonoBehaviourPun
     public IEnumerator MovePawnTo(int pawnID, int pieceID, bool goBack)
     {
         GameObject pawn = GameObject.Find(PhotonView.Find(pawnID).gameObject.name);
-        destinationPiece = gameObject;
-
         pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().CallSetHasPawn(false);     // ASD
+        destinationPiece = gameObject;
         _pawnIsMoving = true;
-        _ap.PlaySound("Move", true);
+        _ap.PlaySound("Move", true);    
         pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().MoveAnimName);
 
         //Start anim?
@@ -555,7 +554,7 @@ public class OnlinePieceController : MonoBehaviourPun
         //End anim?
 
         pawn.transform.position = destinationPiece.transform.position;
-        pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
+        //pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         CallSetHasPawn(true);
         _pawnIsMoving = false;
 

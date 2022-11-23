@@ -40,6 +40,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     public string WaitingAnimName;
     public string IdleAnimName;
     public string MoveAnimName;
+    [HideInInspector] public bool JustMoved;
 
     public int PawnID;  //ASD   
 
@@ -435,6 +436,12 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     /// </summary>
     public void UnassignAdjacentTiles()
     {
+        //For move animations & back button working correctly.
+        if (_am.CurrentTurnPhase != 1 && !JustMoved)
+        {
+            _anims.Play(IdleAnimName);
+        }
+
         for (int i = 0; i < _shownPieces.Count; i++)
         {
             if (_shownPieces[i] != null)
@@ -454,7 +461,6 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         IsUsingWalkway = false;
         MudslideMove = false;
         BuildingToBuild = "";
-        _anims.Play(IdleAnimName);
         _shownPieces.Clear();
     }
 
