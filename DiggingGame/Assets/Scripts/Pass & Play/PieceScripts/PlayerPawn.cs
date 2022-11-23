@@ -441,7 +441,15 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     public void UnassignAdjacentTiles()
     {
-        for(int i = 0; i < _shownPieces.Count; i++)
+        Debug.Log("Moving = " + IsMoving);
+
+        //For move animations & back button working correctly.
+        if(_am.CurrentTurnPhase != 1 && !IsMoving)
+        {
+            _anims.Play(IdleAnimName);
+        }
+
+        for (int i = 0; i < _shownPieces.Count; i++)
         {
             if(_shownPieces[i] != null)
             {
@@ -460,7 +468,6 @@ public class PlayerPawn : MonoBehaviour
         IsUsingWalkway = false;
         MudslideMove = false;
         BuildingToBuild = "";
-        _anims.Play(IdleAnimName);
         _shownPieces.Clear();
     }
 

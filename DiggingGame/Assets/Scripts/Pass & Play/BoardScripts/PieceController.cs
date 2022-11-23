@@ -534,7 +534,7 @@ public class PieceController : MonoBehaviour
         //End anim?
 
         pawn.transform.position = destinationPiece.transform.position;
-        pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        //pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
         HasPawn = true;
         _pawnIsMoving = false;
 
