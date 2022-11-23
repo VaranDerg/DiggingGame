@@ -441,8 +441,6 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     public void UnassignAdjacentTiles()
     {
-        Debug.Log("Moving = " + IsMoving);
-
         //For move animations & back button working correctly.
         if(_am.CurrentTurnPhase != 1 && !IsMoving)
         {

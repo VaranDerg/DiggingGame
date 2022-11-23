@@ -45,6 +45,8 @@ public class HelpButtonController : MonoBehaviour
     {
         if(_helpShowing)
         {
+            _titleText.text = name;
+            _descText.text = desc;
             return;
         }
 
@@ -75,7 +77,7 @@ public class HelpButtonController : MonoBehaviour
     {
         _anims.Play("HelpHide");
         yield return new WaitForSeconds(_animWaitTime);
-        _helpPopup.SetActive(false);
+        _helpPopup.SetActive(false); 
         _helpShowing = false;
     }
 }

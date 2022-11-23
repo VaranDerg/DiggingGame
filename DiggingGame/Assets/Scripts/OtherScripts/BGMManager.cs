@@ -119,13 +119,9 @@ public class BGMManager : MonoBehaviour
     {
         StopAllCoroutines();
 
-        StartCoroutine(FadeTrack(_mainMenuTheme, null));
+        Sound curDayNightTrack = _currentTheme;
+        StartCoroutine(FadeTrack(_mainMenuTheme, curDayNightTrack));
 
-        //May help music bug
-        //StartCoroutine(FadeTrack(null, _daytimeTracks[_currentSongIndex]));
-        //StartCoroutine(FadeTrack(null, _nighttimeTracks[_currentSongIndex]));
-        _daytimeTracks[_currentSongIndex].Source.Stop();
-        _nighttimeTracks[_currentSongIndex].Source.Stop();
         _currentSongIndex = 0;
         IsPlayingDayTrack = false;
     }
