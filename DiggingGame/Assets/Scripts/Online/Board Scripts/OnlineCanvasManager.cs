@@ -450,8 +450,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         CallOpponentActionText(_am.CurrentPlayer + " is contemplating their next action...");     // Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
         CallChangePhase(1);     // ASD
+        _bm.DisableAllBoardInteractions();
 
         _thenZone.SetActive(true);
         _thenActions.SetActive(true);
