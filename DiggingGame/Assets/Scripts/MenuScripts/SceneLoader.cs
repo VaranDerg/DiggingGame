@@ -30,7 +30,12 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if(s_firstLoad)
+        if (!s_firstLoad)
+        {
+            FindObjectOfType<SFXManager>().Play("LoadTransitionEnd");
+        }
+
+        if (s_firstLoad)
         {
             _cg.gameObject.SetActive(false);
             _cg.alpha = 0;

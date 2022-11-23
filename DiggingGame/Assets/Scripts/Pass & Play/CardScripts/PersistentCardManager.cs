@@ -211,6 +211,7 @@ public class PersistentCardManager : MonoBehaviour
                 if(P1PersistentCards[i].name == cardName)
                 {
                     StartCoroutine(P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
+                    FindObjectOfType<SFXManager>().Play("UsePersistent");
                 }
             }
         }
@@ -221,6 +222,7 @@ public class PersistentCardManager : MonoBehaviour
                 if (P2PersistentCards[i].name == cardName)
                 {
                     StartCoroutine(P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
+                    FindObjectOfType<SFXManager>().Play("UsePersistent");
                 }
             }
         }

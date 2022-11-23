@@ -265,7 +265,7 @@ public class PieceController : MonoBehaviour
                         break;
                     case GameState.Three:
                         SetPieceState(4);
-
+                        
                         if (HasGold)
                         {
                             _goldPS.Play();
@@ -525,6 +525,7 @@ public class PieceController : MonoBehaviour
     public IEnumerator MovePawnTo(GameObject pawn, GameObject destinationPiece, bool goBack)
     {
         pawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
+        pawn.GetComponent<PlayerPawn>().JustMoved = true;
         _pawnIsMoving = true;
         FindObjectOfType<SFXManager>().Play("Move");
         pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().MoveAnimName);
@@ -538,7 +539,7 @@ public class PieceController : MonoBehaviour
         HasPawn = true;
         _pawnIsMoving = false;
 
-        if(goBack)
+        if (goBack)
         {
             if (_am.CurrentTurnPhase == 1)
             {

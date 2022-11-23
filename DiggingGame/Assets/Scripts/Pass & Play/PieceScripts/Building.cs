@@ -388,6 +388,7 @@ public class Building : MonoBehaviour
         _damageClickPS.GetComponent<ParticleSystem>().Play();
         _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
         _ce.RepairedBuildings++;
+        FindObjectOfType<SFXManager>().Play("RepairBuilding");
         _damageSmokePS.SetActive(false);
         ActiveBuilding = true;
 

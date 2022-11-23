@@ -451,8 +451,8 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void ToThenPhase()
     {
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
         _am.CurrentTurnPhase++;
+        _bm.DisableAllBoardInteractions();
 
         _thenZone.SetActive(true);
         _thenActions.SetActive(true);
@@ -570,12 +570,12 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     public void Back()
     {
-        DisableListObjects();
-        _bm.DisableAllBoardInteractions();
-        _bm.SetActiveCollider("Board");
-
         if (_am.CurrentTurnPhase == 1)
         {
+            DisableListObjects();
+            _bm.DisableAllBoardInteractions();
+            _bm.SetActiveCollider("Board");
+
             _backButton.SetActive(true);
             _firstZone.SetActive(true);
             _am.StartMove(_am.CurrentPlayer);
@@ -583,7 +583,10 @@ public class GameCanvasManagerNew : MonoBehaviour
             return;
         }
 
-        //Hm... Weird retrieval bug. This fixed it, but I'm not happy about it.
+        DisableListObjects();
+        _bm.DisableAllBoardInteractions();
+        _bm.SetActiveCollider("Board");
+
         if (_curGoldCoroutine != null)
         {
             StopCoroutine(_curGoldCoroutine);
@@ -597,6 +600,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         {
             script.StopAllCoroutines();
         }
+
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 
