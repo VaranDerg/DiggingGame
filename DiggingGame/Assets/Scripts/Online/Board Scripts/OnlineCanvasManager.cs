@@ -104,20 +104,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _ce = FindObjectOfType<OnlineCardEffects>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         AddObjectsToList();
-
-        // Author: Andrea SD
-        if(PhotonNetwork.IsMasterClient)
-        {
-            _factory.sprite = _moleFactory;
-            _burrow.sprite = _moleBurrow;
-            _mine.sprite = _moleMine;
-        }
-        else
-        {
-            _factory.sprite = _meerkatFactory;
-            _burrow.sprite = _meerkatBurrow;
-            _mine.sprite = _meerkatMine;
-        }
     }
 
     /// <summary>

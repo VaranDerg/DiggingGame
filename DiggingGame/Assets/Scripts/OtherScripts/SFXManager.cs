@@ -74,7 +74,6 @@ public class SFXManager : MonoBehaviour
 
         if (s == null)
         {
-            Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
 
