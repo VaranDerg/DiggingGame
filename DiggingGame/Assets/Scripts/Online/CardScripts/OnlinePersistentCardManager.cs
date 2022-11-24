@@ -33,6 +33,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     private OnlineActionManager _am;
     private OnlineBoardManager _bm;
     private OnlineCanvasManager _gcm;
+    private OnlineCardManager _cm;
 
     /// <summary>
     /// Assigns Partner scripts.
@@ -42,6 +43,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         _am = FindObjectOfType<OnlineActionManager>();
         _bm = FindObjectOfType<OnlineBoardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
+        _cm = FindObjectOfType<OnlineCardManager>();
     }
 
     /// <summary>
@@ -97,11 +99,12 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                     //Lowers count.
                     if (card.CompareTag("Card"))
                     {
-                        _am.P1Cards--;
+                        _cm.CallNormalCards(1, -1);
+                       
                     }
                     else if (card.CompareTag("GoldCard"))
                     {
-                        _am.P1GoldCards--;
+                        _cm.CallGoldCards(1, -1);
                     }
 
                     //Adds to newest list.
@@ -128,11 +131,11 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
 
                     if (card.CompareTag("Card"))
                     {
-                        _am.P2Cards--;
+                        _cm.CallNormalCards(2, -1);
                     }
                     else if (card.CompareTag("GoldCard"))
                     {
-                        _am.P2GoldCards--;
+                        _cm.CallGoldCards(2, -1);
                     }
                     CallAddToPersistent(card.GetComponentInChildren<PhotonView>().ViewID, 2);
                     P2OpenPCardSlots[i] = false;
