@@ -1697,6 +1697,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HelpCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7645213744918810921, guid: 291d052472ca1164893d29c2cacd14ee, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7645213744918810922, guid: 291d052472ca1164893d29c2cacd14ee, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -3711,6 +3715,10 @@ PrefabInstance:
     - target: {fileID: 1773380379992662404, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: OnlineCanvasManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1773380380033186544, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1773380380033186544, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
       propertyPath: m_SortingOrder
