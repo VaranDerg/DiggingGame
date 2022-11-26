@@ -65,6 +65,7 @@ public class OnlineBuilding : MonoBehaviourPun
     private OnlineCardEffects _ce;
     private Animator _anims;
     private OnlineBoardManager _bm;
+    private OnlineAudioPlayer _ap;
 
     /// <summary>
     /// Assigns partner scripts.
@@ -77,6 +78,7 @@ public class OnlineBuilding : MonoBehaviourPun
         _ce = FindObjectOfType<OnlineCardEffects>();
         _anims = GetComponent<Animator>();
         _bm = FindObjectOfType<OnlineBoardManager>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
     }
 
     /// <summary>
@@ -216,7 +218,7 @@ public class OnlineBuilding : MonoBehaviourPun
         int damage = _ce.CalculateBuildingDamage(damageDiceVisual);
         _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = damageDiceVisual.ToString();
 
-        BuildingHealth -= damage;
+        CallBuildingHP(-damage);
 
         //The text updates based on this given damage.
         if (damageDiceVisual == _ce.DamageDieSides)
@@ -229,7 +231,7 @@ public class OnlineBuilding : MonoBehaviourPun
             {
                 _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " has taken massive damage!");
             }
-            FindObjectOfType<SFXManager>().Play("DamageBuilding");
+            _ap.PlaySound("DamageBuilding", true);
         }
         else if (damageDiceVisual != 1)
         {
@@ -241,7 +243,7 @@ public class OnlineBuilding : MonoBehaviourPun
             {
                 _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " has taken damage!");
             }
-            FindObjectOfType<SFXManager>().Play("DamageBuilding");
+            _ap.PlaySound("DamageBuilding", true);
         }
         else if (damageDiceVisual == 1)
         {
@@ -253,11 +255,12 @@ public class OnlineBuilding : MonoBehaviourPun
             {
                 _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " avoided taking damage!");
             }
-            FindObjectOfType<SFXManager>().Play("DamageBuilding");
+            _ap.PlaySound("DamageBuilding", true);
         }
 
         //Fun!
-        _damageClickPS.GetComponent<ParticleSystem>().Play();
+        CallDamagePS(true);
+        
 
         //Destroyed
         if (BuildingHealth <= 0)
@@ -267,54 +270,54 @@ public class OnlineBuilding : MonoBehaviourPun
             {
                 if (BuildingType == "Factory")
                 {
-                    _am.P1BuiltBuildings[0]--;
+                    _am.CallBuiltBuildings(1, 0, -1);
                 }
                 else if (BuildingType == "Burrow")
                 {
-                    _am.P1BuiltBuildings[1]--;
+                    _am.CallBuiltBuildings(1, 1, -1);
                 }
                 else if (BuildingType == "Grass Mine")
                 {
-                    _am.P1BuiltBuildings[2]--;
+                    _am.CallBuiltBuildings(1, 2, -1);
                 }
                 else if (BuildingType == "Dirt Mine")
                 {
-                    _am.P1BuiltBuildings[3]--;
+                    _am.CallBuiltBuildings(1, 3, -1);
                 }
                 else if (BuildingType == "Stone Mine")
                 {
-                    _am.P1BuiltBuildings[4]--;
+                    _am.CallBuiltBuildings(1, 4, -1);
                 }
                 else if (BuildingType == "Gold Mine")
                 {
-                    _am.P1BuiltBuildings[5]--;
+                    _am.CallBuiltBuildings(1, 5, -1);
                 }
             }
             else
             {
                 if (BuildingType == "Factory")
                 {
-                    _am.P2BuiltBuildings[0]--;
+                    _am.CallBuiltBuildings(2, 0, -1);
                 }
                 else if (BuildingType == "Burrow")
                 {
-                    _am.P2BuiltBuildings[1]--;
+                    _am.CallBuiltBuildings(2, 1, -1);
                 }
                 else if (BuildingType == "Grass Mine")
                 {
-                    _am.P2BuiltBuildings[2]--;
+                    _am.CallBuiltBuildings(2, 2, -1);
                 }
                 else if (BuildingType == "Dirt Mine")
                 {
-                    _am.P2BuiltBuildings[3]--;
+                    _am.CallBuiltBuildings(2, 3, -1);
                 }
                 else if (BuildingType == "Stone Mine")
                 {
-                    _am.P2BuiltBuildings[4]--;
+                    _am.CallBuiltBuildings(2, 4, -1);
                 }
                 else if (BuildingType == "Gold Mine")
                 {
-                    _am.P1BuiltBuildings[5]--;
+                    _am.CallBuiltBuildings(2, 5, -1);
                 }
             }
 
