@@ -376,6 +376,7 @@ public class ActionManager : MonoBehaviour
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
                 _gcm.UpdateTextBothPlayers();
+                _cm.UpdatePileText();
                 _gcm.Back();
                 _gcm.UpdateCurrentActionText("Gold retrieved!");
             }
