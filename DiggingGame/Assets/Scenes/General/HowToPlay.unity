@@ -5754,8 +5754,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Subterranean's rules are generally understood after a full game of learning.
-    Have the Rules open while playing for the first time! \nNow go have some fun!"
+  m_text: 'Subterranean''s rules are generally understood after a full game of learning.
+    If it''s your first time, enable the Help Buttons in the Options menu!
+
+
+    Now
+    go have some fun!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
   m_sharedMaterial: {fileID: -4674183087742674415, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
@@ -5782,8 +5786,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34
-  m_fontSizeBase: 34
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -12336,7 +12340,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: So Many Rules!
+  m_text: Good Read!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}
   m_sharedMaterial: {fileID: -4674183087742674415, guid: 0e8eeb77e94a1c741a25c0f0f3d04a34, type: 2}

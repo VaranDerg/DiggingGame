@@ -111,6 +111,8 @@ MonoBehaviour:
   - UpdatePileText
   - DrawStartingCards
   - CallStartingCards
+  - ModifyBuiltBuildings
+  - SetCardWeather
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

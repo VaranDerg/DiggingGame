@@ -19,14 +19,12 @@ public class ViewDiscardPile : MonoBehaviour
     [SerializeField] private CanvasGroup _discardPileViewCGroup;
     [SerializeField] private GameObject _discardedCardButtonPrefab;
     [SerializeField] private GameObject _maximizedDiscardedCard;
-    [SerializeField] private GameObject _backButton;
 
     [Header("Values")]
     [SerializeField] private Color _grassCardColor;
     [SerializeField] private Color _dirtCardColor;
     [SerializeField] private Color _stoneCardColor;
     [SerializeField] private Color _goldCardColor;
-    private bool _viewShowing = false;
     private List<GameObject> _cardButtons = new List<GameObject>();
 
     [Header("Partner Scripts")]
@@ -92,10 +90,7 @@ public class ViewDiscardPile : MonoBehaviour
     /// <param name="cardToShow">Card Scriptable Obj, from button</param>
     public void DisplaySpecificCard(Card cardToShow)
     {
-        ToggleDiscardView();
-
         _maximizedDiscardedCard.SetActive(true);
-        _backButton.SetActive(true);
 
         _maximizedDiscardedCard.GetComponent<CardVisuals>().ThisCard = cardToShow;
         _maximizedDiscardedCard.GetComponent<CardVisuals>().PrepareCardSuit();
@@ -103,29 +98,11 @@ public class ViewDiscardPile : MonoBehaviour
     }
 
     /// <summary>
-    /// Toggles the discard view.
-    /// </summary>
-    public void ToggleDiscardView()
-    {
-        if(_viewShowing)
-        {
-            HideDiscardView();
-        }
-        else
-        {
-            ShowDiscardView();
-        }
-    }
-
-    /// <summary>
     /// Shows the discard view.
     /// </summary>
     public void ShowDiscardView()
     {
-        _viewShowing = true;
-
         _maximizedDiscardedCard.SetActive(false);
-        _backButton.SetActive(false);
         DisplayDiscardedCards();
 
         _discardPileViewCGroup.blocksRaycasts = true;
@@ -139,9 +116,7 @@ public class ViewDiscardPile : MonoBehaviour
     public void HideDiscardView()
     {
         _maximizedDiscardedCard.SetActive(false);
-        _backButton.SetActive(false);
 
-        _viewShowing = false;
         _discardPileViewCGroup.interactable = false;
         _discardPileViewCGroup.blocksRaycasts = false;
         _discardPileViewCGroup.alpha = 0;
