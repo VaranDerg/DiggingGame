@@ -7903,7 +7903,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &1360257120
 GameObject:
   m_ObjectHideFlags: 0
@@ -11669,7 +11669,7 @@ MonoBehaviour:
   m_MinValue: -50
   m_MaxValue: 0
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: -20
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
