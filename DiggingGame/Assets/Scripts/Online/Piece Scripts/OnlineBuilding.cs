@@ -1,6 +1,6 @@
 /*****************************************************************************
-// File Name :         Building.cs
-// Author :            Rudy Wolfer
+// File Name :         OnlineBuilding.cs
+// Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 3rd, 2022
 //
 // Brief Description : General script for universal building parameters.

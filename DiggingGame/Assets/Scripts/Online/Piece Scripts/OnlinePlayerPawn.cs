@@ -1,6 +1,6 @@
 /*****************************************************************************
-// File Name :         PlayerPawn.cs
-// Author :            Rudy Wolfer
+// File Name :         OnlinePlayerPawn.cs
+// Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 6th, 2022
 //
 // Brief Description : Script that controls Players' Pawn pieces.
