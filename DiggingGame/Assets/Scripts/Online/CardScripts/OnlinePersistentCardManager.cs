@@ -42,6 +42,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     private OnlineBoardManager _bm;
     private OnlineCanvasManager _gcm;
     private OnlineCardManager _cm;
+    private OnlineAudioPlayer _ap;
 
     /// <summary>
     /// Assigns Partner scripts.
@@ -52,6 +53,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         _bm = FindObjectOfType<OnlineBoardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _cm = FindObjectOfType<OnlineCardManager>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
     }
 
     /// <summary>
@@ -118,6 +120,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                     //Adds to newest list.
                     CallAddToPersistent(card.GetComponentInChildren<OnlineCardController>().GetCardID(), 1);
                     P1OpenPCardSlots[i] = false;
+                    _ap.PlaySound("DrawCard", false);
                     return;
                 }
             }
@@ -147,6 +150,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                     }
                     CallAddToPersistent(card.GetComponentInChildren<PhotonView>().ViewID, 2);
                     P2OpenPCardSlots[i] = false;
+                    _ap.PlaySound("DrawCard", false);
                     return;
                 }
             }
@@ -202,6 +206,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 if (P1PersistentCards[i].name == cardName)
                 {
                     StartCoroutine(P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().ToDiscard());
+                    _ap.PlaySound("UsePersistent", false);
                 }
             }
         }
@@ -212,6 +217,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 if (P2PersistentCards[i].name == cardName)
                 {
                     StartCoroutine(P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().ToDiscard());
+                    _ap.PlaySound("UsePersistent", false);
                 }
             }
         }

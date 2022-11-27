@@ -15,9 +15,6 @@ using System.Threading.Tasks;
 
 public class ActionManager : MonoBehaviour
 {
-    [Header("General References")]
-    private GameObject _backButton;
-
     //Arrays for collected pile. Grass, Dirt, Stone, Gold.
     [HideInInspector] public int[] P1CollectedPile = new int[4];
     [HideInInspector] public int[] P2CollectedPile = new int[4];

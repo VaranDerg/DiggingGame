@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 public class OnlineActionManager : MonoBehaviourPun
 {
@@ -362,6 +363,8 @@ public class OnlineActionManager : MonoBehaviourPun
 
                 StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
 
+                _ap.PlaySound("Retrieve", false);
+
                 StartCoroutine(_cm.DrawCard("Gold"));
                 CallUpdatePieces(1, 1, 3, -1);  // Andrea SD
                 SupplyPileRPC(3, 1);   // Andrea SD
@@ -395,6 +398,8 @@ public class OnlineActionManager : MonoBehaviourPun
                 //End of Geologist code.
 
                 StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
+
+                _ap.PlaySound("Retrieve", false);
 
                 StartCoroutine(_cm.DrawCard("Gold"));
                 CallUpdatePieces(1, 2, 3, -1);  // Andrea SD
@@ -662,7 +667,7 @@ public class OnlineActionManager : MonoBehaviourPun
         {
             if (P1Score >= WinningScore)
             {
-                FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
+                CallResults();
                 return;
             }
             _gcm.UpdateCurrentActionText("Player 2 is starting their turn.");
@@ -672,7 +677,7 @@ public class OnlineActionManager : MonoBehaviourPun
         {
             if (P2Score >= WinningScore)
             {
-                FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
+                CallResults();
                 return;
             }
             _gcm.UpdateCurrentActionText("Player 1 is starting their turn.");
@@ -683,6 +688,7 @@ public class OnlineActionManager : MonoBehaviourPun
             StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Round", 1);
 
             CallDayNight();
+            CallSwapTrack();
         }
 
         //Enables the start button for the other player then disables your own board 
@@ -725,6 +731,28 @@ public class OnlineActionManager : MonoBehaviourPun
     }
 
     #region RPC Functions
+
+    /// <summary>
+    /// Calls the RPC that swaps the music between day and night
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallSwapTrack()
+    {
+        photonView.RPC("SwapTrack", RpcTarget.All);
+    }
+
+
+    /// <summary>
+    /// Swaps the music between day and night
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void SwapTrack()
+    {
+        BGMManager.s_Instance.SwapTrack();
+    }
 
     /// <summary>
     /// Calls the UpdateScore RPC
@@ -1087,7 +1115,28 @@ public class OnlineActionManager : MonoBehaviourPun
             case 2:
                 P2BuiltBuildings[type] += amount;
                 break;
-        }
+        }  
+    }
+
+    /// <summary>
+    /// Calls the RPC that loads the results screen
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallResults()
+    {
+        photonView.RPC("LoadResultsScene", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Loads the Results screen
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void LoadResultScene()
+    {
+        FindObjectOfType<SceneLoader>().LoadScene("ResultsScreen");
     }
 
     #endregion

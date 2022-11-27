@@ -239,6 +239,8 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void SelectCard()
     {
+        _ap.PlaySound("SelectCard", false);
+
         if (!Selected)
         {
             _cm.SelectedCards.Add(_cardBody);
@@ -264,6 +266,7 @@ public class OnlineCardController : MonoBehaviourPun
         if (_cm.AllowedActivations == 0)
         {
             _gcm.UpdateCurrentActionText("You've Activated the max amount of Cards.");
+            FindObjectOfType<SFXManager>().PlayButtonSound();
             return;
         }
 
@@ -284,6 +287,8 @@ public class OnlineCardController : MonoBehaviourPun
                 {
                     CallCardWeather();
                 }
+
+                _ap.PlaySound("ActivateCard", false);
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -317,6 +322,7 @@ public class OnlineCardController : MonoBehaviourPun
             else
             {
                 _gcm.UpdateCurrentActionText("Not enough Pieces to Activate this Card!");
+                FindObjectOfType<SFXManager>().PlayButtonSound();
             }
         }
         else
@@ -336,6 +342,8 @@ public class OnlineCardController : MonoBehaviourPun
                 {
                     CallCardWeather();
                 }
+
+                _ap.PlaySound("ActivateCard", false);
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -368,6 +376,7 @@ public class OnlineCardController : MonoBehaviourPun
             else
             {
                 _gcm.UpdateCurrentActionText("Not enough Pieces to Activate this card!");
+                FindObjectOfType<SFXManager>().PlayButtonSound();
             }
         }
     }
@@ -409,16 +418,13 @@ public class OnlineCardController : MonoBehaviourPun
                 CallRemoveCard(2);   // Andrea SD
             }
 
-            //StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
 
             HeldByPlayer = 0;
             Selected = false;
             CanBeSelected = false;
             CanBeDiscarded = false;
             CanBeActivated = false;
-            MadePersistentP1 = false;
-            MadePersistentP2 = false;
-            _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
 
             _cm.CallPileText();
@@ -444,8 +450,7 @@ public class OnlineCardController : MonoBehaviourPun
             CanBeDiscarded = false;
             CanBeActivated = false;
             MadePersistentP1 = false;
-            MadePersistentP2 = false;
-            
+            MadePersistentP2 = false;           
             _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
 
@@ -477,7 +482,7 @@ public class OnlineCardController : MonoBehaviourPun
             return;
         }
 
-        FindObjectOfType<SFXManager>().Play("SelectCard");
+        _ap.PlaySound("SelectCard", false);
 
         _maximizedCard = Instantiate(_cardVisualToMaximize, _maximizeAnchor);
         _maximizedCard.transform.position = _maximizeAnchor.transform.position;
@@ -494,7 +499,7 @@ public class OnlineCardController : MonoBehaviourPun
             return;
         }
 
-        FindObjectOfType<SFXManager>().Play("SelectCard");
+        _ap.PlaySound("SelectCard", false);
 
         Destroy(_maximizedCard);
         _currentlyMaximized = false;

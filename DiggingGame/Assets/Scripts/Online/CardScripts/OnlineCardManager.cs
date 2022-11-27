@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         CardManager.cs
+// File Name :         OnlineCardManager.cs
 // Author :            Rudy Wolfer, Andrea SD
 // Creation Date :     October 10th, 2022
 //
@@ -33,6 +33,7 @@ public class OnlineCardManager : MonoBehaviourPun
     [HideInInspector] public int AllowedActivations;
     private OnlineActionManager _am;
     private OnlineCanvasManager _gcm;
+    private OnlineAudioPlayer _ap;
 
     [Header("Selection Requiements")]
     [HideInInspector] public string RequiredSuit = "";
@@ -48,6 +49,7 @@ public class OnlineCardManager : MonoBehaviourPun
     {
         _am = FindObjectOfType<OnlineActionManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
     }
 
     /// <summary>
@@ -121,6 +123,9 @@ public class OnlineCardManager : MonoBehaviourPun
             {
                 if (P1OpenHandPositions[i] == true)
                 {
+
+                    _ap.PlaySound("DrawCard", false);
+
                     randomCard.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
@@ -159,6 +164,8 @@ public class OnlineCardManager : MonoBehaviourPun
             {
                 if (P2OpenHandPositions[i] == true)
                 {
+                    _ap.PlaySound("DrawCard", false);
+
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
@@ -436,6 +443,7 @@ public class OnlineCardManager : MonoBehaviourPun
             for (int i = 0; i < P1Hand.Count; i++)
             {
                 P1Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
+                _ap.PlaySound("DrawCard", false);
                 yield return new WaitForSeconds(_cardShowHideTime);
                 P1Hand[i].SetActive(false);
             }
@@ -445,6 +453,7 @@ public class OnlineCardManager : MonoBehaviourPun
             for (int i = 0; i < P2Hand.Count; i++)
             {
                 P2Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
+                _ap.PlaySound("DrawCard", false);
                 yield return new WaitForSeconds(_cardShowHideTime);
                 P2Hand[i].SetActive(false);
             }
@@ -463,6 +472,7 @@ public class OnlineCardManager : MonoBehaviourPun
             {
                 P1Hand[i].SetActive(true);
                 P1Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
+                _ap.PlaySound("DrawCard", false);
                 yield return new WaitForSeconds(_cardShowHideTime);
             }
         }
@@ -472,6 +482,7 @@ public class OnlineCardManager : MonoBehaviourPun
             {
                 P2Hand[i].SetActive(true);
                 P2Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
+                _ap.PlaySound("DrawCard", false);
                 yield return new WaitForSeconds(_cardShowHideTime);
             }
         }

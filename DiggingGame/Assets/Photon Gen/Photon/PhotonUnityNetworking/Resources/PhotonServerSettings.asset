@@ -113,6 +113,8 @@ MonoBehaviour:
   - CallStartingCards
   - SetCardWeather
   - ModifyBuiltBuildings
+  - LoadResultScene
+  - SwapTrack
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

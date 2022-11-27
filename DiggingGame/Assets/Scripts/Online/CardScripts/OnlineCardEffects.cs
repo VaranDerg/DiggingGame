@@ -447,6 +447,9 @@ public class OnlineCardEffects : MonoBehaviourPun
         //StatManager is a statistic storing Class. 
         StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Steal", 1);
         //Updates variables. These are used to track how many more pieces a player can steal.
+
+        _ap.PlaySound("StealPiece", false);
+
         _remainingPiecesToSteal--;
         _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
         _gcm.UpdateTextBothPlayers();
@@ -1535,7 +1538,9 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
             }
         }
-        
+
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
+
         if (enoughPieces)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);

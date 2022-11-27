@@ -168,6 +168,7 @@ public class OnlineBuilding : MonoBehaviourPun
 
         //Starts rolling the dice.
         _damageDice.GetComponent<Animator>().Play("DiceEnter");
+        _ap.PlaySound("DrawCard", false);
         _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
 
         //The real result is separate from the visual
@@ -363,6 +364,7 @@ public class OnlineBuilding : MonoBehaviourPun
 
         //Additional damages are generally only for Tornado or Earthquake.
         _damageDice.GetComponent<Animator>().Play("DiceExit");
+        _ap.PlaySound("DrawCard", false);
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
         if (_ce.CurrentDamages == _ce.AllowedDamages)
@@ -377,6 +379,36 @@ public class OnlineBuilding : MonoBehaviourPun
         }
         PrepBuilidingDamaging(false);
         ActiveBuilding = false;
+    }
+
+    /// <summary>
+    /// Repairs a building.
+    /// </summary>
+    public void RepairBuilding()
+    {
+        //Clicking a building Repairs it.
+        CallBuildingHP(1);     // ASD
+        CallDamagePS(true);     // ASD
+        CallCurrentAnim();  //ASD
+        _ce.RepairedBuildings++;
+        _ap.PlaySound("RepairBuilding", true);
+        CallDamagePS(false);    // ASD
+        ActiveBuilding = true;
+
+        //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
+        if (_am.CurrentPlayer == 1 && PlayerOwning == 2)
+        {
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
+            _gcm.UpdateTextBothPlayers();
+        }
+        else if (_am.CurrentPlayer == 2 && PlayerOwning == 1)
+        {
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
+            _gcm.UpdateTextBothPlayers();
+        }
+
+        ActiveBuilding = false;
+        PrepBuildingRepairing(false);
     }
 
     /// <summary>
@@ -411,35 +443,6 @@ public class OnlineBuilding : MonoBehaviourPun
                 CallPlayAnimation(_buildingDamagedName);    // ASD
             }
         }
-    }
-
-    /// <summary>
-    /// Repairs a building.
-    /// </summary>
-    public void RepairBuilding()
-    {
-        //Clicking a building Repairs it.
-        CallBuildingHP(1);     // ASD
-        CallDamagePS(true);     // ASD
-        CallCurrentAnim();  //ASD
-        _ce.RepairedBuildings++;
-        CallDamagePS(false);    // ASD
-        ActiveBuilding = true;
-
-        //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
-        if (_am.CurrentPlayer == 1 && PlayerOwning == 2)
-        {
-            _am.CallUpdateScore(_am.CurrentPlayer, 1);
-            _gcm.UpdateTextBothPlayers();
-        }
-        else if (_am.CurrentPlayer == 2 && PlayerOwning == 1)
-        {
-            _am.CallUpdateScore(_am.CurrentPlayer, 1);
-            _gcm.UpdateTextBothPlayers();
-        }
-
-        ActiveBuilding = false;
-        PrepBuildingRepairing(false);
     }
 
     /// <summary>

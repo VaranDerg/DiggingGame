@@ -24,6 +24,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     private OnlineActionManager _am;
     private OnlinePersistentCardManager _pcm;
     private OnlineCanvasManager _gcm;
+    private OnlineAudioPlayer _ap;
     private Animator _anims;
     [SerializeField] private SpriteRenderer _sr;
 
@@ -65,6 +66,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         _anims = GetComponent<Animator>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
     }
 
     /// <summary>
@@ -86,6 +88,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 PreparePawnMovement();
+                _ap.PlaySound("ClickPawn", false);
             }
         }
 
@@ -217,6 +220,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            _ap.PlaySound("ClickPawn", false);
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -267,6 +271,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            _ap.PlaySound("ClickPawn", false);
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -309,6 +314,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            _ap.PlaySound("ClickPawn", false);
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -368,6 +374,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            _ap.PlaySound("ClickPawn", false);
             DeselectOtherPawns();
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
@@ -481,7 +488,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         }
     }
 
-    #region
+    #region RPC Functions
 
     /// <summary>
     /// Calls the RPC that adjusts the Pawn's values to fit a player.
