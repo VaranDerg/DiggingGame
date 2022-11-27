@@ -121,7 +121,7 @@ public class OnlineCardManager : MonoBehaviourPun
             {
                 if (P1OpenHandPositions[i] == true)
                 {
-                    randomCard.gameObject.SetActive(true);
+                    randomCard.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
                     randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
@@ -637,7 +637,7 @@ public class OnlineCardManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Changes player's number of gold cards
+    /// Changes player's number of normal cards
     /// </summary>
     /// <param name="player"> 1 or 2 </param>
     /// <param name="amount"> amount the cards are changed by </param>

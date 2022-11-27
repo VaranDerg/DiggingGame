@@ -360,9 +360,12 @@ public class OnlineActionManager : MonoBehaviourPun
                 }
                 //End of Geologist code.
 
+                StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Retrieve", 1);
+
                 StartCoroutine(_cm.DrawCard("Gold"));
                 CallUpdatePieces(1, 1, 3, -1);  // Andrea SD
-                SupplyPileRPC(3, -1);   // Andrea SD
+                SupplyPileRPC(3, 1);   // Andrea SD
+                _cm.CallPileText();
                 _gcm.UpdateTextBothPlayers();
                 _gcm.Back();
                 _gcm.UpdateCurrentActionText("Gold retrieved!");
@@ -514,7 +517,7 @@ public class OnlineActionManager : MonoBehaviourPun
                 if (SupplyPile[0] >= amount)
                 {
                     // Andrea SD
-                    SupplyPileRPC(0, -amount);
+                    SupplyPileRPC(0, amount);
                     CallUpdatePieces(0, 1, 0, amount);
                 }
             }
@@ -523,7 +526,7 @@ public class OnlineActionManager : MonoBehaviourPun
                 if (SupplyPile[1] >= amount)
                 {
                     // Andrea SD
-                    SupplyPileRPC(1, -amount);                   
+                    SupplyPileRPC(1, amount);                   
                     CallUpdatePieces(0, 1, 1, amount);
                 }
             }
@@ -532,7 +535,7 @@ public class OnlineActionManager : MonoBehaviourPun
                 if (SupplyPile[2] >= amount)
                 {
                     // Andrea SD
-                    SupplyPileRPC(2, -amount);
+                    SupplyPileRPC(2, amount);
                     CallUpdatePieces(0, 1, 2, amount);
                 }
             }
@@ -544,7 +547,7 @@ public class OnlineActionManager : MonoBehaviourPun
                 if (SupplyPile[0] >= amount)
                 {
                     // Andrea SD
-                    SupplyPileRPC(0, -amount);
+                    SupplyPileRPC(0, amount);
                     CallUpdatePieces(0, 2, 0, amount);
                 }
             }
@@ -553,7 +556,7 @@ public class OnlineActionManager : MonoBehaviourPun
                 if (SupplyPile[1] >= amount)
                 {
                     // Andrea SD
-                    SupplyPileRPC(1, -amount);
+                    SupplyPileRPC(1, amount);
                     CallUpdatePieces(0, 2, 1, amount);
                 }
             }
@@ -562,7 +565,7 @@ public class OnlineActionManager : MonoBehaviourPun
                 if (SupplyPile[2] >= amount)
                 {
                     // Andrea SD
-                    SupplyPileRPC(2, -amount);
+                    SupplyPileRPC(2, amount);
                     CallUpdatePieces(0, 2, 2, amount);
                 }
             }
@@ -969,8 +972,8 @@ public class OnlineActionManager : MonoBehaviourPun
     /// 
     /// Author: Andrea SD
     /// </summary>
-    /// <param name="pieceType"></param>
-    /// <param name="amount"></param>
+    /// <param name="pieceType"> type of piece being removed </param>
+    /// <param name="amount"> amount being added </param>
     public void SupplyPileRPC(int pieceType, int amount)
     {
         photonView.RPC("ModifySupplyPile", RpcTarget.All, pieceType, amount);
@@ -982,20 +985,20 @@ public class OnlineActionManager : MonoBehaviourPun
     /// Author: Andrea SD
     /// </summary>
     /// <param name="pieceType"> type of piece being removed </param>
-    /// <param name="amount"> amount being removed </param>
+    /// <param name="amount"> amount being added </param>
     [PunRPC]
     public void ModifySupplyPile(int pieceType, int amount)
     {
         switch (pieceType)
         {
             case 0:
-                SupplyPile[0] -= amount;
+                SupplyPile[0] += amount;
                 break;
             case 1:
-                SupplyPile[1] -= amount;
+                SupplyPile[1] += amount;
                 break;
             case 2:
-                SupplyPile[2] -= amount;
+                SupplyPile[2] += amount;
                 break;
         }
     }
@@ -1043,6 +1046,46 @@ public class OnlineActionManager : MonoBehaviourPun
                 break;
             case 2:
                 CurrentPlayerName = PlayerTwoName;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC that modifies the amount of built buildings of [type] by 
+    /// amount for player
+    /// 
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="type"> 0 = Factory, 1 = Burrow, 2 = Grass Mine, 3 = 
+    /// Dirt Mine, 4  = Stone Mine, 5 = Gold Mine </param>
+    /// <param name="amount"> amount the building num is changing by </param>
+    public void CallBuiltBuildings(int player, int type, int amount)
+    {
+        photonView.RPC("ModifyBuiltBuildings", RpcTarget.All, player, type, amount);
+    }
+
+    /// <summary>
+    /// Modifies the amount of built buildings of [type] by amount for player
+    /// 
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="type"> 0 = Factory, 1 = Burrow, 2 = Grass Mine, 3 = 
+    /// Dirt Mine, 4  = Stone Mine, 5 = Gold Mine </param>
+    /// <param name="amount"> amount the building num is changing by </param>
+    [PunRPC]
+    public void ModifyBuiltBuildings(int player, int type, int amount)
+    {
+        switch(player)
+        {
+            case 1:
+                P1BuiltBuildings[type] += amount;
+                break;
+            case 2:
+                P2BuiltBuildings[type] += amount;
                 break;
         }
     }

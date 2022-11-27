@@ -273,16 +273,16 @@ public class OnlineCardController : MonoBehaviourPun
             {
                 StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
 
-                _am.P1RefinedPile[0] -= grassCost;
-                _am.P1RefinedPile[1] -= dirtCost;
-                _am.P1RefinedPile[2] -= stoneCost;
-                _am.SupplyPile[0] += grassCost;
-                _am.SupplyPile[1] += dirtCost;
-                _am.SupplyPile[2] += stoneCost;
+                _am.CallUpdatePieces(2, 1, 0, -grassCost);
+                _am.CallUpdatePieces(2, 1, 1, -dirtCost);
+                _am.CallUpdatePieces(2, 1, 2, -stoneCost);
+                _am.SupplyPileRPC(0, grassCost);
+                _am.SupplyPileRPC(1, dirtCost);
+                _am.SupplyPileRPC(2, stoneCost);
 
                 if (MultiSceneData.s_WeatherOption == 0)
                 {
-                    FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                    CallCardWeather();
                 }
 
                 if (cv.ThisCard.GrassSuit)
@@ -325,16 +325,16 @@ public class OnlineCardController : MonoBehaviourPun
             {
                 StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
 
-                _am.P2RefinedPile[0] -= grassCost;
-                _am.P2RefinedPile[1] -= dirtCost;
-                _am.P2RefinedPile[2] -= stoneCost;
-                _am.SupplyPile[0] += grassCost;
-                _am.SupplyPile[1] += dirtCost;
-                _am.SupplyPile[2] += stoneCost;
+                _am.CallUpdatePieces(2, 2, 0, -grassCost);
+                _am.CallUpdatePieces(2, 2, 1, -dirtCost);
+                _am.CallUpdatePieces(2, 2, 2, -stoneCost);
+                _am.SupplyPileRPC(0, grassCost);
+                _am.SupplyPileRPC(1, dirtCost);
+                _am.SupplyPileRPC(2, stoneCost);
 
                 if (MultiSceneData.s_WeatherOption == 0)
                 {
-                    FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                    CallCardWeather();
                 }
 
                 if (cv.ThisCard.GrassSuit)
@@ -380,17 +380,16 @@ public class OnlineCardController : MonoBehaviourPun
         _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
 
         if (!MadePersistentP1 && !MadePersistentP2)
-        {
-            
+        { 
             if (HeldByPlayer == 1)
             {
                 if (_cardBody.CompareTag("Card"))
                 {
-                    _am.P1Cards--;
+                    _cm.CallNormalCards(1, -1);
                 }
                 else if (_cardBody.CompareTag("GoldCard"))
                 {
-                    _am.P1GoldCards--;
+                    _cm.CallGoldCards(1, -1);
                 }
                 _cm.P1OpenHandPositions[HandPosition] = true;
                 CallRemoveCard(1);   // Andrea SD
@@ -400,11 +399,11 @@ public class OnlineCardController : MonoBehaviourPun
             {
                 if (_cardBody.CompareTag("Card"))
                 {
-                    _am.P2Cards--;
+                    _cm.CallNormalCards(2, -1);
                 }
                 else if (_cardBody.CompareTag("GoldCard"))
                 {
-                    _am.P2GoldCards--;
+                    _cm.CallGoldCards(2, -1);
                 }
                 _cm.P2OpenHandPositions[HandPosition] = true;
                 CallRemoveCard(2);   // Andrea SD
@@ -588,6 +587,28 @@ public class OnlineCardController : MonoBehaviourPun
                 _pcm.P2PersistentCards.Remove(_cardBody);
                 break;
         }     
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets the weather to the activated card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallCardWeather()
+    {
+        photonView.RPC("SetCardWeather", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Sets the weather to the activated card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void SetCardWeather()
+    {
+        CardVisuals cv = _cardBody.GetComponentInChildren<CardVisuals>();
+        FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
     }
 
     #endregion

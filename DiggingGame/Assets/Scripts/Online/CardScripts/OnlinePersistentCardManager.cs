@@ -219,7 +219,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         {
             //Puts every card into that state.
             int pCardCount = 0;
-            _gcm.UpdateCurrentActionText("Player 2, Discard a Persistent Card.");
+            _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
             for (int i = 0; i < P2PersistentCards.Count; i++)
             {
                 P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
@@ -233,6 +233,8 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 _gcm.Back();
                 yield break;
             }
+
+            DiscardedPersistentCard = false;
 
             //Waits until selected.
             while (!DiscardedPersistentCard)
@@ -254,7 +256,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         else
         {
             int pCardCount = 0;
-            _gcm.UpdateCurrentActionText("Player 1, Discard a Persistent Card.");
+            _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s, Discard a Persistent Card.");
             for (int i = 0; i < P1PersistentCards.Count; i++)
             {
                 P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
@@ -267,6 +269,8 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 _gcm.Back();
                 yield break;
             }
+
+            DiscardedPersistentCard = false;
 
             while (!DiscardedPersistentCard)
             {
@@ -287,7 +291,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     /// <summary>
     /// Retribution method.
     /// </summary>
-    /// <param name="retributionPlayer">1 or 2</param>
+    /// <param name="retributionPlayer"> 1 or 2 </param>
     /// <param name="suit">"Grass" "Dirt" or "Stone"</param>
     public void RetributionStart(int retributionPlayer, string suit)
     {
