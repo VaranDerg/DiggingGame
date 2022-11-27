@@ -1079,6 +1079,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
         DugPieces = 0;
 
         //If there's more open pieces than diggable pieces...
@@ -1487,6 +1489,8 @@ public class CardEffects : MonoBehaviour
                 }
             }
         }
+
+        _bm.SetActiveCollider("Board");
 
         DugPieces = 0;
 
@@ -2096,6 +2100,8 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
         DugPieces = 0;
 
         if (openPieces >= _erosionPiecesToDig)
@@ -2348,6 +2354,8 @@ public class CardEffects : MonoBehaviour
                 }
             }
         }
+
+        _bm.SetActiveCollider("Board");
 
         DugPieces = 0;
 

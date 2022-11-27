@@ -2152,6 +2152,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1900508197146913112, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
+      propertyPath: m_TagString
+      value: Card
+      objectReference: {fileID: 0}
     - target: {fileID: 1900508197146913113, guid: 152ad711bd3e8bb419106493ac643a8b, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.75
