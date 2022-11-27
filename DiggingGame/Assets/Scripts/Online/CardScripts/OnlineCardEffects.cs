@@ -1002,6 +1002,8 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
         DugPieces = 0;
 
         //If there's more open pieces than diggable pieces...
@@ -1410,6 +1412,8 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
             }
         }
+
+        _bm.SetActiveCollider("Board");
 
         DugPieces = 0;
 
@@ -2011,6 +2015,10 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
+        DugPieces = 0;
+
         if (openPieces >= _erosionPiecesToDig)
         {
             _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
@@ -2259,6 +2267,8 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
             }
         }
+
+        _bm.SetActiveCollider("Board");
 
         DugPieces = 0;
 
