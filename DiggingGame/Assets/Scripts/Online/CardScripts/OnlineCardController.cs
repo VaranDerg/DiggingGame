@@ -276,9 +276,9 @@ public class OnlineCardController : MonoBehaviourPun
             {
                 StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
 
-                _am.CallUpdatePieces(2, 1, 0, -grassCost);
-                _am.CallUpdatePieces(2, 1, 1, -dirtCost);
-                _am.CallUpdatePieces(2, 1, 2, -stoneCost);
+                _am.CallUpdatePieces(1, 1, 0, -grassCost);
+                _am.CallUpdatePieces(1, 1, 1, -dirtCost);
+                _am.CallUpdatePieces(1, 1, 2, -stoneCost);
                 _am.SupplyPileRPC(0, grassCost);
                 _am.SupplyPileRPC(1, dirtCost);
                 _am.SupplyPileRPC(2, stoneCost);

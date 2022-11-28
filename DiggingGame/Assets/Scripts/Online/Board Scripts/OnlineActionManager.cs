@@ -933,8 +933,7 @@ public class OnlineActionManager : MonoBehaviourPun
     /// <param name="material"> 0 = Grass, 1 = Dirt, 2 = Stone, 3 = Gold 
     /// </param>
     /// <param name="amount"> How much the amount is changing </param>
-    public void CallUpdatePieces(int function, int player, int material,
-        int amount)
+    public void CallUpdatePieces(int function, int player, int material, int amount)
     {
         switch (function)
         {
