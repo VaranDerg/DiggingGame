@@ -468,7 +468,7 @@ public class OnlineCardController : MonoBehaviourPun
         _gettingDiscarded = true;
         yield return new WaitForSeconds(_discardAnimWaitTime);
         _gettingDiscarded = false;
-        _cardBody.SetActive(false);
+        CallCardActive(false);
     }
 
     /// <summary>
@@ -614,6 +614,17 @@ public class OnlineCardController : MonoBehaviourPun
     {
         CardVisuals cv = _cardBody.GetComponentInChildren<CardVisuals>();
         FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+    }
+
+    public void CallCardActive(bool isActive)
+    {
+        photonView.RPC("SetCardActive", RpcTarget.All, isActive);
+    }
+
+    [PunRPC]
+    public void SetCardActive(bool isActive)
+    {
+        _cardBody.SetActive(isActive);
     }
 
     #endregion
