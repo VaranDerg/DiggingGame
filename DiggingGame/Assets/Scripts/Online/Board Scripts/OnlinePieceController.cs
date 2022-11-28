@@ -542,6 +542,7 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <returns></returns>
     public IEnumerator MovePawnTo(int pawnID, int pieceID, bool goBack)
     {
+        Debug.Log(pawnID);
         GameObject pawn = GameObject.Find(PhotonView.Find(pawnID).gameObject.name);
         pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().CallSetHasPawn(false);     // ASD
         destinationPiece = gameObject;
