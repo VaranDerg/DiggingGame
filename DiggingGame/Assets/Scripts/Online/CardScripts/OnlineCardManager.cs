@@ -129,7 +129,7 @@ public class OnlineCardManager : MonoBehaviourPun
                     randomCard.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
-                    randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
+                    randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = 1;
                     randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
                     CallAddCardToHand(1, randomCardID);
                     P1OpenHandPositions[i] = false;
@@ -169,7 +169,7 @@ public class OnlineCardManager : MonoBehaviourPun
                     randomCard.gameObject.SetActive(true);
                     randomCard.transform.position = _handPositions[i].position;
                     randomCard.GetComponentInChildren<OnlineCardController>().HandPosition = i;
-                    randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = _am.CurrentPlayer;
+                    randomCard.GetComponentInChildren<OnlineCardController>().HeldByPlayer = 2;
                     randomCard.GetComponentInChildren<OnlineCardController>().NextPos = randomCard.transform.position;
                     CallAddCardToHand(2, randomCardID);
                     P2OpenHandPositions[i] = false;
