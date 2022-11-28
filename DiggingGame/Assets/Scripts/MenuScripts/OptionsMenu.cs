@@ -26,20 +26,28 @@ public class OptionsMenu : MonoBehaviour
     private Resolution[] _resolutions;
 
     /// <summary>
-    /// Gathers Resolultion Information
+    /// Runs PrepareResolutions
     /// </summary>
     private void Start()
+    {
+        PrepareResolutions();
+    }
+
+    /// <summary>
+    /// Gathers Resolultion Information
+    /// </summary>
+    private void PrepareResolutions()
     {
         _resolutions = Screen.resolutions;
         _resolutionDropdown.ClearOptions();
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
-        for(int i = 0; i < _resolutions.Length; i++)
+        for (int i = 0; i < _resolutions.Length; i++)
         {
             string option = _resolutions[i].width + " x " + _resolutions[i].height;
             options.Add(option);
 
-            if(_resolutions[i].width == Screen.currentResolution.width && _resolutions[i].height == Screen.currentResolution.height)
+            if (_resolutions[i].width == 1920 && _resolutions[i].height == 1080)
             {
                 currentResolutionIndex = i;
             }

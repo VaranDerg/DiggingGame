@@ -16,6 +16,7 @@ using UnityEngine.UI;
 public class ViewDiscardPile : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] private bool _onlineScene = false;
     [SerializeField] private CanvasGroup _discardPileViewCGroup;
     [SerializeField] private GameObject _discardedCardButtonPrefab;
     [SerializeField] private GameObject _maximizedDiscardedCard;
@@ -29,13 +30,21 @@ public class ViewDiscardPile : MonoBehaviour
 
     [Header("Partner Scripts")]
     private CardManager _cm;
+    private OnlineCardManager _ocm;
 
     /// <summary>
     /// Assigns CM
     /// </summary>
     private void Awake()
     {
-        _cm = FindObjectOfType<CardManager>();
+        if(_onlineScene)
+        {
+            _ocm = FindObjectOfType<OnlineCardManager>();
+        }
+        else
+        {
+            _cm = FindObjectOfType<CardManager>();
+        }
     }
 
     /// <summary>
@@ -51,6 +60,16 @@ public class ViewDiscardPile : MonoBehaviour
     /// </summary>
     private void DisplayDiscardedCards()
     {
+        List<GameObject> pileToUse = new List<GameObject>();
+        if(_onlineScene)
+        {
+            pileToUse = _ocm.DPile;
+        }
+        else
+        {
+            pileToUse = _cm.DPile;
+        }
+
         foreach(GameObject cardButton in _cardButtons)
         {
             Destroy(cardButton);
@@ -58,24 +77,24 @@ public class ViewDiscardPile : MonoBehaviour
 
         GameObject newCard;
 
-        for (int i = 0; i < _cm.DPile.Count; i++)
+        for (int i = 0; i < pileToUse.Count; i++)
         {
             newCard = Instantiate(_discardedCardButtonPrefab, transform);
-            newCard.GetComponent<DiscardedCardButton>().DiscardedCard = _cm.DPile[i].GetComponentInChildren<CardVisuals>().ThisCard;
+            newCard.GetComponent<DiscardedCardButton>().DiscardedCard = pileToUse[i].GetComponentInChildren<CardVisuals>().ThisCard;
 
-            if (_cm.DPile[i].GetComponentInChildren<CardVisuals>().ThisCard.GrassSuit)
+            if (pileToUse[i].GetComponentInChildren<CardVisuals>().ThisCard.GrassSuit)
             {
                 newCard.GetComponent<DiscardedCardButton>().PrepareButton(_grassCardColor);
             }
-            else if (_cm.DPile[i].GetComponentInChildren<CardVisuals>().ThisCard.DirtSuit)
+            else if (pileToUse[i].GetComponentInChildren<CardVisuals>().ThisCard.DirtSuit)
             {
                 newCard.GetComponent<DiscardedCardButton>().PrepareButton(_dirtCardColor);
             }
-            else if (_cm.DPile[i].GetComponentInChildren<CardVisuals>().ThisCard.StoneSuit)
+            else if (pileToUse[i].GetComponentInChildren<CardVisuals>().ThisCard.StoneSuit)
             {
                 newCard.GetComponent<DiscardedCardButton>().PrepareButton(_stoneCardColor);
             }
-            else if(_cm.DPile[i].GetComponentInChildren<CardVisuals>().ThisCard.GoldSuit)
+            else if(pileToUse[i].GetComponentInChildren<CardVisuals>().ThisCard.GoldSuit)
             {
                 newCard.GetComponent<DiscardedCardButton>().PrepareButton(_goldCardColor);
             }
