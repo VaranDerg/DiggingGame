@@ -77,6 +77,11 @@ public class SFXManager : MonoBehaviour
             return;
         }
 
+        if(s.Source == null)
+        {
+            return;
+        }
+
         s.Source.Play();
     }
 

@@ -1634,10 +1634,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3450878958116640487, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3934532104423689338, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -1686,29 +1682,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneLoader
       objectReference: {fileID: 0}
-    - target: {fileID: 3934532104423689339, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3934532104423689341, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
-      propertyPath: _anims
-      value: 
-      objectReference: {fileID: 1176176040}
-    - target: {fileID: 7080402369692237236, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8228228206896799521, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
---- !u!95 &1176176040 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 396539223851802207, guid: c6e3c7a37b3b8c94c88b9ed2ad80f944, type: 3}
-  m_PrefabInstance: {fileID: 1176176039}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1257229542
 GameObject:
   m_ObjectHideFlags: 0
