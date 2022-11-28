@@ -325,6 +325,7 @@ public class OnlinePieceController : MonoBehaviourPun
     private IEnumerator UseWalkway()
     {
         // Andrea SD
+        CallPawnID(CurrentPawn.GetComponent<OnlinePlayerPawn>().PawnID);
         CallMovePawn(_currentPawnID, _pieceID, false);
 
         while (_pawnIsMoving)
