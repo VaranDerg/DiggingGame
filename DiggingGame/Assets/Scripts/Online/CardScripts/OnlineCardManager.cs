@@ -636,7 +636,7 @@ public class OnlineCardManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Calls the RPC that changes player's number of gold cards
+    /// Calls the RPC that changes player's number of normal cards
     /// 
     /// Author: Andrea SD
     /// </summary>
