@@ -1541,7 +1541,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
 
-        if (enoughPieces)
+        if (PlacedPieces == _fertilizerPiecesToPlace)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
