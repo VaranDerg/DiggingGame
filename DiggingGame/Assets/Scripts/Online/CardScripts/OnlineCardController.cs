@@ -616,11 +616,23 @@ public class OnlineCardController : MonoBehaviourPun
         FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
     }
 
+    /// <summary>
+    /// Calls the RPC that sets a card body to isActive
+    /// 
+    /// AUthor: Andrea SD
+    /// </summary>
+    /// <param name="isActive"> is the card body is active or not </param>
     public void CallCardActive(bool isActive)
     {
         photonView.RPC("SetCardActive", RpcTarget.All, isActive);
     }
 
+    /// <summary>
+    /// Sets a card body to isActive
+    /// 
+    /// AUthor: Andrea SD
+    /// </summary>
+    /// <param name="isActive"> is the card body is active or not </param>
     [PunRPC]
     public void SetCardActive(bool isActive)
     {
