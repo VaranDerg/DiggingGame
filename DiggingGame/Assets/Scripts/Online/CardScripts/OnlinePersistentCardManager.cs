@@ -418,6 +418,9 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         GameObject card = PhotonView.Find(cardID).transform.parent.gameObject;
         card.SetActive(true);
 
+        //Plays an Animation.
+        card.GetComponentInChildren<Animator>().Play("CardPersistent");
+
         switch (player)
         {
             case 1:
@@ -445,7 +448,8 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         card.transform.position = new Vector3(xPos, yPos, zPos);
 
         //Plays an Animation.
-        card.GetComponentInChildren<Animator>().Play("CardPersistent");
+        //card.GetComponentInChildren<Animator>().Play("CardPersistent");
+
         //Says the Card is persistent and gives its current HandPosition.
         if (player == 1)
         {
