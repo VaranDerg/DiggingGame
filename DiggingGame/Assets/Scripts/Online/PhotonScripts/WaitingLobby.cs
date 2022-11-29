@@ -73,7 +73,7 @@ public class WaitingLobby : MonoBehaviourPun
     public void CallStartGame()
     {
         // photonView.RPC("StartGame", RpcTarget.All);
-        PhotonNetwork.AutomaticallySyncScene = true;
+       // PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.LoadLevel(_joinScene);
     }
 
