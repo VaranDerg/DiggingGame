@@ -134,7 +134,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         }
         else
         {
-            UpdateCurrentActionText("Player 1 is going first!");
+            UpdateCurrentActionText("The Moles are going first!");
             _factory.sprite = _meerkatFactory;
             _burrow.sprite = _meerkatBurrow;
             _mine.sprite = _meerkatMine;

@@ -64,3 +64,6 @@ TagManager:
   - name: Cards
     uniqueID: 4001677777
     locked: 0
+  - name: WaitingArea
+    uniqueID: 3860699175
+    locked: 0
