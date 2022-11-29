@@ -44,6 +44,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     /// <summary>
     /// Automatically called when a room is joined.
     /// Loads scene associated with the room
+    /// 
     /// Author: Andrea SD
     /// </summary>
     public override void OnJoinedRoom()

@@ -47,4 +47,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Old/ActionsTestMultiplayer.unity
     guid: f51bdac60ab4cf046824c40dc0f8e741
+  - enabled: 1
+    path: Assets/Scenes/Online/WaitingLobby.unity
+    guid: 2f09c2e5bf68834488f309159ef5ebd7
   m_configObjects: {}
