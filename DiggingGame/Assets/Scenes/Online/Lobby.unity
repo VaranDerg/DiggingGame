@@ -543,7 +543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _createInput: {fileID: 1508638092}
   _joinInput: {fileID: 224404380}
-  _joinScene: OnlineScene
+  _joinScene: WaitingLobby
 --- !u!4 &266599580
 Transform:
   m_ObjectHideFlags: 0
