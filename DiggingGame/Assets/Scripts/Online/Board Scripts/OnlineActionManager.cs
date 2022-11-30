@@ -114,7 +114,7 @@ public class OnlineActionManager : MonoBehaviourPun
         }
         else
         {
-            _gcm.StartTurnButton.gameObject.SetActive(false);
+            _gcm.StartTurnButton.interactable = false;
             _gcm.UpdateCurrentActionText("Waiting on a second player...");
         }
     }
@@ -1054,6 +1054,7 @@ public class OnlineActionManager : MonoBehaviourPun
     [PunRPC]
     public void EnableStartButton()
     {
+        _gcm.StartTurnButton.interactable = true;
         _gcm.StartTurnButton.gameObject.SetActive(true);
     }
 
