@@ -114,6 +114,7 @@ public class OnlineActionManager : MonoBehaviourPun
         }
         else
         {
+            EnableStartButton();
             _gcm.StartTurnButton.interactable = false;
             _gcm.UpdateCurrentActionText("Waiting on a second player...");
         }
