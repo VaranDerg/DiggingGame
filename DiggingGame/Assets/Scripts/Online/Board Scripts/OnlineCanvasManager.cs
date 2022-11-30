@@ -517,6 +517,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
         _curGoldCoroutine = StartCoroutine(_am.UseGold(_am.CurrentPlayer));
 
+        _cm.CallPileText();
         UpdateTextBothPlayers();
     }
 

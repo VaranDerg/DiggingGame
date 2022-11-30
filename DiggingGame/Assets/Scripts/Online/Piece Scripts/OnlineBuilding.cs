@@ -761,6 +761,8 @@ public class OnlineBuilding : MonoBehaviourPun
     public void SetPieceSuit(string suit)
     {
         SuitOfPiece = suit;
+
+        Debug.Log("SuitOfPiece: " + suit);
     }
 
     /// <summary>
@@ -784,6 +786,8 @@ public class OnlineBuilding : MonoBehaviourPun
     public void SetPlayerOwning(int player)
     {
         PlayerOwning = player;
+
+        Debug.Log("Player Owning: " + PlayerOwning);
     }
 
     #endregion

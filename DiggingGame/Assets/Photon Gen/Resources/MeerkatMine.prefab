@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 656098499243989359}
   m_Layer: 7
   m_Name: MeerkatMine
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

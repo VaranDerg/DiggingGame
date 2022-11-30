@@ -791,7 +791,7 @@ public class PieceController : MonoBehaviour
             }
         }
 
-        InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
+        InstantiateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
         CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
@@ -802,7 +802,7 @@ public class PieceController : MonoBehaviour
     /// Places a building. Returns false and removes it if it's adjacent to another building. Also will spawn another Pawn if 3rd building is placed.
     /// </summary>
     /// <param name="building">"Factory" "Burrow" or "Mine"</param>
-    private bool InstantitateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
+    private bool InstantiateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
     {
         GameObject building = null;
         if(_am.CurrentPlayer == 1)

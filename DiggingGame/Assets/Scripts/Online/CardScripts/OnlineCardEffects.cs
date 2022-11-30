@@ -1638,7 +1638,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             pawn.GetComponent<OnlinePlayerPawn>().MudslideMove = true;
-            pawn.GetComponent<Animator>().Play("TempPawnBlink");
+            pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().WaitingAnimName);
         }
 
         _bm.SetActiveCollider("Pawn");
