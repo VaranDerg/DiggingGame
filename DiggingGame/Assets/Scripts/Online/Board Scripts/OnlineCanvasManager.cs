@@ -301,17 +301,14 @@ public class OnlineCanvasManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Calls every "UpdateText"-type function except the Current Action Text one.
+    /// Calls the RPC that updates every "UpdateText"-type function except the Current Action Text one.
     /// 
     /// Edited: Andrea SD - online use
     /// Updates the opponents text across the network
     /// </summary>
     public void UpdateTextBothPlayers()
     {
-        UpdateCurrentPlayerText();
-        UpdateBuildingText();
-        CallUpdateActiveTextONL();
-        CallOpponentText();
+        photonView.RPC("UpdateTextONL", RpcTarget.All);
     }
 
     /// <summary>
@@ -817,6 +814,20 @@ public class OnlineCanvasManager : MonoBehaviourPun
     public void DrawStartingCards()
     {
         _am.DrawStartingCards();
+    }
+
+    /// <summary>
+    /// Updates every "UpdateText"-type function except the Current Action Text one.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void UpdateTextONL()
+    {
+        UpdateCurrentPlayerText();
+        UpdateBuildingText();
+        CallUpdateActiveTextONL();
+        CallOpponentText();
     }
 
     #endregion
