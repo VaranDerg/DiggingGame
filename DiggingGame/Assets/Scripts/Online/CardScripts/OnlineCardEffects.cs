@@ -456,6 +456,22 @@ public class OnlineCardEffects : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Checks if every button is disabled & will stop thief actions just in case.
+    /// </summary>
+    /// <returns></returns>
+    public bool StealButtonsDisabled()
+    {
+        if (!_grassThiefButton.activeSelf && !_dirtThiefButton.activeSelf && !_stoneThiefButton.activeSelf && !_goldThiefButton.activeSelf)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Claims Pieces with Holy Idol.
     /// 
     /// Edited: Andrea SD - modified the supply pile and collection update lines
@@ -697,11 +713,11 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             damageToTake = 0;
         }
-        else if (diceRoll == 2 || diceRoll == 3)
+        else if (diceRoll != 6)
         {
             damageToTake = 1;
         }
-        else if (diceRoll == 4)
+        else if (diceRoll == 6)
         {
             damageToTake = 2;
         }
@@ -970,6 +986,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         //Lawnmower digs pieces adjacent to your Pawns. Has very similar logic to EXCAVATOR, EROSION, and GOLDEN SHOVEL.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
+        }
+
         //Generates a list of every Pawn.
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
@@ -1013,9 +1035,9 @@ public class OnlineCardEffects : MonoBehaviourPun
         if (openPieces >= _lawnmowerPiecesToDig)
         {
             //Dig only as many of those as the card is able to dig.
-            _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1023,9 +1045,9 @@ public class OnlineCardEffects : MonoBehaviourPun
         else
         {
             //Dig every piece shown. This could be 0!
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1178,7 +1200,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         if (_am.CurrentPlayer == 1)
         {
             //Disables certain buttons if no more pieces of those remain.
-            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) && (_am.P2RefinedPile[3] != 0 && _remainingPiecesToSteal == 1))
+            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 //Disables the Gold button if players choose other pieces. You must take Gold OR 2 other Pieces.
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
@@ -1207,7 +1229,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         //Identical for Player 2.
         else
         {
-            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) && (_am.P1RefinedPile[3] != 0 && _remainingPiecesToSteal == 1))
+            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
                 {
@@ -1385,7 +1407,14 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Excavator()
     {
+        //View Lawnmower for more detail of this code.
         _gcm.DisableListObjects();
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
+        }
 
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
@@ -1396,7 +1425,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two && piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Seven)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Seven)
                     {
                         continue;
                     }
@@ -1422,17 +1451,17 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (openPieces >= _excavatorPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != _excavatorPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1991,6 +2020,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         //For more information, view Lawnmower.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
+        }
+
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
@@ -2026,20 +2061,22 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (openPieces >= _erosionPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
+
+        DugPieces = 0;
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
