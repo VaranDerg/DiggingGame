@@ -414,8 +414,10 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _backButton.SetActive(true);
         if (PhotonNetwork.IsMasterClient)
         {
+            _cm.CallAddCards();
             _am.DrawStartingCards();
             CallStartingCards();
+
         }
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
