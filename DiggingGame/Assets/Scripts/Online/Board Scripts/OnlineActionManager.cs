@@ -82,6 +82,8 @@ public class OnlineActionManager : MonoBehaviourPun
     private OnlinePersistentCardManager _pcm;
     private OnlineAudioPlayer _ap;
 
+    private int _numPlayers;
+
     /// <summary>
     /// Calls PrepareStartingValues and assigns partner scripts.
     /// </summary>
@@ -96,7 +98,7 @@ public class OnlineActionManager : MonoBehaviourPun
         _ap = FindObjectOfType<OnlineAudioPlayer>();
         PrepareStartingValues();
     }
-    
+
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
@@ -104,15 +106,23 @@ public class OnlineActionManager : MonoBehaviourPun
     {
         // Board is disbled for player 2 at the start and enabled for player 1
         // Andrea SD
-        if (PhotonNetwork.IsMasterClient)
+        if (!PhotonNetwork.IsMasterClient)
         {
-            EnableStartButton();
-        }
-        else
-        {
+            CallStartButton();
             CurrentPlayer = 1;
             DisableBoard();
         }
+        else
+        {
+           // CurrentPlayer = 1;
+            //DisableBoard();
+        }
+    }
+
+    [PunRPC]
+    public void AddPlayer()
+    {
+        _numPlayers++;
     }
 
     /// <summary>
