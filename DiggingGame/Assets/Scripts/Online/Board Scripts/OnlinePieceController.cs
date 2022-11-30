@@ -685,8 +685,12 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 pieceSuit = "Stone";
             }
+            else if (ObjState == GameState.Five)
+            {
+                pieceSuit = "Gold";
+            }
 
-                int buildingIndex = 0;
+            int buildingIndex = 0;
             if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Factory")
             {
                 buildingIndex = 0;
@@ -697,17 +701,21 @@ public class OnlinePieceController : MonoBehaviourPun
             }
             else if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Mine")
             {
-                if (pieceSuit == "Grass")
+                if(pieceSuit == "Grass")
                 {
                     buildingIndex = 2;
                 }
-                else if (pieceSuit == "Dirt")
+                else if(pieceSuit == "Dirt")
                 {
                     buildingIndex = 3;
                 }
-                else if (pieceSuit == "Stone")
+                else if(pieceSuit == "Stone")
                 {
                     buildingIndex = 4;
+                }
+                else if(pieceSuit == "Gold")
+                {
+                    buildingIndex = 5;
                 }
             }
 
