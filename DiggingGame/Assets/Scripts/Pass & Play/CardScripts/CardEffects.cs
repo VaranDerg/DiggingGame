@@ -793,11 +793,11 @@ public class CardEffects : MonoBehaviour
         {
             damageToTake = 0;
         }
-        else if(diceRoll == 2 || diceRoll == 3)
+        else if(diceRoll != 6)
         {
             damageToTake = 1;
         }
-        else if(diceRoll == 4)
+        else if(diceRoll == 6)
         {
             damageToTake = 2;
         }
