@@ -121,6 +121,8 @@ MonoBehaviour:
   - AddPlayer
   - PCardCount
   - PersistentDiscardONL
+  - SetDiscardedPC
+  - SetCanBeDiscarded
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
