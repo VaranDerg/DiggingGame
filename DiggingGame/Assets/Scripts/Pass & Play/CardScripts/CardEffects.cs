@@ -1060,6 +1060,12 @@ public class CardEffects : MonoBehaviour
         //Lawnmower digs pieces adjacent to your Pawns. Has very similar logic to EXCAVATOR, EROSION, and GOLDEN SHOVEL.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            piece.GetComponent<PieceController>().FromActivatedCard = false;
+        }
+
         //Generates a list of every Pawn.
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
@@ -1103,9 +1109,9 @@ public class CardEffects : MonoBehaviour
         if(openPieces >= _lawnmowerPiecesToDig)
         {
             //Dig only as many of those as the card is able to dig.
-            _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1113,9 +1119,9 @@ public class CardEffects : MonoBehaviour
         else
         {
             //Dig every piece shown. This could be 0!
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1477,6 +1483,12 @@ public class CardEffects : MonoBehaviour
         //View Lawnmower for more detail of this code.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            piece.GetComponent<PieceController>().FromActivatedCard = false;
+        }
+
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
@@ -1512,17 +1524,17 @@ public class CardEffects : MonoBehaviour
 
         if (openPieces >= _excavatorPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != _excavatorPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -2087,6 +2099,12 @@ public class CardEffects : MonoBehaviour
         //For more information, view Lawnmower.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            piece.GetComponent<PieceController>().FromActivatedCard = false;
+        }
+
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
@@ -2122,17 +2140,17 @@ public class CardEffects : MonoBehaviour
 
         if (openPieces >= _erosionPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != _erosionPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
