@@ -114,8 +114,7 @@ public class OnlineActionManager : MonoBehaviourPun
         }
         else
         {
-           // CurrentPlayer = 1;
-            //DisableBoard();
+            _gcm.StartTurnButton.SetActive(false);
         }
     }
 
