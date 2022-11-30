@@ -476,6 +476,22 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks if every button is disabled & will stop thief actions just in case.
+    /// </summary>
+    /// <returns></returns>
+    public bool StealButtonsDisabled()
+    {
+        if(!_grassThiefButton.activeSelf && !_dirtThiefButton.activeSelf && !_stoneThiefButton.activeSelf && !_goldThiefButton.activeSelf)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Claims Pieces with Holy Idol.
     /// </summary>
     /// <param name="suit">"Grass" "Dirt" "Stone" "Gold" or "Point"</param>
@@ -1253,7 +1269,7 @@ public class CardEffects : MonoBehaviour
         if (_am.CurrentPlayer == 1)
         {
             //Disables certain buttons if no more pieces of those remain.
-            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) && (_am.P2RefinedPile[3] != 0 && _remainingPiecesToSteal == 1))
+            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 //Disables the Gold button if players choose other pieces. You must take Gold OR 2 other Pieces.
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
@@ -1282,7 +1298,7 @@ public class CardEffects : MonoBehaviour
         //Identical for Player 2.
         else
         {
-            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) && (_am.P1RefinedPile[3] != 0 && _remainingPiecesToSteal == 1))
+            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
                 {
@@ -1389,7 +1405,7 @@ public class CardEffects : MonoBehaviour
 
         if (_am.CurrentPlayer == 1)
         {
-            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) && (_am.P2RefinedPile[3] != 0 && _remainingPiecesToSteal == 1))
+            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
                 {
@@ -1416,7 +1432,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) && (_am.P1RefinedPile[3] != 0 && _remainingPiecesToSteal == 1))
+            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
                 {
