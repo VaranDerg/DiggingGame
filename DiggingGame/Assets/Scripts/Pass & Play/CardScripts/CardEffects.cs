@@ -1486,7 +1486,7 @@ public class CardEffects : MonoBehaviour
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Seven)
+                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Seven)
                     {
                         continue;
                     }
