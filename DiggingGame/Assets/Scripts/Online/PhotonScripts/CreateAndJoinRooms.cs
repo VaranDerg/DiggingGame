@@ -25,6 +25,9 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     // Text that displays if name is invalid
     [SerializeField] TextMeshProUGUI _invalidName;
 
+    /// <summary>
+    /// Sets the invalid text to invis at the start
+    /// </summary>
     public void Start()
     {
         _invalidName.gameObject.SetActive(false);
@@ -37,6 +40,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     /// </summary>
     public void CreateRoom()
     {
+        // Room name must be between 3 and 15 characters
         if (_createInput.text.Length >= 3 && _createInput.text.Length <= 15)
         {
             _invalidName.gameObject.SetActive(false);
