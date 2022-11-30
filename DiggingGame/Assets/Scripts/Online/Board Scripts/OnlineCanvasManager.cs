@@ -38,6 +38,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     [Header("Text and Object References, Always Active View")]
     [SerializeField] private TextMeshProUGUI _activePlayerText;
+    [SerializeField] TextMeshProUGUI _pauseRoomText;
     [SerializeField] private TextMeshProUGUI _activeRoundText;
     [SerializeField] private TextMeshProUGUI _currentActionText;
     [SerializeField] private TextMeshProUGUI _showHideOpponentInfoText;
@@ -113,6 +114,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void Start()
     {
+        _pauseRoomText.text = "Room Name: " + PhotonNetwork.CurrentRoom.Name;
+
         DisableListObjects();
 
         _opponentInfoZone.SetActive(false);

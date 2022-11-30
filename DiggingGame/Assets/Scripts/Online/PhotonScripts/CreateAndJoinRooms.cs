@@ -22,6 +22,14 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     // Scene players will load into when a room is joined
     [SerializeField] string _joinScene;
 
+    // Text that displays if name is invalid
+    [SerializeField] TextMeshProUGUI _invalidName;
+
+    public void Start()
+    {
+        _invalidName.gameObject.SetActive(false);
+    }
+
     /// <summary>
     /// Creates a new room with the name of whatever was in the input field.
     /// When players create a room, they also automatically join it.
@@ -29,7 +37,15 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     /// </summary>
     public void CreateRoom()
     {
-        PhotonNetwork.CreateRoom(_createInput.text);
+        if (_createInput.text.Length >= 3 && _createInput.text.Length <= 15)
+        {
+            _invalidName.gameObject.SetActive(false);
+            PhotonNetwork.CreateRoom(_createInput.text);
+        }
+        else
+        {
+            _invalidName.gameObject.SetActive(true);
+        }
     }
 
     /// <summary>
