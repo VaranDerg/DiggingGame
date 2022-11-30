@@ -1626,7 +1626,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
 
         //Starts PCM's PersistentCardDiscardProcess, as per Overgrowth's wording.
-        CallPCDiscardProcess();    
+        StartCoroutine(_pcm.PersistentCardDiscardProcess());
     }
 
     /// <summary>

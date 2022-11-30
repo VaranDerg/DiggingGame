@@ -450,8 +450,8 @@ public class OnlineCardController : MonoBehaviourPun
             CanBeDiscarded = false;
             CanBeActivated = false;
             MadePersistentP1 = false;
-            MadePersistentP2 = false;           
-            _pcm.DiscardedPersistentCard = true;
+            MadePersistentP2 = false;
+            CallDiscardedPC(true);
             CallDiscardRPC();
 
             _cm.CallPileText();
@@ -469,6 +469,17 @@ public class OnlineCardController : MonoBehaviourPun
         yield return new WaitForSeconds(_discardAnimWaitTime);
         _gettingDiscarded = false;
         CallCardActive(false);
+    }
+
+    public void CallDiscardedPC(bool value)
+    {
+        photonView.RPC("SetDiscardedPC", RpcTarget.Others, value);
+    }
+
+    [PunRPC]
+    public void SetDiscardedPC(bool value)
+    {
+        _pcm.DiscardedPersistentCard = value;
     }
 
     /// <summary>

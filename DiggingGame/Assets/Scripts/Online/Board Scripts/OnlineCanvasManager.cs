@@ -133,6 +133,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _bothFactoryImage.sprite = _moleFactory;
             _bothBurrowImage.sprite = _moleBurrow;
             _bothMineImage.sprite = _moleMine;
+            _activePlayerText.text = _am.PlayerOneName + "s";
         }
         else
         {
@@ -143,6 +144,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _bothFactoryImage.sprite = _meerkatFactory;
             _bothBurrowImage.sprite = _meerkatBurrow;
             _bothMineImage.sprite = _meerkatMine;
+            _activePlayerText.text = _am.PlayerTwoName + "s";
         }
     }
 
@@ -264,7 +266,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     private void UpdateAlwaysActiveText()
     {
-        _activePlayerText.text = _am.CurrentPlayerName + "s";
         _activeRoundText.text = "Round " + _am.CurrentRound;
         _supplyPieces[0].text = _am.SupplyPile[0].ToString();
         _supplyPieces[1].text = _am.SupplyPile[1].ToString();

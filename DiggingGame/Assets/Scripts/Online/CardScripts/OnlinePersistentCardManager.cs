@@ -234,9 +234,11 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         if (_am.CurrentPlayer == 1)
         {
             //Puts every card into that state.
-            _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
+            _gcm.UpdateCurrentActionText("Waiting for " + _am.PlayerTwoName + " to discard a card.");
 
-            CallPersistentCardDiscard();
+            _gcm.UpdateOnlineActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
+
+            CallPersistentCardDiscard(2);
 
             //Stops if no cards.
             if (_pCardCount == 0)
@@ -255,10 +257,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
             }
 
             //Returns every other card to its original state.
-            for (int i = 0; i < P2PersistentCards.Count; i++)
-            {
-                P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
-            }
+            CallCanBeDiscarded(2);
 
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
@@ -267,15 +266,16 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         //Identical for player 2.
         else
         {
-            int pCardCount = 0;
-            _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s, Discard a Persistent Card.");
-            for (int i = 0; i < P1PersistentCards.Count; i++)
-            {
-                P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
-                pCardCount++;
-            }
+            _pCardCount = 0;
 
-            if (pCardCount == 0)
+            //Puts every card into that state.
+            _gcm.UpdateCurrentActionText("Waiting for " + _am.PlayerTwoName + " to discard a card.");
+
+            _gcm.UpdateOnlineActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
+
+            CallPersistentCardDiscard(1);
+
+            if (_pCardCount == 0)
             {
                 _bm.DisableAllBoardInteractions();
                 _gcm.Back();
@@ -289,41 +289,12 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 yield return null;
             }
 
-            for (int i = 0; i < P1PersistentCards.Count; i++)
-            {
-                P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
-            }
+            CallCanBeDiscarded(1);
 
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
             CallGoBack();
         }
-    }
-
-    public void CallPersistentCardDiscard()
-    {
-        photonView.RPC("PersistentCardDiscard", RpcTarget.Others);
-    }
-
-    [PunRPC]
-    public void PersistentDiscardONL()
-    {
-        for (int i = 0; i < P2PersistentCards.Count; i++)
-        {
-            P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
-            CallPCardCount(1);
-        }
-    }
-
-    public void CallPCardCount(int amount)
-    {
-        photonView.RPC("PCardCount", RpcTarget.All, amount);
-    }
-
-    [PunRPC]
-    public void PCardCount(int amount)
-    {
-        _pCardCount += amount;
     }
 
     /// <summary>
@@ -483,6 +454,106 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         {
             card.GetComponentInChildren<OnlineCardController>().MadePersistentP2 = true;
         }
+    }
+
+
+    /// <summary>
+    /// Has the other player discard a card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    public void CallPersistentCardDiscard(int player)
+    {
+        photonView.RPC("PersistentCardDiscard", RpcTarget.Others, player);
+    }
+
+    /// <summary>
+    /// Has the other player discard a card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    [PunRPC]
+    public void PersistentDiscardONL(int player)
+    {
+        switch (player)
+        {
+            case 1:
+                for (int i = 0; i < P1PersistentCards.Count; i++)
+                {
+                    P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
+                    _pCardCount++;
+                }
+                break;
+            case 2:
+                for (int i = 0; i < P2PersistentCards.Count; i++)
+                {
+                    P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
+                    CallPCardCount(1);
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC thats sets the other players cards to non-discardable
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    public void CallCanBeDiscarded(int player)
+    {
+        photonView.RPC("SetCanBeDiscarded", RpcTarget.Others, player);
+    }
+
+    /// <summary>
+    /// Thats sets the other players cards to non-discardable
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="player"> 1 or 2 </param>
+    [PunRPC]
+    public void SetCanBeDiscarded(int player)
+    {
+        switch (player)
+        {
+            case 1:
+                for (int i = 0; i < P1PersistentCards.Count; i++)
+                {
+                    P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
+                }
+                break;
+            case 2:
+                for (int i = 0; i < P2PersistentCards.Count; i++)
+                {
+                    P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Calls the RPC that modifies the PCardCount
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"> how much PCardCount is changed by </param>
+    public void CallPCardCount(int amount)
+    {
+        photonView.RPC("PCardCount", RpcTarget.All, amount);
+    }
+
+    /// <summary>
+    /// Modifies the PCardCount
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="amount"> how much PCardCount is changed by </param>
+    [PunRPC]
+    public void PCardCount(int amount)
+    {
+        _pCardCount += amount;
     }
 
     #endregion
