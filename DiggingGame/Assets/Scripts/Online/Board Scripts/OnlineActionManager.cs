@@ -12,8 +12,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 
 public class OnlineActionManager : MonoBehaviourPun
 {
@@ -803,6 +801,7 @@ public class OnlineActionManager : MonoBehaviourPun
             P2Score += amount;
             StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Score", amount);
         }
+        
     }
 
     /// <summary>

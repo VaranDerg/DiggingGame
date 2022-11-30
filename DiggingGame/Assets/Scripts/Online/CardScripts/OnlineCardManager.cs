@@ -62,6 +62,7 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             CallAddCards();
         }
+       // AddCards();
         PrepareOpenHandSlots();
         CallPileText();
     }
