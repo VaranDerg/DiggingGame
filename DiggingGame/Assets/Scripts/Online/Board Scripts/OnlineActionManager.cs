@@ -111,6 +111,7 @@ public class OnlineActionManager : MonoBehaviourPun
             CallStartButton();
             CurrentPlayer = 1;
             DisableBoard();
+            _gcm.CallOpponentActionText(CurrentPlayerName + "s start your turn!");
         }
         else
         {
