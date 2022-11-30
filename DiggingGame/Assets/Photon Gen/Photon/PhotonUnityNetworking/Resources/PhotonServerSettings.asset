@@ -118,6 +118,7 @@ MonoBehaviour:
   - SetCardActive
   - EnableText
   - StartGame
+  - AddPlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

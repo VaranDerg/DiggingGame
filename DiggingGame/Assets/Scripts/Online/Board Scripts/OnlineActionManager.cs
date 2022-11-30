@@ -114,7 +114,8 @@ public class OnlineActionManager : MonoBehaviourPun
         }
         else
         {
-            _gcm.StartTurnButton.SetActive(false);
+            _gcm.StartTurnButton.gameObject.SetActive(false);
+            _gcm.UpdateCurrentActionText("Waiting on a second player...");
         }
     }
 
@@ -725,7 +726,8 @@ public class OnlineActionManager : MonoBehaviourPun
     /// </summary>
     public void DisableStartButton()
     {
-        _gcm.StartTurnButton.SetActive(false);
+        //_gcm.StartTurnButton.SetActive(false);
+        _gcm.StartTurnButton.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -1052,7 +1054,7 @@ public class OnlineActionManager : MonoBehaviourPun
     [PunRPC]
     public void EnableStartButton()
     {
-        _gcm.StartTurnButton.SetActive(true);
+        _gcm.StartTurnButton.gameObject.SetActive(true);
     }
 
     /// <summary>

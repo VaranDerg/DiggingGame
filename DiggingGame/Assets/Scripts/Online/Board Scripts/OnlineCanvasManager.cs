@@ -22,7 +22,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     //Edit: Andrea SD - Added online functionality
 
     [Header("Text and Object References, Current Player View")]
-    public GameObject StartTurnButton;
+    public Button StartTurnButton;
     [SerializeField] private GameObject _firstZone;
     [SerializeField] private GameObject _thenZone;
     [SerializeField] private GameObject _finallyZone;
@@ -83,7 +83,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     private void AddObjectsToList()
     {
-        _allObjects.Add(StartTurnButton);
+        _allObjects.Add(StartTurnButton.gameObject);
         _allObjects.Add(_firstZone);
         _allObjects.Add(_thenZone);
         _allObjects.Add(_finallyZone);
@@ -115,7 +115,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         DisableListObjects();
 
-        StartTurnButton.SetActive(true);
         _opponentInfoZone.SetActive(false);
 
         UpdateTextBothPlayers();
