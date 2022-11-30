@@ -808,7 +808,7 @@ public class OnlinePieceController : MonoBehaviourPun
             }
         }
 
-        InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
+        InstantiateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
         CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
@@ -821,7 +821,7 @@ public class OnlinePieceController : MonoBehaviourPun
     /// Edited: Andrea SD - modified for online useS
     /// </summary>
     /// <param name="building">"Factory" "Burrow" or "Mine"</param>
-    private bool InstantitateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
+    private bool InstantiateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
     {
         GameObject building = null;
         if (_am.CurrentPlayer == 1)
@@ -991,7 +991,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             }
 
-            SetBuildingPlayer(_am.CurrentPlayer, true);     // ASD
+            CallBuildingPlayer(_am.CurrentPlayer, true);    // ASD
 
             return true;
         }

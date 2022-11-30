@@ -44,6 +44,8 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     private OnlineCardManager _cm;
     private OnlineAudioPlayer _ap;
 
+    [SerializeField] int _pCardCount = 0;
+
     /// <summary>
     /// Assigns Partner scripts.
     /// </summary>
@@ -232,16 +234,12 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         if (_am.CurrentPlayer == 1)
         {
             //Puts every card into that state.
-            int pCardCount = 0;
             _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
-            for (int i = 0; i < P2PersistentCards.Count; i++)
-            {
-                P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
-                pCardCount++;
-            }
+
+            CallPersistentCardDiscard();
 
             //Stops if no cards.
-            if (pCardCount == 0)
+            if (_pCardCount == 0)
             {
                 _bm.DisableAllBoardInteractions();
                 _gcm.Back();
@@ -300,6 +298,32 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
             _bm.DisableAllBoardInteractions();
             CallGoBack();
         }
+    }
+
+    public void CallPersistentCardDiscard()
+    {
+        photonView.RPC("PersistentCardDiscard", RpcTarget.Others);
+    }
+
+    [PunRPC]
+    public void PersistentDiscardONL()
+    {
+        for (int i = 0; i < P2PersistentCards.Count; i++)
+        {
+            P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
+            CallPCardCount(1);
+        }
+    }
+
+    public void CallPCardCount(int amount)
+    {
+        photonView.RPC("PCardCount", RpcTarget.All, amount);
+    }
+
+    [PunRPC]
+    public void PCardCount(int amount)
+    {
+        _pCardCount += amount;
     }
 
     /// <summary>
