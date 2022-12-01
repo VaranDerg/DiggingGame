@@ -68,7 +68,7 @@ public class StatManager : MonoBehaviourPun
     {
         if (_isOnline)
         {
-            CallIncreaseStat(player, statName, amount);
+            CallModifyValue(player, statName, amount);
         }
         else
         {
@@ -219,9 +219,9 @@ public class StatManager : MonoBehaviourPun
     /// <param name="statName"> stat being modified </param>
     /// <param name="player"> 1 or 2 </param>
     /// <param name="amount"> amount the stat is being increased by </param>
-    private void CallIncreaseStat(int player, string statName, int amount)
+    private void CallModifyValue(int player, string statName, int amount)
     {
-        photonView.RPC("IncreaseStatisticONL", RpcTarget.All, statName, player, amount);
+        photonView.RPC("ModifyValueONL", RpcTarget.All, statName, player, amount);
     }
 
     /// <summary>
@@ -233,7 +233,7 @@ public class StatManager : MonoBehaviourPun
     /// <param name="player"> 1 or 2 </param>
     /// <param name="amount"> amount the stat is being increased by </param>
     [PunRPC]
-    public void IncreaseStatisticONL(int player, string statName, int amount)
+    public void ModifyValueONL(int player, string statName, int amount)
     {
         ModifyValue(player, statName, amount);
     }
