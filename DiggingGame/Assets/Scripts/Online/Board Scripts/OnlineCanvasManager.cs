@@ -408,6 +408,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void StartTurn()
     {
+        StatManager.s_Instance.CallIsOnline(true);
         DisableListObjects();
 
         _firstZone.SetActive(true);
