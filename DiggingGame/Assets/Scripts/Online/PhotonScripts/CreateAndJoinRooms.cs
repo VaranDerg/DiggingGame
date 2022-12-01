@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
+using Photon.Realtime;
 
 public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 {
@@ -51,6 +52,8 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
             _invalidName.gameObject.SetActive(true);
         }
     }
+
+
 
     /// <summary>
     /// Joins room using the text in the input field

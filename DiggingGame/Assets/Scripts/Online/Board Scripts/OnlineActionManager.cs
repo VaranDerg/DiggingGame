@@ -80,8 +80,6 @@ public class OnlineActionManager : MonoBehaviourPun
     private OnlinePersistentCardManager _pcm;
     private OnlineAudioPlayer _ap;
 
-    private int _numPlayers;
-
     /// <summary>
     /// Calls PrepareStartingValues and assigns partner scripts.
     /// </summary>
@@ -110,6 +108,7 @@ public class OnlineActionManager : MonoBehaviourPun
             CurrentPlayer = 1;
             DisableBoard();
             _gcm.CallOpponentActionText(CurrentPlayerName + "s, start your turn!");
+            PhotonNetwork.CurrentRoom.IsOpen = false;
         }
         else
         {
@@ -117,12 +116,6 @@ public class OnlineActionManager : MonoBehaviourPun
             _gcm.StartTurnButton.interactable = false;
             _gcm.UpdateCurrentActionText("Waiting on a second player...");
         }
-    }
-
-    [PunRPC]
-    public void AddPlayer()
-    {
-        _numPlayers++;
     }
 
     /// <summary>
