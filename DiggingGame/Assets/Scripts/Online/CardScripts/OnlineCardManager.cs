@@ -58,18 +58,12 @@ public class OnlineCardManager : MonoBehaviourPun
     private void Start()
     {
         // Called by master client only
-        /*if (PhotonNetwork.IsMasterClient)    // Andrea SD
-        {
-            CallAddCards();
-        }*/
-        foreach (GameObject uCard in GameObject.FindGameObjectsWithTag("Card"))
-        {
-            uCard.SetActive(false);
-        }
-        foreach (GameObject gCard in GameObject.FindGameObjectsWithTag("GoldCard"))
-        {
-            gCard.SetActive(false);
-        }
+        //if (PhotonNetwork.IsMasterClient)    // Andrea SD
+        // {
+        // CallAddCards();
+        //  }
+        AddCards();
+
         PrepareOpenHandSlots();
         CallPileText();
     }
@@ -632,7 +626,6 @@ public class OnlineCardManager : MonoBehaviourPun
     public void AddCardToHand(int player, int cardID)
     {
         GameObject card = PhotonView.Find(cardID).gameObject;
-        Debug.LogError("card id: " + cardID);
         switch (player)
         {
             case 1:
