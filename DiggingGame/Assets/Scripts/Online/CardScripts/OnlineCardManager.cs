@@ -61,8 +61,15 @@ public class OnlineCardManager : MonoBehaviourPun
         //if (PhotonNetwork.IsMasterClient)    // Andrea SD
         // {
         // CallAddCards();
-        //  }
-        AddCards();
+        // }
+        foreach (GameObject uCard in GameObject.FindGameObjectsWithTag("Card"))
+        {
+            uCard.transform.position = new Vector2(0f, 20f);     
+        }
+        foreach (GameObject gCard in GameObject.FindGameObjectsWithTag("GoldCard"))
+        {
+            gCard.transform.position = new Vector2(0f, 20f);
+        }
 
         PrepareOpenHandSlots();
         CallPileText();
