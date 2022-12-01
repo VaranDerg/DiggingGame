@@ -483,17 +483,6 @@ public class OnlineCardController : MonoBehaviourPun
         CallCardActive(false);
     }
 
-    public void CallDiscardedPC(bool value)
-    {
-        photonView.RPC("SetDiscardedPC", RpcTarget.Others, value);
-    }
-
-    [PunRPC]
-    public void SetDiscardedPC(bool value)
-    {
-        _pcm.DiscardedPersistentCard = value;
-    }
-
     /// <summary>
     /// Maximizes a card for easier view.
     /// </summary>
@@ -660,6 +649,17 @@ public class OnlineCardController : MonoBehaviourPun
     public void SetCardActive(bool isActive)
     {
         _cardBody.SetActive(isActive);
+    }
+
+    public void CallDiscardedPC(bool value)
+    {
+        photonView.RPC("SetDiscardedPC", RpcTarget.Others, value);
+    }
+
+    [PunRPC]
+    public void SetDiscardedPC(bool value)
+    {
+        _pcm.DiscardedPersistentCard = value;
     }
 
     #endregion

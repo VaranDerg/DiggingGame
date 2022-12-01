@@ -719,7 +719,6 @@ public class OnlineActionManager : MonoBehaviourPun
     /// </summary>
     public void DisableStartButton()
     {
-        //_gcm.StartTurnButton.SetActive(false);
         _gcm.StartTurnButton.gameObject.SetActive(false);
     }
 

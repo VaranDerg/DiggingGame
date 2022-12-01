@@ -397,17 +397,19 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void StartTurn()
     {
-        StatManager.s_Instance.CallIsOnline(true);
+        if (_am.CurrentRound <= 1)
+        {
+            StatManager.s_Instance.CallIsOnline(true);
+        }
         DisableListObjects();
 
         _firstZone.SetActive(true);
         _backButton.SetActive(true);
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && _am.CurrentRound == 1)
         {
             _cm.CallAddCards();
             _am.DrawStartingCards();
             CallStartingCards();
-
         }
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);

@@ -123,7 +123,6 @@ public class OnlineCardManager : MonoBehaviourPun
             {
                 if (P1OpenHandPositions[i] == true)
                 {
-
                     _ap.PlaySound("DrawCard", false);
 
                     randomCard.SetActive(true);
@@ -432,61 +431,7 @@ public class OnlineCardManager : MonoBehaviourPun
         }
     }
 
-    /// <summary>
-    /// Shows cards based on the player.
-    /// </summary>
-    /// <param name="player">1 or 2</param>
-    public IEnumerator HideCards(int player)
-    {
-        if (player == 1)
-        {
-            for (int i = 0; i < P1Hand.Count; i++)
-            {
-                P1Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
-                _ap.PlaySound("DrawCard", false);
-                yield return new WaitForSeconds(_cardShowHideTime);
-                P1Hand[i].SetActive(false);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < P2Hand.Count; i++)
-            {
-                P2Hand[i].GetComponentInChildren<Animator>().Play("CardHide");
-                _ap.PlaySound("DrawCard", false);
-                yield return new WaitForSeconds(_cardShowHideTime);
-                P2Hand[i].SetActive(false);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Hides cards based on the player.
-    /// </summary>
-    /// <param name="player">1 or 2</param>
-    public IEnumerator ShowCards(int player)
-    {
-        if (player == 1)
-        {
-            for (int i = 0; i < P1Hand.Count; i++)
-            {
-                P1Hand[i].SetActive(true);
-                P1Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
-                _ap.PlaySound("DrawCard", false);
-                yield return new WaitForSeconds(_cardShowHideTime);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < P2Hand.Count; i++)
-            {
-                P2Hand[i].SetActive(true);
-                P2Hand[i].GetComponentInChildren<Animator>().Play("CardDraw");
-                _ap.PlaySound("DrawCard", false);
-                yield return new WaitForSeconds(_cardShowHideTime);
-            }
-        }
-    }
+ 
 
     #region RPC Functions
 
