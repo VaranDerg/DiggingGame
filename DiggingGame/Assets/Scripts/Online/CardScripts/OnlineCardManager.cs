@@ -62,15 +62,6 @@ public class OnlineCardManager : MonoBehaviourPun
         // {
         // CallAddCards();
         // }
-        foreach (GameObject uCard in GameObject.FindGameObjectsWithTag("Card"))
-        {
-            uCard.transform.position = new Vector2(0f, 20f);     
-        }
-        foreach (GameObject gCard in GameObject.FindGameObjectsWithTag("GoldCard"))
-        {
-            gCard.transform.position = new Vector2(0f, 20f);
-        }
-
         PrepareOpenHandSlots();
         CallPileText();
     }
@@ -601,12 +592,14 @@ public class OnlineCardManager : MonoBehaviourPun
             _uDeck.Add(uCard);
             uCard.SetActive(false);
             uCardAmount++;
+            uCard.GetComponent<OnlineCardController>().EnableReadyToMove();
         }
         foreach (GameObject gCard in GameObject.FindGameObjectsWithTag("GoldCard"))
         {
             _gDeck.Add(gCard);
             gCard.SetActive(false);
             gCardAmount++;
+            gCard.GetComponent<OnlineCardController>().EnableReadyToMove();
         }
     }
 

@@ -60,6 +60,7 @@ public class OnlineCardController : MonoBehaviourPun
     private bool _gettingDiscarded;
 
     [SerializeField] private int _cardID;  //ASD
+    [HideInInspector] bool readyToMove = false;
 
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
@@ -117,7 +118,7 @@ public class OnlineCardController : MonoBehaviourPun
             return;
         }
 
-        if (transform.position != NextPos)
+        if (transform.position != NextPos && readyToMove)
         {
             transform.position = Vector3.MoveTowards(transform.position, NextPos, _cardSlideSpeed * Time.deltaTime);
         }
@@ -232,6 +233,17 @@ public class OnlineCardController : MonoBehaviourPun
                 ActivateCard();
             }
         }
+    }
+
+
+    /// <summary>
+    /// Allows the card to move
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void EnableReadyToMove()
+    {
+        readyToMove = true;
     }
 
     /// <summary>
