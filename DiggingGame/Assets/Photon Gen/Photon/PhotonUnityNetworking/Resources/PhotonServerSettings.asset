@@ -124,6 +124,8 @@ MonoBehaviour:
   - SetDiscardedPC
   - SetCanBeDiscarded
   - UpdateTextONL
+  - IncreaseStatisticONL
+  - SetIsOnline
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

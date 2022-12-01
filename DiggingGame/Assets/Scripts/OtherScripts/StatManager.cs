@@ -10,8 +10,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class StatManager : MonoBehaviour
+public class StatManager : MonoBehaviourPun
 {
     /// <summary>
     /// Nondestructable object.
@@ -19,7 +20,7 @@ public class StatManager : MonoBehaviour
     public static StatManager s_Instance;
     private void Awake()
     {
-        if(s_Instance == null)
+        if (s_Instance == null)
         {
             s_Instance = this;
         }
@@ -38,6 +39,8 @@ public class StatManager : MonoBehaviour
     public static int s_P1RetrieveTotal, s_P2RetrieveTotal; //Amount of Gold Retrieved
     public static int s_P1DigTotal, s_P2DigTotal; //Amount of Dug Pieces
     public static int s_P1CardSpendTotal, s_P2CardSpendTotal; //Amount of Discarded Cards
+
+    private bool _isOnline = false;
 
     /// <summary>
     /// Sets every Stat to 0.
@@ -63,6 +66,7 @@ public class StatManager : MonoBehaviour
         s_P2DigTotal = 0;
         s_P1CardSpendTotal = 0;
         s_P2CardSpendTotal = 0;
+        _isOnline = false;
     }
 
     /// <summary>
@@ -73,15 +77,142 @@ public class StatManager : MonoBehaviour
     /// <param name="statName">Round, Score, Building, Activation, Destroy, Steal, Place, Retrieve, Dig, Card</param>
     public void IncreaseStatistic(int player, string statName, int amount)
     {
-        if(statName == "Round")
+        if (_isOnline)
+        {
+            CallIncreaseStat(player, statName, amount);
+        }
+        else
+        {
+            if (statName == "Round")
+            {
+                s_RoundAmount += amount;
+                return;
+            }
+
+            if (player == 1)
+            {
+                switch (statName)
+                {
+                    case "Score":
+                        s_P1FinalScore += amount;
+                        break;
+                    case "Building":
+                        s_P1BuildingTotal += amount;
+                        break;
+                    case "Activation":
+                        s_P1ActivationTotal += amount;
+                        break;
+                    case "Destroy":
+                        s_P1DestroyTotal += amount;
+                        break;
+                    case "Steal":
+                        s_P1StealTotal += amount;
+                        break;
+                    case "Place":
+                        s_P1PlaceTotal += amount;
+                        break;
+                    case "Retrieve":
+                        s_P1RetrieveTotal += amount;
+                        break;
+                    case "Dig":
+                        s_P1DigTotal += amount;
+                        break;
+                    case "Card":
+                        s_P1CardSpendTotal += amount;
+                        break;
+                }
+            }
+            else
+            {
+                switch (statName)
+                {
+                    case "Score":
+                        s_P2FinalScore += amount;
+                        break;
+                    case "Building":
+                        s_P2BuildingTotal += amount;
+                        break;
+                    case "Activation":
+                        s_P2ActivationTotal += amount;
+                        break;
+                    case "Destroy":
+                        s_P2DestroyTotal += amount;
+                        break;
+                    case "Steal":
+                        s_P2StealTotal += amount;
+                        break;
+                    case "Place":
+                        s_P2PlaceTotal += amount;
+                        break;
+                    case "Retrieve":
+                        s_P2RetrieveTotal += amount;
+                        break;
+                    case "Dig":
+                        s_P2DigTotal += amount;
+                        break;
+                    case "Card":
+                        s_P2CardSpendTotal += amount;
+                        break;
+                }
+            }
+        }
+    }
+
+    #region RPC Functions
+    
+    /// <summary>
+    /// Calls the RPC that sets the _isOnline variable
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="state"> T/F if online or not </param>
+    public void CallIsOnline(bool state)
+    {
+        photonView.RPC("SetIsOnline", RpcTarget.All, state);
+    }
+
+    /// <summary>
+    /// Sets isOnline to true
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="state"> T/F if online or not </param>
+    [PunRPC]
+    public void SetIsOnline(bool state)  {  _isOnline = state; }
+
+    /// <summary>
+    /// Calls the RPC that increases statistics
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="statName"> stat being modified </param>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> amount the stat is being increased by </param>
+    private void CallIncreaseStat(int player, string statName, int amount)
+    {
+        photonView.RPC("IncreaseStatisticONL", RpcTarget.All, statName, player, amount);
+    }
+
+    /// <summary>
+    /// Increases statistics
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="statName"> stat being modified </param>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> amount the stat is being increased by </param>
+    [PunRPC]
+    public void IncreaseStatisticONL(int player, string statName, int amount)
+    {
+        if (statName == "Round")
         {
             s_RoundAmount += amount;
             return;
         }
 
-        if(player == 1)
+        if (player == 1)
         {
-            switch(statName)
+            switch (statName)
             {
                 case "Score":
                     s_P1FinalScore += amount;
@@ -146,4 +277,6 @@ public class StatManager : MonoBehaviour
             }
         }
     }
+
+    #endregion
 }

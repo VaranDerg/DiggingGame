@@ -73,6 +73,7 @@ public class MainMenu : MonoBehaviour
     public void PlayOnline()
     {
         FindObjectOfType<SceneLoader>().LoadScene("Loading");
+        StatManager.s_Instance.CallIsOnline(true);
     }
 
     /// <summary>
