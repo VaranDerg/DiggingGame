@@ -590,16 +590,16 @@ public class OnlineCardManager : MonoBehaviourPun
         foreach (GameObject uCard in GameObject.FindGameObjectsWithTag("Card"))
         {
             _uDeck.Add(uCard);
+            uCard.GetComponent<OnlineCardController>().EnableReadyToMove();
             uCard.SetActive(false);
             uCardAmount++;
-            uCard.GetComponent<OnlineCardController>().EnableReadyToMove();
         }
         foreach (GameObject gCard in GameObject.FindGameObjectsWithTag("GoldCard"))
         {
             _gDeck.Add(gCard);
+            gCard.GetComponent<OnlineCardController>().EnableReadyToMove();
             gCard.SetActive(false);
             gCardAmount++;
-            gCard.GetComponent<OnlineCardController>().EnableReadyToMove();
         }
     }
 
