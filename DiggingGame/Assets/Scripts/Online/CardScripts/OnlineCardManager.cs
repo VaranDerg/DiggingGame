@@ -62,6 +62,14 @@ public class OnlineCardManager : MonoBehaviourPun
         {
             CallAddCards();
         }*/
+        foreach (GameObject uCard in GameObject.FindGameObjectsWithTag("Card"))
+        {
+            uCard.SetActive(false);
+        }
+        foreach (GameObject gCard in GameObject.FindGameObjectsWithTag("GoldCard"))
+        {
+            gCard.SetActive(false);
+        }
         PrepareOpenHandSlots();
         CallPileText();
     }
