@@ -221,7 +221,7 @@ public class StatManager : MonoBehaviourPun
     /// <param name="amount"> amount the stat is being increased by </param>
     private void CallModifyValue(int player, string statName, int amount)
     {
-        photonView.RPC("ModifyValueONL", RpcTarget.All, statName, player, amount);
+        photonView.RPC("ModifyValueONL", RpcTarget.All, player, statName, amount);
     }
 
     /// <summary>
