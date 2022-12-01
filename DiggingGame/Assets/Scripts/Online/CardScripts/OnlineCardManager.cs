@@ -719,9 +719,12 @@ public class OnlineCardManager : MonoBehaviourPun
     [PunRPC]
     public void UpdatePileText()
     {
-        _uDeckSizeText.text = _uDeck.Count.ToString();
-        _gDeckSizeText.text = _gDeck.Count.ToString();
-        _dPileSizeText.text = DPile.Count.ToString();
+        if (_am.CurrentRound != 1)
+        {
+            _uDeckSizeText.text = _uDeck.Count.ToString();
+            _gDeckSizeText.text = _gDeck.Count.ToString();
+            _dPileSizeText.text = DPile.Count.ToString();
+        }
     }
 
     #endregion
