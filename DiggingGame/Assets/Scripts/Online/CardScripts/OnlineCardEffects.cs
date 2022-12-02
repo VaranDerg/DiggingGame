@@ -80,7 +80,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     [SerializeField] private int _earthquakeDamages;
     [SerializeField] private int _thunderstormDamages;
     [SerializeField] private int _tornadoDamages;
-    public int DamageDieSides = 6;
+    public int DamageDieSides;
     [HideInInspector] public Building SelectedBuilding;
     [HideInInspector] public int AllowedDamages;
     [SerializeField] private int _allowedRepairs;
