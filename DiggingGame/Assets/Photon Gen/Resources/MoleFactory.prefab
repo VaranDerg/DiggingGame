@@ -126,8 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7769766f861db3f4d8ba34ae155ace2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damagedSprite: {fileID: 0}
-  _defaultSprite: {fileID: 0}
+  _damagedSprite: {fileID: 21300000, guid: aa5b121d65e92154caec56545a366ff1, type: 3}
+  _defaultSprite: {fileID: 21300000, guid: 654b58a5c91adb34abd5ad416c5d76fd, type: 3}
   _showDiceFaceTimes: 35
   BuildingHealth: 2
   PlayerOwning: 0
