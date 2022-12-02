@@ -329,7 +329,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                     dontHighlight = true;
                 }
 
-                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four || piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Five)
+                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
                 {
                     dontHighlight = true;
                 }

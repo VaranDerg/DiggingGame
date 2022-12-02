@@ -465,7 +465,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     /// <param name="player"> 1 or 2 </param>
     public void CallPersistentCardDiscard(int player)
     {
-        photonView.RPC("PersistentCardDiscard", RpcTarget.Others, player);
+        photonView.RPC("PersistentDiscardONL", RpcTarget.Others, player);
     }
 
     /// <summary>
