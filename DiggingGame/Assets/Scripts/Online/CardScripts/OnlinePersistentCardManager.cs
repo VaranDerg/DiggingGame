@@ -233,10 +233,8 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         //This is for use with Flood. It sets Cards into a discardable state. 
         if (_am.CurrentPlayer == 1)
         {
+            _pCardCount = 0;
             //Puts every card into that state.
-            _gcm.UpdateCurrentActionText("Waiting for " + _am.PlayerTwoName + " to discard a card.");
-
-            _gcm.UpdateOnlineActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
 
             CallPersistentCardDiscard(2);
 
@@ -247,6 +245,10 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 _gcm.Back();
                 yield break;
             }
+
+            _gcm.UpdateCurrentActionText("Waiting for " + _am.PlayerTwoName + " to discard a card.");
+
+            _gcm.UpdateOnlineActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
 
             DiscardedPersistentCard = false;
 
