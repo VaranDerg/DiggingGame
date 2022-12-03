@@ -154,6 +154,7 @@ public class OnlineActionManager : MonoBehaviourPun
             {
                 StartCoroutine(_cm.DrawCard("Universal"));
             }
+            _cm.CallPileText();
         }
     }
 

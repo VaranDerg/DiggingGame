@@ -22,8 +22,8 @@ public class OnlineCardManager : MonoBehaviourPun
     [SerializeField] private TextMeshProUGUI _uDeckSizeText, _gDeckSizeText, _dPileSizeText;
 
     [Header("Other")]
-    private List<GameObject> _uDeck = new List<GameObject>();
-    private List<GameObject> _gDeck = new List<GameObject>();
+    [SerializeField] List<GameObject> _uDeck = new List<GameObject>();
+    [SerializeField] private List<GameObject> _gDeck = new List<GameObject>();
     [HideInInspector] public List<GameObject> DPile = new List<GameObject>();
     [HideInInspector] public List<GameObject> P1Hand = new List<GameObject>();
     [HideInInspector] public List<GameObject> P2Hand = new List<GameObject>();
@@ -63,7 +63,6 @@ public class OnlineCardManager : MonoBehaviourPun
         // CallAddCards();
         // }
         PrepareOpenHandSlots();
-        CallPileText();
     }
 
     /// <summary>
@@ -519,7 +518,7 @@ public class OnlineCardManager : MonoBehaviourPun
     /// </summary>
     public void CallAddCards()
     {
-        photonView.RPC("AddCards", RpcTarget.AllBuffered);
+        photonView.RPC("AddCards", RpcTarget.All);
     }
 
     /// <summary>
@@ -664,12 +663,9 @@ public class OnlineCardManager : MonoBehaviourPun
     [PunRPC]
     public void UpdatePileText()
     {
-        if (_am.CurrentRound != 1)
-        {
-            _uDeckSizeText.text = _uDeck.Count.ToString();
-            _gDeckSizeText.text = _gDeck.Count.ToString();
-            _dPileSizeText.text = DPile.Count.ToString();
-        }
+         _uDeckSizeText.text = _uDeck.Count.ToString();
+         _gDeckSizeText.text = _gDeck.Count.ToString();
+         _dPileSizeText.text = DPile.Count.ToString();
     }
 
     #endregion
