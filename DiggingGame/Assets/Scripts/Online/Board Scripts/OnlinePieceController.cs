@@ -545,7 +545,6 @@ public class OnlinePieceController : MonoBehaviourPun
     /// <returns></returns>
     public IEnumerator MovePawnTo(int pawnID, int pieceID, bool goBack)
     {
-        Debug.Log(pawnID);
         GameObject pawn = GameObject.Find(PhotonView.Find(pawnID).gameObject.name);
         pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().CallSetHasPawn(false);     // ASD
         destinationPiece = gameObject;
@@ -882,6 +881,10 @@ public class OnlinePieceController : MonoBehaviourPun
             // for all clients
             GameObject thisBuilding = PhotonNetwork.Instantiate(building.name,
                 _buildingSlot.position, Quaternion.identity);   //Andrea SD
+            // Sets the building to its piece's slot
+            thisBuilding.transform.SetParent(_buildingSlot);
+            int buildingID = thisBuilding.GetPhotonView().ViewID;
+            CallSetSlot(buildingID);
 
             StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Building", 1);
 
@@ -1010,6 +1013,31 @@ public class OnlinePieceController : MonoBehaviourPun
             _gcm.UpdateCurrentActionText("Cannot place " + building.name + " adjacent to another building.");
             return false;
         }
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets the building parent to the piece building slot
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="buildingID"> the building being spawned </param>
+    public void CallSetSlot(int buildingID)
+    {
+        photonView.RPC("SetParentSlot", RpcTarget.All, buildingID);
+    }
+
+    /// <summary>
+    /// Sets the building parent to the piece building slot
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="buildingID"> the building being spawned </param>
+    [PunRPC]
+    public void SetParentSlot(int buildingID)
+    {
+        Debug.Log(buildingID);
+        GameObject thisBuilding = GameObject.Find(PhotonView.Find(buildingID).gameObject.name);     //ASD
+        thisBuilding.transform.SetParent(_buildingSlot);
     }
 
     /// <summary>

@@ -149,6 +149,7 @@ MonoBehaviour:
   _removalAnimWaitTime: 0.25
   _damageSmokePS: {fileID: 5355069875398092458, guid: 46b6bd99dcd0d1746b5dc1142e0cd82f, type: 3}
   _damageClickPS: {fileID: 895168346198343857, guid: 7b589d9ea2682254db29b9d78911bf53, type: 3}
+  BuildingID: 0
 --- !u!95 &2824289325923641187
 Animator:
   serializedVersion: 4

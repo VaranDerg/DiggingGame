@@ -67,6 +67,7 @@ public class OnlineBuilding : MonoBehaviourPun
     private OnlineBoardManager _bm;
     private OnlineAudioPlayer _ap;
 
+
     /// <summary>
     /// Assigns partner scripts.
     /// </summary>
@@ -88,7 +89,7 @@ public class OnlineBuilding : MonoBehaviourPun
     {
         _damageDice = GameObject.FindGameObjectWithTag("Damage Dice");
         FindBoardPieces();
-        CallCurrentAnim();     
+        CallCurrentAnim();  
     }
 
     /// <summary>
@@ -761,8 +762,6 @@ public class OnlineBuilding : MonoBehaviourPun
     public void SetPieceSuit(string suit)
     {
         SuitOfPiece = suit;
-
-        Debug.Log("SuitOfPiece: " + suit);
     }
 
     /// <summary>
@@ -786,8 +785,6 @@ public class OnlineBuilding : MonoBehaviourPun
     public void SetPlayerOwning(int player)
     {
         PlayerOwning = player;
-
-        Debug.Log("Player Owning: " + PlayerOwning);
     }
 
     #endregion

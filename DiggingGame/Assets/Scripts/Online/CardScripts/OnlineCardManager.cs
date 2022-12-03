@@ -22,8 +22,8 @@ public class OnlineCardManager : MonoBehaviourPun
     [SerializeField] private TextMeshProUGUI _uDeckSizeText, _gDeckSizeText, _dPileSizeText;
 
     [Header("Other")]
-    [SerializeField] List<GameObject> _uDeck = new List<GameObject>();
-    [SerializeField] private List<GameObject> _gDeck = new List<GameObject>();
+    List<GameObject> _uDeck = new List<GameObject>();
+    private List<GameObject> _gDeck = new List<GameObject>();
     [HideInInspector] public List<GameObject> DPile = new List<GameObject>();
     [HideInInspector] public List<GameObject> P1Hand = new List<GameObject>();
     [HideInInspector] public List<GameObject> P2Hand = new List<GameObject>();
