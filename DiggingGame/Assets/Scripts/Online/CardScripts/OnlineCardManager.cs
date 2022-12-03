@@ -152,7 +152,6 @@ public class OnlineCardManager : MonoBehaviourPun
                     randomCard.SetActive(true);
                     randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
                     yield return new WaitForSeconds(_cardShowHideTime);
-                    CallPileText();
                     yield break;
                 }
             }
@@ -192,12 +191,12 @@ public class OnlineCardManager : MonoBehaviourPun
                         randomCard.SetActive(true);
                         randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
                         yield return new WaitForSeconds(_cardShowHideTime);
-                        CallPileText();
                         yield break;
                     }
                 }
             }
         }
+        CallPileText();
     }
 
     /// <summary>
