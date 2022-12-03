@@ -87,8 +87,6 @@ public class CardManager : MonoBehaviour
         {
             P2OpenHandPositions[i] = true;
         }
-
-        //Debug.Log("Prepared " + P1OpenHandPositions.Length + " hand positions for Player 1 and " + P2OpenHandPositions.Length + " hand positions for Player 2.");
     }
 
     /// <summary>

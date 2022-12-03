@@ -391,6 +391,7 @@ public class OnlineCardController : MonoBehaviourPun
                 FindObjectOfType<SFXManager>().PlayButtonSound();
             }
         }
+        _gcm.UpdateTextBothPlayers();
     }
 
     /// <summary>
@@ -414,7 +415,6 @@ public class OnlineCardController : MonoBehaviourPun
                 }
                 _cm.P1OpenHandPositions[HandPosition] = true;
                 CallRemoveCard(1);   // Andrea SD
-                GetComponentInChildren<OnlineCardController>().CallRemoveCard(1);
             }
             else if (HeldByPlayer == 2)
             {
@@ -651,11 +651,23 @@ public class OnlineCardController : MonoBehaviourPun
         _cardBody.SetActive(isActive);
     }
 
+    /// <summary>
+    /// Calls the RPC that sets the value of PCM Discarded Persistent Card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="value"> T if discarded </param>
     public void CallDiscardedPC(bool value)
     {
         photonView.RPC("SetDiscardedPC", RpcTarget.Others, value);
     }
 
+    /// <summary>
+    /// Sets the value of PCM Discarded Persistent Card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="value"> T if discarded </param>
     [PunRPC]
     public void SetDiscardedPC(bool value)
     {

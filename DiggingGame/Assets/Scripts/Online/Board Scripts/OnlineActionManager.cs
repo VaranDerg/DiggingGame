@@ -793,7 +793,7 @@ public class OnlineActionManager : MonoBehaviourPun
             P2Score += amount;
             StatManager.s_Instance.IncreaseStatistic(CurrentPlayer, "Score", amount);
         }
-        
+        _gcm.UpdateTextBothPlayers();
     }
 
     /// <summary>

@@ -185,7 +185,8 @@ public class PieceController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Start of Shovel Code
-            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && (ObjState == GameState.Two || ObjState == GameState.Seven) && !_am.ShovelUsed)
+            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && (ObjState == GameState.Two || 
+                ObjState == GameState.Seven) && !_am.ShovelUsed)
             {
                 FindObjectOfType<SFXManager>().Play("DigDirt");
                 SetPieceState(3);

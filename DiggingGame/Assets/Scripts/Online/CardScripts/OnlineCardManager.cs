@@ -93,7 +93,7 @@ public class OnlineCardManager : MonoBehaviourPun
     /// <param name="deck">"Universal" or "Gold"</param>
     public IEnumerator DrawCard(string deck)
     {
-        if (_uDeck.Count == 0)
+        if (_uDeck.Count <= 0)
         {
             CallShuffleDiscard();
         }
@@ -188,12 +188,13 @@ public class OnlineCardManager : MonoBehaviourPun
                     else
                     {
                         CallNormalCards(2, 1);
+                        
+                        randomCard.SetActive(true);
+                        randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
+                        yield return new WaitForSeconds(_cardShowHideTime);
+                        CallPileText();
+                        yield break;
                     }
-                    randomCard.SetActive(true);
-                    randomCard.GetComponentInChildren<Animator>().Play("CardDraw");
-                    yield return new WaitForSeconds(_cardShowHideTime);
-                    CallPileText();
-                    yield break;
                 }
             }
         }
@@ -473,8 +474,8 @@ public class OnlineCardManager : MonoBehaviourPun
             }
 
             DPile.Clear();
-            CallPileText();
         }
+        CallPileText();
     }
 
     /// <summary>

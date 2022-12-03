@@ -202,7 +202,8 @@ public class OnlinePieceController : MonoBehaviourPun
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Start of Shovel Code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && (ObjState == GameState.Two || ObjState == GameState.Seven) && !_am.ShovelUsed)
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && (ObjState == GameState.Two 
+                || ObjState == GameState.Seven) && !_am.ShovelUsed)
             {
                 _ap.PlaySound("DigDirt", true); // ASD
                 CallPieceState(3);
@@ -264,12 +265,13 @@ public class OnlinePieceController : MonoBehaviourPun
                         _ap.PlaySound("DigGrass", true);
                         break;
                     case GameState.Six:
-                        CallPieceState(1);
+                        CallPieceState(2);
                         CallRemovalAnim(1);
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
                         _ap.PlaySound("DigGrass", true);
                         break;
                     case GameState.Two:
+                    case GameState.Seven:
                         CallPieceState(3);
                         CallRemovalAnim(2);
                         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
@@ -291,7 +293,7 @@ public class OnlinePieceController : MonoBehaviourPun
                             _am.CollectTile(_am.CurrentPlayer, "Stone", true);
                             _ap.PlaySound("DigStone", true);
                         }
-              
+             
                         break;
                     case GameState.Eight:
                         CallPieceState(4);
@@ -526,7 +528,7 @@ public class OnlinePieceController : MonoBehaviourPun
                     _ap.PlaySound("DigDirt", true);
                     break;
                 case GameState.Four:
-                    CallPieceState(3);
+                    CallPieceState(8);
                     CallRemovalAnim(3);
                     _am.PlaceTile("Stone");
                     _ap.PlaySound("DigStone", true);
