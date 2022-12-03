@@ -485,12 +485,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (_am.SupplyPile[0] >= PiecesToClaim)
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 0, PiecesToClaim);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 0, PiecesToClaim);
                 _am.ModifySupplyPile(0, -PiecesToClaim);
             }
             else
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 0, _am.SupplyPile[0]);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 0, _am.SupplyPile[0]);
                 _am.ModifySupplyPile(0, -_am.SupplyPile[0]);
             }
         }
@@ -498,12 +498,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (_am.SupplyPile[1] >= PiecesToClaim)
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 1, PiecesToClaim);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 1, PiecesToClaim);
                 _am.ModifySupplyPile(1, -PiecesToClaim);
             }
             else
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 1, _am.SupplyPile[1]);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 1, _am.SupplyPile[1]);
                 _am.ModifySupplyPile(1, -_am.SupplyPile[1]);
             }
         }
@@ -511,12 +511,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (_am.SupplyPile[2] >= PiecesToClaim)
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 2, PiecesToClaim);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 2, PiecesToClaim);
                 _am.ModifySupplyPile(2, -PiecesToClaim);
             }
             else
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 2, _am.SupplyPile[2]);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 2, _am.SupplyPile[2]);
                 _am.ModifySupplyPile(2, -_am.SupplyPile[2]);
             }
         }
@@ -524,12 +524,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (_am.SupplyPile[3] >= GoldToClaim)
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 3, PiecesToClaim);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 3, PiecesToClaim);
                 _am.ModifySupplyPile(3, -PiecesToClaim);
             }
             else
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 3, _am.SupplyPile[2]);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 3, _am.SupplyPile[2]);
                 _am.ModifySupplyPile(3, -_am.SupplyPile[3]);
             }
         }

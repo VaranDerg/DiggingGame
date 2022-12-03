@@ -504,12 +504,12 @@ public class CardEffects : MonoBehaviour
             {
                 if(_am.SupplyPile[0] >= PiecesToClaim)
                 {
-                    _am.P1CollectedPile[0] += PiecesToClaim;
+                    _am.P1RefinedPile[0] += PiecesToClaim;
                     _am.SupplyPile[0] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P1CollectedPile[0] += _am.SupplyPile[0];
+                    _am.P1RefinedPile[0] += _am.SupplyPile[0];
                     _am.SupplyPile[0] -= _am.SupplyPile[0];
                 }
             }
@@ -517,12 +517,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[1] >= PiecesToClaim)
                 {
-                    _am.P1CollectedPile[1] += PiecesToClaim;
+                    _am.P1RefinedPile[1] += PiecesToClaim;
                     _am.SupplyPile[1] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P1CollectedPile[1] += _am.SupplyPile[1];
+                    _am.P1RefinedPile[1] += _am.SupplyPile[1];
                     _am.SupplyPile[1] -= _am.SupplyPile[1];
                 }
             }
@@ -530,12 +530,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[2] >= PiecesToClaim)
                 {
-                    _am.P1CollectedPile[2] += PiecesToClaim;
+                    _am.P1RefinedPile[2] += PiecesToClaim;
                     _am.SupplyPile[2] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P1CollectedPile[2] += _am.SupplyPile[2];
+                    _am.P1RefinedPile[2] += _am.SupplyPile[2];
                     _am.SupplyPile[2] -= _am.SupplyPile[2];
                 }
             }
@@ -543,12 +543,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[3] >= GoldToClaim)
                 {
-                    _am.P1CollectedPile[3] += GoldToClaim;
+                    _am.P1RefinedPile[3] += GoldToClaim;
                     _am.SupplyPile[3] -= GoldToClaim;
                 }
                 else
                 {
-                    _am.P1CollectedPile[3] += _am.SupplyPile[3];
+                    _am.P1RefinedPile[3] += _am.SupplyPile[3];
                     _am.SupplyPile[3] -= _am.SupplyPile[3];
                 }
             }
@@ -563,12 +563,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[0] >= PiecesToClaim)
                 {
-                    _am.P2CollectedPile[0] += PiecesToClaim;
+                    _am.P2RefinedPile[0] += PiecesToClaim;
                     _am.SupplyPile[0] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P2CollectedPile[0] += _am.SupplyPile[0];
+                    _am.P2RefinedPile[0] += _am.SupplyPile[0];
                     _am.SupplyPile[0] -= _am.SupplyPile[0];
                 }
             }
@@ -576,12 +576,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[1] >= PiecesToClaim)
                 {
-                    _am.P2CollectedPile[1] += PiecesToClaim;
+                    _am.P2RefinedPile[1] += PiecesToClaim;
                     _am.SupplyPile[1] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P2CollectedPile[1] += _am.SupplyPile[1];
+                    _am.P2RefinedPile[1] += _am.SupplyPile[1];
                     _am.SupplyPile[1] -= _am.SupplyPile[1];
                 }
             }
@@ -589,12 +589,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[2] >= PiecesToClaim)
                 {
-                    _am.P2CollectedPile[2] += PiecesToClaim;
+                    _am.P2RefinedPile[2] += PiecesToClaim;
                     _am.SupplyPile[2] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P2CollectedPile[2] += _am.SupplyPile[2];
+                    _am.P2RefinedPile[2] += _am.SupplyPile[2];
                     _am.SupplyPile[2] -= _am.SupplyPile[2];
                 }
             }
@@ -602,12 +602,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[3] >= GoldToClaim)
                 {
-                    _am.P2CollectedPile[3] += GoldToClaim;
+                    _am.P2RefinedPile[3] += GoldToClaim;
                     _am.SupplyPile[3] -= GoldToClaim;
                 }
                 else
                 {
-                    _am.P2CollectedPile[3] += _am.SupplyPile[3];
+                    _am.P2RefinedPile[3] += _am.SupplyPile[3];
                     _am.SupplyPile[3] -= _am.SupplyPile[3];
                 }
             }

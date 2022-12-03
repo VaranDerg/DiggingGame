@@ -3458,7 +3458,7 @@ MonoBehaviour:
   ThiefPiecesToTake: 2
   DirtyThiefPiecesToTake: 2
   MasterThiefPiecesToTake: 4
-  PiecesToClaim: 4
+  PiecesToClaim: 3
   GoldToClaim: 1
 --- !u!114 &1005441710
 MonoBehaviour:
@@ -4874,6 +4874,14 @@ PrefabInstance:
       propertyPath: _pauseScreen
       value: 
       objectReference: {fileID: 1076605771}
+    - target: {fileID: 5038604317731314626, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1016162034}
+    - target: {fileID: 5038604317731314626, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BugReport
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1773380380033186550, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2806bd7c89d8aa24a83160bd6ccc6f15, type: 3}

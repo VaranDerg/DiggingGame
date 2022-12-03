@@ -68,6 +68,7 @@ public class PauseGame : MonoBehaviour
     public void Menu()
     {
         Resume();
+        _pauseScreen.SetActive(true);
         StatManager.s_Instance.ResetStatistics();
         FindObjectOfType<SceneLoader>().LoadScene("MainMenu");
         PhotonNetwork.Disconnect();
@@ -88,5 +89,13 @@ public class PauseGame : MonoBehaviour
     public void Rules()
     {
         Application.OpenURL("https://docs.google.com/document/d/1xR1zlYT4rUaA1m1OP98pxGKvQqt7RB9VVsK4ikHUPjc/edit?usp=sharing");
+    }
+
+    /// <summary>
+    /// Opens the Bug Report form.
+    /// </summary>
+    public void BugReport()
+    {
+        Application.OpenURL("https://forms.gle/heCizWF7Qhwevs8o9");
     }
 }
