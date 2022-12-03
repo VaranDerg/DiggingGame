@@ -942,12 +942,10 @@ public class OnlineActionManager : MonoBehaviourPun
         switch (function)
         {
             case 0:
-                photonView.RPC("UpdateCollected", RpcTarget.All, player,
-                    material, amount);
+                photonView.RPC("UpdateCollected", RpcTarget.All, player, material, amount);
                 break;
             case 1:
-                photonView.RPC("UpdateRefined", RpcTarget.All, player,
-                    material, amount);
+                photonView.RPC("UpdateRefined", RpcTarget.All, player, material, amount);
                 break;
         }
     }

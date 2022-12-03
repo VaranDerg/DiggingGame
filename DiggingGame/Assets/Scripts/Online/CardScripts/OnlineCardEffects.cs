@@ -2002,6 +2002,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
         CurrentDamages = 0;
 
+        AllowedDamages = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
             building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(false);

@@ -233,10 +233,16 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         //This is for use with Flood. It sets Cards into a discardable state. 
         if (_am.CurrentPlayer == 1)
         {
-            _pCardCount = 0;
             //Puts every card into that state.
-
+            _pCardCount = 0;
+            _gcm.UpdateOnlineActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
+            _gcm.UpdateCurrentActionText("Waiting for " + _am.PlayerTwoName + " to discard a card.");
             CallPersistentCardDiscard(2);
+
+            for (int i = 0; i < P2PersistentCards.Count; i++)
+            {
+                _pCardCount++;
+            }
 
             //Stops if no cards.
             if (_pCardCount == 0)
@@ -245,10 +251,6 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 _gcm.Back();
                 yield break;
             }
-
-            _gcm.UpdateCurrentActionText("Waiting for " + _am.PlayerTwoName + " to discard a card.");
-
-            _gcm.UpdateOnlineActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
 
             DiscardedPersistentCard = false;
 
@@ -263,7 +265,7 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
 
             DiscardedPersistentCard = false;
             _bm.DisableAllBoardInteractions();
-            CallGoBack();
+            _gcm.Back();
         }
         //Identical for player 2.
         else
@@ -276,6 +278,11 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
             _gcm.UpdateOnlineActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
 
             CallPersistentCardDiscard(1);
+
+            for (int i = 0; i < P2PersistentCards.Count; i++)
+            {
+                _pCardCount++;
+            }
 
             if (_pCardCount == 0)
             {
@@ -485,14 +492,12 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
                 for (int i = 0; i < P1PersistentCards.Count; i++)
                 {
                     P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
-                    _pCardCount++;
                 }
                 break;
             case 2:
                 for (int i = 0; i < P2PersistentCards.Count; i++)
                 {
                     P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = true;
-                    CallPCardCount(1);
                 }
                 break;
         }
