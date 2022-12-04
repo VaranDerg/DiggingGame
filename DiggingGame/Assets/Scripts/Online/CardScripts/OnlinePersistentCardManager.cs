@@ -235,7 +235,6 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
         {
             //Puts every card into that state.
             _pCardCount = 0;
-            _gcm.UpdateOnlineActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
             _gcm.UpdateCurrentActionText("Waiting for " + _am.PlayerTwoName + " to discard a card.");
             CallPersistentCardDiscard(2);
 
@@ -522,18 +521,20 @@ public class OnlinePersistentCardManager : MonoBehaviourPun
     /// <param name="player"> 1 or 2 </param>
     [PunRPC]
     public void SetCanBeDiscarded(int player)
-    {
+    {  
         switch (player)
         {
             case 1:
                 for (int i = 0; i < P1PersistentCards.Count; i++)
                 {
+                    _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s, Discard a Persistent Card.");
                     P1PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
                 }
                 break;
             case 2:
                 for (int i = 0; i < P2PersistentCards.Count; i++)
                 {
+                    _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s, Discard a Persistent Card.");
                     P2PersistentCards[i].GetComponentInChildren<OnlineCardController>().CanBeDiscarded = false;
                 }
                 break;

@@ -397,6 +397,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void StartTurn()
     {
+        _cm.CallPileText();
         if (_am.CurrentRound <= 1)
         {
             StatManager.s_Instance.CallIsOnline(true);
