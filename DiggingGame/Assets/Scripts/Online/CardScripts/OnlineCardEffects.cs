@@ -586,7 +586,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
 
                 //Does not highlight if the Piece isn't Dirt
-                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two && piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Seven)
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Seven)
                 {
                     continue;
                 }
@@ -618,7 +618,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                     continue;
                 }
 
-                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Three || piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Eight)
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Three && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Eight)
                 {
                     continue;
                 }

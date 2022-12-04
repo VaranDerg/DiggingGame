@@ -467,6 +467,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         IsPlacing = false;
         IsUsingWalkway = false;
         MudslideMove = false;
+        TeleportationMove = false;
         BuildingToBuild = "";
         _shownPieces.Clear();
     }

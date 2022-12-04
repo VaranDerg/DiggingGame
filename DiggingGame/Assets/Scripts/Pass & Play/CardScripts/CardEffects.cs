@@ -665,7 +665,7 @@ public class CardEffects : MonoBehaviour
                 }
 
                 //Does not highlight if the Piece isn't Dirt
-                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Seven)
+                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Seven)
                 {
                     continue;
                 }
@@ -697,7 +697,7 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Eight)
+                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Eight)
                 {
                     continue;
                 }

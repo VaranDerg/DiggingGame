@@ -466,6 +466,7 @@ public class PlayerPawn : MonoBehaviour
         IsPlacing = false;
         IsUsingWalkway = false;
         MudslideMove = false;
+        TeleportationMove = false;
         JustMoved = false;
         BuildingToBuild = "";
         _shownPieces.Clear();
