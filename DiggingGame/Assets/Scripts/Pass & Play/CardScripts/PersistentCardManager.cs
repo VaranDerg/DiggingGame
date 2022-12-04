@@ -253,7 +253,7 @@ public class PersistentCardManager : MonoBehaviour
                 yield break;
             }
 
-            _currentCoverPos = new Vector3(_defaultCoverPos.x, _defaultCoverPos.y + 3, _defaultCoverPos.z);
+            _currentCoverPos = new Vector3(_defaultCoverPos.x, _defaultCoverPos.y + 2, _defaultCoverPos.z);
 
             DiscardedPersistentCard = false;
 
