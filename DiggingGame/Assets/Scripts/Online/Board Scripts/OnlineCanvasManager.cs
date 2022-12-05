@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         GameCanvasManagerNew.cs
+// File Name :         OnlineCanvasManager.cs
 // Author :            Rudy Wolfer, Andrea SD
 // Creation Date :     October 10th, 2022
 //

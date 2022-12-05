@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         Card.cs
+// File Name :         OnlineCardEffects.cs
 // Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 18th, 2022
 //

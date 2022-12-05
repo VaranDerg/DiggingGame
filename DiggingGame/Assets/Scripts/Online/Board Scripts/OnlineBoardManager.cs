@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         AdjacencyChecker.cs
+// File Name :         OnlineBoardManager.cs
 // Author :            Rudy W.
 // Creation Date :     October 7th, 2022
 //
