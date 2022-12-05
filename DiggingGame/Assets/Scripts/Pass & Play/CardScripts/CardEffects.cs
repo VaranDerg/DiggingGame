@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         Card.cs
+// File Name :         CardEffects.cs
 // Author :            Rudy Wolfer
 // Creation Date :     October 18th, 2022
 //

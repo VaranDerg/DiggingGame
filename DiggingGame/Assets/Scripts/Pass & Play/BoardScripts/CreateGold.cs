@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         BoardController.cs
+// File Name :         CreateGold.cs
 // Author :            Andrea Swihart-DeCoster
 // Creation Date :     October 10th, 2022
 //

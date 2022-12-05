@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         BoardController.cs
+// File Name :         PieceController.cs
 // Author :            Andrea Swihart-DeCoster & Rudy W.
 // Creation Date :     October 3rd, 2022
 //

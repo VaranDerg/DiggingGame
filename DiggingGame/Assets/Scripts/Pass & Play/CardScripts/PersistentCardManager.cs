@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         PersistentCardmanager.cs
+// File Name :         PersistentCardManager.cs
 // Author :            Rudy Wolfer
 // Creation Date :     October 20th, 2022
 //

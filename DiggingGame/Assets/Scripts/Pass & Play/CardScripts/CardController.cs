@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         CardManager.cs
+// File Name :         CardController.cs
 // Author :            Rudy Wolfer
 // Creation Date :     October 10th, 2022
 //
