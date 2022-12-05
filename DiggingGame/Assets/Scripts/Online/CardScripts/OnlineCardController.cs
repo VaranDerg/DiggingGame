@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         CardManager.cs
+// File Name :         OnlineCardController.cs
 // Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 10th, 2022
 //

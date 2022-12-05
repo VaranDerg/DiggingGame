@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         PauseGame.cs
+// File Name :         OnlinePause.cs
 // Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 27th, 2022
 //

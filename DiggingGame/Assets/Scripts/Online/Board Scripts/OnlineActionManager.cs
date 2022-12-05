@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         ActionManager.cs
+// File Name :         OnlineActionManager.cs
 // Author :            Rudy Wolfer, Andrea SD
 // Creation Date :     October 3rd, 2022
 //

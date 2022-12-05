@@ -1035,7 +1035,6 @@ public class OnlinePieceController : MonoBehaviourPun
     [PunRPC]
     public void SetParentSlot(int buildingID)
     {
-        Debug.Log(buildingID);
         GameObject thisBuilding = GameObject.Find(PhotonView.Find(buildingID).gameObject.name);     //ASD
         thisBuilding.transform.SetParent(_buildingSlot);
     }
