@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         GameCanvasManagerNew.cs
+// File Name :         OnlineCanvasManager.cs
 // Author :            Rudy Wolfer, Andrea SD
 // Creation Date :     October 10th, 2022
 //
@@ -22,7 +22,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     //Edit: Andrea SD - Added online functionality
 
     [Header("Text and Object References, Current Player View")]
-    public GameObject StartTurnButton;
+    public Button StartTurnButton;
     [SerializeField] private GameObject _firstZone;
     [SerializeField] private GameObject _thenZone;
     [SerializeField] private GameObject _finallyZone;
@@ -38,6 +38,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
     [Header("Text and Object References, Always Active View")]
     [SerializeField] private TextMeshProUGUI _activePlayerText;
+    [SerializeField] TextMeshProUGUI _pauseRoomText;
     [SerializeField] private TextMeshProUGUI _activeRoundText;
     [SerializeField] private TextMeshProUGUI _currentActionText;
     [SerializeField] private TextMeshProUGUI _showHideOpponentInfoText;
@@ -83,7 +84,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     private void AddObjectsToList()
     {
-        _allObjects.Add(StartTurnButton);
+        _allObjects.Add(StartTurnButton.gameObject);
         _allObjects.Add(_firstZone);
         _allObjects.Add(_thenZone);
         _allObjects.Add(_finallyZone);
@@ -104,20 +105,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
         _ce = FindObjectOfType<OnlineCardEffects>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         AddObjectsToList();
-
-        // Author: Andrea SD
-        if(PhotonNetwork.IsMasterClient)
-        {
-            _factory.sprite = _moleFactory;
-            _burrow.sprite = _moleBurrow;
-            _mine.sprite = _moleMine;
-        }
-        else
-        {
-            _factory.sprite = _meerkatFactory;
-            _burrow.sprite = _meerkatBurrow;
-            _mine.sprite = _meerkatMine;
-        }
     }
 
     /// <summary>
@@ -127,9 +114,10 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void Start()
     {
+        _pauseRoomText.text = "Room Name: " + PhotonNetwork.CurrentRoom.Name;
+
         DisableListObjects();
 
-        StartTurnButton.SetActive(true);
         _opponentInfoZone.SetActive(false);
 
         UpdateTextBothPlayers();
@@ -145,16 +133,18 @@ public class OnlineCanvasManager : MonoBehaviourPun
             _bothFactoryImage.sprite = _moleFactory;
             _bothBurrowImage.sprite = _moleBurrow;
             _bothMineImage.sprite = _moleMine;
+            _activePlayerText.text = _am.PlayerOneName + "s";
         }
         else
         {
-            UpdateCurrentActionText("Player 1 is going first!");
+            UpdateCurrentActionText("The Moles are going first!");
             _factory.sprite = _meerkatFactory;
             _burrow.sprite = _meerkatBurrow;
             _mine.sprite = _meerkatMine;
             _bothFactoryImage.sprite = _meerkatFactory;
             _bothBurrowImage.sprite = _meerkatBurrow;
             _bothMineImage.sprite = _meerkatMine;
+            _activePlayerText.text = _am.PlayerTwoName + "s";
         }
     }
 
@@ -188,14 +178,14 @@ public class OnlineCanvasManager : MonoBehaviourPun
         if (PhotonNetwork.IsMasterClient)   //Edited: Andrea SD
         {
             _currentPlayerScore.text = "Score: " + _am.P1Score + "/" + _am.WinningScore;
-            _currentPlayerCollectedPieces[0].text = "x" + _am.P1CollectedPile[0];
-            _currentPlayerCollectedPieces[1].text = "x" + _am.P1CollectedPile[1];
-            _currentPlayerCollectedPieces[2].text = "x" + _am.P1CollectedPile[2];
-            _currentPlayerCollectedPieces[3].text = "x" + _am.P1CollectedPile[3];
-            _currentPlayerRefinedPieces[0].text = "x" + _am.P1RefinedPile[0];
-            _currentPlayerRefinedPieces[1].text = "x" + _am.P1RefinedPile[1];
-            _currentPlayerRefinedPieces[2].text = "x" + _am.P1RefinedPile[2];
-            _currentPlayerRefinedPieces[3].text = "x" + _am.P1RefinedPile[3];
+            _currentPlayerCollectedPieces[0].text = _am.P1CollectedPile[0].ToString();
+            _currentPlayerCollectedPieces[1].text = _am.P1CollectedPile[1].ToString();
+            _currentPlayerCollectedPieces[2].text = _am.P1CollectedPile[2].ToString();
+            _currentPlayerCollectedPieces[3].text = _am.P1CollectedPile[3].ToString();
+            _currentPlayerRefinedPieces[0].text = _am.P1RefinedPile[0].ToString();
+            _currentPlayerRefinedPieces[1].text = _am.P1RefinedPile[1].ToString();
+            _currentPlayerRefinedPieces[2].text = _am.P1RefinedPile[2].ToString();
+            _currentPlayerRefinedPieces[3].text = _am.P1RefinedPile[3].ToString();
             _currentPlayerRemainingBuildings[0].text = _am.P1RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
@@ -230,14 +220,14 @@ public class OnlineCanvasManager : MonoBehaviourPun
         else    // Player 2
         {
             _currentPlayerScore.text = "Score: " + _am.P2Score + "/" + _am.WinningScore;
-            _currentPlayerCollectedPieces[0].text = "x" + _am.P2CollectedPile[0];
-            _currentPlayerCollectedPieces[1].text = "x" + _am.P2CollectedPile[1];
-            _currentPlayerCollectedPieces[2].text = "x" + _am.P2CollectedPile[2];
-            _currentPlayerCollectedPieces[3].text = "x" + _am.P2CollectedPile[3];
-            _currentPlayerRefinedPieces[0].text = "x" + _am.P2RefinedPile[0];
-            _currentPlayerRefinedPieces[1].text = "x" + _am.P2RefinedPile[1];
-            _currentPlayerRefinedPieces[2].text = "x" + _am.P2RefinedPile[2];
-            _currentPlayerRefinedPieces[3].text = "x" + _am.P2RefinedPile[3];
+            _currentPlayerCollectedPieces[0].text = _am.P2CollectedPile[0].ToString();
+            _currentPlayerCollectedPieces[1].text = _am.P2CollectedPile[1].ToString();
+            _currentPlayerCollectedPieces[2].text = _am.P2CollectedPile[2].ToString();
+            _currentPlayerCollectedPieces[3].text = _am.P2CollectedPile[3].ToString();
+            _currentPlayerRefinedPieces[0].text = _am.P2RefinedPile[0].ToString();
+            _currentPlayerRefinedPieces[1].text = _am.P2RefinedPile[1].ToString();
+            _currentPlayerRefinedPieces[2].text = _am.P2RefinedPile[2].ToString();
+            _currentPlayerRefinedPieces[3].text = _am.P2RefinedPile[3].ToString();
             _currentPlayerRemainingBuildings[0].text = _am.P2RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
@@ -276,12 +266,11 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     private void UpdateAlwaysActiveText()
     {
-        _activePlayerText.text = _am.CurrentPlayerName + "s";
         _activeRoundText.text = "Round " + _am.CurrentRound;
-        _supplyPieces[0].text = "x" + _am.SupplyPile[0];
-        _supplyPieces[1].text = "x" + _am.SupplyPile[1];
-        _supplyPieces[2].text = "x" + _am.SupplyPile[2];
-        _supplyPieces[3].text = "x" + _am.SupplyPile[3];
+        _supplyPieces[0].text = _am.SupplyPile[0].ToString();
+        _supplyPieces[1].text = _am.SupplyPile[1].ToString();
+        _supplyPieces[2].text = _am.SupplyPile[2].ToString();
+        _supplyPieces[3].text = _am.SupplyPile[3].ToString();
     }
 
     /// <summary>
@@ -309,20 +298,6 @@ public class OnlineCanvasManager : MonoBehaviourPun
     public void UpdateCurrentActionText(string updatedText)
     {
         _currentActionText.text = updatedText;
-    }
-
-    /// <summary>
-    /// Calls every "UpdateText"-type function except the Current Action Text one.
-    /// 
-    /// Edited: Andrea SD - online use
-    /// Updates the opponents text across the network
-    /// </summary>
-    public void UpdateTextBothPlayers()
-    {
-        UpdateCurrentPlayerText();
-        UpdateBuildingText();
-        CallUpdateActiveTextONL();
-        CallOpponentText();
     }
 
     /// <summary>
@@ -422,15 +397,25 @@ public class OnlineCanvasManager : MonoBehaviourPun
     /// </summary>
     public void StartTurn()
     {
+        _cm.CallPileText();
+        if (_am.CurrentRound <= 1)
+        {
+            StatManager.s_Instance.CallIsOnline(true);
+        }
         DisableListObjects();
 
         _firstZone.SetActive(true);
-        _am.DrawStartingCards();
+        _backButton.SetActive(true);
+        if (PhotonNetwork.IsMasterClient && _am.CurrentRound == 1)
+        {
+            _cm.CallAddCards();
+            _am.DrawStartingCards();
+            CallStartingCards();
+        }
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
         _am.StartMove(_am.CurrentPlayer);
         CallChangePhase(1);
-        StartCoroutine(_cm.ShowCards(_am.CurrentPlayer));
 
         UpdateTextBothPlayers();
         UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto.");
@@ -446,8 +431,8 @@ public class OnlineCanvasManager : MonoBehaviourPun
     {
         CallOpponentActionText(_am.CurrentPlayer + " is contemplating their next action...");     // Andrea SD
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
         CallChangePhase(1);     // ASD
+        _bm.DisableAllBoardInteractions();
 
         _thenZone.SetActive(true);
         _thenActions.SetActive(true);
@@ -525,6 +510,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
 
         _curGoldCoroutine = StartCoroutine(_am.UseGold(_am.CurrentPlayer));
 
+        _cm.CallPileText();
         UpdateTextBothPlayers();
     }
 
@@ -578,6 +564,20 @@ public class OnlineCanvasManager : MonoBehaviourPun
     public void Back()
     {
         CallOpponentActionText("Player " + _am.CurrentPlayer + " is thinking of their next action...");
+
+        if (_am.CurrentTurnPhase == 1)
+        {
+            DisableListObjects();
+            _bm.DisableAllBoardInteractions();
+            _bm.SetActiveCollider("Board");
+
+            _backButton.SetActive(true);
+            _firstZone.SetActive(true);
+            _am.StartMove(_am.CurrentPlayer);
+            UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto, or select Skip Move.");
+            return;
+        }
+
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
         _bm.SetActiveCollider("Board");
@@ -595,6 +595,7 @@ public class OnlineCanvasManager : MonoBehaviourPun
         {
             script.StopAllCoroutines();
         }
+
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 
@@ -787,6 +788,52 @@ public class OnlineCanvasManager : MonoBehaviourPun
     public void UpdateActiveTextOnline()
     {
         UpdateAlwaysActiveText();
+    }
+
+    /// <summary>
+    /// Calls the RPC that draws the starting cards on the other client
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallStartingCards()
+    {
+        photonView.RPC("DrawStartingCards", RpcTarget.OthersBuffered);
+    }
+
+    /// <summary>
+    /// Draws the starting cards
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void DrawStartingCards()
+    {
+        _am.DrawStartingCards();
+    }
+
+    /// <summary>
+    /// Calls the RPC that updates every "UpdateText"-type function except the Current Action Text one.
+    /// 
+    /// Edited: Andrea SD - online use
+    /// Updates the opponents text across the network
+    /// </summary>
+    public void UpdateTextBothPlayers()
+    {
+        photonView.RPC("UpdateTextONL", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Updates every "UpdateText"-type function except the Current Action Text one.
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void UpdateTextONL()
+    {
+        UpdateCurrentPlayerText();
+        UpdateBuildingText();
+        CallUpdateActiveTextONL();
+        CallOpponentText();
     }
 
     #endregion

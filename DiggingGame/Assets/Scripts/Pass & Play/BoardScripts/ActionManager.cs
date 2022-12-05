@@ -11,12 +11,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class ActionManager : MonoBehaviour
 {
-    [Header("General References")]
-    private GameObject _backButton;
-
     //Arrays for collected pile. Grass, Dirt, Stone, Gold.
     [HideInInspector] public int[] P1CollectedPile = new int[4];
     [HideInInspector] public int[] P2CollectedPile = new int[4];
@@ -136,8 +134,12 @@ public class ActionManager : MonoBehaviour
         }
 
         _gcm.UpdateTextBothPlayers();
-        _scoreTextAnimator.Play("ScorePoint");
-        FindObjectOfType<SFXManager>().Play("ScorePoint");
+
+        if(amount > 0)
+        {
+            _scoreTextAnimator.Play("ScorePoint");
+            FindObjectOfType<SFXManager>().Play("ScorePoint");
+        }
     }
 
     /// <summary>
@@ -218,27 +220,6 @@ public class ActionManager : MonoBehaviour
         }
 
         _bm.SetActiveCollider("Pawn");
-    }
-
-    /// <summary>
-    /// Stops pawns from doing stuff.
-    /// </summary>
-    /// <param name="player">1 or 2</param>
-    public void StopPawnActions(int player)
-    {
-        foreach(GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
-        {
-            if(pawn.GetComponent<PlayerPawn>().PawnPlayer == player)
-            {
-                pawn.GetComponent<PlayerPawn>().IsMoving = false;
-                pawn.GetComponent<PlayerPawn>().IsBuilding = false;
-                pawn.GetComponent<PlayerPawn>().IsDigging = false;
-                pawn.GetComponent<PlayerPawn>().IsPlacing = false;
-                pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().IdleAnimName);
-            }
-        }
-
-        _bm.SetActiveCollider("Board");
     }
 
     /// <summary>
@@ -392,6 +373,7 @@ public class ActionManager : MonoBehaviour
                 P1RefinedPile[3]--;
                 SupplyPile[3]++;
                 _gcm.UpdateTextBothPlayers();
+                _cm.UpdatePileText();
                 _gcm.Back();
                 _gcm.UpdateCurrentActionText("Gold retrieved!");
             }

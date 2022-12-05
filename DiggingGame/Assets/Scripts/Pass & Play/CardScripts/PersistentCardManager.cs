@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         PersistentCardmanager.cs
+// File Name :         PersistentCardManager.cs
 // Author :            Rudy Wolfer
 // Creation Date :     October 20th, 2022
 //
@@ -211,6 +211,7 @@ public class PersistentCardManager : MonoBehaviour
                 if(P1PersistentCards[i].name == cardName)
                 {
                     StartCoroutine(P1PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
+                    FindObjectOfType<SFXManager>().Play("UsePersistent");
                 }
             }
         }
@@ -221,6 +222,7 @@ public class PersistentCardManager : MonoBehaviour
                 if (P2PersistentCards[i].name == cardName)
                 {
                     StartCoroutine(P2PersistentCards[i].GetComponentInChildren<CardController>().ToDiscard());
+                    FindObjectOfType<SFXManager>().Play("UsePersistent");
                 }
             }
         }
@@ -251,7 +253,7 @@ public class PersistentCardManager : MonoBehaviour
                 yield break;
             }
 
-            _currentCoverPos = new Vector3(_defaultCoverPos.x, _defaultCoverPos.y + 3, _defaultCoverPos.z);
+            _currentCoverPos = new Vector3(_defaultCoverPos.x, _defaultCoverPos.y + 2, _defaultCoverPos.z);
 
             DiscardedPersistentCard = false;
 

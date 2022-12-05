@@ -1232,7 +1232,7 @@ GameObject:
   - component: {fileID: 1406311459966426615}
   - component: {fileID: 7076904163101635698}
   - component: {fileID: 6649470430099178404}
-  - component: {fileID: 7130050847017223559}
+  - component: {fileID: 1758821942302417115}
   m_Layer: 0
   m_Name: CardScript
   m_TagString: Untagged
@@ -1335,7 +1335,7 @@ MonoBehaviour:
   MadePersistentP2: 0
   _cardAnimator: {fileID: 7076904163101635698}
   _discardAnimWaitTime: 0.6
---- !u!114 &7130050847017223559
+--- !u!114 &1758821942302417115
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

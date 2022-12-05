@@ -105,6 +105,30 @@ MonoBehaviour:
   - MovePersistentCard
   - SetCurrentName
   - BuildingInfoRPC
+  - AddCardToHand
+  - ModifyGoldCards
+  - ModifyNormalCards
+  - UpdatePileText
+  - DrawStartingCards
+  - CallStartingCards
+  - SetCardWeather
+  - ModifyBuiltBuildings
+  - LoadResultScene
+  - SwapTrack
+  - SetCardActive
+  - EnableText
+  - StartGame
+  - AddPlayer
+  - PCardCount
+  - PersistentDiscardONL
+  - SetDiscardedPC
+  - SetCanBeDiscarded
+  - UpdateTextONL
+  - IncreaseStatisticONL
+  - SetIsOnline
+  - ModifyValueONL
+  - ResetStatisticsONL
+  - SetParentSlot
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

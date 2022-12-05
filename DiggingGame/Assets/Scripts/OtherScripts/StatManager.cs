@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         StatManager.cs
-// Author :            Rudy Wolfer
+// Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     November 6th, 2022
 //
 // Brief Description : A script to hold player stats for Results screen display
@@ -10,8 +10,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class StatManager : MonoBehaviour
+public class StatManager : MonoBehaviourPun
 {
     /// <summary>
     /// Nondestructable object.
@@ -19,7 +20,7 @@ public class StatManager : MonoBehaviour
     public static StatManager s_Instance;
     private void Awake()
     {
-        if(s_Instance == null)
+        if (s_Instance == null)
         {
             s_Instance = this;
         }
@@ -39,10 +40,48 @@ public class StatManager : MonoBehaviour
     public static int s_P1DigTotal, s_P2DigTotal; //Amount of Dug Pieces
     public static int s_P1CardSpendTotal, s_P2CardSpendTotal; //Amount of Discarded Cards
 
+    private bool _isOnline = false;
+
     /// <summary>
     /// Sets every Stat to 0.
     /// </summary>
     public void ResetStatistics()
+    {
+        if (_isOnline)
+        {
+            CallReset();
+        }
+        else
+        {
+            ResetValues();
+        }
+        _isOnline = false;
+    }
+
+    /// <summary>
+    /// Increases a given player's given statistic. 
+    /// </summary>
+    /// <param name="player">1 or 2</param>
+    /// <param name="amount">Amount to Increase by</param>
+    /// <param name="statName">Round, Score, Building, Activation, Destroy, Steal, Place, Retrieve, Dig, Card</param>
+    public void IncreaseStatistic(int player, string statName, int amount)
+    {
+        if (_isOnline)
+        {
+            CallModifyValue(player, statName, amount);
+        }
+        else
+        {
+            ModifyValue(player, statName, amount);
+        }
+    }
+
+    /// <summary>
+    /// Resets values of the statistics
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void ResetValues()
     {
         s_RoundAmount = 0;
         s_P1FinalScore = 0;
@@ -66,22 +105,24 @@ public class StatManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Increases a given player's given statistic. 
+    /// Modifies the value of a stat
+    /// 
+    /// Author: Andrea SD
     /// </summary>
-    /// <param name="player">1 or 2</param>
-    /// <param name="amount">Amount to Increase by</param>
-    /// <param name="statName">Round, Score, Building, Activation, Destroy, Steal, Place, Retrieve, Dig, Card</param>
-    public void IncreaseStatistic(int player, string statName, int amount)
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="statName"> stat being modified </param>
+    /// <param name="amount"> amount stat is modified by </param>
+    private void ModifyValue(int player, string statName, int amount)
     {
-        if(statName == "Round")
+        if (statName == "Round")
         {
             s_RoundAmount += amount;
             return;
         }
 
-        if(player == 1)
+        if (player == 1)
         {
-            switch(statName)
+            switch (statName)
             {
                 case "Score":
                     s_P1FinalScore += amount;
@@ -146,4 +187,76 @@ public class StatManager : MonoBehaviour
             }
         }
     }
+
+
+    #region RPC Functions
+    
+    /// <summary>
+    /// Calls the RPC that sets the _isOnline variable
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="state"> T/F if online or not </param>
+    public void CallIsOnline(bool state)
+    {
+        photonView.RPC("SetIsOnline", RpcTarget.All, state);
+    }
+
+    /// <summary>
+    /// Sets isOnline to true
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="state"> T/F if online or not </param>
+    [PunRPC]
+    public void SetIsOnline(bool state)  {  _isOnline = state; }
+
+    /// <summary>
+    /// Calls the RPC that increases statistics
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="statName"> stat being modified </param>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> amount the stat is being increased by </param>
+    private void CallModifyValue(int player, string statName, int amount)
+    {
+        photonView.RPC("ModifyValueONL", RpcTarget.All, player, statName, amount);
+    }
+
+    /// <summary>
+    /// Increases statistics
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="statName"> stat being modified </param>
+    /// <param name="player"> 1 or 2 </param>
+    /// <param name="amount"> amount the stat is being increased by </param>
+    [PunRPC]
+    public void ModifyValueONL(int player, string statName, int amount)
+    {
+        ModifyValue(player, statName, amount);
+    }
+
+    /// <summary>
+    /// Calls the RPC that resets statistic values
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void CallReset()
+    {
+        photonView.RPC("ResetStatisticsONL", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// Resets statistic values
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void ResetStatisticsONL()
+    {
+        ResetValues();
+    }
+    #endregion
 }

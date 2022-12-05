@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         CardManager.cs
+// File Name :         OnlineCardController.cs
 // Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 10th, 2022
 //
@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Unity.VisualScripting;
 
 // Edited: Andrea SD - Edited for online use
 public class OnlineCardController : MonoBehaviourPun
@@ -32,8 +33,8 @@ public class OnlineCardController : MonoBehaviourPun
     private OnlineCardManager _cm;
     private OnlineActionManager _am;
     private OnlineCanvasManager _gcm;
-    private OnlineBoardManager _bm;
     private OnlineCardEffects _ce;
+    private OnlineAudioPlayer _ap;
     private OnlinePersistentCardManager _pcm;
     [HideInInspector] public int HandPosition;
     [HideInInspector] public int PHandPosition;
@@ -59,6 +60,7 @@ public class OnlineCardController : MonoBehaviourPun
     private bool _gettingDiscarded;
 
     [SerializeField] private int _cardID;  //ASD
+    [HideInInspector] bool readyToMove = false;
 
     /// <summary>
     /// Assigns partner scripts and the maximize anchor.
@@ -69,16 +71,21 @@ public class OnlineCardController : MonoBehaviourPun
         _cardBody.gameObject.name = GetComponentInChildren<CardVisuals>().ThisCard.CardName;
         _cm = FindObjectOfType<OnlineCardManager>();
         _am = FindObjectOfType<OnlineActionManager>();
-        _bm = FindObjectOfType<OnlineBoardManager>();
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         _ce = FindObjectOfType<OnlineCardEffects>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
         HeldByPlayer = 0;
     }
 
+    /// <summary>
+    /// Gets ViewID :3
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
     private void Start()
     {
-        _cardID = photonView.ViewID;     //ASD
+        _cardID = photonView.ViewID; 
     }
 
     /// <summary>
@@ -111,7 +118,7 @@ public class OnlineCardController : MonoBehaviourPun
             return;
         }
 
-        if (transform.position != NextPos)
+        if (transform.position != NextPos && readyToMove)
         {
             transform.position = Vector3.MoveTowards(transform.position, NextPos, _cardSlideSpeed * Time.deltaTime);
         }
@@ -137,6 +144,16 @@ public class OnlineCardController : MonoBehaviourPun
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            MaximizeCard();
+        }
+
+        if (!Selected)
+        {
+            _ap.PlaySound("HoverCard", false);
+        }
+
         NextPos = _mouseOverPos.position;
     }
 
@@ -147,8 +164,7 @@ public class OnlineCardController : MonoBehaviourPun
     {
         if (_currentlyMaximized)
         {
-            Destroy(_maximizedCard);
-            _currentlyMaximized = false;
+            DemaximizeCard();
         }
 
         if (_gettingDiscarded)
@@ -174,7 +190,15 @@ public class OnlineCardController : MonoBehaviourPun
     /// </summary>
     private void OnMouseOver()
     {
-        MaximizeCard(_cardVisualToMaximize);
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            MaximizeCard();
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            DemaximizeCard();
+        }
 
         if (_gettingDiscarded)
         {
@@ -211,11 +235,24 @@ public class OnlineCardController : MonoBehaviourPun
         }
     }
 
+
+    /// <summary>
+    /// Allows the card to move
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    public void EnableReadyToMove()
+    {
+        readyToMove = true;
+    }
+
     /// <summary>
     /// Selects the card.
     /// </summary>
     private void SelectCard()
     {
+        _ap.PlaySound("SelectCard", false);
+
         if (!Selected)
         {
             _cm.SelectedCards.Add(_cardBody);
@@ -241,6 +278,7 @@ public class OnlineCardController : MonoBehaviourPun
         if (_cm.AllowedActivations == 0)
         {
             _gcm.UpdateCurrentActionText("You've Activated the max amount of Cards.");
+            FindObjectOfType<SFXManager>().PlayButtonSound();
             return;
         }
 
@@ -250,17 +288,19 @@ public class OnlineCardController : MonoBehaviourPun
             {
                 StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
 
-                _am.P1RefinedPile[0] -= grassCost;
-                _am.P1RefinedPile[1] -= dirtCost;
-                _am.P1RefinedPile[2] -= stoneCost;
-                _am.SupplyPile[0] += grassCost;
-                _am.SupplyPile[1] += dirtCost;
-                _am.SupplyPile[2] += stoneCost;
+                _am.CallUpdatePieces(1, 1, 0, -grassCost);
+                _am.CallUpdatePieces(1, 1, 1, -dirtCost);
+                _am.CallUpdatePieces(1, 1, 2, -stoneCost);
+                _am.SupplyPileRPC(0, grassCost);
+                _am.SupplyPileRPC(1, dirtCost);
+                _am.SupplyPileRPC(2, stoneCost);
 
                 if (MultiSceneData.s_WeatherOption == 0)
                 {
-                    FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                    CallCardWeather();
                 }
+
+                _ap.PlaySound("ActivateCard", false);
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -294,6 +334,7 @@ public class OnlineCardController : MonoBehaviourPun
             else
             {
                 _gcm.UpdateCurrentActionText("Not enough Pieces to Activate this Card!");
+                FindObjectOfType<SFXManager>().PlayButtonSound();
             }
         }
         else
@@ -302,17 +343,19 @@ public class OnlineCardController : MonoBehaviourPun
             {
                 StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Activation", 1);
 
-                _am.P2RefinedPile[0] -= grassCost;
-                _am.P2RefinedPile[1] -= dirtCost;
-                _am.P2RefinedPile[2] -= stoneCost;
-                _am.SupplyPile[0] += grassCost;
-                _am.SupplyPile[1] += dirtCost;
-                _am.SupplyPile[2] += stoneCost;
+                _am.CallUpdatePieces(1, 2, 0, -grassCost);
+                _am.CallUpdatePieces(1, 2, 1, -dirtCost);
+                _am.CallUpdatePieces(1, 2, 2, -stoneCost);
+                _am.SupplyPileRPC(0, grassCost);
+                _am.SupplyPileRPC(1, dirtCost);
+                _am.SupplyPileRPC(2, stoneCost);
 
                 if (MultiSceneData.s_WeatherOption == 0)
                 {
-                    FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+                    CallCardWeather();
                 }
+
+                _ap.PlaySound("ActivateCard", false);
 
                 if (cv.ThisCard.GrassSuit)
                 {
@@ -345,8 +388,10 @@ public class OnlineCardController : MonoBehaviourPun
             else
             {
                 _gcm.UpdateCurrentActionText("Not enough Pieces to Activate this card!");
+                FindObjectOfType<SFXManager>().PlayButtonSound();
             }
         }
+        _gcm.UpdateTextBothPlayers();
     }
 
     /// <summary>
@@ -355,20 +400,18 @@ public class OnlineCardController : MonoBehaviourPun
     public IEnumerator ToDiscard()
     {
         _cardBackground.GetComponent<Image>().color = _cardDefaultColor;
-        Debug.Log("Held by player" + HeldByPlayer);
 
         if (!MadePersistentP1 && !MadePersistentP2)
-        {
-            
+        { 
             if (HeldByPlayer == 1)
             {
                 if (_cardBody.CompareTag("Card"))
                 {
-                    _am.P1Cards--;
+                    _cm.CallNormalCards(1, -1);
                 }
                 else if (_cardBody.CompareTag("GoldCard"))
                 {
-                    _am.P1GoldCards--;
+                    _cm.CallGoldCards(1, -1);
                 }
                 _cm.P1OpenHandPositions[HandPosition] = true;
                 CallRemoveCard(1);   // Andrea SD
@@ -377,29 +420,26 @@ public class OnlineCardController : MonoBehaviourPun
             {
                 if (_cardBody.CompareTag("Card"))
                 {
-                    _am.P2Cards--;
+                    _cm.CallNormalCards(2, -1);
                 }
                 else if (_cardBody.CompareTag("GoldCard"))
                 {
-                    _am.P2GoldCards--;
+                    _cm.CallGoldCards(2, -1);
                 }
                 _cm.P2OpenHandPositions[HandPosition] = true;
                 CallRemoveCard(2);   // Andrea SD
             }
 
-            //StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
+            StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Card", 1);
 
             HeldByPlayer = 0;
             Selected = false;
             CanBeSelected = false;
             CanBeDiscarded = false;
             CanBeActivated = false;
-            MadePersistentP1 = false;
-            MadePersistentP2 = false;
-            _pcm.DiscardedPersistentCard = true;
             CallDiscardRPC();
 
-            _cm.UpdatePileText();
+            _cm.CallPileText();
         }
         else if (MadePersistentP1 || MadePersistentP2)
         {
@@ -423,11 +463,10 @@ public class OnlineCardController : MonoBehaviourPun
             CanBeActivated = false;
             MadePersistentP1 = false;
             MadePersistentP2 = false;
-            
-            _pcm.DiscardedPersistentCard = true;
+            CallDiscardedPC(true);
             CallDiscardRPC();
 
-            _cm.UpdatePileText();
+            _cm.CallPileText();
         }
 
         if (_currentlyMaximized)
@@ -437,12 +476,48 @@ public class OnlineCardController : MonoBehaviourPun
         }
 
         _cardAnimator.Play("CardDiscard");
-        //FindObjectOfType<SFXManager>().Play("DiscardCard");
+        _ap.PlaySound("DiscardCard", false);
         _gettingDiscarded = true;
         yield return new WaitForSeconds(_discardAnimWaitTime);
         _gettingDiscarded = false;
-        _cardBody.SetActive(false);
+        CallCardActive(false);
     }
+
+    /// <summary>
+    /// Maximizes a card for easier view.
+    /// </summary>
+    /// <param name="thingToMaximize">Card zone to maximize</param>
+    private void MaximizeCard()
+    {
+        if (_currentlyMaximized)
+        {
+            return;
+        }
+
+        _ap.PlaySound("SelectCard", false);
+
+        _maximizedCard = Instantiate(_cardVisualToMaximize, _maximizeAnchor);
+        _maximizedCard.transform.position = _maximizeAnchor.transform.position;
+        _currentlyMaximized = true;
+    }
+
+    /// <summary>
+    /// Demaximizes a card.
+    /// </summary>
+    private void DemaximizeCard()
+    {
+        if (!_currentlyMaximized)
+        {
+            return;
+        }
+
+        _ap.PlaySound("SelectCard", false);
+
+        Destroy(_maximizedCard);
+        _currentlyMaximized = false;
+    }
+
+    #region RPC Function
 
     /// <summary>
     /// Calls the AddToDiscarded RPC across all clients. This adds the card to
@@ -450,7 +525,7 @@ public class OnlineCardController : MonoBehaviourPun
     /// 
     /// Author: Andrea SD
     /// </summary>
-    private void CallDiscardRPC()
+    public void CallDiscardRPC()
     {
         photonView.RPC("AddToDiscarded", RpcTarget.All);
     }
@@ -474,7 +549,6 @@ public class OnlineCardController : MonoBehaviourPun
     /// <param name="player"></param>
     public void CallRemoveCard(int player)
     {
-        Debug.Log("CallRemoveCard");
         photonView.RPC("RemoveCard", RpcTarget.All, player);
     }
 
@@ -533,35 +607,72 @@ public class OnlineCardController : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Maximizes a card for easier view.
+    /// Calls the RPC that sets the weather to the activated card
+    /// 
+    /// Author: Andrea SD
     /// </summary>
-    /// <param name="thingToMaximize">Card zone to maximize</param>
-    private void MaximizeCard(GameObject thingToMaximize)
+    public void CallCardWeather()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            if (_currentlyMaximized)
-            {
-                return;
-            }
-
-            FindObjectOfType<SFXManager>().Play("SelectCard");
-
-            _maximizedCard = Instantiate(thingToMaximize, _maximizeAnchor);
-            _maximizedCard.transform.position = _maximizeAnchor.transform.position;
-            _currentlyMaximized = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.Mouse1))
-        {
-            if (!_currentlyMaximized)
-            {
-                return;
-            }
-
-            FindObjectOfType<SFXManager>().Play("SelectCard");
-
-            Destroy(_maximizedCard);
-            _currentlyMaximized = false;
-        }
+        photonView.RPC("SetCardWeather", RpcTarget.All);
     }
+
+    /// <summary>
+    /// Sets the weather to the activated card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    [PunRPC]
+    public void SetCardWeather()
+    {
+        CardVisuals cv = _cardBody.GetComponentInChildren<CardVisuals>();
+        FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets a card body to isActive
+    /// 
+    /// AUthor: Andrea SD
+    /// </summary>
+    /// <param name="isActive"> is the card body is active or not </param>
+    public void CallCardActive(bool isActive)
+    {
+        photonView.RPC("SetCardActive", RpcTarget.All, isActive);
+    }
+
+    /// <summary>
+    /// Sets a card body to isActive
+    /// 
+    /// AUthor: Andrea SD
+    /// </summary>
+    /// <param name="isActive"> is the card body is active or not </param>
+    [PunRPC]
+    public void SetCardActive(bool isActive)
+    {
+        _cardBody.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets the value of PCM Discarded Persistent Card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="value"> T if discarded </param>
+    public void CallDiscardedPC(bool value)
+    {
+        photonView.RPC("SetDiscardedPC", RpcTarget.Others, value);
+    }
+
+    /// <summary>
+    /// Sets the value of PCM Discarded Persistent Card
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="value"> T if discarded </param>
+    [PunRPC]
+    public void SetDiscardedPC(bool value)
+    {
+        _pcm.DiscardedPersistentCard = value;
+    }
+
+    #endregion
 }

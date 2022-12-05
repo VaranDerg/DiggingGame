@@ -1,6 +1,6 @@
 /*****************************************************************************
-// File Name :         PlayerPawn.cs
-// Author :            Rudy Wolfer
+// File Name :         OnlinePlayerPawn.cs
+// Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 6th, 2022
 //
 // Brief Description : Script that controls Players' Pawn pieces.
@@ -24,6 +24,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     private OnlineActionManager _am;
     private OnlinePersistentCardManager _pcm;
     private OnlineCanvasManager _gcm;
+    private OnlineAudioPlayer _ap;
     private Animator _anims;
     [SerializeField] private SpriteRenderer _sr;
 
@@ -40,6 +41,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     public string WaitingAnimName;
     public string IdleAnimName;
     public string MoveAnimName;
+    [HideInInspector] public bool JustMoved;
 
     public int PawnID;  //ASD   
 
@@ -64,6 +66,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         _gcm = FindObjectOfType<OnlineCanvasManager>();
         _pcm = FindObjectOfType<OnlinePersistentCardManager>();
         _anims = GetComponent<Animator>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
     }
 
     /// <summary>
@@ -85,6 +88,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 PreparePawnMovement();
+                _ap.PlaySound("ClickPawn", false);
             }
         }
 
@@ -216,6 +220,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            _ap.PlaySound("ClickPawn", false);
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -266,6 +271,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            _ap.PlaySound("ClickPawn", false);
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -308,6 +314,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            _ap.PlaySound("ClickPawn", false);
             DeselectOtherPawns();
             foreach (GameObject piece in _bm.GenerateAdjacentPieceList(ClosestPieceToPawn()))
             {
@@ -322,7 +329,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
                     dontHighlight = true;
                 }
 
-                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four || piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Five)
+                if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Four)
                 {
                     dontHighlight = true;
                 }
@@ -367,6 +374,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            _ap.PlaySound("ClickPawn", false);
             DeselectOtherPawns();
             foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
             {
@@ -435,6 +443,12 @@ public class OnlinePlayerPawn : MonoBehaviourPun
     /// </summary>
     public void UnassignAdjacentTiles()
     {
+        //For move animations & back button working correctly.
+        if (_am.CurrentTurnPhase != 1 && !JustMoved)
+        {
+            _anims.Play(IdleAnimName);
+        }
+
         for (int i = 0; i < _shownPieces.Count; i++)
         {
             if (_shownPieces[i] != null)
@@ -453,8 +467,8 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         IsPlacing = false;
         IsUsingWalkway = false;
         MudslideMove = false;
+        TeleportationMove = false;
         BuildingToBuild = "";
-        _anims.Play(IdleAnimName);
         _shownPieces.Clear();
     }
 
@@ -475,7 +489,7 @@ public class OnlinePlayerPawn : MonoBehaviourPun
         }
     }
 
-    #region
+    #region RPC Functions
 
     /// <summary>
     /// Calls the RPC that adjusts the Pawn's values to fit a player.

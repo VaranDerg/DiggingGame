@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         AdjacencyChecker.cs
+// File Name :         BoardManager.cs
 // Author :            Rudy W.
 // Creation Date :     October 7th, 2022
 //
@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class BoardManager : MonoBehaviour
 {
@@ -97,7 +98,15 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     public void DisableAllBoardInteractions()
     {
-        foreach(GameObject piece in _boardPieces)
+        foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
+        {
+            if (pawn.GetComponent<PlayerPawn>().PawnPlayer == _am.CurrentPlayer)
+            {
+                pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+            }
+        }
+
+        foreach (GameObject piece in _boardPieces)
         {
             piece.GetComponent<PieceController>().ShowHideBuildable(false);
             piece.GetComponent<PieceController>().ShowHideDiggable(false);
@@ -107,12 +116,6 @@ public class BoardManager : MonoBehaviour
             piece.GetComponent<PieceController>().ShowHideFlippable(false);
             piece.GetComponent<PieceController>().ShowHideWalkway(false);
             piece.GetComponent<PieceController>().PieceIsSelected = false;
-            _am.StopPawnActions(_am.CurrentPlayer);
-        }
-
-        foreach(GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
-        {
-            pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
         }
     }
 

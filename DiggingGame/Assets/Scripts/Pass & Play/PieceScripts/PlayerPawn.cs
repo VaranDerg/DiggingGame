@@ -38,6 +38,7 @@ public class PlayerPawn : MonoBehaviour
     public string WaitingAnimName;
     public string IdleAnimName;
     public string MoveAnimName;
+    [HideInInspector] public bool JustMoved;
 
     /// <summary>
     /// Adds every board piece to a list.
@@ -441,7 +442,13 @@ public class PlayerPawn : MonoBehaviour
     /// </summary>
     public void UnassignAdjacentTiles()
     {
-        for(int i = 0; i < _shownPieces.Count; i++)
+        //For move animations & back button working correctly.
+        if(_am.CurrentTurnPhase != 1 && !JustMoved)
+        {
+            _anims.Play(IdleAnimName);
+        }
+
+        for (int i = 0; i < _shownPieces.Count; i++)
         {
             if(_shownPieces[i] != null)
             {
@@ -459,8 +466,9 @@ public class PlayerPawn : MonoBehaviour
         IsPlacing = false;
         IsUsingWalkway = false;
         MudslideMove = false;
+        TeleportationMove = false;
+        JustMoved = false;
         BuildingToBuild = "";
-        _anims.Play(IdleAnimName);
         _shownPieces.Clear();
     }
 

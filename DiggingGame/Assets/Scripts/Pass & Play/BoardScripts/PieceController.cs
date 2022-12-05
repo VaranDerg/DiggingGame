@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         BoardController.cs
+// File Name :         PieceController.cs
 // Author :            Andrea Swihart-DeCoster & Rudy W.
 // Creation Date :     October 3rd, 2022
 //
@@ -24,6 +24,8 @@ public class PieceController : MonoBehaviour
     [SerializeField] private Sprite _bedrockSprite;
     [SerializeField] private Sprite _goldSprite;
     [SerializeField] private Sprite _flowerSprite;
+    [SerializeField] private Sprite _fertilizerSprite;
+    [SerializeField] private Sprite _compactionSprite;
     [SerializeField] private GameObject _molePawn;
     [SerializeField] private GameObject _meerkatPawn;
     [SerializeField] private SpriteRenderer _borderSr;
@@ -96,7 +98,9 @@ public class PieceController : MonoBehaviour
         Three,
         Four,
         Five,
-        Six
+        Six,
+        Seven,
+        Eight
     }
 
     // Start is called before the first frame update
@@ -181,7 +185,8 @@ public class PieceController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Start of Shovel Code
-            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
+            if(_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && (ObjState == GameState.Two || 
+                ObjState == GameState.Seven) && !_am.ShovelUsed)
             {
                 FindObjectOfType<SFXManager>().Play("DigDirt");
                 SetPieceState(3);
@@ -212,11 +217,11 @@ public class PieceController : MonoBehaviour
                 {
                     _cm.PrepareCardSelection(1, "Grass", false);
                 }
-                else if (ObjState == GameState.Two)
+                else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                 {
                     _cm.PrepareCardSelection(1, "Dirt", false);
                 }
-                else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                 {
                     _cm.PrepareCardSelection(1, "Stone", false);
                 }
@@ -253,9 +258,15 @@ public class PieceController : MonoBehaviour
                         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
                         FindObjectOfType<SFXManager>().Play("DigDirt");
                         break;
+                    case GameState.Seven:
+                        SetPieceState(3);
+                        _dirtPS.Play();
+                        _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
+                        FindObjectOfType<SFXManager>().Play("DigDirt");
+                        break;
                     case GameState.Three:
                         SetPieceState(4);
-
+                        
                         if (HasGold)
                         {
                             _goldPS.Play();
@@ -270,6 +281,12 @@ public class PieceController : MonoBehaviour
                             FindObjectOfType<SFXManager>().Play("DigStone");
                         }
 
+                        break;
+                    case GameState.Eight:
+                        SetPieceState(4);
+                        _stonePS.Play();
+                        _am.CollectTile(_am.CurrentPlayer, "Stone", true);
+                        FindObjectOfType<SFXManager>().Play("DigStone");
                         break;
                     case GameState.Five:
                         SetPieceState(4);
@@ -360,6 +377,7 @@ public class PieceController : MonoBehaviour
             }
             else
             {
+                SetPieceState(8);
                 FindObjectOfType<SFXManager>().Play("DigStone");
                 _stonePS.Play();
             }
@@ -403,6 +421,12 @@ public class PieceController : MonoBehaviour
                     FindObjectOfType<SFXManager>().Play("DigDirt");
                     _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
                     break;
+                case GameState.Seven:
+                    SetPieceState(3);
+                    _dirtPS.Play();
+                    FindObjectOfType<SFXManager>().Play("DigDirt");
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
+                    break;
                 case GameState.Three:
                     SetPieceState(4);
                     if (HasGold)
@@ -418,6 +442,12 @@ public class PieceController : MonoBehaviour
                         FindObjectOfType<SFXManager>().Play("DigStone");
                         _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     }
+                    break;
+                case GameState.Eight:
+                    SetPieceState(4);
+                    _stonePS.Play();
+                    FindObjectOfType<SFXManager>().Play("DigStone");
+                    _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     break;
                 case GameState.Five:
                     SetPieceState(4);
@@ -459,14 +489,26 @@ public class PieceController : MonoBehaviour
                     _am.PlaceTile("Grass");
                     FindObjectOfType<SFXManager>().Play("DigGrass");
                     break;
+                case GameState.Seven:
+                    SetPieceState(6);
+                    _grassPS.Play();
+                    _am.PlaceTile("Grass");
+                    FindObjectOfType<SFXManager>().Play("DigGrass");
+                    break;
                 case GameState.Three:
-                    SetPieceState(2);
+                    SetPieceState(7);
+                    _dirtPS.Play();
+                    _am.PlaceTile("Dirt");
+                    FindObjectOfType<SFXManager>().Play("DigDirt");
+                    break;
+                case GameState.Eight:
+                    SetPieceState(7);
                     _dirtPS.Play();
                     _am.PlaceTile("Dirt");
                     FindObjectOfType<SFXManager>().Play("DigDirt");
                     break;
                 case GameState.Four:
-                    SetPieceState(3);
+                    SetPieceState(8);
                     _stonePS.Play();
                     _am.PlaceTile("Stone");
                     FindObjectOfType<SFXManager>().Play("DigStone");
@@ -484,6 +526,7 @@ public class PieceController : MonoBehaviour
     public IEnumerator MovePawnTo(GameObject pawn, GameObject destinationPiece, bool goBack)
     {
         pawn.GetComponent<PlayerPawn>().ClosestPieceToPawn().GetComponent<PieceController>().HasPawn = false;
+        pawn.GetComponent<PlayerPawn>().JustMoved = true;
         _pawnIsMoving = true;
         FindObjectOfType<SFXManager>().Play("Move");
         pawn.GetComponent<Animator>().Play(pawn.GetComponent<PlayerPawn>().MoveAnimName);
@@ -493,11 +536,11 @@ public class PieceController : MonoBehaviour
         //End anim?
 
         pawn.transform.position = destinationPiece.transform.position;
-        pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
+        //pawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
         HasPawn = true;
         _pawnIsMoving = false;
 
-        if(goBack)
+        if (goBack)
         {
             if (_am.CurrentTurnPhase == 1)
             {
@@ -542,11 +585,11 @@ public class PieceController : MonoBehaviour
                         {
                             _cm.PrepareCardSelection(1, "Grass", false);
                         }
-                        else if (ObjState == GameState.Two)
+                        else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                         {
                             _cm.PrepareCardSelection(1, "Dirt", false);
                         }
-                        else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                        else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                         {
                             _cm.PrepareCardSelection(1, "Stone", false);
                         }
@@ -569,11 +612,11 @@ public class PieceController : MonoBehaviour
                     {
                         _cm.PrepareCardSelection(1, "Grass", false);
                     }
-                    else if (ObjState == GameState.Two)
+                    else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                     {
                         _cm.PrepareCardSelection(1, "Dirt", false);
                     }
-                    else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                    else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                     {
                         _cm.PrepareCardSelection(1, "Stone", false);
                     }
@@ -606,11 +649,11 @@ public class PieceController : MonoBehaviour
             {
                 pieceSuit = "Grass";
             }
-            else if (ObjState == GameState.Two)
+            else if (ObjState == GameState.Two || ObjState == GameState.Seven)
             {
                 pieceSuit = "Dirt";
             }
-            else if (ObjState == GameState.Three)
+            else if (ObjState == GameState.Three || ObjState == GameState.Eight)
             {
                 pieceSuit = "Stone";
             }
@@ -749,7 +792,7 @@ public class PieceController : MonoBehaviour
             }
         }
 
-        InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
+        InstantiateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
         CurrentPawn.GetComponent<PlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
@@ -760,7 +803,7 @@ public class PieceController : MonoBehaviour
     /// Places a building. Returns false and removes it if it's adjacent to another building. Also will spawn another Pawn if 3rd building is placed.
     /// </summary>
     /// <param name="building">"Factory" "Burrow" or "Mine"</param>
-    private bool InstantitateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
+    private bool InstantiateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
     {
         GameObject building = null;
         if(_am.CurrentPlayer == 1)
@@ -981,6 +1024,18 @@ public class PieceController : MonoBehaviour
                 _goldLight.SetActive(false);
                 _goldGlitter.SetActive(false);
                 ObjState = GameState.Six;
+                break;
+            case 7:
+                gameObject.GetComponent<SpriteRenderer>().sprite = _fertilizerSprite;
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
+                ObjState = GameState.Seven;
+                break;
+            case 8:
+                gameObject.GetComponent<SpriteRenderer>().sprite = _compactionSprite;
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
+                ObjState = GameState.Eight;
                 break;
             default:
                 throw new Exception("This board piece state does not exist.");

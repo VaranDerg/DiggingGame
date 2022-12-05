@@ -1,3 +1,11 @@
+/*****************************************************************************
+// File Name :         GalleryCardView.cs
+// Author :            Rudy Wolfer
+// Creation Date :     November 8th, 2022
+//
+// Brief Description : Partner script for GalleryMenu for card displays.
+*****************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

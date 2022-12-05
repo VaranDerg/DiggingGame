@@ -129,14 +129,14 @@ public class GameCanvasManagerNew : MonoBehaviour
         if (curPlayer == 1)
         {
             _currentPlayerScore.text = "Score: " + _am.P1Score + "/" + _am.WinningScore;
-            _currentPlayerCollectedPieces[0].text = "x" + _am.P1CollectedPile[0];
-            _currentPlayerCollectedPieces[1].text = "x" + _am.P1CollectedPile[1];
-            _currentPlayerCollectedPieces[2].text = "x" + _am.P1CollectedPile[2];
-            _currentPlayerCollectedPieces[3].text = "x" + _am.P1CollectedPile[3];
-            _currentPlayerRefinedPieces[0].text = "x" + _am.P1RefinedPile[0];
-            _currentPlayerRefinedPieces[1].text = "x" + _am.P1RefinedPile[1];
-            _currentPlayerRefinedPieces[2].text = "x" + _am.P1RefinedPile[2];
-            _currentPlayerRefinedPieces[3].text = "x" + _am.P1RefinedPile[3];
+            _currentPlayerCollectedPieces[0].text = _am.P1CollectedPile[0].ToString();
+            _currentPlayerCollectedPieces[1].text = _am.P1CollectedPile[1].ToString();
+            _currentPlayerCollectedPieces[2].text = _am.P1CollectedPile[2].ToString();
+            _currentPlayerCollectedPieces[3].text = _am.P1CollectedPile[3].ToString();
+            _currentPlayerRefinedPieces[0].text = _am.P1RefinedPile[0].ToString();
+            _currentPlayerRefinedPieces[1].text = _am.P1RefinedPile[1].ToString();
+            _currentPlayerRefinedPieces[2].text = _am.P1RefinedPile[2].ToString();
+            _currentPlayerRefinedPieces[3].text = _am.P1RefinedPile[3].ToString();
             _currentPlayerRemainingBuildings[0].text = _am.P1RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P1RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P1RemainingBuildings[2] + " Left";
@@ -171,14 +171,14 @@ public class GameCanvasManagerNew : MonoBehaviour
         else
         {
             _currentPlayerScore.text = "Score: " + _am.P2Score + "/" + _am.WinningScore;
-            _currentPlayerCollectedPieces[0].text = "x" + _am.P2CollectedPile[0];
-            _currentPlayerCollectedPieces[1].text = "x" + _am.P2CollectedPile[1];
-            _currentPlayerCollectedPieces[2].text = "x" + _am.P2CollectedPile[2];
-            _currentPlayerCollectedPieces[3].text = "x" + _am.P2CollectedPile[3];
-            _currentPlayerRefinedPieces[0].text = "x" + _am.P2RefinedPile[0];
-            _currentPlayerRefinedPieces[1].text = "x" + _am.P2RefinedPile[1];
-            _currentPlayerRefinedPieces[2].text = "x" + _am.P2RefinedPile[2];
-            _currentPlayerRefinedPieces[3].text = "x" + _am.P2RefinedPile[3];
+            _currentPlayerCollectedPieces[0].text = _am.P2CollectedPile[0].ToString();
+            _currentPlayerCollectedPieces[1].text = _am.P2CollectedPile[1].ToString();
+            _currentPlayerCollectedPieces[2].text = _am.P2CollectedPile[2].ToString();
+            _currentPlayerCollectedPieces[3].text = _am.P2CollectedPile[3].ToString();
+            _currentPlayerRefinedPieces[0].text = _am.P2RefinedPile[0].ToString();
+            _currentPlayerRefinedPieces[1].text = _am.P2RefinedPile[1].ToString();
+            _currentPlayerRefinedPieces[2].text = _am.P2RefinedPile[2].ToString();
+            _currentPlayerRefinedPieces[3].text = _am.P2RefinedPile[3].ToString();
             _currentPlayerRemainingBuildings[0].text = _am.P2RemainingBuildings[0] + " Left";
             _currentPlayerRemainingBuildings[1].text = _am.P2RemainingBuildings[1] + " Left";
             _currentPlayerRemainingBuildings[2].text = _am.P2RemainingBuildings[2] + " Left";
@@ -219,10 +219,10 @@ public class GameCanvasManagerNew : MonoBehaviour
     {
         _activePlayerText.text = _am.CurrentPlayerName + "s";
         _activeRoundText.text = "Round " + _am.CurrentRound;
-        _supplyPieces[0].text = "x" + _am.SupplyPile[0];
-        _supplyPieces[1].text = "x" + _am.SupplyPile[1];
-        _supplyPieces[2].text = "x" + _am.SupplyPile[2];
-        _supplyPieces[3].text = "x" + _am.SupplyPile[3];
+        _supplyPieces[0].text = _am.SupplyPile[0].ToString();
+        _supplyPieces[1].text = _am.SupplyPile[1].ToString();
+        _supplyPieces[2].text = _am.SupplyPile[2].ToString();
+        _supplyPieces[3].text = _am.SupplyPile[3].ToString();
     }
 
     /// <summary>
@@ -433,6 +433,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         DisableListObjects();
 
         _firstZone.SetActive(true);
+        _backButton.SetActive(true);
         _am.DrawStartingCards();
         _am.RefineTiles(_am.CurrentPlayer);
         _am.ActivateMines(_am.CurrentPlayer);
@@ -450,8 +451,8 @@ public class GameCanvasManagerNew : MonoBehaviour
     public void ToThenPhase()
     {
         DisableListObjects();
-        _bm.DisableAllBoardInteractions();
         _am.CurrentTurnPhase++;
+        _bm.DisableAllBoardInteractions();
 
         _thenZone.SetActive(true);
         _thenActions.SetActive(true);
@@ -569,12 +570,24 @@ public class GameCanvasManagerNew : MonoBehaviour
     /// </summary>
     public void Back()
     {
+        if (_am.CurrentTurnPhase == 1)
+        {
+            DisableListObjects();
+            _bm.DisableAllBoardInteractions();
+            _bm.SetActiveCollider("Board");
+
+            _backButton.SetActive(true);
+            _firstZone.SetActive(true);
+            _am.StartMove(_am.CurrentPlayer);
+            UpdateCurrentActionText("Select a Pawn to move, then a Piece to move onto, or select Skip Move.");
+            return;
+        }
+
         DisableListObjects();
         _bm.DisableAllBoardInteractions();
         _bm.SetActiveCollider("Board");
 
-        //Hm... Weird retrieval bug. This fixed it, but I'm not happy about it.
-        if(_curGoldCoroutine != null)
+        if (_curGoldCoroutine != null)
         {
             StopCoroutine(_curGoldCoroutine);
         }
@@ -587,6 +600,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         {
             script.StopAllCoroutines();
         }
+
         _cm.DeselectSelectedCards();
         _cm.PrepareCardSelection(0, "", true);
 

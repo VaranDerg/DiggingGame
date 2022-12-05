@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         Card.cs
+// File Name :         OnlineCardEffects.cs
 // Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 18th, 2022
 //
@@ -80,7 +80,7 @@ public class OnlineCardEffects : MonoBehaviourPun
     [SerializeField] private int _earthquakeDamages;
     [SerializeField] private int _thunderstormDamages;
     [SerializeField] private int _tornadoDamages;
-    public int DamageDieSides = 4;
+    public int DamageDieSides;
     [HideInInspector] public Building SelectedBuilding;
     [HideInInspector] public int AllowedDamages;
     [SerializeField] private int _allowedRepairs;
@@ -160,6 +160,16 @@ public class OnlineCardEffects : MonoBehaviourPun
     }
 
     /// <summary>
+    /// Activates the activate response box
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    private void Start()
+    {
+        _activateResponseBox.SetActive(true);
+    }
+
+    /// <summary>
     /// Disables all card effect UI.
     /// </summary>
     public void DisableCardEffectUI()
@@ -183,7 +193,8 @@ public class OnlineCardEffects : MonoBehaviourPun
     public IEnumerator ActivateCardEffect(string suit, string effectName, GameObject pCardObject)
     {
         //Enables the Activated response box and calls ShowActivationText.
-        _activateResponseBox.SetActive(true);
+        /* note: Activate response box code was moved to start */
+
         CallActivationText(suit, effectName, true);
 
         yield return new WaitForSeconds(activateAnimWaitTime);
@@ -436,9 +447,28 @@ public class OnlineCardEffects : MonoBehaviourPun
         //StatManager is a statistic storing Class. 
         StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Steal", 1);
         //Updates variables. These are used to track how many more pieces a player can steal.
+
+        _ap.PlaySound("StealPiece", false);
+
         _remainingPiecesToSteal--;
         _remainingStealsText.text = _remainingPiecesToSteal + " Remaining";
         _gcm.UpdateTextBothPlayers();
+    }
+
+    /// <summary>
+    /// Checks if every button is disabled & will stop thief actions just in case.
+    /// </summary>
+    /// <returns></returns>
+    public bool StealButtonsDisabled()
+    {
+        if (!_grassThiefButton.activeSelf && !_dirtThiefButton.activeSelf && !_stoneThiefButton.activeSelf && !_goldThiefButton.activeSelf)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -455,12 +485,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (_am.SupplyPile[0] >= PiecesToClaim)
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 0, PiecesToClaim);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 0, PiecesToClaim);
                 _am.ModifySupplyPile(0, -PiecesToClaim);
             }
             else
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 0, _am.SupplyPile[0]);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 0, _am.SupplyPile[0]);
                 _am.ModifySupplyPile(0, -_am.SupplyPile[0]);
             }
         }
@@ -468,12 +498,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (_am.SupplyPile[1] >= PiecesToClaim)
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 1, PiecesToClaim);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 1, PiecesToClaim);
                 _am.ModifySupplyPile(1, -PiecesToClaim);
             }
             else
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 1, _am.SupplyPile[1]);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 1, _am.SupplyPile[1]);
                 _am.ModifySupplyPile(1, -_am.SupplyPile[1]);
             }
         }
@@ -481,12 +511,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (_am.SupplyPile[2] >= PiecesToClaim)
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 2, PiecesToClaim);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 2, PiecesToClaim);
                 _am.ModifySupplyPile(2, -PiecesToClaim);
             }
             else
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 2, _am.SupplyPile[2]);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 2, _am.SupplyPile[2]);
                 _am.ModifySupplyPile(2, -_am.SupplyPile[2]);
             }
         }
@@ -494,12 +524,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (_am.SupplyPile[3] >= GoldToClaim)
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 3, PiecesToClaim);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 3, PiecesToClaim);
                 _am.ModifySupplyPile(3, -PiecesToClaim);
             }
             else
             {
-                _am.CallUpdatePieces(0, _am.CurrentPlayer, 3, _am.SupplyPile[2]);
+                _am.CallUpdatePieces(1, _am.CurrentPlayer, 3, _am.SupplyPile[2]);
                 _am.ModifySupplyPile(3, -_am.SupplyPile[3]);
             }
         }
@@ -556,7 +586,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
 
                 //Does not highlight if the Piece isn't Dirt
-                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Seven)
                 {
                     continue;
                 }
@@ -588,7 +618,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                     continue;
                 }
 
-                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Three)
+                if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Three && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Eight)
                 {
                     continue;
                 }
@@ -683,11 +713,11 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             damageToTake = 0;
         }
-        else if (diceRoll == 2 || diceRoll == 3)
+        else if (diceRoll != 6)
         {
             damageToTake = 1;
         }
-        else if (diceRoll == 4)
+        else if (diceRoll == 6)
         {
             damageToTake = 2;
         }
@@ -720,10 +750,15 @@ public class OnlineCardEffects : MonoBehaviourPun
             enoughPieces = false;
         }
 
-        foreach(GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHidePlaceable(false);
+        }
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             //If a piece is Dirt...
-            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Two)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Two || piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Seven)
             {
                 //It cannot have a Pawn or Building...
                 if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
@@ -852,7 +887,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two || piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Seven)
                     {
                         continue;
                     }
@@ -951,6 +986,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         //Lawnmower digs pieces adjacent to your Pawns. Has very similar logic to EXCAVATOR, EROSION, and GOLDEN SHOVEL.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
+        }
+
         //Generates a list of every Pawn.
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
@@ -974,7 +1015,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                     {
                         continue;
                     }
-
+                    
                     //And will be made Diggable if all this succeeds. 
                     if (!piece.GetComponent<OnlinePieceController>().IsDiggable)
                     {
@@ -986,15 +1027,17 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
         DugPieces = 0;
 
         //If there's more open pieces than diggable pieces...
         if (openPieces >= _lawnmowerPiecesToDig)
         {
             //Dig only as many of those as the card is able to dig.
-            _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1002,9 +1045,9 @@ public class OnlineCardEffects : MonoBehaviourPun
         else
         {
             //Dig every piece shown. This could be 0!
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1157,7 +1200,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         if (_am.CurrentPlayer == 1)
         {
             //Disables certain buttons if no more pieces of those remain.
-            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 //Disables the Gold button if players choose other pieces. You must take Gold OR 2 other Pieces.
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
@@ -1186,7 +1229,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         //Identical for Player 2.
         else
         {
-            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
                 {
@@ -1293,7 +1336,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         if (_am.CurrentPlayer == 1)
         {
-            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2RefinedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) && (_am.P2RefinedPile[3] != 0 && _remainingPiecesToSteal == 1))
             {
                 if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
                 {
@@ -1320,7 +1363,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
         else
         {
-            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1RefinedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) && (_am.P1RefinedPile[3] != 0 && _remainingPiecesToSteal == 1))
             {
                 if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
                 {
@@ -1364,7 +1407,14 @@ public class OnlineCardEffects : MonoBehaviourPun
     /// <returns>Wait & Hold time</returns>
     public IEnumerator Excavator()
     {
+        //View Lawnmower for more detail of this code.
         _gcm.DisableListObjects();
+
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
+        }
 
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
@@ -1375,7 +1425,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Two && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Seven)
                     {
                         continue;
                     }
@@ -1395,21 +1445,23 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
         DugPieces = 0;
 
         if (openPieces >= _excavatorPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != _excavatorPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1451,7 +1503,7 @@ public class OnlineCardEffects : MonoBehaviourPun
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three || piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Eight)
             {
                 if (piece.GetComponent<OnlinePieceController>().HasPawn || piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building)
                 {
@@ -1515,8 +1567,10 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
             }
         }
-        
-        if (enoughPieces)
+
+        StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Place", PlacedPieces);
+
+        if (PlacedPieces == _fertilizerPiecesToPlace)
         {
             _am.CallUpdateScore(_am.CurrentPlayer, 1);
         }
@@ -1543,7 +1597,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                 continue;
             }
 
-            if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Stone" || building.GetComponent<OnlineBuilding>().SuitOfPiece == "Gold")
+            if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Grass" || building.GetComponent<OnlineBuilding>().SuitOfPiece == "Gold")
             {
                 continue;
             }
@@ -1558,7 +1612,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             yield break;
         }
 
-        _gcm.UpdateCurrentActionText("Select a building on a Dirt Piece to damage!");
+        _gcm.UpdateCurrentActionText("Select a building on a Dirt or Stone Piece to damage!");
 
         AllowedDamages = _floodDamages;
 
@@ -1567,7 +1621,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         {
             if (building.GetComponent<OnlineBuilding>().PlayerOwning != _am.CurrentPlayer)
             {
-                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<OnlineBuilding>().SuitOfPiece == "Dirt" || building.GetComponent<OnlineBuilding>().SuitOfPiece == "Stone")
                 {
                     building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(true);
                     buildingCount++;
@@ -1601,7 +1655,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
 
         //Starts PCM's PersistentCardDiscardProcess, as per Overgrowth's wording.
-        CallPCDiscardProcess();    
+        StartCoroutine(_pcm.PersistentCardDiscardProcess());
     }
 
     /// <summary>
@@ -1613,7 +1667,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         foreach (GameObject pawn in GameObject.FindGameObjectsWithTag("Pawn"))
         {
             pawn.GetComponent<OnlinePlayerPawn>().MudslideMove = true;
-            pawn.GetComponent<Animator>().Play("TempPawnBlink");
+            pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().WaitingAnimName);
         }
 
         _bm.SetActiveCollider("Pawn");
@@ -1911,7 +1965,7 @@ public class OnlineCardEffects : MonoBehaviourPun
                 continue;
             }
 
-            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three)
+            if (piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Three || piece.GetComponent<OnlinePieceController>().ObjState == OnlinePieceController.GameState.Eight)
             {
                 if (piece.GetComponent<OnlinePieceController>().HasP1Building || piece.GetComponent<OnlinePieceController>().HasP2Building || piece.GetComponent<OnlinePieceController>().HasPawn)
                 {
@@ -1948,6 +2002,7 @@ public class OnlineCardEffects : MonoBehaviourPun
         }
         CurrentDamages = 0;
 
+        AllowedDamages = 0;
         foreach (GameObject building in GameObject.FindGameObjectsWithTag("Building"))
         {
             building.GetComponent<OnlineBuilding>().PrepBuilidingDamaging(false);
@@ -1966,6 +2021,12 @@ public class OnlineCardEffects : MonoBehaviourPun
         //For more information, view Lawnmower.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<OnlinePieceController>().ShowHideDiggable(false);
+            piece.GetComponent<OnlinePieceController>().FromActivatedCard = false;
+        }
+
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
@@ -1975,7 +2036,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Three && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Five)
+                    if (piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Three && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Five && piece.GetComponent<OnlinePieceController>().ObjState != OnlinePieceController.GameState.Eight)
                     {
                         continue;
                     }
@@ -1995,22 +2056,28 @@ public class OnlineCardEffects : MonoBehaviourPun
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
+        DugPieces = 0;
+
         if (openPieces >= _erosionPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
+
+        DugPieces = 0;
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
@@ -2243,6 +2310,8 @@ public class OnlineCardEffects : MonoBehaviourPun
                 }
             }
         }
+
+        _bm.SetActiveCollider("Board");
 
         DugPieces = 0;
 
@@ -2711,7 +2780,7 @@ public class OnlineCardEffects : MonoBehaviourPun
             curInterval = 1;
         }
 
-        _am.CallUpdateScore(_am.CurrentPlayer, 1 + pointsToScore);
+        _am.CallUpdateScore(_am.CurrentPlayer, pointsToScore);
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();

@@ -18,7 +18,7 @@ public class Building : MonoBehaviour
     [Header("References")]
     [SerializeField] private Sprite _damagedSprite;
     [SerializeField] private Sprite _defaultSprite;
-    [SerializeField] private int _showDiceFaceTimes = 30;
+    [SerializeField] private int _showDiceFaceTimes = 15;
 
     //Information regarding the Building.
     [Header("Values")]
@@ -220,7 +220,7 @@ public class Building : MonoBehaviour
         BuildingHealth -= damage;
 
         //The text updates based on this given damage.
-        if(damageDiceVisual == 4)
+        if(damageDiceVisual == _ce.DamageDieSides)
         {
             if (PlayerOwning == 1)
             {
@@ -232,7 +232,7 @@ public class Building : MonoBehaviour
             }
             FindObjectOfType<SFXManager>().Play("DamageBuilding");
         }
-        else if(damageDiceVisual == 3 || damageDiceVisual == 2)
+        else if(damageDiceVisual != 1)
         {
             if (PlayerOwning == 1)
             {
@@ -388,6 +388,7 @@ public class Building : MonoBehaviour
         _damageClickPS.GetComponent<ParticleSystem>().Play();
         _currentAnimCoroutine = StartCoroutine(BuildingAnimations());
         _ce.RepairedBuildings++;
+        FindObjectOfType<SFXManager>().Play("RepairBuilding");
         _damageSmokePS.SetActive(false);
         ActiveBuilding = true;
 

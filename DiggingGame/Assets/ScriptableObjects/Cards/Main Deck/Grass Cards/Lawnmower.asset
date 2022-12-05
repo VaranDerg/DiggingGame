@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lawnmower
   m_EditorClassIdentifier: 
   CardName: Lawnmower
-  CardDescription: Remove up to 4 adjacent Grass Pieces.
+  CardDescription: Remove 4 adjacent Grass Pieces.
   GrassSuit: 1
   DirtSuit: 0
   StoneSuit: 0

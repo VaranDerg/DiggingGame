@@ -1,6 +1,6 @@
 /*****************************************************************************
-// File Name :         Building.cs
-// Author :            Rudy Wolfer
+// File Name :         OnlineBuilding.cs
+// Author :            Rudy Wolfer, Andrea Swihart-DeCoster
 // Creation Date :     October 3rd, 2022
 //
 // Brief Description : General script for universal building parameters.
@@ -19,7 +19,7 @@ public class OnlineBuilding : MonoBehaviourPun
     [Header("References")]
     [SerializeField] private Sprite _damagedSprite;
     [SerializeField] private Sprite _defaultSprite;
-    [SerializeField] private int _showDiceFaceTimes = 30;
+    [SerializeField] private int _showDiceFaceTimes = 15;
 
     //Information regarding the Building.
     [Header("Values")]
@@ -65,6 +65,8 @@ public class OnlineBuilding : MonoBehaviourPun
     private OnlineCardEffects _ce;
     private Animator _anims;
     private OnlineBoardManager _bm;
+    private OnlineAudioPlayer _ap;
+
 
     /// <summary>
     /// Assigns partner scripts.
@@ -77,6 +79,7 @@ public class OnlineBuilding : MonoBehaviourPun
         _ce = FindObjectOfType<OnlineCardEffects>();
         _anims = GetComponent<Animator>();
         _bm = FindObjectOfType<OnlineBoardManager>();
+        _ap = FindObjectOfType<OnlineAudioPlayer>();
     }
 
     /// <summary>
@@ -86,7 +89,7 @@ public class OnlineBuilding : MonoBehaviourPun
     {
         _damageDice = GameObject.FindGameObjectWithTag("Damage Dice");
         FindBoardPieces();
-        CallCurrentAnim();     
+        CallCurrentAnim();  
     }
 
     /// <summary>
@@ -166,6 +169,7 @@ public class OnlineBuilding : MonoBehaviourPun
 
         //Starts rolling the dice.
         _damageDice.GetComponent<Animator>().Play("DiceEnter");
+        _ap.PlaySound("DrawCard", false);
         _gcm.UpdateCurrentActionText("Rolling Damage Dice...");
 
         //The real result is separate from the visual
@@ -216,24 +220,49 @@ public class OnlineBuilding : MonoBehaviourPun
         int damage = _ce.CalculateBuildingDamage(damageDiceVisual);
         _damageDice.GetComponentInChildren<TextMeshProUGUI>().text = damageDiceVisual.ToString();
 
-        BuildingHealth -= damage;
+        CallBuildingHP(-damage);
 
         //The text updates based on this given damage.
-        if (damageDiceVisual == 4)
+        if (damageDiceVisual == _ce.DamageDieSides)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken massive damage!");
+            if (PlayerOwning == 1)
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s' " + BuildingType + " has taken massive damage!");
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " has taken massive damage!");
+            }
+            _ap.PlaySound("DamageBuilding", true);
         }
-        else if (damageDiceVisual == 3 || damageDiceVisual == 2)
+        else if (damageDiceVisual != 1)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " has taken damage!");
+            if (PlayerOwning == 1)
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s' " + BuildingType + " has taken damage!");
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " has taken damage!");
+            }
+            _ap.PlaySound("DamageBuilding", true);
         }
         else if (damageDiceVisual == 1)
         {
-            _gcm.UpdateCurrentActionText("Player " + PlayerOwning + "'s " + BuildingType + " avoided taking damage!");
+            if (PlayerOwning == 1)
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerOneName + "s' " + BuildingType + " avoided taking damage!");
+            }
+            else
+            {
+                _gcm.UpdateCurrentActionText(_am.PlayerTwoName + "s' " + BuildingType + " avoided taking damage!");
+            }
+            _ap.PlaySound("DamageBuilding", true);
         }
 
         //Fun!
-        _damageClickPS.GetComponent<ParticleSystem>().Play();
+        CallDamagePS(true);
+        
 
         //Destroyed
         if (BuildingHealth <= 0)
@@ -243,54 +272,54 @@ public class OnlineBuilding : MonoBehaviourPun
             {
                 if (BuildingType == "Factory")
                 {
-                    _am.P1BuiltBuildings[0]--;
+                    _am.CallBuiltBuildings(1, 0, -1);
                 }
                 else if (BuildingType == "Burrow")
                 {
-                    _am.P1BuiltBuildings[1]--;
+                    _am.CallBuiltBuildings(1, 1, -1);
                 }
                 else if (BuildingType == "Grass Mine")
                 {
-                    _am.P1BuiltBuildings[2]--;
+                    _am.CallBuiltBuildings(1, 2, -1);
                 }
                 else if (BuildingType == "Dirt Mine")
                 {
-                    _am.P1BuiltBuildings[3]--;
+                    _am.CallBuiltBuildings(1, 3, -1);
                 }
                 else if (BuildingType == "Stone Mine")
                 {
-                    _am.P1BuiltBuildings[4]--;
+                    _am.CallBuiltBuildings(1, 4, -1);
                 }
                 else if (BuildingType == "Gold Mine")
                 {
-                    _am.P1BuiltBuildings[5]--;
+                    _am.CallBuiltBuildings(1, 5, -1);
                 }
             }
             else
             {
                 if (BuildingType == "Factory")
                 {
-                    _am.P2BuiltBuildings[0]--;
+                    _am.CallBuiltBuildings(2, 0, -1);
                 }
                 else if (BuildingType == "Burrow")
                 {
-                    _am.P2BuiltBuildings[1]--;
+                    _am.CallBuiltBuildings(2, 1, -1);
                 }
                 else if (BuildingType == "Grass Mine")
                 {
-                    _am.P2BuiltBuildings[2]--;
+                    _am.CallBuiltBuildings(2, 2, -1);
                 }
                 else if (BuildingType == "Dirt Mine")
                 {
-                    _am.P2BuiltBuildings[3]--;
+                    _am.CallBuiltBuildings(2, 3, -1);
                 }
                 else if (BuildingType == "Stone Mine")
                 {
-                    _am.P2BuiltBuildings[4]--;
+                    _am.CallBuiltBuildings(2, 4, -1);
                 }
                 else if (BuildingType == "Gold Mine")
                 {
-                    _am.P1BuiltBuildings[5]--;
+                    _am.CallBuiltBuildings(2, 5, -1);
                 }
             }
 
@@ -336,6 +365,7 @@ public class OnlineBuilding : MonoBehaviourPun
 
         //Additional damages are generally only for Tornado or Earthquake.
         _damageDice.GetComponent<Animator>().Play("DiceExit");
+        _ap.PlaySound("DrawCard", false);
         _ce.CurrentDamages++;
         _pcm.BuildingsDamaged++;
         if (_ce.CurrentDamages == _ce.AllowedDamages)
@@ -350,6 +380,36 @@ public class OnlineBuilding : MonoBehaviourPun
         }
         PrepBuilidingDamaging(false);
         ActiveBuilding = false;
+    }
+
+    /// <summary>
+    /// Repairs a building.
+    /// </summary>
+    public void RepairBuilding()
+    {
+        //Clicking a building Repairs it.
+        CallBuildingHP(1);     // ASD
+        CallDamagePS(true);     // ASD
+        CallCurrentAnim();  //ASD
+        _ce.RepairedBuildings++;
+        _ap.PlaySound("RepairBuilding", true);
+        CallDamagePS(false);    // ASD
+        ActiveBuilding = true;
+
+        //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
+        if (_am.CurrentPlayer == 1 && PlayerOwning == 2)
+        {
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
+            _gcm.UpdateTextBothPlayers();
+        }
+        else if (_am.CurrentPlayer == 2 && PlayerOwning == 1)
+        {
+            _am.CallUpdateScore(_am.CurrentPlayer, 1);
+            _gcm.UpdateTextBothPlayers();
+        }
+
+        ActiveBuilding = false;
+        PrepBuildingRepairing(false);
     }
 
     /// <summary>
@@ -384,35 +444,6 @@ public class OnlineBuilding : MonoBehaviourPun
                 CallPlayAnimation(_buildingDamagedName);    // ASD
             }
         }
-    }
-
-    /// <summary>
-    /// Repairs a building.
-    /// </summary>
-    public void RepairBuilding()
-    {
-        //Clicking a building Repairs it.
-        CallBuildingHP(1);     // ASD
-        CallDamagePS(true);     // ASD
-        CallCurrentAnim();  //ASD
-        _ce.RepairedBuildings++;
-        CallDamagePS(false);    // ASD
-        ActiveBuilding = true;
-
-        //_am.ScorePoints cannot be used here since this specific interaction inverses point scoring.
-        if (_am.CurrentPlayer == 1 && PlayerOwning == 2)
-        {
-            _am.CallUpdateScore(_am.CurrentPlayer, 1);
-            _gcm.UpdateTextBothPlayers();
-        }
-        else if (_am.CurrentPlayer == 2 && PlayerOwning == 1)
-        {
-            _am.CallUpdateScore(_am.CurrentPlayer, 1);
-            _gcm.UpdateTextBothPlayers();
-        }
-
-        ActiveBuilding = false;
-        PrepBuildingRepairing(false);
     }
 
     /// <summary>

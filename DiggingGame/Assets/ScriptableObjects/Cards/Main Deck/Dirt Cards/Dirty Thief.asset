@@ -18,9 +18,9 @@ MonoBehaviour:
   DirtSuit: 1
   StoneSuit: 0
   GoldSuit: 0
-  GrassCost: 1
+  GrassCost: 0
   DirtCost: 1
-  StoneCost: 0
+  StoneCost: 1
   persistent: 0
   disaster: 0
   FlavorText: 'I can officially note that the talk surrounding gold was no mere rumor,

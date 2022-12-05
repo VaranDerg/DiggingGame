@@ -110,13 +110,15 @@ public class OnlinePieceController : MonoBehaviourPun
         Three,
         Four,
         Five,
-        Six
+        Six,
+        Seven,
+        Eight
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        SetPieceState(1);
+        CallPieceState(1);
         _borderSr.color = _defaultColor;
         _borderAnims.Play("PieceBorderIdle");
         _pieceID = photonView.ViewID;
@@ -200,7 +202,8 @@ public class OnlinePieceController : MonoBehaviourPun
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Start of Shovel Code
-            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && ObjState == GameState.Two && !_am.ShovelUsed)
+            if (_pcm.CheckForPersistentCard(_am.CurrentPlayer, "Shovel") && (ObjState == GameState.Two 
+                || ObjState == GameState.Seven) && !_am.ShovelUsed)
             {
                 _ap.PlaySound("DigDirt", true); // ASD
                 CallPieceState(3);
@@ -219,7 +222,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             else
             {
-                _ap.PlaySound("ClickPawn", true);   // ASD
+                _ap.PlaySound("ClickPawn", false);   // ASD
                 _borderSr.color = _waitingColor;
                 _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
@@ -232,11 +235,11 @@ public class OnlinePieceController : MonoBehaviourPun
                 {
                     _cm.PrepareCardSelection(1, "Grass", false);
                 }
-                else if (ObjState == GameState.Two)
+                else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                 {
                     _cm.PrepareCardSelection(1, "Dirt", false);
                 }
-                else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                 {
                     _cm.PrepareCardSelection(1, "Stone", false);
                 }
@@ -262,12 +265,13 @@ public class OnlinePieceController : MonoBehaviourPun
                         _ap.PlaySound("DigGrass", true);
                         break;
                     case GameState.Six:
-                        CallPieceState(1);
+                        CallPieceState(2);
                         CallRemovalAnim(1);
                         _am.CollectTile(_am.CurrentPlayer, "Grass", true);
                         _ap.PlaySound("DigGrass", true);
                         break;
                     case GameState.Two:
+                    case GameState.Seven:
                         CallPieceState(3);
                         CallRemovalAnim(2);
                         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
@@ -289,7 +293,13 @@ public class OnlinePieceController : MonoBehaviourPun
                             _am.CollectTile(_am.CurrentPlayer, "Stone", true);
                             _ap.PlaySound("DigStone", true);
                         }
-              
+             
+                        break;
+                    case GameState.Eight:
+                        CallPieceState(4);
+                        CallRemovalAnim(3);
+                        _am.CollectTile(_am.CurrentPlayer, "Stone", true);
+                        _ap.PlaySound("DigStone", true);
                         break;
                     case GameState.Five:
                         CallPieceState(4);
@@ -317,6 +327,7 @@ public class OnlinePieceController : MonoBehaviourPun
     private IEnumerator UseWalkway()
     {
         // Andrea SD
+        CallPawnID(CurrentPawn.GetComponent<OnlinePlayerPawn>().PawnID);
         CallMovePawn(_currentPawnID, _pieceID, false);
 
         while (_pawnIsMoving)
@@ -325,9 +336,10 @@ public class OnlinePieceController : MonoBehaviourPun
         }
 
         UsingWalkway = false;
-        SetPieceState(3);
-        _grassPS.Play();
-        _dirtPS.Play();
+        CallPieceState(3);
+        CallRemovalAnim(1);
+        CallRemovalAnim(2);
+        _ap.PlaySound("DigGrass", true);
         _am.CollectTile(_am.CurrentPlayer, "Grass", false);
         _am.CollectTile(_am.CurrentPlayer, "Dirt", true);
     }
@@ -373,8 +385,10 @@ public class OnlinePieceController : MonoBehaviourPun
 
             if (HasGold)
             {
-                SetPieceState(5);
-                _goldPS.Play();
+                CallPieceState(5);
+                CallRemovalAnim(4);
+                _ap.PlaySound("DigGold", true);
+
                 if (DiscerningEye)
                 {
                     _am.CallUpdateScore(_am.CurrentPlayer, 1);
@@ -382,6 +396,8 @@ public class OnlinePieceController : MonoBehaviourPun
             }
             else
             {
+                CallPieceState(8);
+                _ap.PlaySound("DigStone", true);
                 CallRemovalAnim(3);
             }
 
@@ -413,19 +429,25 @@ public class OnlinePieceController : MonoBehaviourPun
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     break;
                 case GameState.Six:
-                    SetPieceState(2);
+                    CallPieceState(2);
                     CallRemovalAnim(1);
                     _ap.PlaySound("DigGrass", true);
                     _am.CollectTile(_am.CurrentPlayer, "Grass", false);
                     break;
                 case GameState.Two:
-                    SetPieceState(3);
+                    CallPieceState(3);
+                    CallRemovalAnim(2);
+                    _ap.PlaySound("DigDirt", true);
+                    _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
+                    break;
+                case GameState.Seven:
+                    CallPieceState(3);
                     CallRemovalAnim(2);
                     _ap.PlaySound("DigDirt", true);
                     _am.CollectTile(_am.CurrentPlayer, "Dirt", false);
                     break;
                 case GameState.Three:
-                    SetPieceState(4);
+                    CallPieceState(4);
                     if (HasGold)
                     {
                         CallRemovalAnim(4);
@@ -440,8 +462,14 @@ public class OnlinePieceController : MonoBehaviourPun
                         _am.CollectTile(_am.CurrentPlayer, "Stone", false);
                     }
                     break;
+                case GameState.Eight:
+                    CallPieceState(4);
+                    CallRemovalAnim(3);
+                    _ap.PlaySound("DigStone", true);
+                    _am.CollectTile(_am.CurrentPlayer, "Stone", false);
+                    break;
                 case GameState.Five:
-                    SetPieceState(4);
+                    CallPieceState(4);
                     CallRemovalAnim(4);
                     _am.CollectTile(_am.CurrentPlayer, "Gold", true);
                     _ap.PlaySound("DigGold", true);
@@ -481,14 +509,26 @@ public class OnlinePieceController : MonoBehaviourPun
                     _am.PlaceTile("Grass");
                     _ap.PlaySound("DigGrass", true);
                     break;
+                case GameState.Seven:
+                    CallPieceState(6);
+                    CallRemovalAnim(1);
+                    _am.PlaceTile("Grass");
+                    _ap.PlaySound("DigGrass", true);
+                    break;
                 case GameState.Three:
-                    CallPieceState(2);
+                    CallPieceState(7);
+                    CallRemovalAnim(2);
+                    _am.PlaceTile("Dirt");
+                    _ap.PlaySound("DigDirt", true);
+                    break;
+                case GameState.Eight:
+                    CallPieceState(7);
                     CallRemovalAnim(2);
                     _am.PlaceTile("Dirt");
                     _ap.PlaySound("DigDirt", true);
                     break;
                 case GameState.Four:
-                    CallPieceState(3);
+                    CallPieceState(8);
                     CallRemovalAnim(3);
                     _am.PlaceTile("Stone");
                     _ap.PlaySound("DigStone", true);
@@ -506,10 +546,10 @@ public class OnlinePieceController : MonoBehaviourPun
     public IEnumerator MovePawnTo(int pawnID, int pieceID, bool goBack)
     {
         GameObject pawn = GameObject.Find(PhotonView.Find(pawnID).gameObject.name);
-        destinationPiece = gameObject;
-
         pawn.GetComponent<OnlinePlayerPawn>().ClosestPieceToPawn().GetComponent<OnlinePieceController>().CallSetHasPawn(false);     // ASD
+        destinationPiece = gameObject;
         _pawnIsMoving = true;
+        _ap.PlaySound("Move", true);    
         pawn.GetComponent<Animator>().Play(pawn.GetComponent<OnlinePlayerPawn>().MoveAnimName);
 
         //Start anim?
@@ -517,7 +557,7 @@ public class OnlinePieceController : MonoBehaviourPun
         //End anim?
 
         pawn.transform.position = destinationPiece.transform.position;
-        pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
+        //pawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         CallSetHasPawn(true);
         _pawnIsMoving = false;
 
@@ -551,6 +591,7 @@ public class OnlinePieceController : MonoBehaviourPun
             //For the game's initial free move. The player has to spend cards unless this is true.
             if (_am.CurrentTurnPhase != 1 && _am.CurrentTurnPhase != 3)
             {
+                _ap.PlaySound("ClickPawn", false);
                 _borderSr.color = _waitingColor;
                 _borderAnims.Play("PieceBorderWaiting");
                 PieceIsSelected = true;
@@ -572,11 +613,11 @@ public class OnlinePieceController : MonoBehaviourPun
                         {
                             _cm.PrepareCardSelection(1, "Grass", false);
                         }
-                        else if (ObjState == GameState.Two)
+                        else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                         {
                             _cm.PrepareCardSelection(1, "Dirt", false);
                         }
-                        else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                        else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                         {
                             _cm.PrepareCardSelection(1, "Stone", false);
                         }
@@ -600,11 +641,11 @@ public class OnlinePieceController : MonoBehaviourPun
                     {
                         _cm.PrepareCardSelection(1, "Grass", false);
                     }
-                    else if (ObjState == GameState.Two)
+                    else if (ObjState == GameState.Two || ObjState == GameState.Seven)
                     {
                         _cm.PrepareCardSelection(1, "Dirt", false);
                     }
-                    else if (ObjState == GameState.Three || ObjState == GameState.Five)
+                    else if (ObjState == GameState.Three || ObjState == GameState.Five || ObjState == GameState.Eight)
                     {
                         _cm.PrepareCardSelection(1, "Stone", false);
                     }
@@ -637,13 +678,17 @@ public class OnlinePieceController : MonoBehaviourPun
             {
                 pieceSuit = "Grass";
             }
-            else if (ObjState == GameState.Two)
+            else if (ObjState == GameState.Two || ObjState == GameState.Seven)
             {
                 pieceSuit = "Dirt";
             }
-            else if (ObjState == GameState.Three)
+            else if (ObjState == GameState.Three || ObjState == GameState.Eight)
             {
                 pieceSuit = "Stone";
+            }
+            else if (ObjState == GameState.Five)
+            {
+                pieceSuit = "Gold";
             }
 
             int buildingIndex = 0;
@@ -657,17 +702,21 @@ public class OnlinePieceController : MonoBehaviourPun
             }
             else if (CurrentPawn.GetComponent<OnlinePlayerPawn>().BuildingToBuild == "Mine")
             {
-                if (pieceSuit == "Grass")
+                if(pieceSuit == "Grass")
                 {
                     buildingIndex = 2;
                 }
-                else if (pieceSuit == "Dirt")
+                else if(pieceSuit == "Dirt")
                 {
                     buildingIndex = 3;
                 }
-                else if (pieceSuit == "Stone")
+                else if(pieceSuit == "Stone")
                 {
                     buildingIndex = 4;
+                }
+                else if(pieceSuit == "Gold")
+                {
+                    buildingIndex = 5;
                 }
             }
 
@@ -686,6 +735,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
     public IEnumerator BuildingCardSelection(string buildingName, int buildingIndex, string suitOfPiece)
     {
+        _ap.PlaySound("ClickPawn", false);
         _borderSr.color = _waitingColor;
         _borderAnims.Play("PieceBorderWaiting");
         PieceIsSelected = true;
@@ -767,7 +817,7 @@ public class OnlinePieceController : MonoBehaviourPun
             }
         }
 
-        InstantitateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
+        InstantiateBuildingAndPawn(buildingName, buildingIndex, suitOfPiece);
 
         CurrentPawn.GetComponent<OnlinePlayerPawn>().UnassignAdjacentTiles();
         _gcm.Back();
@@ -780,7 +830,7 @@ public class OnlinePieceController : MonoBehaviourPun
     /// Edited: Andrea SD - modified for online useS
     /// </summary>
     /// <param name="building">"Factory" "Burrow" or "Mine"</param>
-    private bool InstantitateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
+    private bool InstantiateBuildingAndPawn(string buildingName, int buildingArrayNum, string pieceSuit)
     {
         GameObject building = null;
         if (_am.CurrentPlayer == 1)
@@ -831,8 +881,14 @@ public class OnlinePieceController : MonoBehaviourPun
             // for all clients
             GameObject thisBuilding = PhotonNetwork.Instantiate(building.name,
                 _buildingSlot.position, Quaternion.identity);   //Andrea SD
+            // Sets the building to its piece's slot
+            thisBuilding.transform.SetParent(_buildingSlot);
+            int buildingID = thisBuilding.GetPhotonView().ViewID;
+            CallSetSlot(buildingID);
 
             StatManager.s_Instance.IncreaseStatistic(_am.CurrentPlayer, "Building", 1);
+
+            _ap.PlaySound("BuildBuilding", true);
 
             if (buildingArrayNum == 0)
             {
@@ -927,6 +983,8 @@ public class OnlinePieceController : MonoBehaviourPun
 
             if (spawnPawn)
             {
+                _ap.PlaySound("SpawnPawn", true);
+
                 if (_am.CurrentPlayer == 1)
                 {
                     Vector3 _buildingPlacement = _buildingSlot.transform.position;   // Andrea SD
@@ -946,7 +1004,7 @@ public class OnlinePieceController : MonoBehaviourPun
 
             }
 
-            SetBuildingPlayer(_am.CurrentPlayer, true);     // ASD
+            CallBuildingPlayer(_am.CurrentPlayer, true);    // ASD
 
             return true;
         }
@@ -955,6 +1013,30 @@ public class OnlinePieceController : MonoBehaviourPun
             _gcm.UpdateCurrentActionText("Cannot place " + building.name + " adjacent to another building.");
             return false;
         }
+    }
+
+    /// <summary>
+    /// Calls the RPC that sets the building parent to the piece building slot
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="buildingID"> the building being spawned </param>
+    public void CallSetSlot(int buildingID)
+    {
+        photonView.RPC("SetParentSlot", RpcTarget.All, buildingID);
+    }
+
+    /// <summary>
+    /// Sets the building parent to the piece building slot
+    /// 
+    /// Author: Andrea SD
+    /// </summary>
+    /// <param name="buildingID"> the building being spawned </param>
+    [PunRPC]
+    public void SetParentSlot(int buildingID)
+    {
+        GameObject thisBuilding = GameObject.Find(PhotonView.Find(buildingID).gameObject.name);     //ASD
+        thisBuilding.transform.SetParent(_buildingSlot);
     }
 
     /// <summary>
@@ -1239,27 +1321,57 @@ public class OnlinePieceController : MonoBehaviourPun
     [PunRPC]
     public void SetPieceState(int state)
     {
-        //Debug.Log("Switching " + gameObject.name + "'s State to " + state + ".");
-
         switch (state)
         {
             // Each case calls each client connected to the server and
             // changes the game object sprite to a sprite from the resources
             case 1:
                 ChangeSprite("GrassPiece");
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
                 ObjState = GameState.One;
                 break;
             case 2:
                 ChangeSprite("DirtPiece");
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
                 ObjState = GameState.Two;
                 break;
             case 3:
                 ChangeSprite("StonePiece");
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
                 ObjState = GameState.Three;
                 break;
             case 4:
                 ChangeSprite("BedrockPiece");
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
                 ObjState = GameState.Four;
+                break;
+            case 5:
+                ChangeSprite("GoldPiece");
+                _goldLight.SetActive(true);
+                _goldGlitter.SetActive(true);
+                ObjState = GameState.Five;
+                break;
+            case 6:
+                ChangeSprite("FlowerPiece");
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
+                ObjState = GameState.Six;
+                break;
+            case 7:
+                ChangeSprite("DirtPlaced");
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
+                ObjState = GameState.Seven;
+                break;
+            case 8:
+                ChangeSprite("StonePlaced");
+                _goldLight.SetActive(false);
+                _goldGlitter.SetActive(false);
+                ObjState = GameState.Eight;
                 break;
         }
     }

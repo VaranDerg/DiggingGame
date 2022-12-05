@@ -32,4 +32,5 @@ public class MultiSceneData : MonoBehaviour
     }
 
     public static int s_WeatherOption;
+    public static bool s_HelpEnabled = false;
 }

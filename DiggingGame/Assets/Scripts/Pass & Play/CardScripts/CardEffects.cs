@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         Card.cs
+// File Name :         CardEffects.cs
 // Author :            Rudy Wolfer
 // Creation Date :     October 18th, 2022
 //
@@ -78,7 +78,7 @@ public class CardEffects : MonoBehaviour
     [SerializeField] private int _earthquakeDamages;
     [SerializeField] private int _thunderstormDamages;
     [SerializeField] private int _tornadoDamages;
-    public int DamageDieSides = 4;
+    public int DamageDieSides;
     [HideInInspector] public Building SelectedBuilding;
     [HideInInspector] public int AllowedDamages;
     [SerializeField] private int _allowedRepairs;
@@ -476,6 +476,22 @@ public class CardEffects : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks if every button is disabled & will stop thief actions just in case.
+    /// </summary>
+    /// <returns></returns>
+    public bool StealButtonsDisabled()
+    {
+        if(!_grassThiefButton.activeSelf && !_dirtThiefButton.activeSelf && !_stoneThiefButton.activeSelf && !_goldThiefButton.activeSelf)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Claims Pieces with Holy Idol.
     /// </summary>
     /// <param name="suit">"Grass" "Dirt" "Stone" "Gold" or "Point"</param>
@@ -488,12 +504,12 @@ public class CardEffects : MonoBehaviour
             {
                 if(_am.SupplyPile[0] >= PiecesToClaim)
                 {
-                    _am.P1CollectedPile[0] += PiecesToClaim;
+                    _am.P1RefinedPile[0] += PiecesToClaim;
                     _am.SupplyPile[0] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P1CollectedPile[0] += _am.SupplyPile[0];
+                    _am.P1RefinedPile[0] += _am.SupplyPile[0];
                     _am.SupplyPile[0] -= _am.SupplyPile[0];
                 }
             }
@@ -501,12 +517,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[1] >= PiecesToClaim)
                 {
-                    _am.P1CollectedPile[1] += PiecesToClaim;
+                    _am.P1RefinedPile[1] += PiecesToClaim;
                     _am.SupplyPile[1] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P1CollectedPile[1] += _am.SupplyPile[1];
+                    _am.P1RefinedPile[1] += _am.SupplyPile[1];
                     _am.SupplyPile[1] -= _am.SupplyPile[1];
                 }
             }
@@ -514,12 +530,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[2] >= PiecesToClaim)
                 {
-                    _am.P1CollectedPile[2] += PiecesToClaim;
+                    _am.P1RefinedPile[2] += PiecesToClaim;
                     _am.SupplyPile[2] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P1CollectedPile[2] += _am.SupplyPile[2];
+                    _am.P1RefinedPile[2] += _am.SupplyPile[2];
                     _am.SupplyPile[2] -= _am.SupplyPile[2];
                 }
             }
@@ -527,12 +543,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[3] >= GoldToClaim)
                 {
-                    _am.P1CollectedPile[3] += GoldToClaim;
+                    _am.P1RefinedPile[3] += GoldToClaim;
                     _am.SupplyPile[3] -= GoldToClaim;
                 }
                 else
                 {
-                    _am.P1CollectedPile[3] += _am.SupplyPile[3];
+                    _am.P1RefinedPile[3] += _am.SupplyPile[3];
                     _am.SupplyPile[3] -= _am.SupplyPile[3];
                 }
             }
@@ -547,12 +563,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[0] >= PiecesToClaim)
                 {
-                    _am.P2CollectedPile[0] += PiecesToClaim;
+                    _am.P2RefinedPile[0] += PiecesToClaim;
                     _am.SupplyPile[0] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P2CollectedPile[0] += _am.SupplyPile[0];
+                    _am.P2RefinedPile[0] += _am.SupplyPile[0];
                     _am.SupplyPile[0] -= _am.SupplyPile[0];
                 }
             }
@@ -560,12 +576,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[1] >= PiecesToClaim)
                 {
-                    _am.P2CollectedPile[1] += PiecesToClaim;
+                    _am.P2RefinedPile[1] += PiecesToClaim;
                     _am.SupplyPile[1] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P2CollectedPile[1] += _am.SupplyPile[1];
+                    _am.P2RefinedPile[1] += _am.SupplyPile[1];
                     _am.SupplyPile[1] -= _am.SupplyPile[1];
                 }
             }
@@ -573,12 +589,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[2] >= PiecesToClaim)
                 {
-                    _am.P2CollectedPile[2] += PiecesToClaim;
+                    _am.P2RefinedPile[2] += PiecesToClaim;
                     _am.SupplyPile[2] -= PiecesToClaim;
                 }
                 else
                 {
-                    _am.P2CollectedPile[2] += _am.SupplyPile[2];
+                    _am.P2RefinedPile[2] += _am.SupplyPile[2];
                     _am.SupplyPile[2] -= _am.SupplyPile[2];
                 }
             }
@@ -586,12 +602,12 @@ public class CardEffects : MonoBehaviour
             {
                 if (_am.SupplyPile[3] >= GoldToClaim)
                 {
-                    _am.P2CollectedPile[3] += GoldToClaim;
+                    _am.P2RefinedPile[3] += GoldToClaim;
                     _am.SupplyPile[3] -= GoldToClaim;
                 }
                 else
                 {
-                    _am.P2CollectedPile[3] += _am.SupplyPile[3];
+                    _am.P2RefinedPile[3] += _am.SupplyPile[3];
                     _am.SupplyPile[3] -= _am.SupplyPile[3];
                 }
             }
@@ -649,7 +665,7 @@ public class CardEffects : MonoBehaviour
                 }
 
                 //Does not highlight if the Piece isn't Dirt
-                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                if(piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Seven)
                 {
                     continue;
                 }
@@ -681,7 +697,7 @@ public class CardEffects : MonoBehaviour
                     continue;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three)
+                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Eight)
                 {
                     continue;
                 }
@@ -777,11 +793,11 @@ public class CardEffects : MonoBehaviour
         {
             damageToTake = 0;
         }
-        else if(diceRoll == 2 || diceRoll == 3)
+        else if(diceRoll != 6)
         {
             damageToTake = 1;
         }
-        else if(diceRoll == 4)
+        else if(diceRoll == 6)
         {
             damageToTake = 2;
         }
@@ -820,7 +836,7 @@ public class CardEffects : MonoBehaviour
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
             //If a piece is Dirt...
-            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two)
+            if(piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Two || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Seven)
             {
                 //It cannot have a Pawn or Building...
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
@@ -947,7 +963,7 @@ public class CardEffects : MonoBehaviour
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Seven)
                     {
                         continue;
                     }
@@ -1044,6 +1060,12 @@ public class CardEffects : MonoBehaviour
         //Lawnmower digs pieces adjacent to your Pawns. Has very similar logic to EXCAVATOR, EROSION, and GOLDEN SHOVEL.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            piece.GetComponent<PieceController>().FromActivatedCard = false;
+        }
+
         //Generates a list of every Pawn.
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
@@ -1079,15 +1101,17 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
         DugPieces = 0;
 
         //If there's more open pieces than diggable pieces...
         if(openPieces >= _lawnmowerPiecesToDig)
         {
             //Dig only as many of those as the card is able to dig.
-            _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != _lawnmowerPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _lawnmowerPiecesToDig + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1095,9 +1119,9 @@ public class CardEffects : MonoBehaviour
         else
         {
             //Dig every piece shown. This could be 0!
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Grass Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1251,7 +1275,7 @@ public class CardEffects : MonoBehaviour
         if (_am.CurrentPlayer == 1)
         {
             //Disables certain buttons if no more pieces of those remain.
-            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[0] + _am.P2RefinedPile[0] + _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 //Disables the Gold button if players choose other pieces. You must take Gold OR 2 other Pieces.
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
@@ -1280,7 +1304,7 @@ public class CardEffects : MonoBehaviour
         //Identical for Player 2.
         else
         {
-            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[0] + _am.P1RefinedPile[0] + _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 if (_remainingPiecesToSteal != ThiefPiecesToTake)
                 {
@@ -1387,7 +1411,7 @@ public class CardEffects : MonoBehaviour
 
         if (_am.CurrentPlayer == 1)
         {
-            while (_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0)
+            while ((_remainingPiecesToSteal != 0 && _am.P2CollectedPile[1] + _am.P2RefinedPile[1] + _am.P2CollectedPile[2] + _am.P2RefinedPile[2] + _am.P2CollectedPile[3] + _am.P2RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
                 {
@@ -1414,7 +1438,7 @@ public class CardEffects : MonoBehaviour
         }
         else
         {
-            while (_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0)
+            while ((_remainingPiecesToSteal != 0 && _am.P1CollectedPile[1] + _am.P1RefinedPile[1] + _am.P1CollectedPile[2] + _am.P1RefinedPile[2] + _am.P1CollectedPile[3] + _am.P1RefinedPile[3] != 0) || StealButtonsDisabled())
             {
                 if (_remainingPiecesToSteal != DirtyThiefPiecesToTake)
                 {
@@ -1459,6 +1483,12 @@ public class CardEffects : MonoBehaviour
         //View Lawnmower for more detail of this code.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            piece.GetComponent<PieceController>().FromActivatedCard = false;
+        }
+
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
@@ -1468,7 +1498,7 @@ public class CardEffects : MonoBehaviour
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Seven)
                     {
                         continue;
                     }
@@ -1488,21 +1518,23 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
         DugPieces = 0;
 
         if (openPieces >= _excavatorPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != _excavatorPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _excavatorPiecesToDig + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Dirt Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -1545,7 +1577,7 @@ public class CardEffects : MonoBehaviour
 
         foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
         {
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Eight)
             {
                 if (piece.GetComponent<PieceController>().HasPawn || piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building)
                 {
@@ -1641,7 +1673,7 @@ public class CardEffects : MonoBehaviour
                 continue;
             }
 
-            if(building.GetComponent<Building>().SuitOfPiece == "Stone" || building.GetComponent<Building>().SuitOfPiece == "Gold")
+            if(building.GetComponent<Building>().SuitOfPiece == "Grass" || building.GetComponent<Building>().SuitOfPiece == "Gold")
             {
                 continue;
             }
@@ -1656,7 +1688,7 @@ public class CardEffects : MonoBehaviour
             yield break;
         }
 
-        _gcm.UpdateCurrentActionText("Select a building on a Dirt Piece to damage!");
+        _gcm.UpdateCurrentActionText("Select a building on a Dirt or Stone Piece to damage!");
 
         AllowedDamages = _floodDamages;
 
@@ -1665,7 +1697,7 @@ public class CardEffects : MonoBehaviour
         {
             if (building.GetComponent<Building>().PlayerOwning != _am.CurrentPlayer)
             {
-                if (building.GetComponent<Building>().SuitOfPiece == "Dirt")
+                if (building.GetComponent<Building>().SuitOfPiece == "Dirt" || building.GetComponent<Building>().SuitOfPiece == "Stone")
                 {
                     building.GetComponent<Building>().PrepBuilidingDamaging(true);
                     buildingCount++;
@@ -2009,7 +2041,7 @@ public class CardEffects : MonoBehaviour
                 continue;
             }
 
-            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three)
+            if (piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Three || piece.GetComponent<PieceController>().ObjState == PieceController.GameState.Eight)
             {
                 if (piece.GetComponent<PieceController>().HasP1Building || piece.GetComponent<PieceController>().HasP2Building || piece.GetComponent<PieceController>().HasPawn)
                 {
@@ -2067,6 +2099,12 @@ public class CardEffects : MonoBehaviour
         //For more information, view Lawnmower.
         _gcm.DisableListObjects();
 
+        foreach (GameObject piece in GameObject.FindGameObjectsWithTag("BoardPiece"))
+        {
+            piece.GetComponent<PieceController>().ShowHideDiggable(false);
+            piece.GetComponent<PieceController>().FromActivatedCard = false;
+        }
+
         int openPieces = 0;
         List<GameObject> pawns = FindEveryPawnOfCurrentPlayer();
 
@@ -2076,7 +2114,7 @@ public class CardEffects : MonoBehaviour
             {
                 foreach (GameObject piece in _bm.GenerateAdjacentPieceList(pawn.gameObject))
                 {
-                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Five)
+                    if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Three && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Five && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Eight)
                     {
                         continue;
                     }
@@ -2096,21 +2134,23 @@ public class CardEffects : MonoBehaviour
             }
         }
 
+        _bm.SetActiveCollider("Board");
+
         DugPieces = 0;
 
         if (openPieces >= _erosionPiecesToDig)
         {
-            _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != _erosionPiecesToDig)
             {
+                _gcm.UpdateCurrentActionText("Dig " + _erosionPiecesToDig + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
         else
         {
-            _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
             while (DugPieces != openPieces)
             {
+                _gcm.UpdateCurrentActionText("Dig " + openPieces + " Stone Pieces adjacent to your Pawns!");
                 yield return null;
             }
         }
@@ -2348,6 +2388,8 @@ public class CardEffects : MonoBehaviour
                 }
             }
         }
+
+        _bm.SetActiveCollider("Board");
 
         DugPieces = 0;
 
@@ -2817,7 +2859,7 @@ public class CardEffects : MonoBehaviour
             curInterval = 1;
         }
 
-        _am.ScorePoints(1 + pointsToScore);
+        _am.ScorePoints(pointsToScore);
 
         _bm.DisableAllBoardInteractions();
         _gcm.Back();

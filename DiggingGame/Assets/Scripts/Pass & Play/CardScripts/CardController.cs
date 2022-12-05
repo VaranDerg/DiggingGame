@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         CardManager.cs
+// File Name :         CardController.cs
 // Author :            Rudy Wolfer
 // Creation Date :     October 10th, 2022
 //
@@ -120,6 +120,11 @@ public class CardController : MonoBehaviour
             return;
         }
 
+        if(Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            MaximizeCard();
+        }
+
         if(!Selected)
         {
             FindObjectOfType<SFXManager>().Play("HoverCard");
@@ -135,8 +140,7 @@ public class CardController : MonoBehaviour
     {
         if (_currentlyMaximized)
         {
-            Destroy(_maximizedCard);
-            _currentlyMaximized = false;
+            DemaximizeCard();
         }
 
         if (_gettingDiscarded)
@@ -162,7 +166,15 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseOver()
     {
-        MaximizeCard(_cardVisualToMaximize);
+        if(Input.GetKey(KeyCode.Mouse1))
+        {
+            MaximizeCard();
+        }
+
+        if(Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            DemaximizeCard();
+        }
 
         if(_gettingDiscarded)
         {
@@ -436,32 +448,33 @@ public class CardController : MonoBehaviour
     /// Maximizes a card for easier view.
     /// </summary>
     /// <param name="thingToMaximize">Card zone to maximize</param>
-    private void MaximizeCard(GameObject thingToMaximize)
+    private void MaximizeCard()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        if (_currentlyMaximized)
         {
-            if (_currentlyMaximized)
-            {
-                return;
-            }
-
-            FindObjectOfType<SFXManager>().Play("SelectCard");
-
-            _maximizedCard = Instantiate(thingToMaximize, _maximizeAnchor);
-            _maximizedCard.transform.position = _maximizeAnchor.transform.position;
-            _currentlyMaximized = true;
+            return;
         }
-        else if(Input.GetKeyUp(KeyCode.Mouse1))
+
+        FindObjectOfType<SFXManager>().Play("SelectCard");
+
+        _maximizedCard = Instantiate(_cardVisualToMaximize, _maximizeAnchor);
+        _maximizedCard.transform.position = _maximizeAnchor.transform.position;
+        _currentlyMaximized = true;
+    }
+
+    /// <summary>
+    /// Demaximizes a card.
+    /// </summary>
+    private void DemaximizeCard()
+    {
+        if (!_currentlyMaximized)
         {
-            if(!_currentlyMaximized)
-            {
-                return;
-            }
-
-            FindObjectOfType<SFXManager>().Play("SelectCard");
-
-            Destroy(_maximizedCard);
-            _currentlyMaximized = false;
+            return;
         }
+
+        FindObjectOfType<SFXManager>().Play("SelectCard");
+
+        Destroy(_maximizedCard);
+        _currentlyMaximized = false;
     }
 }

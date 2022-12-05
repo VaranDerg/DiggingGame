@@ -194,3 +194,24 @@ MonoBehaviour:
     Pitch: 1
     Loop: 0
     Source: {fileID: 0}
+  - AudioType: 0
+    Name: RepairBuilding
+    Clip: {fileID: 8300000, guid: d6ff0148af62fe54795940c9edbcd66b, type: 3}
+    Volume: 0.5
+    Pitch: 1
+    Loop: 0
+    Source: {fileID: 0}
+  - AudioType: 0
+    Name: UsePersistent
+    Clip: {fileID: 8300000, guid: 94d8eb7b81494964c9cc79aed9a5f181, type: 3}
+    Volume: 0.5
+    Pitch: 1
+    Loop: 0
+    Source: {fileID: 0}
+  - AudioType: 0
+    Name: LoadTransitionEnd
+    Clip: {fileID: 8300000, guid: 7c30a2131f4241e4da269feee6037a61, type: 3}
+    Volume: 0.5
+    Pitch: 1
+    Loop: 0
+    Source: {fileID: 0}

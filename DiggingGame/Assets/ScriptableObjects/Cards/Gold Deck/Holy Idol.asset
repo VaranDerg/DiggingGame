@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Holy Idol
   m_EditorClassIdentifier: 
   CardName: Holy Idol
-  CardDescription: Take 1 Gold Piece from the supply, or 4 of any other Piece from
-    the supply, or score 1 point.
+  CardDescription: Take 1 Gold or 3 of any other type of Piece from the Supply and
+    put them in your Refined Pile.
   GrassSuit: 0
   DirtSuit: 0
   StoneSuit: 0
   GoldSuit: 1
-  GrassCost: 1
-  DirtCost: 1
+  GrassCost: 0
+  DirtCost: 0
   StoneCost: 1
   persistent: 0
   disaster: 0

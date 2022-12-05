@@ -30,7 +30,12 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if(s_firstLoad)
+        if (!s_firstLoad)
+        {
+            FindObjectOfType<SFXManager>().Play("LoadTransitionEnd");
+        }
+
+        if (s_firstLoad)
         {
             _cg.gameObject.SetActive(false);
             _cg.alpha = 0;
@@ -75,14 +80,14 @@ public class SceneLoader : MonoBehaviour
 
         yield return new WaitForSeconds(_transitionTime);
 
-        if (sceneName == "MainMenu" && s_enteredGame)
+        //Music Stuff
+        if ((sceneName == "MainMenu" || sceneName == "ResultsScreen") && s_enteredGame)
         {
             BGMManager.s_Instance.Invoke("PlayMenuTheme", BGMManager.s_Instance.SongFadeTime);
             s_enteredGame = false;
         }
         else if(sceneName == "PnPWeather" || sceneName == "OnlineScene")
         {
-            //Enable Gameplay Music
             BGMManager.s_Instance.SwapTrack();
             s_enteredGame = true;
         }
