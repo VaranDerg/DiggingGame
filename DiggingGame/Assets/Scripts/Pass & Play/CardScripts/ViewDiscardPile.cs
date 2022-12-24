@@ -32,6 +32,9 @@ public class ViewDiscardPile : MonoBehaviour
     private CardManager _cm;
     private OnlineCardManager _ocm;
 
+    [Header("Other")]
+    public static bool s_ViewOpen = false;
+
     /// <summary>
     /// Assigns CM
     /// </summary>
@@ -127,6 +130,8 @@ public class ViewDiscardPile : MonoBehaviour
         _discardPileViewCGroup.blocksRaycasts = true;
         _discardPileViewCGroup.interactable = true;
         _discardPileViewCGroup.alpha = 1;
+
+        s_ViewOpen = true;
     }
 
     /// <summary>
@@ -139,5 +144,7 @@ public class ViewDiscardPile : MonoBehaviour
         _discardPileViewCGroup.interactable = false;
         _discardPileViewCGroup.blocksRaycasts = false;
         _discardPileViewCGroup.alpha = 0;
+
+        s_ViewOpen = false;
     }
 }

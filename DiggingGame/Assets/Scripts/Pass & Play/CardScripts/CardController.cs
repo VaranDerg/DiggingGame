@@ -105,6 +105,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseEnter()
     {
+        if(ViewDiscardPile.s_ViewOpen)
+        {
+            return;
+        }
+
         if(_gettingDiscarded)
         {
             return;
@@ -138,6 +143,11 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
+        if (ViewDiscardPile.s_ViewOpen)
+        {
+            return;
+        }
+
         if (_currentlyMaximized)
         {
             DemaximizeCard();
@@ -166,7 +176,12 @@ public class CardController : MonoBehaviour
     /// </summary>
     private void OnMouseOver()
     {
-        if(Input.GetKey(KeyCode.Mouse1))
+        if (ViewDiscardPile.s_ViewOpen)
+        {
+            return;
+        }
+
+        if (Input.GetKey(KeyCode.Mouse1))
         {
             MaximizeCard();
         }

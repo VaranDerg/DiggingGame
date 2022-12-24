@@ -29,7 +29,12 @@ public class PauseGame : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (ViewDiscardPile.s_ViewOpen)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if(_isPaused)
             {
