@@ -265,6 +265,7 @@ public class CardController : MonoBehaviour
                     FindObjectOfType<WeatherManager>().SetActiveWeather(cv.ThisCard.ChangeWeatherTo);
                 }
 
+                _gcm.FinallyZone.SetActive(false);
                 FindObjectOfType<SFXManager>().Play("ActivateCard");
 
                 if (cv.ThisCard.GrassSuit)
@@ -320,6 +321,7 @@ public class CardController : MonoBehaviour
                 }
 
                 FindObjectOfType<SFXManager>().Play("ActivateCard");
+                _gcm.FinallyZone.SetActive(false);
 
                 if (cv.ThisCard.GrassSuit)
                 {

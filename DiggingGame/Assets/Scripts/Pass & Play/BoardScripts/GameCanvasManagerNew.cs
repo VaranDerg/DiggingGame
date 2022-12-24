@@ -20,7 +20,7 @@ public class GameCanvasManagerNew : MonoBehaviour
     public GameObject StartTurnButton;
     [SerializeField] private GameObject _firstZone;
     [SerializeField] private GameObject _thenZone;
-    [SerializeField] private GameObject _finallyZone;
+    [SerializeField] public GameObject FinallyZone;
     [SerializeField] private GameObject _thenActions;
     [SerializeField] private GameObject _thenBuildMenu;
     [SerializeField] private GameObject _backButton;
@@ -81,7 +81,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         _allObjects.Add(StartTurnButton);
         _allObjects.Add(_firstZone);
         _allObjects.Add(_thenZone);
-        _allObjects.Add(_finallyZone);
+        _allObjects.Add(FinallyZone);
         _allObjects.Add(_thenActions);
         _allObjects.Add(_thenBuildMenu);
         _allObjects.Add(_backButton);
@@ -550,7 +550,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         _bm.DisableAllBoardInteractions();
         _am.CurrentTurnPhase++;
 
-        _finallyZone.SetActive(true);
+        FinallyZone.SetActive(true);
 
         UpdateTextBothPlayers();
         if(_am.CurrentPlayer == 1)
@@ -613,7 +613,7 @@ public class GameCanvasManagerNew : MonoBehaviour
         }
         else if(_am.CurrentTurnPhase == 3)
         {
-            _finallyZone.SetActive(true);
+            FinallyZone.SetActive(true);
             _cm.PrepareCardActivating(_am.CurrentPlayer, _am.CardActivations, false);
             if (_am.CurrentPlayer == 1)
             {

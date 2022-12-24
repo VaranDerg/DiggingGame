@@ -10174,7 +10174,7 @@ MonoBehaviour:
   StartTurnButton: {fileID: 1773380379944653640}
   _firstZone: {fileID: 1773380379141416550}
   _thenZone: {fileID: 1773380380478588375}
-  _finallyZone: {fileID: 1773380380589776730}
+  FinallyZone: {fileID: 1773380380589776730}
   _thenActions: {fileID: 1773380379737230933}
   _thenBuildMenu: {fileID: 1773380379992022553}
   _backButton: {fileID: 1773380379180950818}
