@@ -382,7 +382,7 @@ public class PlayerPawn : MonoBehaviour
                     continue;
                 }
 
-                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two)
+                if (piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Two && piece.GetComponent<PieceController>().ObjState != PieceController.GameState.Seven)
                 {
                     continue;
                 }
